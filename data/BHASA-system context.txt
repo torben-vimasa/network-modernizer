@@ -1,0 +1,1026 @@
+BHASA1/baneisp.dk/BDK-Teknik/pri/act# changeto system
+BHASA1/baneisp.dk/pri/act# sh run
+: Saved
+
+:
+: Serial Number: JAD180600DT
+: Hardware:   ASA5585-SSP-20, 12029 MB RAM, CPU Xeon 5500 series 2133 MHz, 1 CPU (8 cores)
+:
+ASA Version 9.8(4)32 <system>
+!
+terminal width 511
+hostname BHASA1
+domain-name baneisp.dk
+enable password 8Ry2YjIyt7RRXU24 encrypted
+mac-address auto prefix 1
+!
+interface GigabitEthernet0/0
+ description Outside
+ channel-group 3 mode on
+!
+interface GigabitEthernet0/1
+ description Outside
+ channel-group 3 mode on
+!
+interface GigabitEthernet0/2
+ description Inside/DMZ
+ channel-group 4 mode on
+!
+interface GigabitEthernet0/3
+ description Inside/DMZ
+ channel-group 4 mode on
+!
+interface GigabitEthernet0/4
+ description Inside/DMZ
+ channel-group 4 mode on
+!
+interface GigabitEthernet0/5
+ description Inside/DMZ
+ channel-group 4 mode on
+!
+interface GigabitEthernet0/6
+ channel-group 5 mode on
+!
+interface GigabitEthernet0/7
+ channel-group 5 mode on
+!
+interface Management0/0
+ channel-group 6 mode on
+!
+interface Management0/1
+ channel-group 6 mode on
+!
+interface TenGigabitEthernet0/8
+!
+interface TenGigabitEthernet0/8.709
+ description TDC-Secure-Mobile
+ vlan 709
+!
+interface TenGigabitEthernet0/8.731
+ description TDC-ALARMNET
+ vlan 731
+!
+interface TenGigabitEthernet0/8.807
+ description Cyberkey Cibicom
+ vlan 807
+!
+interface TenGigabitEthernet0/8.1200
+ description DSB-OUTSIDE
+ vlan 1200
+!
+interface TenGigabitEthernet0/8.1709
+ vlan 1709
+!
+interface TenGigabitEthernet0/8.1717
+ description TDC-Secure-Mobile
+ vlan 1717
+!
+interface TenGigabitEthernet0/8.1740
+ description LAN-SIP-CPE1
+ vlan 1740
+!
+interface TenGigabitEthernet0/8.1741
+ description LAN-SIP-CPE2
+ vlan 1741
+!
+interface TenGigabitEthernet0/8.1806
+ description ext_cibicom_rgdc
+ vlan 1806
+!
+interface TenGigabitEthernet0/8.1807
+ description ext_cibicom_obv
+ vlan 1807
+!
+interface TenGigabitEthernet0/8.1900
+ description DRIFT-BDK-INTERNAL
+ vlan 1900
+!
+interface TenGigabitEthernet0/8.1901
+ description DRIFT-BDK-DMZ
+ vlan 1901
+!
+interface TenGigabitEthernet0/8.1902
+ description DRIFT-BDK-PREPROD
+ vlan 1902
+!
+interface TenGigabitEthernet0/8.1905
+ description DRIFT-BDK
+ vlan 1905
+!
+interface TenGigabitEthernet0/8.1906
+ description KMD_INFOCARE
+ vlan 1906
+!
+interface TenGigabitEthernet0/8.1907
+ vlan 1907
+!
+interface TenGigabitEthernet0/8.1909
+ description Aeven_DNOC
+ vlan 1909
+!
+interface TenGigabitEthernet0/8.1910
+ description BDK_Management
+ vlan 1910
+!
+interface TenGigabitEthernet0/9
+!
+interface TenGigabitEthernet0/9.256
+ description BANENET
+ vlan 256
+!
+interface Port-channel1
+ description LAN/STATE Failover Interface
+ shutdown
+!
+interface Port-channel2
+!
+interface Port-channel3
+ lacp max-bundle 8
+!
+interface Port-channel3.650
+ description External
+ vlan 650
+!
+interface Port-channel3.899
+ description Siemens PUBLIC VLAN
+ vlan 899
+!
+interface Port-channel4
+ lacp max-bundle 8
+!
+interface Port-channel4.2
+ vlan 2
+!
+interface Port-channel4.15
+ description PSI-OCK
+ vlan 15
+!
+interface Port-channel4.57
+ description ASA 5540 Inside
+ vlan 57
+!
+interface Port-channel4.59
+ description JTL
+ vlan 59
+!
+interface Port-channel4.60
+ description Link to KMD
+ vlan 60
+!
+interface Port-channel4.61
+ vlan 61
+!
+interface Port-channel4.202
+ description CHG0039129
+ vlan 202
+!
+interface Port-channel4.400
+ description UAGDMZ
+ vlan 400
+!
+interface Port-channel4.401
+ description Internal
+ vlan 401
+!
+interface Port-channel4.501
+ description eth-s3p1c4
+ vlan 501
+!
+interface Port-channel4.503
+ description eth-s3p1c10
+ vlan 503
+!
+interface Port-channel4.504
+ description eth-s3p1c5
+ vlan 504
+!
+interface Port-channel4.505
+ description eth1c0
+ vlan 505
+!
+interface Port-channel4.506
+ description eth-s3p1c23
+ vlan 506
+!
+interface Port-channel4.507
+ description eth-s3p1c18
+ vlan 507
+!
+interface Port-channel4.508
+ description eth-s2p1c0
+ vlan 508
+!
+interface Port-channel4.509
+ description eth3c0
+ vlan 509
+!
+interface Port-channel4.510
+ description eth-s3p1c6
+ vlan 510
+!
+interface Port-channel4.511
+ description eth-s3p1c24
+ vlan 511
+!
+interface Port-channel4.512
+ description eth-s3p1c19
+ vlan 512
+!
+interface Port-channel4.513
+ description eth-s3p1c12
+ vlan 513
+!
+interface Port-channel4.514
+ description eth-s2p3c0
+ vlan 514
+!
+interface Port-channel4.515
+ description eth-s3p1c7
+ vlan 515
+!
+interface Port-channel4.517
+ description eth-s1p2c0
+ vlan 517
+!
+interface Port-channel4.518
+ description eth-s3p1c13
+ vlan 518
+!
+interface Port-channel4.519
+ description eth-s1p4c0
+ vlan 519
+!
+interface Port-channel4.520
+ description eth-s3p1c8
+ vlan 520
+!
+interface Port-channel4.521
+ description eth-s3p1c14
+ vlan 521
+!
+interface Port-channel4.522
+ description eth-s3p1c2
+ vlan 522
+!
+interface Port-channel4.523
+ description eth-s3p1c20
+ vlan 523
+!
+interface Port-channel4.524
+ description eth-s2p2c0
+ vlan 524
+!
+interface Port-channel4.525
+ description eth-s3p1c3
+ vlan 525
+!
+interface Port-channel4.526
+ description eth-s3p1c21
+ vlan 526
+!
+interface Port-channel4.527
+ description eth-s1p1c0
+ vlan 527
+!
+interface Port-channel4.528
+ description eth4c0
+ vlan 528
+!
+interface Port-channel4.529
+ description eth2c1
+ vlan 529
+!
+interface Port-channel4.555
+ description ASA 5540 Internet services
+ vlan 555
+!
+interface Port-channel4.560
+ vlan 560
+!
+interface Port-channel4.570
+ description TDC Secure Net - overvaagning
+ vlan 570
+!
+interface Port-channel4.660
+ description ESB
+ vlan 660
+!
+interface Port-channel4.666
+ vlan 666
+!
+interface Port-channel4.670
+ description Dedicated vlan for PaloAlto updates
+ vlan 670
+!
+interface Port-channel4.701
+ description eth-s3p1c4
+ vlan 701
+!
+interface Port-channel4.702
+ description eth-s3p1c22
+ vlan 702
+!
+interface Port-channel4.703
+ description eth-s3p1c10
+ vlan 703
+!
+interface Port-channel4.704
+ description eth-s3p1c5
+ vlan 704
+!
+interface Port-channel4.705
+ description eth1c0
+ vlan 705
+!
+interface Port-channel4.706
+ description eth-s3p1c23
+ vlan 706
+!
+interface Port-channel4.707
+ description eth-s3p1c18
+ vlan 707
+!
+interface Port-channel4.708
+ description eth-s2p1c0
+ vlan 708
+!
+interface Port-channel4.710
+ description eth-s3p1c6
+ vlan 710
+!
+interface Port-channel4.711
+ description eth-s3p1c24
+ vlan 711
+!
+interface Port-channel4.712
+ description eth-s3p1c19
+ vlan 712
+!
+interface Port-channel4.713
+ description eth-s3p1c12
+ vlan 713
+!
+interface Port-channel4.714
+ description eth-s2p3c0
+ vlan 714
+!
+interface Port-channel4.715
+ description eth-s3p1c7
+ vlan 715
+!
+interface Port-channel4.716
+ description eth-s3p1c0
+ vlan 716
+!
+interface Port-channel4.717
+ description BECOS-32
+ vlan 717
+!
+interface Port-channel4.718
+ description eth-s3p1c13
+ vlan 718
+!
+interface Port-channel4.719
+ description eth-s1p4c0
+ vlan 719
+!
+interface Port-channel4.720
+ description eth-s3p1c8
+ vlan 720
+!
+interface Port-channel4.721
+ description eth-s3p1c14
+ vlan 721
+!
+interface Port-channel4.722
+ description eth-s3p1c2
+ vlan 722
+!
+interface Port-channel4.723
+ description eth-s3p1c20
+ vlan 723
+!
+interface Port-channel4.724
+ description eth-s2p2c0
+ vlan 724
+!
+interface Port-channel4.725
+ description eth-s3p1c3
+ vlan 725
+!
+interface Port-channel4.726
+ description SIP-DMZ
+ vlan 726
+!
+interface Port-channel4.727
+ description eth-s1p1c0
+ vlan 727
+!
+interface Port-channel4.728
+ description eth4c0
+ vlan 728
+!
+interface Port-channel4.729
+ description STTN-MGMT
+ vlan 729
+!
+interface Port-channel4.730
+ description NPS_Extern
+ vlan 730
+!
+interface Port-channel4.732
+ description PSI OCK TIG/GATEWAY net
+ vlan 732
+!
+interface Port-channel4.733
+ description PSI OCK TIG/GATEWAY net
+ vlan 733
+!
+interface Port-channel4.734
+ description PSI-KC-Server
+ vlan 734
+!
+interface Port-channel4.735
+ description PSI-OC-Server
+ vlan 735
+!
+interface Port-channel4.736
+ description ALARM1123-ServerNet
+ vlan 736
+!
+interface Port-channel4.740
+ description DIAMONT_MGMT
+ vlan 740
+!
+interface Port-channel4.746
+ description DCTC_BACKUP_DMZ
+ vlan 746
+!
+interface Port-channel4.750
+ description wwwBane
+ vlan 750
+!
+interface Port-channel4.760
+ description DMZzone1
+ vlan 760
+!
+interface Port-channel4.770
+ description DMZzone2
+ vlan 770
+!
+interface Port-channel4.780
+ description Mobildatafangst
+ vlan 780
+!
+interface Port-channel4.785
+ description MobildatafangstRelayDMZ
+ vlan 785
+!
+interface Port-channel4.790
+ description OCSDmz1
+ vlan 790
+!
+interface Port-channel4.791
+ description dmz-airtame
+ vlan 791
+!
+interface Port-channel4.795
+ description OCSDmz2
+ vlan 795
+!
+interface Port-channel4.796
+ description PBASE2022
+ vlan 796
+!
+interface Port-channel4.797
+ description Priveledged_Remote_Access_PoC
+ vlan 797
+!
+interface Port-channel4.798
+ description Aeven_JumpHost_DMZ
+ vlan 798
+!
+interface Port-channel4.799
+ description VULSCANSRVS01_DMZ
+ vlan 799
+!
+interface Port-channel4.800
+ description BaneUdv
+ vlan 800
+!
+interface Port-channel4.801
+ description Aeven_Vulnerability_scan_probes
+ vlan 801
+!
+interface Port-channel4.802
+ description EXT-PROVIDERS-JTTN-JUMPHOST
+ vlan 802
+!
+interface Port-channel4.803
+ description Cegal_Jumphost
+ vlan 803
+!
+interface Port-channel4.806
+ description dmz_cibicom_jumpservers
+ vlan 806
+!
+interface Port-channel4.810
+ description BaneUdvQA
+ vlan 810
+!
+interface Port-channel4.820
+ description UDV_Teknik
+ vlan 820
+!
+interface Port-channel4.850
+ description Mgmt_Global
+ vlan 850
+!
+interface Port-channel4.851
+ description Mgmt_CS
+ vlan 851
+!
+interface Port-channel4.852
+ description Mgmt_Bane1
+ vlan 852
+!
+interface Port-channel4.853
+ description Mgmt_TS
+ vlan 853
+!
+interface Port-channel4.854
+ description Mgmt_DICS
+ vlan 854
+!
+interface Port-channel4.855
+ description Mgmt_Fdrift
+ vlan 855
+!
+interface Port-channel4.856
+ description Mgmt_Fservice
+ vlan 856
+!
+interface Port-channel4.857
+ description Signal-program
+ vlan 857
+!
+interface Port-channel4.858
+ description Mgmt_DWDM
+ vlan 858
+!
+interface Port-channel4.859
+ description SPNS2-TRANSIT-JTTN
+ vlan 859
+!
+interface Port-channel4.900
+ description NIO-managemnet
+ vlan 900
+!
+interface Port-channel4.1300
+ description Siemens_Inside_VPN
+ vlan 1300
+!
+interface Port-channel4.1911
+ vlan 1911
+!
+interface Port-channel4.1950
+ description GSMR phase 3 CHG0032846
+ vlan 1950
+!
+interface Port-channel5
+ description LAN/STATE Failover Interface
+ lacp max-bundle 8
+!
+interface Port-channel6
+ lacp max-bundle 8
+!
+class default
+  limit-resource Mac-addresses 65535
+  limit-resource All 0
+  limit-resource SSH 5
+  limit-resource Telnet 5
+  limit-resource ASDM 10
+!
+
+class Site2Site-VPN
+  limit-resource VPN Other 50
+!
+
+boot system disk0:/asa984-32-smp-k8.bin
+boot system disk0:/asa9-12-4-52-smp-k8.bin
+boot system disk0:/asa984-smp-k8.bin
+boot system disk0:/asa924-27-smp-k8.bin
+ftp mode passive
+clock timezone CET 1
+pager lines 24
+failover
+failover lan unit primary
+failover lan interface faillink Port-channel5
+failover polltime unit msec 200 holdtime 1
+failover link faillink Port-channel5
+failover interface ip faillink 192.168.100.1 255.255.255.0 standby 192.168.100.2
+failover group 1
+failover group 2
+  secondary
+no failover wait-disable
+asdm image disk0:/asdm-7122.bin
+no asdm history enable
+arp timeout 14400
+no arp permit-nonconnected
+arp rate-limit 32768
+ssh scopy enable
+no ssh stricthostkeycheck
+console timeout 0
+!
+tls-proxy maximum-session 1000
+!
+
+admin-context MANAGEMENT
+context MANAGEMENT
+  allocate-interface Port-channel6
+  config-url disk0:/man.cfg
+  join-failover-group 1
+!
+
+context BDK-Enterprise
+  allocate-interface Port-channel3.650
+  allocate-interface Port-channel4.400-Port-channel4.401
+  allocate-interface Port-channel4.750
+  allocate-interface Port-channel4.760
+  allocate-interface Port-channel4.770
+  allocate-interface Port-channel4.780
+  allocate-interface Port-channel4.785
+  allocate-interface Port-channel4.790
+  allocate-interface Port-channel4.795
+  allocate-interface Port-channel4.800
+  allocate-interface Port-channel4.810
+  config-url disk0:/BDK-Enterprise.cfg
+  join-failover-group 1
+!
+
+context Site2Site-VPN
+  member Site2Site-VPN
+  allocate-interface Port-channel3.650
+  allocate-interface Port-channel3.899
+  allocate-interface Port-channel4.57
+  allocate-interface Port-channel4.59
+  allocate-interface Port-channel4.401
+  allocate-interface Port-channel4.555
+  allocate-interface Port-channel4.734-Port-channel4.735
+  allocate-interface Port-channel4.900
+  allocate-interface Port-channel4.1300
+  allocate-interface Port-channel4.1950
+  allocate-interface TenGigabitEthernet0/8.1900-TenGigabitEthernet0/8.1902
+  allocate-interface TenGigabitEthernet0/8.1905-TenGigabitEthernet0/8.1907
+  allocate-interface TenGigabitEthernet0/8.1909-TenGigabitEthernet0/8.1910
+  config-url disk0:/Site2Site-VPN.cfg
+  join-failover-group 1
+!
+
+context BDK-Teknik
+  allocate-interface Port-channel3.650
+  allocate-interface Port-channel4.2
+  allocate-interface Port-channel4.15
+  allocate-interface Port-channel4.57
+  allocate-interface Port-channel4.202
+  allocate-interface Port-channel4.555
+  allocate-interface Port-channel4.560
+  allocate-interface Port-channel4.570
+  allocate-interface Port-channel4.660
+  allocate-interface Port-channel4.666
+  allocate-interface Port-channel4.670
+  allocate-interface Port-channel4.701-Port-channel4.708
+  allocate-interface Port-channel4.710-Port-channel4.728
+  allocate-interface Port-channel4.730
+  allocate-interface Port-channel4.732-Port-channel4.733
+  allocate-interface Port-channel4.736
+  allocate-interface Port-channel4.740
+  allocate-interface Port-channel4.746
+  allocate-interface Port-channel4.791
+  allocate-interface Port-channel4.796-Port-channel4.799
+  allocate-interface Port-channel4.801-Port-channel4.803
+  allocate-interface Port-channel4.806
+  allocate-interface Port-channel4.820
+  allocate-interface TenGigabitEthernet0/8.709
+  allocate-interface TenGigabitEthernet0/8.731
+  allocate-interface TenGigabitEthernet0/8.807
+  allocate-interface TenGigabitEthernet0/8.1709
+  allocate-interface TenGigabitEthernet0/8.1717
+  allocate-interface TenGigabitEthernet0/8.1740-TenGigabitEthernet0/8.1741
+  allocate-interface TenGigabitEthernet0/8.1806-TenGigabitEthernet0/8.1807
+  config-url disk0:/BDK-Teknik.cfg
+  join-failover-group 1
+!
+
+context BDK-Mgmt
+  allocate-interface Port-channel4.729
+  allocate-interface Port-channel4.850-Port-channel4.859
+  config-url disk0:/BDK-Mgmt.cfg
+  join-failover-group 1
+!
+
+context BDK-DSB
+  allocate-interface TenGigabitEthernet0/8.1200
+  allocate-interface TenGigabitEthernet0/9.256
+  config-url disk0:/BDK-DSB.cfg
+  join-failover-group 1
+!
+
+ntp server 172.27.2.1 source MANAGEMENT
+quota management-session 20
+prompt hostname domain context priority state
+no call-home reporting anonymous
+Cryptochecksum:d23480f03c3ff8f2810e0c70f380a473
+: end
+BHASA1/baneisp.dk/pri/act#
+BHASA1/baneisp.dk/pri/act# sh int
+Interface GigabitEthernet0/0 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 1000 Mbps, DLY 10 usec
+        Auto-Duplex(Full-duplex), Auto-Speed(1000 Mbps)
+        Input flow control is unsupported, output flow control is off
+        Description: Outside
+        Active member of Port-channel3
+        MAC address 78da.6ef8.cf7a, MTU not set
+        IP address unassigned
+        198634631 packets input, 25415858537 bytes, 0 no buffer
+        Received 12147 broadcasts, 0 runts, 0 giants
+        0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort
+        0 pause/resume input
+        0 L2 decode drops
+        0 switch ingress policy drops
+        463136611676 packets output, 232893766786685 bytes, 0 underruns
+        0 pause/resume output
+        0 output errors, 0 collisions, 0 interface resets
+        0 late collisions, 0 deferred
+        0 rate limit drops
+        0 switch egress policy drops
+        0 input reset drops, 0 output reset drops
+Interface GigabitEthernet0/1 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 1000 Mbps, DLY 10 usec
+        Auto-Duplex(Full-duplex), Auto-Speed(1000 Mbps)
+        Input flow control is unsupported, output flow control is off
+        Description: Outside
+        Active member of Port-channel3
+        MAC address 78da.6ef8.cf7b, MTU not set
+        IP address unassigned
+        741245363732 packets input, 780502593743374 bytes, 0 no buffer
+        Received 973561089 broadcasts, 0 runts, 0 giants
+        0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort
+        0 pause/resume input
+        0 L2 decode drops
+        0 switch ingress policy drops
+        376617132961 packets output, 176136746917856 bytes, 0 underruns
+        0 pause/resume output
+        0 output errors, 0 collisions, 0 interface resets
+        0 late collisions, 0 deferred
+        0 rate limit drops
+        0 switch egress policy drops
+        0 input reset drops, 0 output reset drops
+Interface GigabitEthernet0/2 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 1000 Mbps, DLY 10 usec
+        Auto-Duplex(Full-duplex), Auto-Speed(1000 Mbps)
+        Input flow control is unsupported, output flow control is off
+        Description: Inside/DMZ
+        Active member of Port-channel4
+        MAC address 78da.6ef8.cf7c, MTU not set
+        IP address unassigned
+        906319744972 packets input, 668775381916238 bytes, 0 no buffer
+        Received 44013082 broadcasts, 0 runts, 1 giants
+        2 input errors, 1 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort
+        0 pause/resume input
+        0 L2 decode drops
+        0 switch ingress policy drops
+        659438876549 packets output, 542966832907650 bytes, 0 underruns
+        0 pause/resume output
+        0 output errors, 0 collisions, 0 interface resets
+        0 late collisions, 0 deferred
+        0 rate limit drops
+        0 switch egress policy drops
+        0 input reset drops, 0 output reset drops
+Interface GigabitEthernet0/3 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 1000 Mbps, DLY 10 usec
+        Auto-Duplex(Full-duplex), Auto-Speed(1000 Mbps)
+        Input flow control is unsupported, output flow control is off
+        Description: Inside/DMZ
+        Active member of Port-channel4
+        MAC address 78da.6ef8.cf7d, MTU not set
+        IP address unassigned
+        992905471821 packets input, 808790821479112 bytes, 0 no buffer
+        Received 25505700 broadcasts, 0 runts, 1 giants
+        2 input errors, 1 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort
+        0 pause/resume input
+        0 L2 decode drops
+        0 switch ingress policy drops
+        936693932538 packets output, 858374090992063 bytes, 0 underruns
+        0 pause/resume output
+        0 output errors, 0 collisions, 0 interface resets
+        0 late collisions, 0 deferred
+        0 rate limit drops
+        0 switch egress policy drops
+        0 input reset drops, 0 output reset drops
+Interface GigabitEthernet0/4 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 1000 Mbps, DLY 10 usec
+        Auto-Duplex(Full-duplex), Auto-Speed(1000 Mbps)
+        Input flow control is unsupported, output flow control is off
+        Description: Inside/DMZ
+        Active member of Port-channel4
+        MAC address 78da.6ef8.cf7e, MTU not set
+        IP address unassigned
+        817797846239 packets input, 517453335333546 bytes, 0 no buffer
+        Received 55186181 broadcasts, 0 runts, 0 giants
+        0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort
+        0 pause/resume input
+        0 L2 decode drops
+        0 switch ingress policy drops
+        905732285508 packets output, 589088703757449 bytes, 0 underruns
+        0 pause/resume output
+        0 output errors, 0 collisions, 0 interface resets
+        0 late collisions, 0 deferred
+        0 rate limit drops
+        0 switch egress policy drops
+        0 input reset drops, 0 output reset drops
+Interface GigabitEthernet0/5 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 1000 Mbps, DLY 10 usec
+        Auto-Duplex(Full-duplex), Auto-Speed(1000 Mbps)
+        Input flow control is unsupported, output flow control is off
+        Description: Inside/DMZ
+        Active member of Port-channel4
+        MAC address 78da.6ef8.cf7f, MTU not set
+        IP address unassigned
+        726015043810 packets input, 513371592935613 bytes, 0 no buffer
+        Received 71763415 broadcasts, 0 runts, 0 giants
+        0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort
+        0 pause/resume input
+        0 L2 decode drops
+        0 switch ingress policy drops
+        975768578391 packets output, 779028485349260 bytes, 0 underruns
+        0 pause/resume output
+        0 output errors, 0 collisions, 0 interface resets
+        0 late collisions, 0 deferred
+        0 rate limit drops
+        0 switch egress policy drops
+        0 input reset drops, 0 output reset drops
+Interface GigabitEthernet0/6 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 1000 Mbps, DLY 10 usec
+        Auto-Duplex(Full-duplex), Auto-Speed(1000 Mbps)
+        Input flow control is unsupported, output flow control is off
+        MAC address 78da.6ef8.cf80, MTU 1500
+        IP address unassigned
+        619866440 packets input, 135100160012 bytes, 0 no buffer
+        Received 169442 broadcasts, 0 runts, 0 giants
+        0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort
+        0 pause/resume input
+        0 L2 decode drops
+        0 switch ingress policy drops
+        86076618975 packets output, 79463414362380 bytes, 0 underruns
+        0 pause/resume output
+        0 output errors, 0 collisions, 0 interface resets
+        0 late collisions, 0 deferred
+        0 rate limit drops
+        0 switch egress policy drops
+        0 input reset drops, 0 output reset drops
+Interface GigabitEthernet0/7 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 1000 Mbps, DLY 10 usec
+        Auto-Duplex(Full-duplex), Auto-Speed(1000 Mbps)
+        Input flow control is unsupported, output flow control is off
+        MAC address 78da.6ef8.cf81, MTU 1500
+        IP address unassigned
+        37229837 packets input, 2675741612 bytes, 0 no buffer
+        Received 0 broadcasts, 0 runts, 0 giants
+        0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort
+        0 pause/resume input
+        0 L2 decode drops
+        0 switch ingress policy drops
+        56506331990 packets output, 52455526531528 bytes, 0 underruns
+        0 pause/resume output
+        0 output errors, 0 collisions, 0 interface resets
+        0 late collisions, 0 deferred
+        0 rate limit drops
+        0 switch egress policy drops
+        0 input reset drops, 0 output reset drops
+Interface Management0/0 "", is up, line protocol is up
+  Hardware is i82574L rev00, BW 1000 Mbps, DLY 10 usec
+        Auto-Duplex(Full-duplex), Auto-Speed(1000 Mbps)
+        Input flow control is unsupported, output flow control is off
+        Active member of Port-channel6
+        MAC address 78da.6ef8.cf78, MTU not set
+        IP address unassigned
+        68750087895 packets input, 4493563874992 bytes, 0 no buffer
+        Received 34321494 broadcasts, 0 runts, 0 giants
+        0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort
+        0 pause input, 0 resume input
+        0 L2 decode drops
+        1104107099 packets output, 230697349324 bytes, 0 underruns
+        0 pause output, 0 resume output
+        0 output errors, 0 collisions, 0 interface resets
+        0 late collisions, 0 deferred
+        0 input reset drops, 0 output reset drops
+        input queue (blocks free curr/low): hardware (209/178)
+        output queue (blocks free curr/low): hardware (255/207)
+Interface Management0/1 "", is up, line protocol is up
+  Hardware is i82574L rev00, BW 1000 Mbps, DLY 10 usec
+        Auto-Duplex(Full-duplex), Auto-Speed(1000 Mbps)
+        Input flow control is unsupported, output flow control is off
+        Active member of Port-channel6
+        MAC address 78da.6ef8.cf79, MTU not set
+        IP address unassigned
+        360741206 packets input, 28260421471 bytes, 0 no buffer
+        Received 1828244 broadcasts, 0 runts, 0 giants
+        0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort
+        0 pause input, 0 resume input
+        0 L2 decode drops
+        155346076073 packets output, 35862398917312 bytes, 0 underruns
+        0 pause output, 0 resume output
+        0 output errors, 0 collisions, 0 interface resets
+        0 late collisions, 0 deferred
+        0 input reset drops, 0 output reset drops
+        input queue (blocks free curr/low): hardware (240/144)
+        output queue (blocks free curr/low): hardware (255/167)
+Interface TenGigabitEthernet0/8 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 10000 Mbps, DLY 10 usec
+        (Full-duplex), (10000 Mbps)
+        Input flow control is unsupported, output flow control is off
+        Available for allocation to a context
+        MAC address 78da.6ef8.cf82, MTU not set
+        IP address unassigned
+        343309363157 packets input, 209206587794445 bytes, 0 no buffer
+        Received 536536 broadcasts, 0 runts, 0 giants
+        860 input errors, 0 CRC, 0 frame, 860 overrun, 0 ignored, 0 abort
+        0 pause/resume input
+        60054 L2 decode drops
+        0 switch ingress policy drops
+        447626111838 packets output, 401299798391579 bytes, 0 underruns
+        0 pause/resume output
+        0 output errors, 0 collisions, 0 interface resets
+        0 late collisions, 0 deferred
+        0 rate limit drops
+        0 switch egress policy drops
+        0 input reset drops, 0 output reset drops
+Interface TenGigabitEthernet0/8.709 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 10000 Mbps, DLY 10 usec
+        VLAN identifier 709
+        Description: TDC-Secure-Mobile
+        Available for allocation to a context
+Interface TenGigabitEthernet0/8.731 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 10000 Mbps, DLY 10 usec
+        VLAN identifier 731
+        Description: TDC-ALARMNET
+        Available for allocation to a context
+Interface TenGigabitEthernet0/8.807 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 10000 Mbps, DLY 10 usec
+        VLAN identifier 807
+        Description: Cyberkey Cibicom
+        Available for allocation to a context
+Interface TenGigabitEthernet0/8.1200 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 10000 Mbps, DLY 10 usec
+        VLAN identifier 1200
+        Description: DSB-OUTSIDE
+        Available for allocation to a context
+Interface TenGigabitEthernet0/8.1709 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 10000 Mbps, DLY 10 usec
+        VLAN identifier 1709
+        Available for allocation to a context
+Interface TenGigabitEthernet0/8.1717 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 10000 Mbps, DLY 10 usec
+        VLAN identifier 1717
+        Description: TDC-Secure-Mobile
+        Available for allocation to a context
+Interface TenGigabitEthernet0/8.1740 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 10000 Mbps, DLY 10 usec
+        VLAN identifier 1740
+        Description: LAN-SIP-CPE1
+        Available for allocation to a context
+Interface TenGigabitEthernet0/8.1741 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 10000 Mbps, DLY 10 usec
+        VLAN identifier 1741
+        Description: LAN-SIP-CPE2
+        Available for allocation to a context
+Interface TenGigabitEthernet0/8.1806 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 10000 Mbps, DLY 10 usec
+        VLAN identifier 1806
+        Description: ext_cibicom_rgdc
+        Available for allocation to a context
+Interface TenGigabitEthernet0/8.1807 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 10000 Mbps, DLY 10 usec
+        VLAN identifier 1807
+        Description: ext_cibicom_obv
+        Available for allocation to a context
+Interface TenGigabitEthernet0/8.1900 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 10000 Mbps, DLY 10 usec
+        VLAN identifier 1900
+        Description: DRIFT-BDK-INTERNAL
+        Available for allocation to a context
+Interface TenGigabitEthernet0/8.1901 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 10000 Mbps, DLY 10 usec
+        VLAN identifier 1901
+        Description: DRIFT-BDK-DMZ
+        Available for allocation to a context
+Interface TenGigabitEthernet0/8.1902 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 10000 Mbps, DLY 10 usec
+        VLAN identifier 1902
+        Description: DRIFT-BDK-PREPROD
+        Available for allocation to a context
+Interface TenGigabitEthernet0/8.1905 "", is up, line protocol is up
+  Hardware is bcm56801 rev 01, BW 10000 Mbps, DLY 10 usec
+        VLAN identifier 1905
+<--- More --->

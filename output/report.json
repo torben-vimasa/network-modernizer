@@ -1,0 +1,18 @@
+{
+    "names": 40,
+    "access_lists": 1147,
+    "objects": 416,
+    "any_any_rules": 2,
+    "top_acls": {
+        "access-in-bane1": 384,
+        "access-in-signal_program": 313,
+        "access-in-cs": 128,
+        "CSM_AAA_AUTHE_Bane1_FirewallMgt": 125,
+        "access-in-sttn_mgmt": 87,
+        "access-in-SPNS2-TRANSIT-JTTN": 37,
+        "access-in-dwdm": 34,
+        "access-in-fdrift": 14,
+        "access-in-dics": 9,
+        "access-in-fservice": 9
+    }
+}
