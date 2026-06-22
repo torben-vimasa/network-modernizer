@@ -1,0 +1,4590 @@
+[
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip host 188.180.65.67 host 10.185.1.14"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip host 188.180.65.67 host 172.17.91.237"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip host 188.180.65.67 host 172.17.91.238"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip object Vasbygade_bruger_172.20.137.0_24 host 172.17.91.238"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip object Vasbygade_bruger_172.20.137.0_24 host 172.17.91.237"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip any host 172.17.138.37"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip 10.110.6.0 255.255.255.0 any"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip 172.27.18.0 255.255.255.0 172.17.89.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny icmp any host 172.17.10.66 echo"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny udp any host 172.17.10.66 eq ntp"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip any host 172.17.138.38"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip 172.31.100.0 255.255.255.0 172.17.89.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip 172.31.100.0 255.255.255.0 172.17.87.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip 172.20.141.0 255.255.255.0 172.17.89.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip 172.20.133.0 255.255.255.0 172.17.89.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip 172.20.133.0 255.255.255.0 172.17.87.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip 172.20.133.0 255.255.255.0 10.185.50.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip 172.20.141.0 255.255.255.0 172.17.87.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip 172.27.22.0 255.255.255.0 172.17.87.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip 172.27.20.0 255.255.255.0 172.17.89.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip 172.27.21.0 255.255.255.0 172.17.89.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip 172.27.21.0 255.255.255.0 172.17.87.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip 172.18.2.0 255.255.255.0 172.17.87.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip any object-group WSA-SERVERS"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip any host 172.17.88.240"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip any host 172.17.88.236"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip host 172.21.2.13 host 172.17.88.230"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip host 172.21.2.13 host 172.17.88.234"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip host 172.21.2.13 host 172.17.88.235"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip host 188.180.65.67 172.17.89.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip host 188.180.65.67 172.17.87.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp 10.185.50.0 255.255.255.0 host 10.185.1.20"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny udp any eq snmp 10.185.50.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny udp any 10.185.50.0 255.255.255.0 eq snmptrap"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip any 10.185.50.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny icmp any 10.185.1.0 255.255.255.0 echo-reply"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny icmp any 10.185.1.0 255.255.255.0 time-exceeded"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp any 10.185.1.0 255.255.255.0 eq https"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny udp any 10.185.1.0 255.255.255.0 eq domain"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp any 10.185.1.0 255.255.255.0 eq tacacs"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny udp any 10.185.1.0 255.255.255.0 eq tftp"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny udp any eq snmp 10.185.1.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny udp any 10.185.1.0 255.255.255.0 eq snmptrap"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp any host 10.185.1.20 eq www"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny udp any 10.185.1.0 255.255.255.0 eq syslog"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp any host 10.185.1.11 eq ftp"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp any host 10.185.1.11 eq 3389"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp any host 10.185.1.20 eq 3389"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp any host 10.185.1.22 eq 3389"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp any host 10.185.1.22 eq www"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp any host 10.185.1.50 eq 3389"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny udp 172.22.0.0 255.255.0.0 host 10.185.1.10 eq bootps"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp 172.22.0.0 255.255.0.0 10.185.1.0 255.255.255.0 eq ftp"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny udp any host 172.17.56.221 eq 3000"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny udp 172.22.0.0 255.255.0.0 host 10.185.1.20 eq 10000"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny udp 172.22.0.0 255.255.0.0 host 10.185.1.17 eq 10000"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip host 172.27.1.27 10.185.1.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny udp any 10.185.1.0 255.255.255.0 eq ntp"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt remark CTASK0020006"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny icmp 10.3.0.0 255.255.128.0 10.150.87.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip 10.3.0.0 255.255.128.0 10.150.87.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip object SRA-ELTEL_100.64.15.0_mask_24 object-group RFC1918"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt remark CTASK0036019"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp host 172.21.65.116 any eq ssh"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp host 172.21.65.117 any eq ssh"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp host 172.21.65.139 any eq ssh"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp host 172.21.65.131 any eq ssh"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip host 10.233.40.30 object-group ALLE_DCer"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt remark CTASK0036374"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip host 172.27.200.40 host 172.21.248.24"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt remark ."
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp host 100.126.255.121 object SSM_Satellite_100.73.35.40 eq https"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp host 100.126.255.58 object SSM_Satellite_100.73.35.40 eq https"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp host 10.233.40.200 object CAT2_PRTG eq https"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt remark CTASK0036819 ----------- Begin"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp host 172.21.65.118 any eq ssh"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny icmp host 172.21.65.118 any"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp host 172.21.65.118 host 172.17.88.230 eq https"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp host 172.21.65.118 host 172.17.88.232 eq https"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp host 172.21.65.118 host 172.17.88.233 eq https"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt remark CTASK0036819 ----------- END"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip 172.27.200.0 255.255.255.0 host 172.21.248.22"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip host 172.27.2.109 host 172.21.254.9"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt remark CHG0056465-CTASK0037880 ----------- Begin"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp host 172.21.65.119 any eq ssh"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp host 172.21.65.119 any eq https"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny icmp host 172.21.65.119 any"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt remark CHG0056465-CTASK0037880 ----------- END"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended permit ip any 10.185.1.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip any 10.185.5.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended permit ip any 10.165.200.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny icmp host 172.21.65.116 any"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny icmp host 172.21.65.117 any"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny icmp host 172.21.65.139 any"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp host 172.21.65.116 host 172.17.88.230 eq https"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp host 172.21.65.117 host 172.17.88.230 eq https"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp host 172.21.65.116 host 172.17.88.232 eq https"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp host 172.21.65.117 host 172.17.88.232 eq https"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp host 172.21.65.116 host 172.17.88.233 eq https"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp host 172.21.65.117 host 172.17.88.233 eq https"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended permit ip any 172.22.0.0 255.255.0.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt remark CHG0056312"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny tcp object-group HOST-GROUP-EXT-PROVIDERS-JTTN-JUMPHOSTS object HOST-172.17.88.190-TCCE-Alstom-TC-HHT-VPN-FW eq ssh"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt remark ..."
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended permit ip any 172.17.0.0 255.255.0.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt remark CTASK0020006"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip object SRA-ELTEL_100.64.15.0_mask_24 object net_100.126.255.0_24"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip object Herning_10.142.14.0_24 host 10.110.2.167"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip object Aalborg_172.24.36.0_24 host 10.110.2.167"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt remark CTASK0022208"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip host 172.21.251.18 host 172.27.2.22"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip host 172.21.251.18 host 172.27.3.22"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip host 172.21.251.18 host 172.21.1.76"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip host 172.21.1.76 host 172.21.251.18"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny icmp 10.3.128.0 255.255.128.0 10.150.87.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip 10.3.128.0 255.255.128.0 10.150.87.0 255.255.255.0"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt remark CTASK0036552"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny udp object Baneextern.dk_rds 10.185.50.0 255.255.255.0 eq snmptrap"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt remark CTASK0036552"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny udp object DMZ-net 10.185.50.0 255.255.255.0 eq snmptrap"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt remark CTASK0036552"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny udp object DMZ-FTP 10.185.50.0 255.255.255.0 eq snmptrap"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt remark CTASK0036552"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny udp object NET-172.21.5.0_28 10.185.50.0 255.255.255.0 eq snmptrap"
+    },
+    {
+        "acl": "CSM_AAA_AUTHE_Bane1_FirewallMgt",
+        "rule": "access-list CSM_AAA_AUTHE_Bane1_FirewallMgt extended deny ip host 172.21.248.22 172.27.200.0 255.255.255.0"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp any any"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit ip host 172.21.65.116 host 172.17.139.248"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0037152"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object PoC_BANE1-VRF_Source_Host object-group PoC_Destination_Hosts eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit ip host 172.21.65.117 172.17.0.0 255.255.0.0"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny icmp object SSM_Satellite_100.73.35.40 any log"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny object-group RDP object VPN_pool_172.31.100.10-103.200 object STTN_WTS_172.21.2.62"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp object VPN_pool_172.31.100.10-103.200 object STTN_WTS_172.21.2.62"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp any 100.72.35.0 255.255.255.0"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp any 100.72.3.0 255.255.255.0"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0020006"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny object-group RDP object Eltel_Host_188.180.65.67 object STTN_WTS_172.21.2.62"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group RDP object SRA-ELTEL_100.64.15.0_mask_24 object STTN_WTS_172.21.2.62"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group RDP object SRA-ELTEL_100.64.15.0_mask_24 host 10.138.63.118"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit ip object SRA-ELTEL_100.64.15.0_mask_24 any"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0020006"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp object Net_172.20.137.0 object OBVPEs eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny icmp object Net_172.20.137.0 object OBVPEs"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp object Net_172.20.137.0 object OBVPEs eq telnet"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark chg38153"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny object TACACS object OBV2ASASw1_172.31.250.254 object Tacacs01"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp object OBV2ASASw1_172.31.250.254 object Tacacs01 eq tacacs"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny object TACACS object OBV2edge_172.31.250.252 object Tacacs01"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp object OBV2edge_172.31.250.252 object Tacacs01 eq tacacs"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny object TACACS object OBVASASw1_172.31.250.253 object Tacacs01"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp object OBVASASw1_172.31.250.253 object Tacacs01 eq tacacs"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny object TACACS object OBVedge_172.31.250.251 object Tacacs01"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp object OBVedge_172.31.250.251 object Tacacs01 eq tacacs"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark chg38153"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny udp object OBV2ASASw1_172.31.250.254 object AWTSUCS1_10.185.50.42 eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny udp object OBV2ASASw1_172.31.250.254 object AWTSUCS1_10.185.50.42 eq snmptrap"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object OBV2ASASw1_172.31.250.254 object Prime_Core eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny udp object OBV2ASASw1_172.31.250.254 object Prime_Core eq snmptrap"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny udp object OBV2edge_172.31.250.252 object AWTSUCS1_10.185.50.42 eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny udp object OBV2edge_172.31.250.252 object AWTSUCS1_10.185.50.42 eq snmptrap"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object OBV2edge_172.31.250.252 object Prime_Core eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny udp object OBV2edge_172.31.250.252 object Prime_Core eq snmptrap"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny udp object OBVASASw1_172.31.250.253 object AWTSUCS1_10.185.50.42 eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny udp object OBVASASw1_172.31.250.253 object AWTSUCS1_10.185.50.42 eq snmptrap"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object OBVASASw1_172.31.250.253 object Prime_Core eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny udp object OBVASASw1_172.31.250.253 object Prime_Core eq snmptrap"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny udp object OBVedge_172.31.250.251 object AWTSUCS1_10.185.50.42 eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny udp object OBVedge_172.31.250.251 object AWTSUCS1_10.185.50.42 eq snmptrap"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object OBVedge_172.31.250.251 object Prime_Core eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny udp object OBVedge_172.31.250.251 object Prime_Core eq snmptrap"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0020429"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0020429"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CHG0039010"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny object-group RDP object Ringsted_bruger_10.9.241.0_24 object ACTXJUMP01_172.21.248.24"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CHG0056099 - CTASK0037542"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object ACIBICOMJUMPRG1 object GSMR_Jump_10.185.50.85 eq 3389"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object ACIBICOMJUMPOB1 object GSMR_Jump_10.185.50.85 eq 3389"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ..."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0021538"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit ip any host 172.17.88.240"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit ip any host 172.17.88.236"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark Test new JH for BDK - Install ASDM"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny ip any host 172.17.88.235"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark Transmissions adgang"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit ip any 10.185.5.0 255.255.255.0"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark Transmissions adgang slut"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit ip any 10.185.1.0 255.255.255.0"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit ip any 10.185.50.0 255.255.255.0"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny ip any 172.22.0.0 255.255.0.0"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny ip any 10.165.200.0 255.255.255.0"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit ip any 10.0.0.0 255.0.0.0"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny ip any 192.168.0.0 255.255.0.0"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CHG0056312"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object-group HOST-GROUP-EXT-PROVIDERS-JTTN-JUMPHOSTS object HOST-172.17.88.190-TCCE-Alstom-TC-HHT-VPN-FW eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ..."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit ip any 172.17.0.0 255.255.0.0"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny ip any 172.27.1.0 255.255.255.0 log"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny ip host 172.21.2.13 host 172.17.88.234"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny ip host 172.21.2.13 host 172.17.88.235"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp 172.21.1.88 255.255.255.252 host 10.185.5.11 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp 172.21.1.92 255.255.255.252 host 10.185.5.11 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp 172.21.1.92 255.255.255.252 host 10.185.5.12 eq 3389"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp 172.21.1.88 255.255.255.252 host 10.185.5.12 eq 3389"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.210.5 host 172.21.252.13 eq 2019"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp host 172.27.210.5 host 172.16.244.13 eq 2019"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp host 172.27.210.21 host 172.21.252.13 eq 2019"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp host 172.27.210.21 host 172.16.244.13 eq 2019"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0023642 08-01-2020"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp object-group Bizqan1_2 host 10.83.5.203 eq www"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0023402 23-01-2020"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp 172.31.100.0 255.255.252.0 host 172.21.248.24 eq 3389"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny udp object-group DiaMont-Servers_172.21.244.1x object masterclock.bane.dk_172.17.138.38 eq ntp"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny udp object-group DiaMont-Servers_172.21.252.1x object masterclock.bane.dk_172.17.138.38 eq ntp"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object aapptogstapri1m_172.27.210.5 object-group DiaMont-Servers_172.21.244.1x eq 2019"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp object aapptogstapri1m_172.27.210.5 object-group DiaMont-Servers_172.21.252.1x eq 2019"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object aapptogstasec1m_172.27.210.21 object-group DiaMont-Servers_172.21.244.1x eq 2019"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp object aapptogstasec1m_172.27.210.21 object-group DiaMont-Servers_172.21.252.1x eq 2019"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object AELTJUMPBANE1_172.27.200.37 object ACTXJUMP01_172.21.248.24 eq 3389"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp host 172.27.200.40 host 172.21.248.23 range 49151 65535"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp host 172.27.200.40 host 172.21.248.24 range 49151 65535"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0026104 02-09-2020"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny object-group AD_Services host 172.27.133.32 host 10.185.50.11"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny object-group AD_Services host 172.27.133.32 host 10.185.50.12"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0026103 09-09-2020"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group SERVICE_tcp_80_443 any object SSM_Satellite_100.73.35.40"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp any object SSM_Satellite_100.73.35.40 eq 8443"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny icmp host 172.27.210.5 object-group DiaMont-Servers_172.21.252.1x"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny icmp host 172.27.210.21 object-group DiaMont-Servers_172.21.252.1x"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp any object CAT3-ISE01_100.73.35.15 eq tacacs"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp any object CAT3-ISE02_100.73.3.15 eq tacacs"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0028512 04-05-2021"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object AALSTOMJUMP1_172.21.2.164 object AALSTOMJUMP2_172.21.248.50 eq 3389"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit ip host 100.73.3.15 host 172.27.2.22"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny icmp object SRA-ELTEL_100.64.15.0_mask_24 object AWTSDWDM1_10.26.0.46"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp object SRA-ELTEL_100.64.15.0_mask_24 object AWTSDWDM1_10.26.0.46 eq 3389"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny icmp object VPN_pool_172.31.100.10-103.200 object AWTSDWDM1_10.26.0.46"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended deny tcp object VPN_pool_172.31.100.10-103.200 object AWTSDWDM1_10.26.0.46 eq 3389"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0029833 30-09-2021"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object AJUMPTSS1BANE1_172.27.200.36 object ACTXJUMP01_172.21.248.24 eq 3389"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0030726 CConrads 7-12-2021"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0031858 2022-03-21"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.200.17 host 172.21.247.25 eq 7074"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.200.17 host 172.21.247.25 eq 7076"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.200.17 host 172.21.247.25 eq 7081"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.200.17 host 172.21.247.25 eq 7083"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.200.17 host 172.21.247.25 eq 8080"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.200.17 host 172.21.247.25 eq 8443"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.200.17 host 172.21.247.25 eq https"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.200.34 host 172.21.247.25 range 8530 8531"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CHG0050132 - bane.dk access to Citrix AD"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group AD_Services_Citrix object-group Domain_group object-group AD_CITRIX"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0032104 2022-04-13"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object-group BDK_Bruger_Net host 172.21.247.41 eq www"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object-group BDK_Bruger_Net host 172.21.247.41 eq https"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0032350 2022-05-03"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.23 host 172.21.247.26 eq www"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.23 host 172.21.247.26 eq https"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0032354 2022-05-04"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.200.40 object CTX_DHCP_172_21_247_100_199 eq 135"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.200.40 object CTX_DHCP_172_21_247_100_199 eq 445"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.200.40 object CTX_DHCP_172_21_247_100_199 range 49152 65535"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0032860 2022-07-01"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object f.esbbane.dk_80.243.122.4 host 10.14.0.70 eq 31000"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object f.esbbane.dk_80.243.122.4 host 10.14.0.70 eq 32000"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object f.esbbane.dk_80.243.122.4 host 10.14.0.70 eq 8088"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object f.esbbane.dk_80.243.122.4 host 10.14.0.70 eq 8086"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0033634 2022-09-29"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object AWTSDIAM1_172.21.65.38 object ADIATSFA1_172.21.244.16 eq 3389"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object AWTSDIAM1_172.21.65.38 object ADIATSOB1_172.21.252.16 eq 3389"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK003340822023-02-21"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.108 host 172.21.254.4 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.108 host 172.21.254.5 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.108 host 172.21.254.6 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.108 host 172.21.254.7 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.108 host 172.21.254.8 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.108 host 172.21.254.20 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.111 host 172.21.254.4 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.111 host 172.21.254.5 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.111 host 172.21.254.6 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.111 host 172.21.254.7 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.111 host 172.21.254.8 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.111 host 172.21.254.20 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.117 host 172.21.254.4 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.117 host 172.21.254.5 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.117 host 172.21.254.6 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.117 host 172.21.254.7 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.117 host 172.21.254.8 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.117 host 172.21.254.20 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0034507 2023-03-06"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp host 172.27.2.108 host 172.21.254.4"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.108 host 172.21.254.4 eq https"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp host 172.27.2.108 host 172.21.254.5"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.108 host 172.21.254.5 eq https"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp host 172.27.2.108 host 172.21.254.6"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.108 host 172.21.254.6 eq 5432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.108 host 172.21.254.6 eq 6432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp host 172.27.2.108 host 172.21.254.7"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.108 host 172.21.254.7 eq 5432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.108 host 172.21.254.7 eq 6432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp host 172.27.2.108 host 172.21.254.8"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.108 host 172.21.254.8 eq 5432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.108 host 172.21.254.8 eq 6432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp host 172.27.2.108 host 172.21.254.9"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.108 host 172.21.254.9 eq 6432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp host 172.27.2.111 host 172.21.254.4"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.111 host 172.21.254.4 eq https"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp host 172.27.2.111 host 172.21.254.5"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.111 host 172.21.254.5 eq https"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp host 172.27.2.111 host 172.21.254.6"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.111 host 172.21.254.6 eq 5432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.111 host 172.21.254.6 eq 6432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp host 172.27.2.111 host 172.21.254.7"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.111 host 172.21.254.7 eq 5432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.111 host 172.21.254.7 eq 6432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp host 172.27.2.111 host 172.21.254.8"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.111 host 172.21.254.8 eq 5432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.111 host 172.21.254.8 eq 6432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp host 172.27.2.111 host 172.21.254.9"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.111 host 172.21.254.9 eq 5432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.111 host 172.21.254.9 eq 6432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp host 172.27.2.117 host 172.21.254.4"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.117 host 172.21.254.4 eq https"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp host 172.27.2.117 host 172.21.254.5"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.117 host 172.21.254.5 eq https"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp host 172.27.2.117 host 172.21.254.6"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.117 host 172.21.254.6 eq 5432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.117 host 172.21.254.6 eq 6432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp host 172.27.2.117 host 172.21.254.7"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.117 host 172.21.254.7 eq 5432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.117 host 172.21.254.7 eq 6432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp host 172.27.2.117 host 172.21.254.8"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.117 host 172.21.254.8 eq 5432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.117 host 172.21.254.8 eq 6432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp host 172.27.2.117 host 172.21.254.9"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.117 host 172.21.254.9 eq 5432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.2.117 host 172.21.254.9 eq 6432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0035036 2023-06-29"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 80.243.122.14 host 10.255.255.138 eq https"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 80.243.122.26 host 10.255.255.138 eq https"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.200.37 host 172.21.248.70 eq https"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0035673 2023-10-30"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group Aeven_DC_snak host 10.233.40.30 object-group ALLE_DCer"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0035661 2023-10-30"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0035661 2023-10-30"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object AAEVENJUMP_172.21.65.116_117 172.21.0.0 255.255.0.0 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object AAEVENJUMP_172.21.65.116_117 172.21.0.0 255.255.0.0 eq https"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object AAEVENJUMP_172.21.65.116_117 172.21.0.0 255.255.0.0 eq 3389"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit ip object AAEVENJUMP_172.21.65.116_117 172.17.0.0 255.255.0.0"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object AAEVENJUMP_172.21.65.116_117 host 10.185.50.72 eq www"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0035661 2023-11-02"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object AAEVENJUMP_172.21.65.116_117 100.73.0.0 255.255.0.0 eq https"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object AAEVENJUMP_172.21.65.116_117 100.73.0.0 255.255.0.0 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object AAEVENJUMP_172.21.65.116_117 100.73.0.0 255.255.0.0 eq 3389"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit icmp object AAEVENJUMP_172.21.65.116_117 any"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp host 172.21.65.131 host 10.185.50.78 eq snmptrap"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp host 172.21.65.139 host 10.185.50.78 eq snmptrap"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0036083 2024-01-16"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object obj-RAS-POOL object-group HOST-GROUP-BDK-JTTN-JUMPHOSTS eq 3389"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0035969 2024-01-16"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group PORT-GROUP-AEVEN-SPNS2-JUMPHOST-ACCESS object-group HOST-GROUP-AEVEN-JTTN-JUMPHOSTS object-group HOST-GROUP-AEVEN-SPNS2-JUMPHOSTS"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0035959 2024-01-16"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group PORT-GROUP-EXT-PROVIDERS-SPNS2-JUMPHOST-ACCESS object-group HOST-GROUP-EXT-PROVIDERS-JTTN-JUMPHOSTS object-group HOST-GROUP-EXT-PROVIDERS-SPNS2-JUMPHOSTS"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0036374"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group CHG0054478 object ARDLICENSE01 object ACTXJUMP01_172.21.248.24"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0036473 ---BEGIN"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0036473 ---END"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object AAEVENJUMP_172.21.65.116_117 10.185.10.0 255.255.255.192 eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0036552"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object Baneextern.dk_rds 10.185.50.0 255.255.255.0 eq snmptrap"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0036552"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object DMZ-net 10.185.50.0 255.255.255.0 eq snmptrap"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0036552"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object DMZ-FTP 10.185.50.0 255.255.255.0 eq snmptrap"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object NET-172.21.5.0_28 10.185.50.0 255.255.255.0 eq snmptrap"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0036753"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 10.233.40.200 object CAT2_PRTG eq https"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark .."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0036819 ----------- Begin"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit ip host 172.21.65.118 host 172.17.139.248"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0036819 ----------- END"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0036871 2024-05-29"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group PORT-GROUP-SUPPORT-ZONE-VXRAIL-VCSA-MGMT object-group HOST-GROUP-AEVEN-JTTN-JUMPHOSTS object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-VCSA"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group PORT-GROUP-SUPPORT-ZONE-VXRAIL-VXMAN-MGMT object-group HOST-GROUP-AEVEN-JTTN-JUMPHOSTS object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-VXMAN"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group PORT-GROUP-SUPPORT-ZONE-VXRAIL-NODES-MGMT object-group HOST-GROUP-AEVEN-JTTN-JUMPHOSTS object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-NODES"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group PORT-GROUP-SUPPORT-ZONE-VXRAIL-NODES-MGMT object-group HOST-GROUP-AEVEN-JTTN-JUMPHOSTS object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-NODES-iDRAC"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group PORT-GROUP-SUPPORT-ZONE-VXRAIL-VCSA-MGMT object-group HOST-GROUP-EXT-PROVIDERS-JTTN-JUMPHOSTS object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-VCSA"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group PORT-GROUP-SUPPORT-ZONE-VXRAIL-VXMAN-MGMT object-group HOST-GROUP-EXT-PROVIDERS-JTTN-JUMPHOSTS object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-VXMAN"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group PORT-GROUP-SUPPORT-ZONE-VXRAIL-NODES-MGMT object-group HOST-GROUP-EXT-PROVIDERS-JTTN-JUMPHOSTS object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-NODES"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group PORT-GROUP-SUPPORT-ZONE-VXRAIL-NODES-MGMT object-group HOST-GROUP-EXT-PROVIDERS-JTTN-JUMPHOSTS object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-NODES-iDRAC"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CHG0055802-------- Begin"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.200.34 host 172.21.248.22 range 8530 8531"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.200.17 host 172.21.248.22 eq 8443"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CHG0055802-------- End"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object PoC_ERTMS-DMZ-VRF_Source_Host object-group PoC_Destination_Hosts eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object PoC_SERVER-MGMT_Source_Host object-group PoC_Destination_Hosts eq ssh"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CHG0056173-CTASK0037654"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp host 172.27.3.149 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp host 172.27.3.150 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object abane17.bane.dk_172.27.3.22 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object ABANE16.bane.dk_172.27.2.22 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object ADNSFORW1_172.21.1.201 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object ADNSFORW2_172.21.1.202 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object ABITDEFEND1_172.27.200.17 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object AAPPWEBENKS202_172.27.3.242 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp host 172.27.3.243 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object AbaneExt1_172.21.2.104 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object AbaneExt2_172.21.2.103 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp host 172.21.2.180 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp host 172.21.1.77 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp host 172.27.3.101 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp host 172.27.3.102 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp host 172.27.3.43 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp host 172.27.210.36 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp host 172.27.210.68 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object abaneardc1.bane.dk_172.24.12.61 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object abanefa4.bane.dk_172.23.3.6 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp host 172.27.210.4 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object aapptogstapri1m_172.27.210.5 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ..."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CHG0056465-CTASK0037880 ----------- Begin"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit ip host 172.21.65.119 host 172.17.139.248"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CHG0056465-CTASK0037880 ----------- END"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CHG0056173-CTASK0037654"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp host 100.126.255.62 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object OBVCore01_100.126.255.65 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object OBVCore02_Sec_100.126.255.66 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object TCCWCORE01_100.126.255.1 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object TCCWCORE02_100.126.255.2 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object TCCECore01_100.126.255.129 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object TCCECore02_100.126.255.130 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object OBVFW1_admin_100.126.255.114 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object TCCWFw1_100.126.255.50 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object OBVFw2_admin_100.126.255.121 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object TCCWFW2_100.126.255.58 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object OBVBrokerMgmtSw01_100.126.255.69 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object OBVBrokerSW01_100.126.255.67 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ..."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CHG0056653-CTASK0037959"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group Windows_Logging host 172.27.210.4 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group Windows_Logging host 172.27.210.5 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group Windows_Logging host 172.27.210.20 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group Windows_Logging host 172.27.210.21 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group Windows_Logging object AAPPWEBENKS202_172.27.3.242 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group Windows_Logging host 172.27.3.243 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group Windows_Logging host 172.21.2.180 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group Windows_Logging host 172.27.3.101 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group Windows_Logging host 172.27.3.102 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group Windows_Logging host 172.27.3.43 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group Windows_Logging object APBASEFTP_172.21.1.76 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group Windows_Logging object ABANE16.bane.dk_172.27.2.22 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group Windows_Logging object abane17.bane.dk_172.27.3.22 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group Windows_Logging object AbaneExt1_172.21.2.104 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group Windows_Logging object AbaneExt2_172.21.2.103 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ..."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ..."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0037979 -------------- BEGIN"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object AJUMPTSS1BANE1_172.27.200.36 object-group AD_CITRIX eq ldap"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0037979 -------------- END"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0038080 ---------------- BEGIN"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object abaneardc1.bane.dk_172.24.12.61 object SPNS2_Logpoint_100.72.36.70 eq 1514"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object abaneardc1.bane.dk_172.24.12.61 object SPNS2_Logpoint_100.72.36.70 eq 1515"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object abanefa4.bane.dk_172.23.3.6 object SPNS2_Logpoint_100.72.36.70 eq 1514"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object abanefa4.bane.dk_172.23.3.6 object SPNS2_Logpoint_100.72.36.70 eq 1515"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group Windows_Logging object ADNSFORW1_172.21.1.201 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object-group Windows_Logging object ADNSFORW2_172.21.1.202 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0038080 ---------------- END"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CHG0056918-CTASK0038190 ---------------- BEGIN"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object PRC-Roskilde_10.147.62.10 object APRBPRTG11_10.185.50.61 eq snmptrap"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit udp object prc-odense.baneisp.dk_10.9.77.10 object APRBPRTG21_10.185.50.63 eq 1515"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CHG0056918-CTASK0038190 ---------------- END"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CHG0056750-CTASK0038089"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 80.243.122.26 host 10.255.255.139 eq 8011"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ..."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0038286-CHG0057083-------- Begin"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp object adwhtrnspbr01_172.27.2.109 object adbdwhrppbr00_172.21.254.9 eq 6432"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0038286-CHG0057083-------- End"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0038642"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object TCP-3389 object-group HOST-GROUP-AEVEN-JTTN-JUMPHOSTS object-group HOST-GROUP-UCS-JUMPHOSTS"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit object TCP-3389 object-group HOST-GROUP-EXT-PROVIDERS-JTTN-JUMPHOSTS object-group HOST-GROUP-UCS-JUMPHOSTS"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark ..."
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0038714 ------------ BEGIN"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 extended permit tcp host 172.27.3.148 object-group AD_CITRIX eq https"
+    },
+    {
+        "acl": "access-in-bane1",
+        "rule": "access-list access-in-bane1 remark CTASK0038714 ------------ END"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit icmp object SSM_Satellite_100.73.35.40 any log"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit icmp host 10.185.50.51 100.73.0.0 255.255.0.0"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0037152"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit tcp object PoC_CS-VRF_Source_Host object-group PoC_Destination_Hosts eq ssh"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark ."
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended deny icmp host 10.185.50.51 100.72.0.0 255.255.0.0"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0020006"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group RDP object AWTSUCS1_10.185.50.42 object STTN_WTS_172.21.2.62"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit ip object SRA-ELTEL_100.64.15.0_mask_24 any"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0020006"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended deny ip any object STTN_WTS_172.21.2.62"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark chg38153"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit tcp object AWTSUCS1_10.185.50.42 object OBV2ASASw1_172.31.250.254 eq ssh"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit tcp object AWTSUCS1_10.185.50.42 object OBV2edge_172.31.250.252 eq ssh"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit tcp object AWTSUCS1_10.185.50.42 object OBVASASw1_172.31.250.253 eq ssh"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit tcp object AWTSUCS1_10.185.50.42 object OBVedge_172.31.250.251 eq ssh"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit tcp object Prime_Core object OBV2ASASw1_172.31.250.254 eq ssh"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit tcp object Prime_Core object OBV2edge_172.31.250.252 eq ssh"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit tcp object Prime_Core object OBVASASw1_172.31.250.253 eq ssh"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit tcp object Prime_Core object OBVedge_172.31.250.251 eq ssh"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended deny tcp object Net_172.17.87.0 object ARDSPROD1.BANE.DK eq ftp"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended deny tcp 172.17.88.0 255.255.255.0 object ARDSPROD1.BANE.DK eq ftp"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended deny tcp 172.17.89.0 255.255.255.0 object ARDSPROD1.BANE.DK eq ftp"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CHG0049711"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group BackupToClient object-group NETBACKUP_MEDIASERVERS object-group DWDM_ESX_SERVERS"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CHG0049711"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group vCenter object VX-VCSA_10.185.230.200 object-group DWDM_ESX_SERVERS"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended deny udp 10.185.50.0 255.255.255.0 eq snmptrap any"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp 10.185.50.0 255.255.255.0 any eq snmp"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CHG0056173-CTASK0037654"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp object BHADOBVAD_10.185.50.11 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp object BHADOBVAD_10.185.50.12 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp object GSMR_Jump_10.185.50.85 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp object CAT2ISE1_100.72.35.15 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp object CAT2ISE2_100.72.3.15 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp object VX-VCSA_10.185.230.200 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark ..."
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CHG0056653-CTASK0037959"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group Windows_Logging object BHADOBVAD_10.185.50.11 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group Windows_Logging object BHADOBVAD_10.185.50.12 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group Windows_Logging object HOST-100.72.3.11--CAT2DMZ-DC01 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group Windows_Logging object HOST-100.72.35.11--CAT2DMZ-DC02 object SPNS2_Logpoint_100.72.36.70"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark ..."
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit ip 10.185.50.0 255.255.255.0 any"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit ip 10.185.230.0 255.255.255.0 any"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit ip 172.17.0.0 255.255.0.0 any"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit ip 10.255.255.16 255.255.255.240 any"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0022756 09-10-2019"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended deny udp host 10.185.50.93 172.27.137.0 255.255.255.0 eq 65532"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended deny udp host 10.185.50.93 172.27.137.0 255.255.255.0 eq domain"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended deny tcp host 10.185.50.93 172.27.137.0 255.255.255.0 eq domain"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended deny udp host 10.185.50.93 172.27.137.0 255.255.255.0 eq tftp"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark ."
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit ip object CAT3-ISE01_100.73.35.15 host 172.27.2.22"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit ip object CAT3-ISE02_100.73.3.15 host 172.27.2.22"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit tcp host 100.73.35.40 host 172.27.2.120 eq https"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit tcp host 100.73.35.40 host 172.27.2.120 eq 3128"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended deny tcp host 100.73.35.40 host 172.27.2.121 eq https"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit tcp host 100.73.35.40 host 172.27.2.121 eq 3128"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended deny tcp host 100.73.35.40 host 172.27.2.121 eq www"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0031480 14-02-2022"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group SERVICE_tcp_7074_7075_7081_8443 object SPNS1_5JUMP_100.73.36.5 object ABITDEFEND1_172.27.200.17"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit tcp object SPNS1_5JUMP_100.73.36.5 object AWSUS01_172.27.200.34 range 8530 8531"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark ."
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended deny tcp object SPNS1_5JUMP_100.73.36.5 host 100.64.15.40 eq 5666"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0034956 2023-06-09"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit tcp object Cat2WSUS01_100.72.3.12 object AWSUS01_172.27.200.34 range 8530 8531"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0035058 2023-06-30"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp object-group PRTG_Servers 172.21.247.0 255.255.255.0 eq snmp"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp object-group PRTG_Servers 172.21.248.0 255.255.255.0 eq snmp"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp object-group PRTG_Servers 172.21.254.0 255.255.255.0 eq snmp"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark ."
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0035993 2023-12-15"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit tcp object eltnbmaster01 object actxnbopsc1 eq 1556"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp object eltnbmaster01 object actxnbopsc1 eq 1556"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark ."
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0035961 2024-01-16"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group PORT-GROUP-BDK-SPNS2-JUMPHOST-ACCESS object-group HOST-GROUP-BDK-JTTN-JUMPHOSTS object-group HOST-GROUP-BDK-SPNS2-JUMPHOSTS"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark ."
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0036183 2024-01-30"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group WSUS_ports object HOST-10.185.50.44--BDK-JTTN-JUMPHOST2 object AWSUS01_172.27.200.34"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group SERVICE_tcp_7074_7075_7081_8443 object HOST-10.185.50.44--BDK-JTTN-JUMPHOST2 object ABITDEFEND1_172.27.200.17"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark ."
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0036166 2024-02-19"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group DNS-Resolving object-group CAT2DMZ-WINDOWS-DC object-group Domain_group"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark ."
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp 10.185.50.0 255.255.255.0 object Baneextern.dk_rds eq snmp"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0036552"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp 10.185.50.0 255.255.255.0 object DMZ-net eq snmp"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0036552"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp 10.185.50.0 255.255.255.0 object DMZ-FTP eq snmp"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0036552"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0036552"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp 10.185.50.0 255.255.255.0 object NET-172.21.5.0_28 eq snmp"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group DNS-Resolving object-group CAT2DMZ-WINDOWS-DC object-group FORWARD-DNS"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0036871 2024-05-29"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group PORT-GROUP-SUPPORT-ZONE-VXRAIL-VCSA-MGMT object-group HOST-GROUP-BDK-JTTN-JUMPHOSTS object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-VCSA"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group PORT-GROUP-SUPPORT-ZONE-VXRAIL-VXMAN-MGMT object-group HOST-GROUP-BDK-JTTN-JUMPHOSTS object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-VXMAN"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group PORT-GROUP-SUPPORT-ZONE-VXRAIL-NODES-MGMT object-group HOST-GROUP-BDK-JTTN-JUMPHOSTS object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-NODES"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group PORT-GROUP-SUPPORT-ZONE-VXRAIL-NODES-MGMT object-group HOST-GROUP-BDK-JTTN-JUMPHOSTS object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-NODES-iDRAC"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark ."
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0036950 2024-06-11"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group PORT-GROUP-HTTPS-HTTP object APRBPRTG41.baneisp.dk object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-VCSA"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group PORT-GROUP-HTTPS-HTTP object APRBPRTG41.baneisp.dk object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-VXMAN"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group PORT-GROUP-HTTPS-HTTP object APRBPRTG41.baneisp.dk object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-NODES"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object-group PORT-GROUP-HTTPS-HTTP object APRBPRTG41.baneisp.dk object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-NODES-iDRAC"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark ."
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CHG0055949-CTASK0037416"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit tcp object BHADOBVAD_10.185.50.11 host 172.21.248.70 eq 3269"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit tcp object BHADOBVAD_10.185.50.11 host 172.21.248.75 eq 3269"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit tcp object BHADOBVAD_10.185.50.12 host 172.21.248.70 eq 3269"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit tcp object BHADOBVAD_10.185.50.12 host 172.21.248.75 eq 3269"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark ..."
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0037943 ----------------- BEGIN"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp object-group ACOREPRTG4_1-3 object ACEGALJUMP2_172.21.65.169 eq snmp"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0037943 ----------------- END"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CHG0056918-CTASK0038190 ---------------- BEGIN"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp object APRBPRTG11_10.185.50.61 object PRC-Roskilde_10.147.62.10 eq snmp"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp object APRBPRTG21_10.185.50.63 object prc-odense.baneisp.dk_10.9.77.10 eq snmp"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp object APRBPRTG11_10.185.50.61 object TE_OBV_TP5000_172.19.255.70 eq snmp"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp object APRBPRTG11_10.185.50.61 object TW_FRC_TP5000_172.19.255.66 eq snmp"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CHG0056918-CTASK0038190 ---------------- END"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CHG0057065_CTASK0038261 ---------------- BEGIN"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit udp object vx-witness.baneisp.dk_10.185.138.10 object masterclock.bane.dk_172.17.138.38 eq ntp"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CHG0057065_CTASK0038261 ---------------- END"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark CTASK0038642"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs extended permit object TCP-3389 object-group HOST-GROUP-BDK-JTTN-JUMPHOSTS object-group HOST-GROUP-UCS-JUMPHOSTS"
+    },
+    {
+        "acl": "access-in-cs",
+        "rule": "access-list access-in-cs remark ..."
+    },
+    {
+        "acl": "access-in-dics",
+        "rule": "access-list access-in-dics remark CTASK0020006"
+    },
+    {
+        "acl": "access-in-dics",
+        "rule": "access-list access-in-dics extended deny ip any object STTN_WTS_172.21.2.62"
+    },
+    {
+        "acl": "access-in-dics",
+        "rule": "access-list access-in-dics extended permit ip 10.165.200.0 255.255.255.0 any"
+    },
+    {
+        "acl": "access-in-dics",
+        "rule": "access-list access-in-dics extended permit ip 10.165.192.0 255.255.192.0 10.185.50.0 255.255.255.0"
+    },
+    {
+        "acl": "access-in-dics",
+        "rule": "access-list access-in-dics remark CTASK0026103 09-09-2020"
+    },
+    {
+        "acl": "access-in-dics",
+        "rule": "access-list access-in-dics extended deny object-group SERVICE_tcp_80_443 any object SSM_Satellite_100.73.35.40"
+    },
+    {
+        "acl": "access-in-dics",
+        "rule": "access-list access-in-dics remark ."
+    },
+    {
+        "acl": "access-in-dics",
+        "rule": "access-list access-in-dics extended deny tcp any object CAT3-ISE01_100.73.35.15 eq tacacs"
+    },
+    {
+        "acl": "access-in-dics",
+        "rule": "access-list access-in-dics extended deny tcp any object CAT3-ISE02_100.73.3.15 eq tacacs"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm remark CTASK0028878"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm remark CTASK0028878"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm remark CTASK0028878"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm extended permit object-group WSUS_ports object AWTSDWDM1_10.26.0.46 object AWSUS01_172.27.200.34"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm remark CTASK0028878"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm remark CTASK0029598"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm remark CTASK0028878"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm extended permit object-group MICROSOFT_LICENSE_Ports object AWTSDWDM1_10.26.0.46 object ARDEXTLIC1_172.31.255.9"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm remark CTASK0029598"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm remark CHG0049711"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm remark CHG0049711"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm extended permit object-group ClientToBackup object-group DWDM_ESX_SERVERS object-group NETBACKUP_MEDIASERVERS"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm remark CHG0049711"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm remark CHG0049711"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm extended permit object-group vCenter object-group DWDM_ESX_SERVERS object VX-VCSA_10.185.230.200"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm extended permit object-group DWDM_External_AD_ports object AWTSDWDM1_10.26.0.46 object-group DWDM_External_AD"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm extended deny object-group DWDM_Bane_AD_ports object AWTSDWDM1_10.26.0.46 object-group DWDM_Bane_AD"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm extended permit object-group Bitdefender_ports object AWTSDWDM1_10.26.0.46 object ABITDEFEND1_172.27.200.17"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm extended deny object-group ClientToBackup object-group DWDM_ESX_SERVERS object-group NETBACKUP_MEDIASERVERS"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm remark CTASK0035036 2023-06-29"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm extended permit tcp host 10.255.255.138 host 80.243.122.8 eq https"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm extended permit tcp host 10.255.255.138 host 80.243.122.23 eq https"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm remark ."
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm remark CTASK0035328 2023-09-05"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm extended permit icmp host 10.26.0.3 host 172.17.138.38"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm extended permit icmp host 10.26.0.10 host 172.17.138.38"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm extended permit icmp host 10.26.0.26 host 172.17.138.38"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm extended permit udp host 10.26.0.3 host 172.17.138.38 eq ntp"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm extended permit udp host 10.26.0.10 host 172.17.138.38 eq ntp"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm extended permit udp host 10.26.0.26 host 172.17.138.38 eq ntp"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm remark ."
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm remark CHG0056750-CTASK0038089"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm extended permit tcp host 10.255.255.139 host 80.243.122.23 eq https"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "rule": "access-list access-in-dwdm remark ..."
+    },
+    {
+        "acl": "access-in-fdrift",
+        "rule": "access-list access-in-fdrift extended permit icmp any any"
+    },
+    {
+        "acl": "access-in-fdrift",
+        "rule": "access-list access-in-fdrift remark CTASK0020006"
+    },
+    {
+        "acl": "access-in-fdrift",
+        "rule": "access-list access-in-fdrift extended deny ip any object STTN_WTS_172.21.2.62"
+    },
+    {
+        "acl": "access-in-fdrift",
+        "rule": "access-list access-in-fdrift extended permit ip 10.83.246.0 255.255.255.0 10.185.50.0 255.255.255.0"
+    },
+    {
+        "acl": "access-in-fdrift",
+        "rule": "access-list access-in-fdrift extended permit ip any 10.185.50.0 255.255.255.0"
+    },
+    {
+        "acl": "access-in-fdrift",
+        "rule": "access-list access-in-fdrift remark CTASK0026103 09-09-2020"
+    },
+    {
+        "acl": "access-in-fdrift",
+        "rule": "access-list access-in-fdrift extended permit object-group SERVICE_tcp_80_443 any object SSM_Satellite_100.73.35.40"
+    },
+    {
+        "acl": "access-in-fdrift",
+        "rule": "access-list access-in-fdrift remark ."
+    },
+    {
+        "acl": "access-in-fdrift",
+        "rule": "access-list access-in-fdrift extended permit tcp any object CAT3-ISE01_100.73.35.15 eq tacacs"
+    },
+    {
+        "acl": "access-in-fdrift",
+        "rule": "access-list access-in-fdrift extended deny tcp any object CAT3-ISE02_100.73.3.15 eq tacacs"
+    },
+    {
+        "acl": "access-in-fdrift",
+        "rule": "access-list access-in-fdrift extended deny udp any host 10.185.50.11 eq domain"
+    },
+    {
+        "acl": "access-in-fdrift",
+        "rule": "access-list access-in-fdrift extended deny tcp any host 10.185.50.11 eq domain"
+    },
+    {
+        "acl": "access-in-fdrift",
+        "rule": "access-list access-in-fdrift extended deny udp any host 10.185.50.12 eq domain"
+    },
+    {
+        "acl": "access-in-fdrift",
+        "rule": "access-list access-in-fdrift extended deny tcp any host 10.185.50.12 eq domain"
+    },
+    {
+        "acl": "access-in-fservice",
+        "rule": "access-list access-in-fservice remark CTASK0020006"
+    },
+    {
+        "acl": "access-in-fservice",
+        "rule": "access-list access-in-fservice extended deny ip any object STTN_WTS_172.21.2.62"
+    },
+    {
+        "acl": "access-in-fservice",
+        "rule": "access-list access-in-fservice extended deny ip host 10.83.245.16 10.185.50.0 255.255.255.0"
+    },
+    {
+        "acl": "access-in-fservice",
+        "rule": "access-list access-in-fservice extended deny object-group Management host 10.83.245.15 10.185.50.0 255.255.255.0"
+    },
+    {
+        "acl": "access-in-fservice",
+        "rule": "access-list access-in-fservice remark CTASK0026103 09-09-2020"
+    },
+    {
+        "acl": "access-in-fservice",
+        "rule": "access-list access-in-fservice extended deny object-group SERVICE_tcp_80_443 any object SSM_Satellite_100.73.35.40"
+    },
+    {
+        "acl": "access-in-fservice",
+        "rule": "access-list access-in-fservice remark ."
+    },
+    {
+        "acl": "access-in-fservice",
+        "rule": "access-list access-in-fservice extended permit tcp any object CAT3-ISE01_100.73.35.15 eq tacacs"
+    },
+    {
+        "acl": "access-in-fservice",
+        "rule": "access-list access-in-fservice extended deny tcp any object CAT3-ISE02_100.73.3.15 eq tacacs"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0020429"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0020429"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0020429"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0020429"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0020429"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0020429"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0021510 | CHG0038935"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0020429"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object Kerberos-Sec_TCP object ACTXJUMP01_172.21.248.24 object ABANE16.bane.dk_172.27.2.22"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object RPC object ACTXJUMP01_172.21.248.24 object ABANE16.bane.dk_172.27.2.22"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object ACTXJUMP01_172.21.248.24 object ABANE16.bane.dk_172.27.2.22 eq ldap"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object Kerberos_Password_V5_TCP object ACTXJUMP01_172.21.248.24 object ABANE16.bane.dk_172.27.2.22"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny object LDAP_GC object ACTXJUMP01_172.21.248.24 object ABANE16.bane.dk_172.27.2.22"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny object LDAPS_GC object ACTXJUMP01_172.21.248.24 object ABANE16.bane.dk_172.27.2.22"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp object ACTXJUMP01_172.21.248.24 object ABANE16.bane.dk_172.27.2.22 eq 464"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp object ACTXJUMP01_172.21.248.24 object ABANE16.bane.dk_172.27.2.22 eq ldaps"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object ACTXJUMP01_172.21.248.24 object ABANE16.bane.dk_172.27.2.22 eq 445"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object Kerberos-Sec_TCP object ACTXJUMP01_172.21.248.24 object abane17.bane.dk_172.27.3.22"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object RPC object ACTXJUMP01_172.21.248.24 object abane17.bane.dk_172.27.3.22"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object ACTXJUMP01_172.21.248.24 object abane17.bane.dk_172.27.3.22 eq ldap"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object Kerberos_Password_V5_TCP object ACTXJUMP01_172.21.248.24 object abane17.bane.dk_172.27.3.22"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny object LDAP_GC object ACTXJUMP01_172.21.248.24 object abane17.bane.dk_172.27.3.22"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny object LDAPS_GC object ACTXJUMP01_172.21.248.24 object abane17.bane.dk_172.27.3.22"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp object ACTXJUMP01_172.21.248.24 object abane17.bane.dk_172.27.3.22 eq 464"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp object ACTXJUMP01_172.21.248.24 object abane17.bane.dk_172.27.3.22 eq ldaps"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object ACTXJUMP01_172.21.248.24 object abane17.bane.dk_172.27.3.22 eq 445"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0021538"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0021538"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0021893 CConrads"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0022208 CConrads 17-7-2019"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object-group TPS_AD_ports object ASPFIL01_172.21.251.18 object-group Domain_group"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object ASPFIL01_172.21.251.18 object APBASEFTP_172.21.1.76 eq ftp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp object ASPFIL01_172.21.251.18 object APBASEFTP_172.21.1.76 range 50000 50005"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny udp object-group DiaMont-Servers_172.21.244.1x object ABANE16.bane.dk_172.27.2.22 eq ntp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny udp object-group DiaMont-Servers_172.21.252.1x object ABANE16.bane.dk_172.27.2.22 eq ntp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object-group DiaMont-Servers_172.21.244.1x object ABANE16.bane.dk_172.27.2.22 eq domain"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object-group DiaMont-Servers_172.21.252.1x object ABANE16.bane.dk_172.27.2.22 eq domain"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0023502 27-01-2020"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object-group TPS_AD_ports object asmtprelay01_172.21.251.19 object-group Domain_group"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object-group DiaMont-Servers_172.21.244.1x host 172.17.138.38 eq ntp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object-group DiaMont-Servers_172.21.252.1x host 172.17.138.38 eq ntp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp object-group DiaMont-Servers_172.21.252.1x object WSA1 eq https"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object-group DiaMont-Servers_172.21.252.1x object WSA1 eq www"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp object-group DiaMont-Servers_172.21.244.1x object WSA1 eq https"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object-group DiaMont-Servers_172.21.244.1x object WSA1 eq www"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp 172.21.144.0 255.255.252.0 object-group Domain_group eq ldaps"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object obj_172.21.144.0_22 object-group Domain_group eq domain"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object obj_172.21.144.0_22 object-group Domain_group eq domain"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0024848 20-05-2020"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp object asmtprelay01_172.21.251.19 object mailrelay_10.110.9.21 eq 587"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp object asmtprelay01_172.21.251.19 object mailrelay_10.110.9.22 eq 587"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK025109 2020-05-25"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp object-group Thales_HIS_ixl object-group Domain_group"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.248.24 host 172.27.200.40 eq 135"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp host 172.21.248.24 host 172.27.200.40 eq 445"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.248.24 host 172.27.200.40 range 49151 65535"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp host 172.21.248.23 host 172.27.200.40 eq 135"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp host 172.21.248.23 host 172.27.200.40 eq 445"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp host 172.21.248.23 host 172.27.200.40 range 49151 65535"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0025815 12-08-2020"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp host 172.21.248.23 object AWSUS01_172.27.200.34 range 8530 8531"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object ACTXJUMP01_172.21.248.24 object AWSUS01_172.27.200.34 range 8530 8531"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0023831"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp object-group DiaMont-Servers_172.21.252.1x host 172.27.210.5 eq 2019"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp object-group DiaMont-Servers_172.21.252.1x host 172.27.210.21 eq 2019"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp object-group DiaMont-Servers_172.21.244.1x host 172.27.210.5 eq 2019"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp object-group DiaMont-Servers_172.21.244.1x host 172.27.210.21 eq 2019"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny icmp object-group DiaMont-Servers_172.21.252.1x host 172.27.210.5"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny icmp object-group DiaMont-Servers_172.21.252.1x host 172.27.210.21"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp any object CAT3-ISE01_100.73.35.15 eq tacacs"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp any object CAT3-ISE02_100.73.3.15 eq tacacs"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp object ACTXVCENT01_172.21.248.22 object BHADOBVAD_10.185.50.11 eq ldap"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp object ACTXVCENT01_172.21.248.22 object BHADOBVAD_10.185.50.11 eq ldaps"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny udp object ACTXVCENT01_172.21.248.22 object BHADOBVAD_10.185.50.11 eq domain"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny udp object ACTXVCENT01_172.21.248.22 object BHADOBVAD_10.185.50.11 eq ntp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny udp object ACTXVCENT01_172.21.248.22 object BHADOBVAD_10.185.50.11 eq 389"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny udp object ACTXVCENT01_172.21.248.22 object BHADOBVAD_10.185.50.11 eq 636"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp object ACTXVCENT01_172.21.248.22 object BHADOBVAD_10.185.50.12 eq ldap"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp object ACTXVCENT01_172.21.248.22 object BHADOBVAD_10.185.50.12 eq ldaps"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny udp object ACTXVCENT01_172.21.248.22 object BHADOBVAD_10.185.50.12 eq domain"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny udp object ACTXVCENT01_172.21.248.22 object BHADOBVAD_10.185.50.12 eq ntp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny udp object ACTXVCENT01_172.21.248.22 object BHADOBVAD_10.185.50.12 eq 389"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny udp object ACTXVCENT01_172.21.248.22 object BHADOBVAD_10.185.50.12 eq 636"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CBO til Citrix platform"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0028525"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object AALSTOMJUMP2_172.21.248.50 object AWSUS01_172.27.200.34 range 8530 8531"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object-group Alstom_AD_ports object AALSTOMJUMP2_172.21.248.50 object abane17.bane.dk_172.27.3.22"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object-group SERVICE_tcp_49152_65535 object AALSTOMJUMP2_172.21.248.50 object abane17.bane.dk_172.27.3.22"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object-group Alstom_AD_ports object AALSTOMJUMP2_172.21.248.50 object ABANE16.bane.dk_172.27.2.22"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object-group SERVICE_tcp_49152_65535 object AALSTOMJUMP2_172.21.248.50 object ABANE16.bane.dk_172.27.2.22"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny object-group SERVICE_tcp_7074_7075_7081_8443 object AALSTOMJUMP2_172.21.248.50 object ABITDEFEND1_172.27.200.17"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CHG0048856"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object-group Thales_HHT object-group BDK-LDAP eq ldaps"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny udp object-group Thales_HHT object-group BDK-LDAP eq 636"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0030722 CConrads 7-12-2021"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object-group CTX_Servers_2 host 172.17.138.38 eq ntp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0030710 CConrads 6-12-2021"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object-group CTX_Servers_2 host 10.185.50.11 eq domain"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object-group CTX_Servers_2 host 10.185.50.12 eq domain"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object-group CTX_Servers_2 host 10.185.50.11 eq domain"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny tcp object-group CTX_Servers_2 host 10.185.50.12 eq domain"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0030728 CConrads 7-12-2021"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.248.70 host 10.185.50.11 eq ldap"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.248.70 host 10.185.50.12 eq ldap"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.248.70 host 10.185.50.11 eq ldaps"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.248.70 host 10.185.50.12 eq ldaps"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CHG0049422"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CHG0049434"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object aapplogpoint1_data_100.72.35.34 object ASMTP1.BANE.DK_172.27.200.24 eq smtp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0031236 21-01-2022"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object-group AD_SERVICES_CTX_VXRAIL_DELL host 172.21.248.70 host 10.185.50.11"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny object-group AD_SERVICES_CTX_VXRAIL_DELL host 172.21.248.71 host 10.185.50.11"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object-group AD_SERVICES_CTX_VXRAIL_DELL host 172.21.248.70 host 10.185.50.12"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended deny object-group AD_SERVICES_CTX_VXRAIL_DELL host 172.21.248.71 host 10.185.50.12"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CHG0050008 - Citrix AD access to bane.dk"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object-group AD_Services_Citrix object-group AD_CITRIX object-group Domain_group"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0031858 2022-03-21"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.247.25 host 172.27.200.17 eq 7074"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.247.25 host 172.27.200.17 eq 7076"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.247.25 host 172.27.200.17 eq 7081"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.247.25 host 172.27.200.17 eq 7083"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.247.25 host 172.27.200.17 eq 8080"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.247.25 host 172.27.200.17 eq 8443"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.247.25 host 172.27.200.17 eq https"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.247.25 host 172.27.200.34 range 8530 8531"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0032112 2022-04-13"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object CTX_DHCP_172_21_247_100_199 host 172.27.200.40 eq 135"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object CTX_DHCP_172_21_247_100_199 host 172.27.200.40 range 49152 65535"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object aapplogpoint1_data_100.72.35.34 object masterclock.bane.dk_172.17.138.38 eq ntp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0032350 2022-05-03"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.247.26 host 172.27.2.23 eq www"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.247.26 host 172.27.2.23 eq https"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0032353 2022-05-04"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object CTX_DHCP_172_21_247_100_199 host 10.110.3.41 eq https"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object CTX_DHCP_172_21_247_100_199 host 10.110.3.41 eq www"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0032354 2022-05-04"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object CTX_DHCP_172_21_247_100_199 host 172.27.200.40 eq 445"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0032860 2022-07-01"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 10.14.0.70 object f.esbbane.dk_80.243.122.4 eq 31000"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 10.14.0.70 object f.esbbane.dk_80.243.122.4 eq 32000"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 10.14.0.70 object f.esbbane.dk_80.243.122.4 eq 8088"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 10.14.0.70 object f.esbbane.dk_80.243.122.4 eq 8086"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0032860 2022-07-05"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object-group PBASE2022_AD object adwhreppbr01.bane.dk_172.21.254.4 object ABANE16.bane.dk_172.27.2.22"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object-group PBASE2022_AD object adwhreppbr01.bane.dk_172.21.254.4 object abane17.bane.dk_172.27.3.22"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object-group PBASE2022_AD object ADWHSTGPBR01.BANE.DK_172.21.254.5 object ABANE16.bane.dk_172.27.2.22"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object-group PBASE2022_AD object ADWHSTGPBR01.BANE.DK_172.21.254.5 object abane17.bane.dk_172.27.3.22"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object adwhreppbr01.bane.dk_172.21.254.4 object ADBDWHPBR00_172.27.2.103 eq 9999"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit icmp object adwhreppbr01.bane.dk_172.21.254.4 object ADBDWHPBR00_172.27.2.103"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object ADWHSTGPBR01.BANE.DK_172.21.254.5 object ADBDWHPBR00_172.27.2.103 eq 9999"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit icmp object ADWHSTGPBR01.BANE.DK_172.21.254.5 object ADBDWHPBR00_172.27.2.103"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark *** Permit UDP/123 for NTP from NUH to Masterclock (CHG0051089)"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object-group DiaMonT-NUH object masterclock.bane.dk_172.17.138.38 eq ntp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark *** Permit UDP/123 for NUC traffic to Masterclock (CHG0051089)"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object ADIANUCOB1_DATADMZ_172.21.253.22 object masterclock.bane.dk_172.17.138.38 eq ntp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark *** Permit UDP/123 for Responder traffic to Masterclock (CHG0051089)"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object ADIARESPOB1_DATADMZ_172.21.253.14 object masterclock.bane.dk_172.17.138.38 eq ntp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark *** Permit UDP/123 for Responder traffic to Masterclock (CHG0051089)"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object ADIARESPOB1_DATADMZ_172.21.253.14 object ASMTP1.BANE.DK_172.27.200.24 eq smtp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0033364 2022-08-23"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object ADWHSTGPBR01.BANE.DK_172.21.254.5 object AREPOPBR01.BANE.DK_172.27.2.206 eq www"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object ADWHSTGPBR01.BANE.DK_172.21.254.5 object AREPOPBR01.BANE.DK_172.27.2.206 eq https"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object adwhreppbr01.bane.dk_172.21.254.4 object AREPOPBR01.BANE.DK_172.27.2.206 eq www"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object adwhreppbr01.bane.dk_172.21.254.4 object AREPOPBR01.BANE.DK_172.27.2.206 eq https"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.254.6 object AREPOPBR01.BANE.DK_172.27.2.206 eq www"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.254.6 object AREPOPBR01.BANE.DK_172.27.2.206 eq https"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.254.7 object AREPOPBR01.BANE.DK_172.27.2.206 eq www"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.254.7 object AREPOPBR01.BANE.DK_172.27.2.206 eq https"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.254.8 object AREPOPBR01.BANE.DK_172.27.2.206 eq www"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.254.8 object AREPOPBR01.BANE.DK_172.27.2.206 eq https"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.254.20 object AREPOPBR01.BANE.DK_172.27.2.206 eq www"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.254.20 object AREPOPBR01.BANE.DK_172.27.2.206 eq https"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object ADIANUCOB1_DATADMZ_172.21.253.22 object ASMTP1.BANE.DK_172.27.200.24 eq smtp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0034412 2023-02-16"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.247.10 host 172.27.3.148 eq https"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.247.11 host 172.27.3.148 eq https"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0034533 2023-03-08"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.247.25 host 172.27.200.24 eq smtp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0034574 2023-03-16"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit icmp host 172.21.254.5 host 172.27.2.103"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.254.5 host 172.27.2.103 eq 6432"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0034654 2023-03-24"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp host 172.21.252.25 host 172.17.138.38 eq ntp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp host 172.21.244.25 host 172.17.138.38 eq ntp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.252.16 object-group openstreetmap.org eq https"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.244.16 object-group openstreetmap.org eq https"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.252.11 host 172.27.200.24 eq smtp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.252.12 host 172.27.200.24 eq smtp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.252.13 host 172.27.200.24 eq smtp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.252.14 host 172.27.200.24 eq smtp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.252.15 host 172.27.200.24 eq smtp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.252.25 host 172.27.200.24 eq smtp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.244.11 host 172.27.200.24 eq smtp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.244.12 host 172.27.200.24 eq smtp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.244.13 host 172.27.200.24 eq smtp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.244.14 host 172.27.200.24 eq smtp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.244.15 host 172.27.200.24 eq smtp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.244.25 host 172.27.200.24 eq smtp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.253.22 host 172.27.200.24 eq smtp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0035058 2023-06-30"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0035058 2023-06-30"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp 172.21.247.0 255.255.255.0 object-group PRTG_Servers eq snmptrap"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp 172.21.248.0 255.255.255.0 object-group PRTG_Servers eq snmptrap"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp 172.21.254.0 255.255.255.0 object-group PRTG_Servers eq snmptrap"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0035993 2023-12-15"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object actxnbopsc1 object eltnbmaster01 eq 1556"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object actxnbopsc1 object eltnbmaster01 eq 1556"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0036257"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object-group ASMTP1-CTX object ASMTP1.BANE.DK_172.27.200.24 eq smtp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0036374"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit object-group CHG0054478 object ACTXJUMP01_172.21.248.24 object ARDLICENSE01"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CHG0055776_CTASK0037322"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object ACTXVCENT01_172.21.248.22 object ACOREPRTG4_10.185.50.69 eq 23560"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CHG0055949-CTASK0037416"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.248.70 object BHADOBVAD_10.185.50.11 eq 3269"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.248.75 object BHADOBVAD_10.185.50.11 eq 3269"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.248.70 object BHADOBVAD_10.185.50.12 eq 3269"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.248.75 object BHADOBVAD_10.185.50.12 eq 3269"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ..."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CHG0055974-------- Begin"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.248.22 host 172.27.200.17 eq 8443"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CHG0055974-------- End"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CHG0055988 - CTASK0037494"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.248.75 object BHADOBVAD_10.185.50.11 eq domain"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp host 172.21.248.75 object BHADOBVAD_10.185.50.11 eq domain"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.248.75 object BHADOBVAD_10.185.50.12 eq domain"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp host 172.21.248.75 object BHADOBVAD_10.185.50.12 eq domain"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp host 172.21.248.75 object masterclock.bane.dk_172.17.138.38 eq 123"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp host 172.21.248.75 object masterclock.bane.dk_172.17.138.38 eq ntp"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ..."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CHG0056173-CTASK0037654"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp host 10.150.199.11 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp host 10.150.199.20 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp host 10.138.63.118 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp host 172.19.255.129 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp host 172.19.255.137 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp host 100.126.255.62 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object OBVCore01_100.126.255.65 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object OBVCore02_Sec_100.126.255.66 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object TCCWCORE01_100.126.255.1 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object TCCWCORE02_100.126.255.2 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object TCCECore01_100.126.255.129 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object TCCECore02_100.126.255.130 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object OBVFw1_CAT-2-3-FW-E_100.65.2.41 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object OBVFw1_REMOTE-VPN-E_100.65.2.193 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object OBVFW1_admin_100.126.255.114 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object OBVFw1_SP-LAN-FW-E_100.65.2.57 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object TCCWFw1_100.126.255.50 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object TCCWFw1_CAT-2-3-FW-W_100.65.2.33 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object TCCWFw1_SP-LAN-FW-W_100.65.2.49 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object OBVFw2_admin_100.126.255.121 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object OBVFw2_gsmr-e_100.65.2.9 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object TCCWFW2_100.126.255.58 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object TCCWFW2_gsmr-w_100.65.2.1 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object OBVBrokerMgmtSw01_100.126.255.69 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object ABANECTXDC1_172.21.247.10 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object ABANECTXDC2_172.21.247.11 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp host 10.150.211.1 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp host 10.150.211.2 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp host 10.150.210.1 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp host 10.150.210.2 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object TCCWFw1_SP-LAN-FW-W_10.150.195.65 object-group SPNS2_Logpoint eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark ..."
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CHG0056653-CTASK0037959"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object VxRail_CTX_172.21.248.70 object SPNS2_Logpoint_100.72.36.70 eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0038080 ---------------- BEGIN"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object ABANECTXDC1_172.21.247.10 object SPNS2_Logpoint_100.72.36.70 eq 1514"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object ABANECTXDC1_172.21.247.10 object SPNS2_Logpoint_100.72.36.70 eq 1515"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object ABANECTXDC2_172.21.247.11 object SPNS2_Logpoint_100.72.36.70 eq 1514"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object ABANECTXDC2_172.21.247.11 object SPNS2_Logpoint_100.72.36.70 eq 1515"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0038080 ---------------- END"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CHG0056918-CTASK0038190 ---------------- BEGIN"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object TE_OBV_TP5000_172.19.255.70 object APRBPRTG11_10.185.50.61 eq snmptrap"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object TW_FRC_TP5000_172.19.255.66 object APRBPRTG11_10.185.50.61 eq snmptrap"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CHG0056918-CTASK0038190 ---------------- END"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0038214 --------- Begin"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object ACTXNS1_172.21.247.40 object SPNS2_Logpoint_100.72.36.70 eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object ACTXNS1_172.21.247.40 object SPNS2_Logpoint_100.72.4.70 eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object ACTXNS2_172.21.247.50 object SPNS2_Logpoint_100.72.36.70 eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit udp object ACTXNS2_172.21.247.50 object SPNS2_Logpoint_100.72.4.70 eq syslog"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0038214 --------- End"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0038286-CHG0057083-------- Begin"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program extended permit tcp object adbdwhrppbr00_172.21.254.9 object adwhtrnspbr01_172.27.2.109 eq 6432"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "rule": "access-list access-in-signal_program remark CTASK0038286-CHG0057083-------- End"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt remark CTASK0021795 CConradseltel ---BEGIN---"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny ip object STTN_WTS_172.21.2.62 object TCC_EAST_GREEN_MGMT_10.14.31.0_25"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny object-group STTN_EAST_MGMT_ports object STTN_WTS_172.21.2.62 object TCC_EAST_GREEN_MGMT_10.14.31.0_25"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt remark CTASK0021795 CConradseltel ---END---"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt remark CTASK0020006"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit ip object STTN_WTS_172.21.2.62 object NokiaSAMIPSubnet_1"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit ip object STTN_WTS_172.21.2.62 object NokiaSAMIPSubnet_2"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny ip object STTN_WTS_172.21.2.62 object-group SPNS"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt remark CTASK0021501 | CHG0038869"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny tcp object STTN_WTS_172.21.2.62 object-group PSS_Group eq https"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt remark CTASK0021611"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit object-group RDP object STTN_WTS_172.21.2.62 object-group DiaMont-Servers_172.21.252.1x"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny tcp object STTN_WTS_172.21.2.62 object-group DiaMont-Servers_172.21.252.1x eq ssh"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny object TCP-808 object STTN_WTS_172.21.2.62 object-group DiaMont-Servers_172.21.252.1x"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit icmp object STTN_WTS_172.21.2.62 object-group DiaMont-Servers_172.21.252.1x"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit object-group RDP object STTN_WTS_172.21.2.62 object-group DiaMont-Servers_172.21.244.1x"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny tcp object STTN_WTS_172.21.2.62 object-group DiaMont-Servers_172.21.244.1x eq ssh"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny object TCP-808 object STTN_WTS_172.21.2.62 object-group DiaMont-Servers_172.21.244.1x"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit icmp object STTN_WTS_172.21.2.62 object-group DiaMont-Servers_172.21.244.1x"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt remark CTASK0021611"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny object-group RDP object STTN_WTS_172.21.2.62 object ADIATSOB1_172.21.252.16"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny tcp object STTN_WTS_172.21.2.62 object ADIATSOB1_172.21.252.16 eq ssh"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny object TCP-808 object STTN_WTS_172.21.2.62 object ADIATSOB1_172.21.252.16"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny icmp object STTN_WTS_172.21.2.62 object ADIATSOB1_172.21.252.16"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt remark CTASK0021611"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit object TCP_623 object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.249.1x"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny object UDP-623 object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.249.1x"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.249.1x eq www"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.249.1x eq https"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit object VNC_5900 object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.249.1x"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny tcp object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.249.1x eq ssh"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny object TCP-8889 object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.249.1x"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny icmp object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.249.1x"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny object TCP_623 object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.241.1x"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny object UDP-623 object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.241.1x"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.241.1x eq www"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.241.1x eq https"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny object VNC_5900 object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.241.1x"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny tcp object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.241.1x eq ssh"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny object TCP-8889 object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.241.1x"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit icmp object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.241.1x"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny tcp object STTN_WTS_172.21.2.62 object-group SPNS-Group eq ssh"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp object STTN_WTS_172.21.2.62 object-group SPNS-Group eq telnet"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny icmp host 172.21.2.62 172.21.252.0 255.255.255.240"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny tcp host 172.21.2.62 172.21.252.0 255.255.255.240 eq 2019"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp object AELTCTXMON1_172.21.2.61 object em7-db1-1.axcess.dk_92.43.233.11 eq 7705"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp object AELTCTXMON1_172.21.2.61 object em7-db1-1.axcess.dk_92.43.233.12 eq 7705"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny tcp object AELTCTXMON1_172.21.2.61 object salt.axcess.dk_92.43.233.212 eq 4405"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny tcp object AELTCTXMON1_172.21.2.61 object salt.axcess.dk_92.43.233.212 eq 4406"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit udp object AELTCTXMON1_172.21.2.61 object masterclock.bane.dk_172.17.138.38 eq ntp"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny tcp object AELTCTXMON1_172.21.2.61 any eq www"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny tcp object AELTCTXMON1_172.21.2.61 any eq https"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt remark CTASK0026672 ---BEGIN---"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp object STTN_WTS_172.21.2.62 object NokiaNSPIPSubnet_1"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp object STTN_WTS_172.21.2.62 object NokiaNSPIPSubnet_2"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt remark CTASK0026672 ---END---"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny tcp any object CAT3-ISE01_100.73.35.15 eq tacacs"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended deny tcp any object CAT3-ISE02_100.73.3.15 eq tacacs"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp object STTN_WTS_172.21.2.62 object AAPPLOGPOINT1 eq ssh"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp object STTN_WTS_172.21.2.62 object AAPPLOGPOINT1 eq www"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp object STTN_WTS_172.21.2.62 object AAPPLOGPOINT1 eq https"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt remark CTASK0027102 02-12-2020"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit icmp object STTN_WTS_172.21.2.62 object aapplogpoint_100.72.35.50"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp object STTN_WTS_172.21.2.62 object aapplogpoint_100.72.35.50 eq 5900"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt remark ."
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt remark CTASK0034654 2023-03-24"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp host 172.21.2.62 host 172.21.244.11 eq 623"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp host 172.21.2.62 host 172.21.244.12 eq 623"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp host 172.21.2.62 host 172.21.244.13 eq 623"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp host 172.21.2.62 host 172.21.244.14 eq 623"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp host 172.21.2.62 host 172.21.244.15 eq 623"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp host 172.21.2.62 host 172.21.244.16 eq 623"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp host 172.21.2.62 host 172.21.244.25 eq 623"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp host 172.21.2.62 host 172.21.252.25 eq 623"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit udp host 172.21.2.62 host 172.21.244.11 eq 623"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit udp host 172.21.2.62 host 172.21.244.12 eq 623"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit udp host 172.21.2.62 host 172.21.244.13 eq 623"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit udp host 172.21.2.62 host 172.21.244.14 eq 623"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit udp host 172.21.2.62 host 172.21.244.15 eq 623"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit udp host 172.21.2.62 host 172.21.244.16 eq 623"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit udp host 172.21.2.62 host 172.21.244.25 eq 623"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit udp host 172.21.2.62 host 172.21.252.25 eq 623"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt remark ."
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt remark CTASK0035561 2023-10-09"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit tcp host 172.21.2.62 host 10.138.63.118 eq 12443"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt extended permit icmp host 172.21.2.62 host 10.138.63.118"
+    },
+    {
+        "acl": "access-in-sttn_mgmt",
+        "rule": "access-list access-in-sttn_mgmt remark ."
+    },
+    {
+        "acl": "access-in-ts",
+        "rule": "access-list access-in-ts remark CTASK0020006"
+    },
+    {
+        "acl": "access-in-ts",
+        "rule": "access-list access-in-ts extended deny ip any object STTN_WTS_172.21.2.62"
+    },
+    {
+        "acl": "access-in-ts",
+        "rule": "access-list access-in-ts extended permit ip 10.185.5.0 255.255.255.0 any"
+    },
+    {
+        "acl": "access-in-ts",
+        "rule": "access-list access-in-ts extended permit ip 172.22.0.0 255.255.0.0 any"
+    },
+    {
+        "acl": "access-in-ts",
+        "rule": "access-list access-in-ts extended deny tcp any object CAT3-ISE01_100.73.35.15 eq tacacs"
+    },
+    {
+        "acl": "access-in-ts",
+        "rule": "access-list access-in-ts extended deny tcp any object CAT3-ISE02_100.73.3.15 eq tacacs"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN remark *** Traffic allowed from SPNS2 - CTASK0034529"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit tcp object-group SPNS2-CAT3DMZ-FMC object WSA1 eq www"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit udp object-group SPNS2-CAT3DMZ-FMC object ABANE16.bane.dk_172.27.2.22 eq domain"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit tcp object-group SPNS2-CAT3DMZ-FMC object ABANE16.bane.dk_172.27.2.22 eq domain"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit udp object-group SPNS2-CAT3DMZ-FMC object abane17.bane.dk_172.27.3.22 eq domain"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit tcp object-group SPNS2-CAT3DMZ-FMC object abane17.bane.dk_172.27.3.22 eq domain"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN remark CTASK0035925 2023-12-13"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit object-group SMTP_RELAY_PORTS object-group SPNS2-CAT2DMZ-MAIL-RELAY-ACCESS object ASMTP1_172.27.200.24"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit object-group WEB_PORTS object-group SPNS2-CAT2DMZ-REPO-ACCESS object AREPOPBR01_172.27.2.206"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN remark CTASK0036114 2024-01-24"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit object-group ABITDEFENDER_PORTS object-group SPNS2-CAT2DMZ-ANTIVIRUS-ACCESS object ABITDEFENDPRX1_172.27.200.18"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN remark CTASK0036251 2024-02-19"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit object-group WSUS_ports object-group SPNS2-CAT2DMZ-WSUS-HOSTS object AWSUS01_172.27.200.34"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN remark ."
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN remark CTASK0036166 2024-02-19"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit object-group DNS-Resolving object-group CAT2DMZ-WINDOWS-DC object-group Domain_group"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN remark ."
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN remark CTASK0036554 2024-04-05"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit object-group PORT-GROUP-FIT-DOMAIN-JOIN object-group NET-GROUP-CAT3DMZ-ALL-FIT-SERVER-FARM-SUBNETS object-group Domain_group"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit icmp object-group NET-GROUP-CAT3DMZ-ALL-FIT-SERVER-FARM-SUBNETS object-group Domain_group echo"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN remark ."
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN remark CTASK0036869 2024-05-30"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit object-group PORT-GROUP-LDAP-LDAPS object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-VCSA object-group HOST-GROUP-BANEISP.DK-DCs"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit object-group DNS-Resolving object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-VCSA object-group HOST-GROUP-BANEISP.DK-DCs"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit object-group DNS-Resolving object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-VXMAN object-group HOST-GROUP-BANEISP.DK-DCs"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit object-group DNS-Resolving object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-NODES object-group HOST-GROUP-BANEISP.DK-DCs"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit object-group NTP object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-VCSA object masterclock.bane.dk_172.17.138.38"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit object-group NTP object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-VXMAN object masterclock.bane.dk_172.17.138.38"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit object-group NTP object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-NODES object masterclock.bane.dk_172.17.138.38"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN remark ."
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN remark CTASK0037050 2024-06-27"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit object-group PORT-GROUP-DELL-CLOUD-ENTERPRISE-ACCESS object-group HOST-GROUP-SUPPORT-ZONE-VXRAIL-VXMAN object-group HOST-GROUP-DELL-CLOUD-ENTERPRISE-DESTINATIONS"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN remark ."
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN remark CTASK0038642"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit object-group WSUS_ports object-group HOST-GROUP-UCS-WSUS object-group HOST-GROUP-JTTN-WSUS-SERVERS"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN extended permit object-group DNS-Resolving object-group CAT2DMZ-WINDOWS-DC object-group FORWARD-DNS"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "rule": "access-list access-in-SPNS2-TRANSIT-JTTN remark ..."
+    },
+    {
+        "acl": "Telenova_split",
+        "rule": "access-list Telenova_split standard permit host 172.27.133.32"
+    }
+]

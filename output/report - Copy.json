@@ -3,7 +3,6 @@
     "access_lists": 1147,
     "objects": 416,
     "any_any_rules": 2,
-    "acl_count": 12,
     "top_acls": {
         "access-in-bane1": 384,
         "access-in-signal_program": 313,
