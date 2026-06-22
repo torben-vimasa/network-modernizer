@@ -1,0 +1,52 @@
+[
+    {
+        "acl": "access-in-sttn_mgmt",
+        "direction": "in",
+        "asa_interface": "STTN_MGMT"
+    },
+    {
+        "acl": "access-in-cs",
+        "direction": "in",
+        "asa_interface": "CS"
+    },
+    {
+        "acl": "access-in-bane1",
+        "direction": "in",
+        "asa_interface": "Bane1"
+    },
+    {
+        "acl": "access-in-ts",
+        "direction": "in",
+        "asa_interface": "TS"
+    },
+    {
+        "acl": "access-in-dics",
+        "direction": "in",
+        "asa_interface": "DICS"
+    },
+    {
+        "acl": "access-in-fdrift",
+        "direction": "in",
+        "asa_interface": "Fdrift"
+    },
+    {
+        "acl": "access-in-fservice",
+        "direction": "in",
+        "asa_interface": "Fservice"
+    },
+    {
+        "acl": "access-in-signal_program",
+        "direction": "in",
+        "asa_interface": "Signal-Program"
+    },
+    {
+        "acl": "access-in-dwdm",
+        "direction": "in",
+        "asa_interface": "DWDM"
+    },
+    {
+        "acl": "access-in-SPNS2-TRANSIT-JTTN",
+        "direction": "in",
+        "asa_interface": "SPNS2-TRANSIT-JTTN"
+    }
+]

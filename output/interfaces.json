@@ -1,0 +1,90 @@
+[
+    {
+        "physical_interface": "Port-channel4.729",
+        "asa_interface": "STTN_MGMT",
+        "security_level": "75",
+        "ip_address": "172.21.2.49",
+        "subnet_mask": "255.255.255.240",
+        "standby_ip": "172.21.2.50"
+    },
+    {
+        "physical_interface": "Port-channel4.850",
+        "asa_interface": "Global",
+        "security_level": "50",
+        "ip_address": "10.255.255.1",
+        "subnet_mask": "255.255.255.240",
+        "standby_ip": "10.255.255.2"
+    },
+    {
+        "physical_interface": "Port-channel4.851",
+        "asa_interface": "CS",
+        "security_level": "50",
+        "ip_address": "10.255.255.17",
+        "subnet_mask": "255.255.255.240",
+        "standby_ip": "10.255.255.18"
+    },
+    {
+        "physical_interface": "Port-channel4.852",
+        "asa_interface": "Bane1",
+        "security_level": "50",
+        "ip_address": "10.255.255.33",
+        "subnet_mask": "255.255.255.240",
+        "standby_ip": "10.255.255.34"
+    },
+    {
+        "physical_interface": "Port-channel4.853",
+        "asa_interface": "TS",
+        "security_level": "50",
+        "ip_address": "10.255.255.49",
+        "subnet_mask": "255.255.255.240",
+        "standby_ip": "10.255.255.50"
+    },
+    {
+        "physical_interface": "Port-channel4.854",
+        "asa_interface": "DICS",
+        "security_level": "50",
+        "ip_address": "10.255.255.65",
+        "subnet_mask": "255.255.255.240",
+        "standby_ip": "10.255.255.66"
+    },
+    {
+        "physical_interface": "Port-channel4.855",
+        "asa_interface": "Fdrift",
+        "security_level": "50",
+        "ip_address": "10.255.255.81",
+        "subnet_mask": "255.255.255.240",
+        "standby_ip": "10.255.255.82"
+    },
+    {
+        "physical_interface": "Port-channel4.856",
+        "asa_interface": "Fservice",
+        "security_level": "50",
+        "ip_address": "10.255.255.97",
+        "subnet_mask": "255.255.255.240",
+        "standby_ip": "10.255.255.98"
+    },
+    {
+        "physical_interface": "Port-channel4.857",
+        "asa_interface": "Signal-Program",
+        "security_level": "50",
+        "ip_address": "10.255.255.113",
+        "subnet_mask": "255.255.255.240",
+        "standby_ip": "10.255.255.114"
+    },
+    {
+        "physical_interface": "Port-channel4.858",
+        "asa_interface": "DWDM",
+        "security_level": "50",
+        "ip_address": "10.255.255.129",
+        "subnet_mask": "255.255.255.240",
+        "standby_ip": "10.255.255.130"
+    },
+    {
+        "physical_interface": "Port-channel4.859",
+        "asa_interface": "SPNS2-TRANSIT-JTTN",
+        "security_level": "50",
+        "ip_address": "10.255.255.161",
+        "subnet_mask": "255.255.255.240",
+        "standby_ip": "10.255.255.162"
+    }
+]

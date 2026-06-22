@@ -12,9 +12,43 @@ object_count = 0
 any_any_rules = []
 acl_counts = {}
 rules = []
+interfaces = []
+current_interface = None
+access_groups = []
 
 for line in lines:
     line = line.strip()
+
+    if line.startswith("interface "):
+        current_interface = {
+            "physical_interface": line.replace("interface ", ""),
+            "asa_interface": None,
+            "security_level": None,
+            "ip_address": None,
+            "subnet_mask": None,
+            "standby_ip": None
+        }
+
+    elif current_interface and line.startswith("nameif "):
+        current_interface["asa_interface"] = line.replace("nameif ", "")
+
+    elif current_interface and line.startswith("security-level "):
+        current_interface["security_level"] = line.replace("security-level ", "")
+
+    elif current_interface and line.startswith("ip address "):
+        parts = line.split()
+
+        if len(parts) >= 4:
+            current_interface["ip_address"] = parts[2]
+            current_interface["subnet_mask"] = parts[3]
+
+        if "standby" in parts:
+            standby_index = parts.index("standby")
+            if len(parts) > standby_index + 1:
+                current_interface["standby_ip"] = parts[standby_index + 1]
+
+        interfaces.append(current_interface)
+        current_interface = None
 
     if line.startswith("name "):
         name_count += 1
@@ -28,7 +62,6 @@ for line in lines:
 
         if len(parts) > 1:
             acl_name = parts[1]
-
             acl_counts[acl_name] = acl_counts.get(acl_name, 0) + 1
 
             rules.append({
@@ -38,7 +71,22 @@ for line in lines:
 
         if " any any" in line:
             any_any_rules.append(line)
+    if line.startswith("access-group "):
+        parts = line.split()
 
+        if len(parts) >= 5:
+            access_groups.append({
+                "acl": parts[1],
+                "direction": parts[2],
+                "asa_interface": parts[4]
+            })
+            acl_to_interface = {
+    ag["acl"]: ag["asa_interface"]
+    for ag in access_groups
+}
+
+for rule in rules:
+    rule["asa_interface"] = acl_to_interface.get(rule["acl"], "unknown")
 top_acls = dict(
     sorted(
         acl_counts.items(),
@@ -106,3 +154,13 @@ for rule in largest_acl_rules:
 
 print("\nServices i største ACL")
 print(service_counts)
+with open("output/interfaces.json", "w") as f:
+    json.dump(interfaces, f, indent=4)
+
+print("output/interfaces.json")
+print(f"Interfaces fundet: {len(interfaces)}")
+with open("output/access_groups.json", "w") as f:
+    json.dump(access_groups, f, indent=4)
+
+print("output/access_groups.json")
+print(f"Access-groups fundet: {len(access_groups)}")
