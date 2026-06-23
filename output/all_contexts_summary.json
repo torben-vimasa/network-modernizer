@@ -1,0 +1,42 @@
+[
+    {
+        "context": "BDK-DSB",
+        "access_lists": 468,
+        "objects": 13,
+        "interfaces": 2,
+        "access_groups": 2,
+        "acl_count": 5
+    },
+    {
+        "context": "BDK-Enterprise",
+        "access_lists": 3783,
+        "objects": 395,
+        "interfaces": 12,
+        "access_groups": 13,
+        "acl_count": 27
+    },
+    {
+        "context": "BDK-Mgmt",
+        "access_lists": 13883,
+        "objects": 918,
+        "interfaces": 11,
+        "access_groups": 10,
+        "acl_count": 25
+    },
+    {
+        "context": "BDK-Teknik",
+        "access_lists": 42262,
+        "objects": 1819,
+        "interfaces": 66,
+        "access_groups": 65,
+        "acl_count": 135
+    },
+    {
+        "context": "Site2Site-VPN",
+        "access_lists": 44578,
+        "objects": 1250,
+        "interfaces": 19,
+        "access_groups": 20,
+        "acl_count": 110
+    }
+]
