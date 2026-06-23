@@ -1,0 +1,16 @@
+BHASA1/baneisp.dk/MANAGEMENT/pri/act# sh acc
+BHASA1/baneisp.dk/MANAGEMENT/pri/act# sh access-list
+access-list cached ACL log flows: total 0, denied 0 (deny-flow-max 4096)
+            alert-interval 300
+access-list CSM_FW_ACL_; 5 elements; name hash: 0x4a69e3f3
+access-list CSM_FW_ACL_ line 1 extended permit udp object Netbrain_Server1 object Firewall_Management eq snmp (hitcnt=0) 0xdd0a9b67
+  access-list CSM_FW_ACL_ line 1 extended permit udp host 10.185.50.71 host 172.17.88.230 eq snmp (hitcnt=0) 0xdd0a9b67
+access-list CSM_FW_ACL_ line 2 extended permit udp object Netbrain_Server2 object Firewall_Management eq snmp (hitcnt=0) 0xae3f334d
+  access-list CSM_FW_ACL_ line 2 extended permit udp host 10.185.50.72 host 172.17.88.230 eq snmp (hitcnt=0) 0xae3f334d
+access-list CSM_FW_ACL_ line 3 extended permit udp host 172.17.88.240 host 172.17.88.230 eq syslog log informational interval 300 (hitcnt=0) 0xc09ac245
+access-list CSM_FW_ACL_ line 4 extended permit udp host 172.17.88.230 host 172.17.88.240 eq syslog log informational interval 300 (hitcnt=0) 0x6ce874a8
+access-list CSM_FW_ACL_ line 5 extended permit ip host 172.17.88.240 host 172.17.88.230 (hitcnt=0) 0xbb175134
+access-list MANAGEMENT_in; 2 elements; name hash: 0xfe63de2a
+access-list MANAGEMENT_in line 1 extended permit icmp any any (hitcnt=0) 0xab90e1ef
+access-list MANAGEMENT_in line 2 extended permit ip any any log informational interval 300 (hitcnt=0) 0x6785ce50
+BHASA1/baneisp.dk/MANAGEMENT/pri/act#

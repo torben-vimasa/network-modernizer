@@ -1,0 +1,189 @@
+BHASA1/baneisp.dk/MANAGEMENT/pri/act# sh run
+: Saved
+
+:
+: Serial Number: JAD180600DT
+: Hardware:   ASA5585-SSP-20, 12029 MB RAM, CPU Xeon 5500 series 2133 MHz, 1 CPU                                                                                                                                                              (8 cores)
+:
+ASA Version 9.8(4)32 <context>
+!
+terminal width 511
+hostname MANAGEMENT
+domain-name baneisp.dk
+enable password X5OjAl7mezloa6Av encrypted
+passwd X5OjAl7mezloa6Av encrypted
+names
+
+!
+interface Port-channel6
+ management-only
+ nameif MANAGEMENT
+ security-level 100
+ ip address 172.17.88.230 255.255.255.224 standby 172.17.88.231
+!
+dns server-group DefaultDNS
+ domain-name baneisp.dk
+object network Netbrain_Server1
+ host 10.185.50.71
+object network Netbrain_Server2
+ host 10.185.50.72
+object network Firewall_Management
+ host 172.17.88.230
+access-list CSM_FW_ACL_ extended permit udp object Netbrain_Server1 object Firew                                                                                                                                                             all_Management eq snmp
+access-list CSM_FW_ACL_ extended permit udp object Netbrain_Server2 object Firew                                                                                                                                                             all_Management eq snmp
+access-list CSM_FW_ACL_ extended permit udp host 172.17.88.240 host 172.17.88.23                                                                                                                                                             0 eq syslog log
+access-list CSM_FW_ACL_ extended permit udp host 172.17.88.230 host 172.17.88.24                                                                                                                                                             0 eq syslog log
+access-list CSM_FW_ACL_ extended permit ip host 172.17.88.240 host 172.17.88.230                                                                                                                                                             
+access-list MANAGEMENT_in extended permit icmp any any
+access-list MANAGEMENT_in extended permit ip any any log
+pager lines 24
+logging enable
+logging timestamp
+no logging hide username
+logging standby
+logging buffer-size 65535
+logging buffered notifications
+logging trap informational
+logging facility 16
+logging device-id context-name
+logging host MANAGEMENT 172.17.88.240
+logging host MANAGEMENT 100.73.70.70
+mtu MANAGEMENT 1500
+icmp unreachable rate-limit 1 burst-size 1
+icmp permit 100.64.15.0 255.255.255.0 MANAGEMENT
+icmp permit 10.185.0.0 255.255.0.0 MANAGEMENT
+icmp permit 172.17.88.224 255.255.255.224 MANAGEMENT
+icmp permit host 172.21.65.139 MANAGEMENT
+no asdm history enable
+arp timeout 14400
+access-group MANAGEMENT_in in interface MANAGEMENT
+access-group CSM_FW_ACL_ global
+route MANAGEMENT 0.0.0.0 0.0.0.0 172.17.88.225 1
+timeout xlate 3:00:00
+timeout pat-xlate 0:00:30
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 sctp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00 mgcp-pat 0:05:00
+timeout sip 0:30:00 sip_media 0:02:00 sip-invite 0:03:00 sip-disconnect 0:02:00
+timeout sip-provisional-media 0:02:00 uauth 0:05:00 absolute
+timeout tcp-proxy-reassembly 0:01:00
+timeout floating-conn 0:00:00
+timeout conn-holddown 0:00:15
+timeout igp stale-route 0:01:10
+aaa-server CAT3-ISE-GROUP protocol tacacs+
+aaa-server CAT3-ISE-GROUP (MANAGEMENT) host 100.73.35.15
+ timeout 20
+ key *****
+aaa-server CAT3-ISE-GROUP (MANAGEMENT) host 100.73.3.15
+ timeout 20
+ key *****
+user-identity default-domain LOCAL
+aaa authentication enable console CAT3-ISE-GROUP LOCAL
+aaa authentication telnet console CAT3-ISE-GROUP LOCAL
+aaa authentication http console CAT3-ISE-GROUP LOCAL
+aaa authentication ssh console CAT3-ISE-GROUP LOCAL
+aaa authorization command CAT3-ISE-GROUP LOCAL
+aaa local authentication attempts max-fail 3
+aaa authorization exec authentication-server auto-enable
+aaa authentication login-history
+http server enable
+http 172.17.88.236 255.255.255.255 MANAGEMENT
+http 172.17.88.237 255.255.255.255 MANAGEMENT
+http 172.21.2.13 255.255.255.255 MANAGEMENT
+http 100.64.15.60 255.255.255.255 MANAGEMENT
+http 100.64.15.0 255.255.255.0 MANAGEMENT
+http 172.21.65.116 255.255.255.255 MANAGEMENT
+http 172.21.65.117 255.255.255.255 MANAGEMENT
+http 172.21.65.118 255.255.255.255 MANAGEMENT
+http 172.21.65.119 255.255.255.255 MANAGEMENT
+snmp-server host MANAGEMENT 10.185.50.60 community *****
+snmp-server host MANAGEMENT 10.185.50.62 community *****
+snmp-server host MANAGEMENT 10.185.50.72 poll community ***** version 2c
+snmp-server host MANAGEMENT 10.185.50.71 poll community ***** version 2c
+snmp-server host MANAGEMENT 10.185.50.51 community ***** version 2c udp-port 161
+snmp-server host MANAGEMENT 10.185.50.61 poll community ***** version 2c
+no snmp-server location
+no snmp-server contact
+snmp-server community *****
+no snmp-server enable traps snmp authentication linkup linkdown coldstart warmst                                                                                                                                                             art
+crypto ipsec security-association pmtu-aging infinite
+telnet timeout 5
+ssh stricthostkeycheck
+ssh 172.17.88.237 255.255.255.255 MANAGEMENT
+ssh 172.27.0.0 255.255.0.0 MANAGEMENT
+ssh 172.17.88.236 255.255.255.255 MANAGEMENT
+ssh 172.18.0.0 255.255.0.0 MANAGEMENT
+ssh 172.21.2.13 255.255.255.255 MANAGEMENT
+ssh 10.185.50.71 255.255.255.255 MANAGEMENT
+ssh 10.185.50.72 255.255.255.255 MANAGEMENT
+ssh 172.17.88.240 255.255.255.255 MANAGEMENT
+ssh 10.185.50.0 255.255.255.0 MANAGEMENT
+ssh 100.64.15.0 255.255.255.0 MANAGEMENT
+ssh 172.21.65.116 255.255.255.255 MANAGEMENT
+ssh 172.21.65.117 255.255.255.255 MANAGEMENT
+ssh 172.21.65.118 255.255.255.255 MANAGEMENT
+ssh 172.21.65.119 255.255.255.255 MANAGEMENT
+ssh timeout 20
+ssh key-exchange group dh-group14-sha1
+threat-detection statistics tcp-intercept rate-interval 30 burst-rate 400 averag                                                                                                                                                             e-rate 200
+dynamic-access-policy-record DfltAccessPolicy
+username CSM_MNG password D3rVBI/NED/QBA/1 encrypted privilege 15
+username Test password Jff1wVVXqjqxOacM encrypted privilege 15
+username primemgmtuser password $sha512$5000$qA0uJxrtBVfmu5x8UtC4Pg==$QSqftTf96n                                                                                                                                                             G+ShC/wwnMOw== pbkdf2 privilege 15
+username prime password $sha512$5000$YKE1eNowTB6JBFEuXUavDg==$5YWiohnEu/mzb2B7Am                                                                                                                                                             0RNQ== pbkdf2 privilege 15
+username joleseneltel password $sha512$5000$z5NOVXjdwx7l3HJIWYO5tA==$PBazxJxRfn/                                                                                                                                                             Bq6u5A0B9OA== pbkdf2 privilege 15
+username ADMIN password okI46sWIGpFRQLOW encrypted privilege 15
+username nytest password $sha512$5000$MIGhteMKwQoqncGhFPYd+A==$7gZ0007tm2TP2MwgD                                                                                                                                                             RZz6g== pbkdf2 privilege 15
+!
+class-map inspection_default
+ match default-inspection-traffic
+!
+!
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+  no tcp-inspection
+policy-map global_policy
+ class inspection_default
+  inspect dns preset_dns_map
+  inspect ftp
+  inspect h323 h225
+  inspect h323 ras
+  inspect ip-options
+  inspect netbios
+  inspect rsh
+  inspect rtsp
+  inspect skinny
+  inspect esmtp
+  inspect sqlnet
+  inspect sunrpc
+  inspect tftp
+  inspect sip
+  inspect xdmcp
+ class class-default
+  user-statistics accounting
+!
+service-policy global_policy global
+privilege show level 5 mode exec command running-config
+Cryptochecksum:525f3a1d612052763969450f7e4f0720
+: end
+BHASA1/baneisp.dk/MANAGEMENT/pri/act#
+
+
+BHASA1/baneisp.dk/MANAGEMENT/pri/act# sh acc
+BHASA1/baneisp.dk/MANAGEMENT/pri/act# sh access-list
+access-list cached ACL log flows: total 0, denied 0 (deny-flow-max 4096)
+            alert-interval 300
+access-list CSM_FW_ACL_; 5 elements; name hash: 0x4a69e3f3
+access-list CSM_FW_ACL_ line 1 extended permit udp object Netbrain_Server1 object Firewall_Management eq snmp (hitcnt=0) 0xdd0a9b67
+  access-list CSM_FW_ACL_ line 1 extended permit udp host 10.185.50.71 host 172.17.88.230 eq snmp (hitcnt=0) 0xdd0a9b67
+access-list CSM_FW_ACL_ line 2 extended permit udp object Netbrain_Server2 object Firewall_Management eq snmp (hitcnt=0) 0xae3f334d
+  access-list CSM_FW_ACL_ line 2 extended permit udp host 10.185.50.72 host 172.17.88.230 eq snmp (hitcnt=0) 0xae3f334d
+access-list CSM_FW_ACL_ line 3 extended permit udp host 172.17.88.240 host 172.17.88.230 eq syslog log informational interval 300 (hitcnt=0) 0xc09ac245
+access-list CSM_FW_ACL_ line 4 extended permit udp host 172.17.88.230 host 172.17.88.240 eq syslog log informational interval 300 (hitcnt=0) 0x6ce874a8
+access-list CSM_FW_ACL_ line 5 extended permit ip host 172.17.88.240 host 172.17.88.230 (hitcnt=0) 0xbb175134
+access-list MANAGEMENT_in; 2 elements; name hash: 0xfe63de2a
+access-list MANAGEMENT_in line 1 extended permit icmp any any (hitcnt=0) 0xab90e1ef
+access-list MANAGEMENT_in line 2 extended permit ip any any log informational interval 300 (hitcnt=0) 0x6785ce50
+BHASA1/baneisp.dk/MANAGEMENT/pri/act#
+
