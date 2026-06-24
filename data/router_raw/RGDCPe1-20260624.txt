@@ -1,0 +1,3202 @@
+=~=~=~=~=~=~=~=~=~=~=~= PuTTY log 2026.06.24 08:11:31 =~=~=~=~=~=~=~=~=~=~=~=
+sh run
+
+
+!Command: show running-config
+!Running configuration last done at: Fri Jun 12 08:32:31 2026
+!Time: Wed Jun 24 08:11:35 2026
+
+version 8.4(4)
+power redundancy-mode ps-redundant
+license grace-period
+
+hostname RGDCPe1
+no system admin-vdc
+install feature-set mpls
+vdc RGDCPe1 id 1
+  limit-resource module-type m3 
+  allow feature-set mpls
+  cpu-share 5
+  allocate interface Ethernet1/1-48
+  limit-resource vlan minimum 16 maximum 4094
+  limit-resource monitor-session-erspan-dst minimum 0 maximum 23
+  limit-resource vrf minimum 2 maximum 4096
+  limit-resource port-channel minimum 0 maximum 768
+  limit-resource u4route-mem minimum 96 maximum 96
+  limit-resource u6route-mem minimum 24 maximum 24
+
+  limit-resource m4route-mem minimum 58 maximum 58
+  limit-resource m6route-mem minimum 8 maximum 8
+  limit-resource monitor-session-inband-src minimum 0 maximum 1
+  limit-resource anycast_bundleid minimum 0 maximum 16
+  limit-resource monitor-session-extended minimum 0 maximum 16
+  limit-resource monitor-rbs-filter minimum 0 maximum 16
+  limit-resource monitor-rbs-product minimum 0 maximum 16
+feature-set mpls
+
+feature scp-server
+feature tacacs+
+feature bgp
+feature eigrp
+feature isis
+feature mpls l3vpn
+feature mpls ldp
+feature udld
+feature interface-vlan
+feature hsrp
+feature lacp
+feature dhcp
+feature vpc
+feature bfd
+
+
+
+no mac address-table loop-detect
+
+username admin password 5 $1$ri3jK54F$ydIE7qb.WQ6M53q2tOyJ2/  role network-admin
+username JTTN password 5 $5$u9NePjVD$dtl.GmSsM0s4VmUR09F.D7GZ5lFNBNOCzLn6gwBTXU8
+  role network-admin
+username JTTN passphrase  lifetime 99999 warntime 14 gracetime 3
+ip domain-lookup
+ip domain-name baneisp.dk
+ip name-server 10.185.50.11 10.185.50.12
+tacacs-server key 7 "be36ka45"
+tacacs-server host 100.73.35.15 
+tacacs-server host 100.73.3.15 
+aaa group server tacacs+ onlyvty 
+    server 100.73.35.15 
+    server 100.73.3.15 
+    source-interface loopback1
+logging message interface type ethernet description
+system jumbomtu 1548
+ip access-list SNMP-acc
+  10 remark Limit SNMP access
+  30 permit ip 10.185.50.0/24 any 
+  40 permit ip 100.64.15.0/24 any 
+
+  50 permit ip 172.21.65.116/32 any 
+ip access-list signal-connected
+  10 permit ip 10.138.63.80/28 any 
+  20 permit ip 10.255.255.112/28 any 
+ip access-list signal-static
+  10 permit ip 188.180.65.67/32 any 
+  20 permit ip 10.138.63.240/28 any 
+  30 permit ip 172.20.133.0/24 any 
+  40 permit ip 172.20.137.0/24 any 
+  50 permit ip 172.20.141.0/24 any 
+  60 permit ip 172.21.2.48/28 any 
+  70 permit ip 172.27.2.22/32 any 
+  75 permit ip 172.27.2.23/32 any 
+  80 permit ip 172.27.2.120/32 any 
+  90 permit ip 172.27.3.22/32 any 
+  100 permit ip 172.31.255.5/32 any 
+  110 permit ip 172.31.255.6/32 any 
+  120 permit ip 172.20.3.19/32 any 
+  130 permit ip 172.27.3.140/32 any 
+  140 permit ip 10.14.0.71/32 any 
+  150 permit ip 10.110.2.0/23 any 
+  160 permit ip 10.3.0.0/17 any 
+  170 permit ip 172.21.1.72/29 any 
+
+  180 permit ip 172.17.138.38/32 any 
+  190 permit ip 172.27.3.22/32 any 
+  200 permit ip 172.27.200.37/0 any 
+  205 permit ip 172.27.200.36/0 any 
+  210 permit ip 172.27.200.40/0 any 
+  220 permit ip 172.27.200.34/0 any 
+  230 permit ip 10.110.9.0/24 any 
+  240 permit ip 172.27.210.5/32 any 
+  250 permit ip 172.27.210.21/32 any 
+  260 permit ip 172.27.3.242/32 any 
+  270 permit ip 172.21.2.160/28 any 
+  280 permit ip 172.27.200.24/32 any 
+  290 permit ip 172.21.65.0/24 any 
+service dhcp
+ip dhcp relay
+ipv6 dhcp relay
+track 310 interface Ethernet1/13 line-protocol
+copp profile strict
+snmp-server contact NOC 16666
+snmp-server location DataCenter Ringsted (RGDC) RG.144, Godsbanevej 2, 4100 Ring
+sted
+snmp-server source-interface traps loopback1
+snmp-server user JTTN network-admin auth md5 0xd3822b1e9b38c27a07708cc3c991e9aa 
+
+priv aes-128 0xd3822b1e9b38c27a07708cc3c991e9aa localizedkey
+snmp-server user admin network-admin auth md5 0xca703652194fa213dc0816891ce6fb85
+ priv des 0xca703652194fa213dc0816891ce6fb85 localizedkey
+snmp-server host 10.185.50.51 traps version 1 2ex3me
+rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
+rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
+rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
+rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
+snmp-server enable traps bgp
+snmp-server enable traps snmp authentication
+snmp-server enable traps mpls ldp session-up
+snmp-server enable traps mpls ldp session-down
+snmp-server community 2ex3me group network-operator
+snmp-server community h.0p16.y group network-admin
+snmp-server community 2ex3me use-acl SNMP-acc
+snmp-server community h.0p16.y use-acl SNMP-acc
+ntp server 172.17.3.237 prefer
+ntp source-interface loopback1
+aaa authentication login default group onlyvty 
+aaa authentication login console local 
+aaa authorization config-commands default group onlyvty 
+aaa authorization commands default group onlyvty 
+
+aaa accounting default group onlyvty 
+
+ip route 0.0.0.0/0 10.255.255.1 name MGMT_Global
+ip route 10.185.50.0/24 10.255.255.1 name MGMT_Global
+ip route 100.64.15.0/24 10.255.255.1 name MGMT_Global
+ip route 172.21.65.116/32 10.255.255.1 name MGMT_Global
+
+vlan 1-3,10-13,15,50,56-57,59,80-82,88,91-92,97,101,133,137,185,189-190,200,202,
+256,351,410,451-453,555,570,600,603,660,703,718,726,745-746,798-799,801,803,806,
+808-809,811-814,850-859,910,998-999,1230-1231,1233,1235,1253,1601,1903,1950,2000
+-2003,3100-3102,3110-3111,3401-3402,3409,3501
+vlan 1
+vlan 2
+  name Server1
+vlan 3
+  name Server2
+vlan 10
+  name WCtrlAdmin
+vlan 11
+  name WClient
+vlan 12
+  name WVoice
+vlan 13
+
+  name WTeknik
+vlan 15
+  name PSI-OCK
+vlan 50
+  name NMSCisco
+vlan 56
+  name AudioCtrl
+vlan 57
+  name BDKLAN-Firewall
+vlan 59
+  name JTL
+vlan 80
+  name e-PDU_Management_RGDC
+vlan 81
+  name RGDC-Brugere
+vlan 82
+  name RGDC-NAS-MGMT
+vlan 88
+  name ASA-DMZ-Management
+vlan 91
+  name L2_PBR_AGWSIG_Repl
+vlan 92
+  name L2_PBR_ADBTORPO_Repl
+
+vlan 97
+  name L2_PBR_DWH_Repl
+vlan 101
+  name SDHManagement
+vlan 133
+  name PDHManagement
+vlan 137
+  name Service_Console
+vlan 185
+  name DRAC-ILO
+vlan 189
+  name Capmon
+vlan 190
+  name server-management
+vlan 200
+  name NAS
+vlan 202
+  name UDV-NET
+vlan 256
+  name KlvASA
+vlan 351
+  name L3-RGDCPe1-RGDCPe2
+vlan 410
+
+  name NPS_INTERN
+vlan 451
+  name DWDM-SRV-Main
+vlan 452
+  name DWDM-SRV-RDR
+vlan 453
+  name DWDM-Client
+vlan 555
+  name Public-Internet
+vlan 570
+  name overvaagning
+vlan 600
+  name QA-VxRail-MGMT
+vlan 603
+  name QA-VxRail-iDrac
+vlan 660
+  name ESB-WAN
+vlan 703
+  name fservice
+vlan 718
+  name fdrift
+vlan 726
+  name SIP-DMZ
+
+vlan 745
+  name Eltel_Jumphosts
+vlan 746
+  name DCTC_BACKUP
+vlan 798
+  name 798_DMZ_Aeven
+vlan 799
+  name VULSCANSRVS01_DMZ
+vlan 801
+  name Aeven_Vuln_probes
+vlan 803
+  name Cegal_DMZ
+vlan 806
+  name Cibicom_DMZ
+vlan 808
+  name MFA_SELFSERVICE
+vlan 809
+  name MFA_NPS_EXT
+vlan 811
+  name MFA_NPS_DK
+vlan 812
+  name MFA_BACKEND
+vlan 813
+
+  name MDR
+vlan 814
+  name Nokia_JumpHost_DMZ
+vlan 850
+  name Mgmt_Global
+vlan 851
+  name Mgmt_CS
+vlan 852
+  name Mgmt_bane1
+vlan 853
+  name Mgmt_TS
+vlan 854
+  name Mgmt_InterConnect
+vlan 855
+  name Mgmt_fdrift
+vlan 856
+  name Mgmt_fservice
+vlan 857
+  name GSMR-MANAGEMENT
+vlan 858
+  name Mgmt_DWDM
+vlan 859
+  name SPNS2-TRANSIT
+
+vlan 910
+  name Vmotion
+vlan 998
+  name N7K_vPC_Keepalive
+vlan 999
+  shutdown
+  name Unused
+vlan 1230
+  name VxRail-Mgmt
+vlan 1231
+  name VxRail-iDRAC
+vlan 1233
+  name VxRail-vSAN
+vlan 1235
+  name DATADOMAIN
+vlan 1253
+vlan 1601
+  name ASA5585Failover
+vlan 1903
+  name KMD-BACKUP
+vlan 1950
+  name SP-dispatchers
+vlan 2000
+
+  name TogstatusOBv2
+vlan 2001
+  name TogstatusOBv
+vlan 2002
+  name OracleRGDC
+vlan 2003
+  name OracleOBV
+vlan 3100
+  name SPNS2-TRANSIT-P_RGDC-CAT3-FW1-1
+vlan 3101
+  name SPNS2-TRANSIT-BANE1
+vlan 3102
+  name SPNS2-TRANSIT-SIGNAL-PROGRAM
+vlan 3110
+  name Signal-P_RGDC-CAT3-FW1-1
+vlan 3111
+  name Signal-P_RGDC-CAT3-FW1-2
+vlan 3401
+  name CAT3-DMZ-SERVICE01
+vlan 3402
+  name CAT3-DMZ-SERVICE02
+vlan 3409
+  name CAT3-DMZ-SERVICE09
+
+vlan 3501
+  name CAT3-DMZ-SERVICE01W
+
+spanning-tree vlan 1,80-81,351,600,603,998-999 priority 4096
+spanning-tree vlan 2-79,82-350,352-599,601-602,604-997,1000-1234,1236-3967 prior
+ity 24576
+ip prefix-list CIBICOM-TEST seq 1000 permit 157.250.163.240/29 le 32 
+ip prefix-list DEFAULT seq 5 permit 0.0.0.0/0 
+ip prefix-list EVERYTHING seq 1000 permit 0.0.0.0/0 le 32 
+ip prefix-list FTSVOIP seq 1000 permit 10.150.146.0/24 le 32 
+ip prefix-list KONTROL-POSTER seq 1000 permit 10.150.144.0/23 le 32 
+ip prefix-list PREFIX-CIBICOM-TEST seq 10 permit 157.250.163.240/29 
+ip prefix-list PREFIX-FTSVOIP seq 10 permit 10.150.146.0/24 le 32 
+ip prefix-list SPNS seq 1000 permit 100.72.0.0/16 le 32 
+ip prefix-list SPNS seq 1100 permit 100.73.0.0/16 le 32 
+route-map BANE1-SECOND permit 10
+  match ip address prefix-list PREFIX-FTSVOIP 
+  set metric 75 
+route-map CAT3DMZ-BANE1-SECOND-LOCAL-PREF-1800 permit 1000
+  match ip address prefix-list PREFIX-CIBICOM-TEST 
+  set local-preference 0
+route-map DEFAULT permit 1000
+  match ip address prefix-list DEFAULT 
+
+route-map EVERYTHING permit 10
+  match ip address prefix-list EVERYTHING 
+route-map GSMR-IN permit 1000
+  match ip address prefix-list FTSVOIP 
+route-map GSMR-KP-OUT permit 1000
+  match ip address prefix-list KONTROL-POSTER 
+route-map GSMR-TEST-OUT permit 1000
+  match ip address prefix-list CIBICOM-TEST 
+route-map IBGP-ROUTES-RR permit 10
+  match route-type external
+  set ip next-hop peer-address
+route-map IBGP-ROUTES-RR permit 20
+  match route-type internal
+  set ip next-hop unchanged
+route-map NO_DEFAULT deny 1000
+  match ip address prefix-list DEFAULT 
+route-map NO_DEFAULT permit 1100
+  match ip address prefix-list EVERYTHING 
+route-map SPNS-BANE1-OUT permit 1000
+  match ip address prefix-list DEFAULT 
+route-map SPNS-SIGNAL-PROGRAM-OUT deny 1000
+  match ip address prefix-list DEFAULT SPNS 
+route-map SPNS-SIGNAL-PROGRAM-OUT permit 1100
+
+  match ip address prefix-list EVERYTHING 
+route-map SPNS2-TRANSIT-JTTN-OUT permit 1000
+  match ip address prefix-list DEFAULT 
+route-map signal-program-connected permit 10
+  match ip address signal-connected 
+  set metric 30000 
+route-map signal-program-static permit 10
+  match ip address signal-static 
+  set metric 30000 
+vrf context CS
+  ip route 0.0.0.0/0 10.255.255.17 name MGMT_CS
+  ip route 10.30.8.0/24 10.255.255.17 name MGMT_JTTN1
+  ip route 10.30.9.0/24 10.255.255.17 name MGMT_JTTN2
+  ip route 10.80.0.0/16 10.255.255.17 name MGMT_JTTN3
+  ip route 100.72.4.64/27 10.255.255.17 name SPNS2_Logpoint2
+  ip route 100.72.4.160/27 10.255.255.17 name BDK-SPNS2-JUMPHOSTS-TCCW
+  ip route 100.72.36.64/27 10.255.255.17 name SPNS2_Logpoint
+  ip route 100.72.36.160/27 10.255.255.17 name BDK-SPNS2-JUMPHOSTS-TCCE
+  ip route 172.17.0.0/16 10.255.255.17 name MGMT_CS
+  ip route 172.17.89.128/28 10.255.255.17 name MGMT_CS
+  ip route 172.20.240.112/29 10.255.255.17 name TEMP
+  ip route 172.21.64.0/28 10.255.255.17 name MFA_SELFSERVICE
+  ip route 172.21.64.16/28 10.255.255.17 name MFA_NPS_EXT
+
+  ip route 172.21.64.32/28 10.255.255.17 name MFA_NPS_DK
+  ip route 172.21.64.48/28 10.255.255.17 name MFA_BACKEND
+  ip route 172.21.65.112/28 10.255.255.17
+  ip route 172.21.65.240/29 10.255.255.17
+  ip route 172.22.253.228/30 10.255.255.17 name TEMP
+  rd 172.17.139.201:101
+  address-family ipv4 unicast
+    route-target import 65020:102
+    route-target export 65020:102
+vrf context DWDM
+  ip route 0.0.0.0/0 10.255.255.129
+  rd 172.17.139.201:4001
+  address-family ipv4 unicast
+    route-target import 65020:4001
+    route-target export 65020:4001
+vrf context Internet
+  ip route 0.0.0.0/0 10.60.0.1
+  ip route 172.21.70.0/24 10.60.0.9
+  rd 65020:555
+  address-family ipv4 unicast
+    route-target import 65020:555
+    route-target export 65020:555
+vrf context JTL
+
+  ip route 0.0.0.0/0 172.20.59.1
+  ip route 10.35.10.0/24 172.20.59.1 name DSB_SERVER_NET
+  ip route 10.185.50.0/24 172.20.59.1 name IPAM_NET
+  rd 65020:59
+  address-family ipv4 unicast
+    route-target import 65020:59
+    route-target export 65020:59
+vrf context MGMT
+  ip route 0.0.0.0/0 10.255.255.65
+  ip route 10.185.50.0/24 10.255.255.65 name BDK_MGMT_InterConnect
+  rd 172.17.139.201:500
+  address-family ipv4 unicast
+    route-target import 65020:500
+    route-target export 65020:500
+vrf context PSI-OCK
+  ip route 10.46.21.97/32 10.84.15.94
+  ip route 10.46.85.98/32 10.84.15.94
+  rd 172.17.139.201:3001
+  address-family ipv4 unicast
+    route-target import 65020:3001
+    route-target export 65020:3001
+vrf context SIP-DMZ
+  ip route 128.77.191.0/26 172.21.2.193
+
+  ip route 128.77.191.64/26 172.21.2.193
+  rd 172.17.139.201:4011
+  address-family ipv4 unicast
+    route-target import 65020:4011
+    route-target export 65020:4011
+vrf context SPNS2-TRANSIT-JTTN
+  ip route 0.0.0.0/0 10.255.255.161
+  rd 172.17.139.201:859
+  address-family ipv4 unicast
+    route-target import 65020:859
+    route-target export 65020:859
+vrf context TS
+  ip route 0.0.0.0/0 10.255.255.49
+  ip route 172.22.253.228/30 10.185.5.5
+  ip route 172.22.254.0/24 10.185.5.5
+  rd 172.17.139.201:1071
+  address-family ipv4 unicast
+    route-target import 65020:1070
+    route-target export 65020:1070
+    route-target export 65020:1080
+vrf context bane1
+  ip route 0.0.0.0/0 172.27.2.100
+  ip route 2.109.65.92/32 172.27.57.5 name Postnord_VPN
+
+  ip route 10.0.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.1.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.2.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.3.0.0/17 172.27.57.5 name KMD_BaneIT_ClientNet
+  ip route 10.3.128.0/17 172.27.57.5 name KMD_BaneIT_ClientNet
+  ip route 10.4.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.4.25.0/24 172.27.57.5 name UDV_machine_VLAN
+  ip route 10.4.26.0/24 172.27.57.5 name New_Server_VLAN
+  ip route 10.4.255.0/24 172.27.57.5 name KMD_INTERNAL
+  ip route 10.5.1.16/28 172.27.57.5
+  ip route 10.5.16.0/22 172.27.57.5 name BDK-BizTalk-Prod-01-vnet
+  ip route 10.5.20.0/22 172.27.57.5 name BDK-BizTalk-QA-01-vnet
+  ip route 10.5.24.0/22 172.27.57.5 name BDK-BizTalk-Dev-01-vnet
+  ip route 10.5.82.0/25 172.27.57.5 name AdminIT_Azure_DEV
+  ip route 10.5.83.0/25 172.27.57.5 name AdminIT_Azure_QA
+  ip route 10.5.84.0/25 172.27.57.5 name AdminIT_Azure
+  ip route 10.5.120.0/24 172.27.57.5 name KMD_BaneIT_ClientNet
+  ip route 10.5.121.4/32 172.27.57.5
+  ip route 10.5.122.132/32 172.27.57.5
+  ip route 10.6.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.10.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.11.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.12.0.0/16 172.20.1.15 name KlvASA--DSB
+
+  ip route 10.14.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.15.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.18.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.19.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.20.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.22.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.26.0.0/22 10.255.255.33
+  ip route 10.29.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.30.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.30.8.0/24 10.255.255.33 name MGMT_JTTN1
+  ip route 10.30.9.0/24 10.255.255.33 name MGMT_JTTN2
+  ip route 10.31.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.33.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.35.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.36.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.40.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.42.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.45.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.46.13.0/24 172.27.57.5 name PSI-OC-Server
+  ip route 10.46.19.0/24 172.27.57.5 name PSI-OC-Server
+  ip route 10.46.21.0/24 172.27.57.5 name PSI-OC-Server
+  ip route 10.46.77.0/24 172.27.57.5 name PSI-KC-Server
+  ip route 10.46.83.0/24 172.27.57.5 name PSI-KC-Server
+
+  ip route 10.46.85.0/24 172.27.57.5 name PSI-KC-Server
+  ip route 10.48.0.163/32 10.255.255.33 name Thales_ARAMIS_D
+  ip route 10.48.1.64/27 10.255.255.33 name Thales_HIS
+  ip route 10.48.2.64/27 10.255.255.33 name Thales_HIS
+  ip route 10.48.3.64/27 10.255.255.33 name Thales_HIS
+  ip route 10.48.4.64/27 10.255.255.33 name Thales_HIS
+  ip route 10.48.50.64/27 10.255.255.33 name Thales_HIS
+  ip route 10.48.51.64/27 10.255.255.33 name Thales_HIS
+  ip route 10.48.90.64/27 10.255.255.33 name Thales_HIS
+  ip route 10.49.73.64/27 10.255.255.33 name Thales_HIS
+  ip route 10.49.255.0/24 10.255.255.33 name Thales_HHT
+  ip route 10.50.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.50.1.64/27 10.255.255.33 name Thales_HIS
+  ip route 10.50.2.64/27 10.255.255.33 name Thales_HIS
+  ip route 10.50.3.64/27 10.255.255.33 name Thales_HIS
+  ip route 10.50.4.64/27 10.255.255.33 name Thales_HIS
+  ip route 10.50.50.64/27 10.255.255.33 name Thales_HIS
+  ip route 10.50.51.64/27 10.255.255.33 name Thales_HIS
+  ip route 10.50.90.64/27 10.255.255.33 name Thales_HIS
+  ip route 10.51.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.51.73.64/27 10.255.255.33 name Thales_HIS
+  ip route 10.54.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.56.60.0/24 172.27.57.5
+
+  ip route 10.60.0.0/16 172.27.57.5
+  ip route 10.60.9.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 10.61.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.62.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.63.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.64.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.71.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.72.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.73.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.75.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.80.0.0/16 10.255.255.33 name MGMT_JTTN3
+  ip route 10.81.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.83.0.0/16 172.27.2.100
+  ip route 10.84.26.0/24 172.27.2.100
+  ip route 10.96.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.100.0.0/16 172.27.2.100
+  ip route 10.102.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.110.0.0/23 172.27.57.5 name KMD_DRIFT
+  ip route 10.110.2.0/23 172.27.57.5 name KMD_INTERNAL
+  ip route 10.110.4.0/24 172.27.57.5 name KMD_DMZ
+  ip route 10.110.5.0/24 172.27.57.5 name KMD_PREPROD
+  ip route 10.110.6.0/28 172.27.57.5 name KMD_WANIP
+  ip route 10.110.6.16/28 172.27.57.5 name KMD_WANIP
+
+  ip route 10.110.6.32/28 172.27.57.5 name KMD_WANIP
+  ip route 10.110.6.64/28 172.27.57.5 name KMD_WANIP
+  ip route 10.110.6.128/28 172.27.57.5 name KMD_MGMT_WANIP
+  ip route 10.110.7.0/24 172.27.57.5 name KMD_InfoCare 5
+  ip route 10.110.8.0/25 172.27.57.5 name KMD_BaneIT
+  ip route 10.110.9.0/29 172.27.57.5 name KMD_INTERNAL
+  ip route 10.110.9.16/28 172.27.57.5 name KMD_INTERNAL
+  ip route 10.110.9.64/26 172.27.57.5 name KMD_Internal
+  ip route 10.111.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.116.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.117.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.124.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.125.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.130.0.0/27 172.27.57.5 name Siemens_Inside_VPN
+  ip route 10.136.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.138.63.118/32 10.255.255.33
+  ip route 10.139.52.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 10.143.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.150.24.224/28 172.27.57.5
+  ip route 10.155.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.163.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.165.1.0/24 172.27.2.100
+  ip route 10.165.26.10/32 172.27.57.5 name Siemens_VPN
+
+  ip route 10.165.26.11/32 172.27.57.5 name Siemens_VPN
+  ip route 10.165.26.12/32 172.27.57.5 name Siemens_VPN
+  ip route 10.165.55.1/32 172.27.57.5 name Siemens_VPN
+  ip route 10.165.55.2/32 172.27.57.5 name Siemens_VPN
+  ip route 10.165.200.0/24 10.255.255.33 name BDK_MGMT_DICS
+  ip route 10.174.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.180.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.182.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.185.1.0/24 10.255.255.33 name BDK_MGMT_CS
+  ip route 10.185.5.0/24 10.255.255.33 name BDK_MGMT_TS
+  ip route 10.185.10.0/26 10.255.255.33 name BDK_MGMT_CS
+  ip route 10.185.11.0/25 10.255.255.33 name CHG0058878
+  ip route 10.185.50.0/24 10.255.255.33 name BDK_MGMT_CS
+  ip route 10.185.138.0/28 10.255.255.33 name BDK_MGMT_CS
+  ip route 10.185.230.0/24 10.255.255.33
+  ip route 10.185.231.0/24 10.255.255.33 name BDK_MGMT_Global
+  ip route 10.185.250.0/25 10.255.255.33 name BDK_MGMT_CS
+  ip route 10.194.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.198.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.199.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.200.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.202.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.204.0.0/16 172.20.1.15 name KlvASA--DSB
+
+  ip route 10.206.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.213.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.215.44.128/25 172.20.1.15 name KlvASA--DSB
+  ip route 10.215.47.128/25 172.20.1.15 name KlvASA--DSB
+  ip route 10.217.0.0/16 172.27.2.100
+  ip route 10.231.9.128/26 172.20.1.15 name KlvASA--DSB
+  ip route 10.231.16.64/26 172.20.1.15 name KlvASA--DSB
+  ip route 10.231.61.0/24 172.20.1.15 name CHG0056395-DSB
+  ip route 10.231.66.0/24 172.20.1.15 name CHG0056395-DSB
+  ip route 10.231.68.0/24 172.20.1.15 name CHG0056395-DSB
+  ip route 10.233.40.0/24 172.27.57.5 name Aeven_DNOC
+  ip route 10.236.240.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 10.237.240.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 10.238.240.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 10.239.240.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 10.240.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.245.0.0/16 172.20.1.15 name KlvASA--DSB
+  ip route 10.254.2.0/24 172.27.57.5
+  ip route 10.255.0.0/23 172.27.57.5 name EIP-Dev
+  ip route 10.255.255.0/24 10.255.255.33
+  ip route 62.159.143.199/32 172.27.57.5 name PSI_Aschaffenburg
+  ip route 62.242.37.156/32 172.27.57.5 name trapeze
+  ip route 62.242.149.185/32 172.27.57.5
+
+  ip route 62.242.204.166/32 172.27.57.5
+  ip route 77.66.38.0/24 172.27.2.100 name CBrain
+  ip route 80.243.120.0/24 172.27.57.5 name Firewall
+  ip route 80.243.122.0/26 172.27.2.100 name ESB
+  ip route 80.243.122.64/26 172.27.57.5 name Netcompany
+  ip route 84.238.5.166/32 172.27.57.5
+  ip route 87.116.17.18/32 172.27.57.5 name Capmon
+  ip route 92.62.207.240/29 172.27.57.5
+  ip route 93.176.80.190/32 172.27.57.5
+  ip route 93.183.6.224/27 172.27.57.5
+  ip route 93.183.9.224/27 172.27.57.5
+  ip route 95.131.98.159/32 172.27.57.5 name PSI_Karlsruhe
+  ip route 100.64.15.0/24 172.27.57.5
+  ip route 100.65.2.1/32 10.255.255.33
+  ip route 100.65.2.9/32 10.255.255.33
+  ip route 100.65.2.193/32 10.255.255.33
+  ip route 100.72.0.0/16 10.255.255.33 name SPNS2_CAT2DMZ
+  ip route 100.72.3.0/24 10.255.255.33 name BDK_MGMT_CS
+  ip route 100.72.4.0/24 10.255.255.33 name BDK_MGMT_CS
+  ip route 100.72.35.0/24 10.255.255.33 name BDK_MGMT_CS
+  ip route 100.72.36.0/24 10.255.255.33 name BDK_MGMT_CS
+  ip route 100.73.0.0/16 10.255.255.33 name SPNS2_CAT3DMZ
+  ip route 100.73.3.0/24 10.255.255.33 name BDK_MGMT_CS
+
+  ip route 100.73.4.0/24 10.255.255.33 name BDK_MGMT_CS
+  ip route 100.73.35.0/24 10.255.255.33 name BDK_MGMT_CS
+  ip route 100.73.36.0/24 10.255.255.33 name BDK_MGMT_CS
+  ip route 109.202.140.125/32 172.27.57.5
+  ip route 131.165.61.182/32 172.27.57.5 name KMD
+  ip route 147.29.11.10/32 172.27.57.5
+  ip route 147.29.80.162/32 172.27.57.5
+  ip route 147.29.80.163/32 172.27.57.5
+  ip route 147.29.169.32/32 172.27.57.5
+  ip route 147.29.169.33/32 172.27.57.5
+  ip route 147.204.2.5/32 172.27.57.5 name SAP_Walldorf
+  ip route 149.212.21.132/32 172.27.57.5
+  ip route 149.212.21.133/32 172.27.57.5
+  ip route 149.212.27.92/32 172.27.57.5
+  ip route 149.212.166.8/32 172.27.57.5
+  ip route 157.250.163.240/29 172.27.2.100 name CHG0056517
+  ip route 157.250.163.248/29 172.27.2.100 name CHG0056517
+  ip route 172.17.0.0/16 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.17.89.160/28 172.27.57.5 name KMD_MGMT
+  ip route 172.21.0.0/16 172.27.2.100
+  ip route 172.21.1.88/29 172.27.57.5 name Ericsson_VPN
+  ip route 172.21.2.48/28 10.255.255.33 name STTN_MGMT
+  ip route 172.21.2.224/27 172.27.57.5 name Kemp-Lauritzen_VPN
+
+  ip route 172.21.3.0/28 172.27.57.5
+  ip route 172.21.64.0/28 172.27.2.100 name MFA_SELFSERVICE
+  ip route 172.21.64.16/28 172.27.2.100 name MFA_NPS_EXT
+  ip route 172.21.64.32/28 172.27.2.100 name MFA_NPS_DK
+  ip route 172.21.64.48/28 172.27.2.100 name MFA_BACKEND
+  ip route 172.21.65.16/28 172.27.2.100 name MDR
+  ip route 172.21.65.48/28 172.27.2.100 name Eltel_JHs
+  ip route 172.21.65.112/28 172.27.2.100 name Aeven_JHs
+  ip route 172.21.139.0/28 10.255.255.33
+  ip route 172.21.228.112/29 172.27.57.5 name PSI-KC-Server
+  ip route 172.21.228.120/29 172.27.57.5 name PSI-OC-Server
+  ip route 172.21.244.0/24 10.255.255.33
+  ip route 172.21.247.0/24 10.255.255.33
+  ip route 172.21.248.0/24 10.255.255.33
+  ip route 172.21.250.0/24 10.255.255.33
+  ip route 172.21.251.0/24 10.255.255.33
+  ip route 172.21.252.0/24 10.255.255.33
+  ip route 172.21.253.0/30 172.27.57.5 name PANTOINSPECT_VPN
+  ip route 172.21.253.8/29 10.255.255.33
+  ip route 172.21.253.16/29 10.255.255.33
+  ip route 172.21.254.0/27 10.255.255.33 name CITRIX-DATA
+  ip route 172.21.255.0/27 10.255.255.33
+  ip route 172.21.255.32/27 10.255.255.33
+
+  ip route 172.22.253.168/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.22.253.172/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.22.254.4/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.22.254.8/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.22.254.12/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.22.254.16/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.22.254.236/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.22.254.244/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.22.254.248/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.22.255.0/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.22.255.4/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.22.255.28/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.22.255.76/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.22.255.172/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.22.255.176/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.22.255.192/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.22.255.220/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.22.255.224/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.22.255.244/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.22.255.248/30 10.255.255.33 name BDK_MGMT_Global
+  ip route 172.27.58.0/24 172.27.57.12
+  ip route 172.27.187.0/24 172.27.57.12
+  ip route 172.27.197.0/24 172.27.57.12
+
+  ip route 172.27.198.0/24 172.27.57.12
+  ip route 172.30.0.0/21 172.27.57.5 name CegalVPN
+  ip route 172.30.107.160/28 172.27.57.5 name KMD_DMZ
+  ip route 172.30.107.176/28 172.27.57.5 name KMD_DMZ
+  ip route 172.31.0.0/16 172.27.57.5 name Firewall
+  ip route 188.121.68.69/32 172.27.57.5
+  ip route 188.121.68.70/32 172.27.57.5
+  ip route 188.121.70.100/32 172.27.57.5
+  ip route 188.180.65.67/32 172.27.57.5
+  ip route 192.168.0.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.1.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.10.0/24 172.27.57.5 name BIREPO_VPN
+  ip route 192.168.11.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.12.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.13.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.14.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.19.2/32 172.27.57.5 name ERDMANN_TEST_VPN
+  ip route 192.168.20.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.22.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.72.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.74.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.75.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.100.20/32 172.27.2.100
+
+  ip route 192.168.101.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.120.0/24 172.27.57.5
+  ip route 192.168.122.0/24 172.27.57.5
+  ip route 192.168.150.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.151.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.156.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.192.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.200.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.201.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.216.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.220.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.234.0/24 172.20.1.15 name KlvASA--DSB
+  ip route 192.168.249.10/32 172.27.57.5 name DB_Cargo_VPN
+  ip route 192.168.254.0/23 172.27.57.5 name OOB-VPN
+  ip route 192.168.254.32/28 172.27.57.5 name STTN-OOB-TCCW
+  ip route 192.168.254.64/28 172.27.57.5 name STTN-OOB-TCCE
+  ip route 192.168.254.96/28 172.27.57.5 name STTN-OOB-OBV
+  ip route 192.176.229.196/32 172.27.57.5
+  ip route 194.39.131.34/32 172.27.57.5 name SAP_Walldorf
+  ip route 194.117.106.129/32 172.27.57.5 name SAP_Walldorf
+  ip route 195.50.37.64/28 172.27.57.5 name KMD_VPN_PUB
+  ip route 198.18.0.0/24 172.27.57.5 name KMD_BaneIT_ClientNet
+  ip route 212.93.32.30/32 172.27.57.5
+
+  ip route 212.93.35.18/32 172.27.57.5
+  ip route 212.93.52.163/32 172.27.57.5
+  ip route 217.116.213.136/29 172.27.57.5 name Itelligence
+  rd 172.17.139.201:1001
+  address-family ipv4 unicast
+    route-target import 65020:100
+    route-target import 65020:1000
+    route-target export 65020:1000
+vrf context fdrift
+  ip route 0.0.0.0/0 172.21.1.147
+  ip route 10.84.1.0/24 172.21.1.147 name PSI-TIG1
+  ip route 10.84.2.0/24 172.21.1.147 name PSI-TIG2
+  ip route 10.185.50.0/24 10.255.255.81
+  ip route 10.255.255.16/28 10.255.255.81
+  ip route 100.73.3.0/27 10.255.255.81 name BDK_MGMT_CS
+  ip route 100.73.35.0/27 10.255.255.81 name BDK_MGMT_CS
+  ip route 100.73.35.32/27 10.255.255.81 name BDK_MGMT_CS
+  ip route 100.73.36.0/27 10.255.255.81 name BDK_MGMT_CS
+  rd 172.17.139.201:1051
+  address-family ipv4 unicast
+    route-target import 65020:1050
+    route-target import 65020:1090
+    route-target export 65020:1050
+
+vrf context fservice
+  ip route 0.0.0.0/0 172.21.1.163
+  ip route 10.185.50.0/24 10.255.255.97
+  ip route 10.255.255.16/28 10.255.255.97
+  ip route 100.73.3.0/27 10.255.255.97 name BDK_MGMT_CS
+  ip route 100.73.35.0/27 10.255.255.97 name BDK_MGMT_CS
+  ip route 100.73.35.32/27 10.255.255.97 name BDK_MGMT_CS
+  ip route 100.73.36.0/27 10.255.255.97 name BDK_MGMT_CS
+  rd 172.17.139.201:1061
+  address-family ipv4 unicast
+    route-target import 65020:1060
+    route-target export 65020:1060
+vrf context kdrift
+  rd 172.17.139.201:1091
+  address-family ipv4 unicast
+    route-target import 65020:1090
+    route-target export 65020:1090
+vrf context management
+  ip route 0.0.0.0/0 10.1.1.1
+vrf context overvaagning
+  ip route 172.21.131.192/26 10.99.2.14 name overvaagning
+  ip route 172.21.135.20/32 10.99.2.14 name overvaagning
+  ip route 172.21.135.21/32 10.99.2.14 name overvaagning
+
+  rd 172.17.139.201:1201
+  address-family ipv4 unicast
+    route-target import 65020:1200
+    route-target export 65020:1200
+vrf context signal-program
+  ip route 10.3.0.0/17 10.138.63.81 name KMD_BaneIT_ClientNet
+  ip route 10.3.128.0/17 10.138.63.81 name KMD_BaneIT_ClientNet
+  ip route 10.14.0.71/32 10.255.255.113
+  ip route 10.110.2.0/23 10.138.63.81 name KMD-DRIFT-BDK-INTERNAL
+  ip route 10.110.9.0/24 10.255.255.113 name CTASK0024848
+  ip route 10.138.63.240/28 10.138.63.81
+  ip route 10.185.50.0/24 10.255.255.113
+  ip route 10.185.250.0/25 10.255.255.113
+  ip route 93.183.6.224/27 10.138.63.81 name NOKIA-VPN
+  ip route 93.183.9.224/27 10.138.63.81 name NOKIA-VPN
+  ip route 100.64.15.0/24 10.138.63.81 name SRA
+  ip route 100.72.4.64/27 10.255.255.113 name SPNS2_Logpoint2
+  ip route 100.72.36.64/27 10.255.255.113 name SPNS2_Logpoint
+  ip route 100.73.70.64/27 10.255.255.113 name MDR
+  ip route 157.250.163.240/29 10.138.63.81 name CHG0056517
+  ip route 157.250.163.248/29 10.138.63.81 name CHG0056517
+  ip route 172.20.3.19/32 10.255.255.113
+  ip route 172.20.133.0/24 10.138.63.81
+
+  ip route 172.20.137.0/24 10.138.63.81
+  ip route 172.20.141.0/24 10.138.63.81
+  ip route 172.21.1.72/29 10.255.255.113 name PBASE
+  ip route 172.21.2.48/28 10.255.255.113 name SPNS_STTN_WTS
+  ip route 172.21.2.160/28 10.255.255.113 name ALSTOMJUMPBANE1
+  ip route 172.21.64.64/28 10.255.255.113
+  ip route 172.21.65.0/24 10.255.255.113
+  ip route 172.21.254.0/24 172.17.75.246
+  ip route 172.27.2.0/24 10.255.255.113
+  ip route 172.27.2.22/32 10.255.255.113
+  ip route 172.27.2.23/32 10.255.255.113
+  ip route 172.27.2.120/32 10.255.255.113
+  ip route 172.27.3.22/32 10.255.255.113
+  ip route 172.27.3.140/32 10.255.255.113
+  ip route 172.27.3.148/32 10.255.255.113
+  ip route 172.27.3.242/32 10.255.255.113 name AAPPWEBENKS202.bane.dk
+  ip route 172.27.200.24/32 10.255.255.113 name ASMTP1
+  ip route 172.27.200.34/32 10.255.255.113 name AWSUS01
+  ip route 172.27.200.36/32 10.255.255.113 name AJUMPTSS1BANE1
+  ip route 172.27.200.37/32 10.255.255.113 name AELTJUMPBANE1
+  ip route 172.27.200.40/32 10.255.255.113 name ARDLICENSE01
+  ip route 172.27.210.5/32 10.255.255.113 name TogStatus
+  ip route 172.27.210.21/32 10.255.255.113 name TogStatus
+
+  ip route 172.31.100.0/22 10.138.63.81
+  ip route 172.31.255.5/32 10.138.63.81
+  ip route 172.31.255.6/32 10.138.63.81
+  ip route 188.180.65.67/32 10.138.63.81
+  rd 172.17.139.201:2001
+  address-family ipv4 unicast
+    route-target import 65020:2001
+    route-target export 65020:2001
+vpc domain 10
+  peer-switch
+  role priority 1
+  system-priority 8192
+  peer-keepalive destination 10.185.10.252 source 10.185.10.251
+
+cfs eth distribute
+
+
+interface mgmt0
+  vrf member management
+  ip address 10.185.10.251/29
+
+interface Vlan1
+  description Management
+
+  no shutdown
+  vrf member CS
+  no ip redirects
+  ip address 10.185.10.2/26
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 1 
+    authentication text vlan1
+    preempt delay minimum 300 
+    priority 240
+    ip 10.185.10.1
+
+interface Vlan2
+  description Server Vlan
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 172.27.2.2/24
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 2 
+    authentication text vlan2
+    preempt 
+
+    priority 210
+    ip 172.27.2.1
+
+interface Vlan3
+  description Server Vlan
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 172.27.3.2/24
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 3 
+    authentication text vlan3
+    preempt 
+    priority 210
+    ip 172.27.3.1
+
+interface Vlan10
+  description Wireless Controller Admin
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 172.18.254.8/24
+
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 10 
+    authentication text vlan10
+    preempt 
+    priority 210
+    ip 172.18.254.1
+
+interface Vlan11
+  description Wireless Bane1 Clients
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 172.18.0.5/21
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 11 
+    authentication text vlan11
+    preempt 
+    priority 210
+    ip 172.18.0.1
+  ip dhcp relay address 172.27.2.22 
+
+
+interface Vlan12
+  description Wireless Voice
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 172.18.16.5/21
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 12 
+    authentication text vlan12
+    preempt 
+    priority 210
+    ip 172.18.16.1
+  ip dhcp relay address 172.27.2.22 
+
+interface Vlan13
+  description Wireless Teknik
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 172.18.64.5/21
+  ip router isis BDK-global
+  isis passive-interface level-2
+
+  hsrp 13 
+    authentication text vlan13
+    preempt 
+    priority 210
+    ip 172.18.64.1
+  ip dhcp relay address 172.27.2.22 
+
+interface Vlan15
+  no shutdown
+  vrf member PSI-OCK
+  no ip redirects
+  ip address 10.84.15.84/28
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 15 
+    authentication text vlan15
+    preempt delay minimum 300 
+    priority 210
+    ip 10.84.15.81
+
+interface Vlan50
+  description NMSCisco
+  no shutdown
+
+  vrf member CS
+  no ip redirects
+  ip address 10.185.50.2/24
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 50 
+    authentication text vlan50
+    preempt 
+    priority 210
+    ip 10.185.50.1
+
+interface Vlan56
+  description AudioCtrl
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 172.27.56.253/24
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 56 
+    authentication text vlan56
+    preempt delay minimum 300 
+    priority 210
+
+    ip 172.27.56.1
+
+interface Vlan57
+  description BDKLAN-Firewall
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 172.27.57.2/24
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 57 
+    authentication text vlan57
+    preempt delay minimum 300 
+    priority 210
+    ip 172.27.57.1
+
+interface Vlan59
+  description JTL
+  no shutdown
+  vrf member JTL
+  no ip redirects
+  ip address 172.20.59.8/26
+  ip router isis BDK-global
+
+  isis passive-interface level-2
+  hsrp 59 
+    authentication text JTL
+    preempt delay minimum 300 
+    priority 210
+    ip 172.20.59.3
+
+interface Vlan80
+  description e-PDU_Management_RGDC
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 10.147.207.2/24
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 80 
+    authentication text RGvlan80
+    preempt 
+    priority 240
+    ip 10.147.207.1
+
+interface Vlan81
+  description BDK Brugere i Ringsted
+
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 10.147.201.2/24
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 81 
+    authentication text RGvlan81
+    preempt 
+    priority 240
+    ip 10.147.201.1
+  ip dhcp relay address 172.27.2.22 
+  ip dhcp relay address 172.27.3.22 
+
+interface Vlan82
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 10.147.202.2/27
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 82 
+    authentication text RGvlan82
+
+    preempt 
+    priority 240
+    ip 10.147.202.1
+
+interface Vlan88
+  description ASA Management
+  no shutdown
+  no ip redirects
+  ip address 172.17.88.226/27
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 88 
+    authentication text vlan88
+    preempt 
+    priority 210
+    ip 172.17.88.225
+
+interface Vlan101
+  description SDHManagement
+  no shutdown
+  vrf member TS
+  no ip redirects
+  ip address 10.185.5.253/24
+
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 101 
+    authentication text vlan101
+    preempt delay minimum 300 
+    priority 210
+    ip 10.185.5.1
+
+interface Vlan133
+  description PDHManagement
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 172.27.133.2/24
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 133 
+    authentication text vlan133
+    preempt delay minimum 300 
+    priority 210
+    ip 172.27.133.1
+
+interface Vlan137
+
+  description Service_Console
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 172.27.137.2/24
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 137 
+    authentication text vlan137
+    preempt 
+    priority 210
+    ip 172.27.137.1
+
+interface Vlan185
+  description DRAC-ILO
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 172.27.185.2/24
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 185 
+    authentication text vlan185
+
+    preempt delay minimum 300 
+    priority 210
+    ip 172.27.185.1
+
+interface Vlan189
+  description Capmon
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 172.27.189.2/24
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 237 
+    authentication text vlan237
+    preempt delay minimum 300 
+    priority 210
+    ip 172.27.189.1
+
+interface Vlan190
+  description NAS-MGMT
+  no shutdown
+  vrf member bane1
+  no ip redirects
+
+  ip address 172.27.190.2/24
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 190 
+    authentication text vlan190
+    preempt delay minimum 300 
+    priority 210
+    ip 172.27.190.1
+
+interface Vlan200
+  description UCS-BDK-Teknik
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 172.27.200.2/24
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 200 
+    authentication text vlan200
+    preempt delay minimum 300 
+    priority 210
+    ip 172.27.200.1
+
+
+interface Vlan256
+  description KlvAsa-Inside
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 172.20.1.4/24
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 201 
+    authentication text vlan256
+    preempt 
+    priority 210
+    ip 172.20.1.1
+
+interface Vlan351
+  description L3 -> RGDCPe2
+  no shutdown
+  mtu 1548
+  mpls ip
+  bfd interval 100 min_rx 100 multiplier 3
+  no ip redirects
+  ip address 172.17.138.113/30
+  isis circuit-type level-2
+
+  ip router isis BDK-global
+  isis bfd
+
+interface Vlan410
+  description NPS Intern
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 172.27.4.2/25
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 102 
+    authentication text vlan400
+    preempt delay minimum 300 
+    priority 210
+    ip 172.27.4.1
+
+interface Vlan451
+  description DWDM-SRV-Main
+  no shutdown
+  vrf member DWDM
+  no ip redirects
+  ip address 10.26.0.4/28
+
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 103 
+    authentication text vlan451
+    preempt delay minimum 300 
+    priority 210
+    ip 10.26.0.1
+
+interface Vlan452
+  description DWDM-SRV-RDR
+  no shutdown
+  vrf member DWDM
+  no ip redirects
+  ip address 10.26.0.20/28
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 104 
+    authentication text vlan452
+    preempt delay minimum 300 
+    priority 210
+    ip 10.26.0.17
+
+interface Vlan453
+
+  description DWDM-Client
+  no shutdown
+  vrf member DWDM
+  no ip redirects
+  ip address 10.26.0.36/28
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 105 
+    authentication text vlan453
+    preempt delay minimum 300 
+    priority 210
+    ip 10.26.0.33
+
+interface Vlan555
+  description Public-Internet
+  no shutdown
+  vrf member Internet
+  no ip redirects
+  ip address 10.60.0.5/26
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 241 
+    authentication text Internet
+
+    preempt delay minimum 300 
+    priority 210
+    ip 10.60.0.3
+
+interface Vlan570
+  description overvaagning
+  no shutdown
+  vrf member overvaagning
+  no ip redirects
+  ip address 10.99.2.6/28
+  hsrp 70 
+    authentication text vlan570
+    preempt 
+    priority 210
+    ip 10.99.2.1
+
+interface Vlan600
+  description QA-VxRail-MGMT
+  no shutdown
+  vrf member CS
+  no ip redirects
+  ip address 10.186.0.2/24
+  hsrp 60 
+
+    authentication text RGv600
+    preempt 
+    priority 240
+    ip 10.186.0.1
+
+interface Vlan603
+  description QA-VxRail-iDrac
+  no shutdown
+  vrf member CS
+  no ip redirects
+  ip address 10.186.3.2/24
+  hsrp 63 
+    authentication text RGv603
+    preempt 
+    priority 240
+    ip 10.186.3.1
+
+interface Vlan703
+  description BDK-Teknik - fservice
+  no shutdown
+  vrf member fservice
+  no ip redirects
+  ip address 172.21.1.166/29
+
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 170 
+    authentication text vlan703
+    preempt delay minimum 300 
+    priority 210
+    ip 172.21.1.161
+
+interface Vlan718
+  description BDK-Teknik - fdrift
+  no shutdown
+  vrf member fdrift
+  no ip redirects
+  ip address 172.21.1.150/29
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 171 
+    authentication text vlan718
+    preempt delay minimum 300 
+    priority 210
+    ip 172.21.1.145
+
+interface Vlan726
+
+  description SIP-DMZ - Context BDK-Teknik
+  no shutdown
+  vrf member SIP-DMZ
+  no ip redirects
+  ip address 172.21.2.198/28
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 172 
+    authentication text vlan726
+    preempt delay minimum 300 
+    priority 210
+    ip 172.21.2.195
+
+interface Vlan850
+  description Mgmt_Global
+  no shutdown
+  no ip redirects
+  ip address 10.255.255.4/28
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 230 
+    authentication text vlan850
+    preempt delay minimum 300 
+
+    priority 210
+    ip 10.255.255.3
+
+interface Vlan851
+  description Mgmt_CS
+  no shutdown
+  vrf member CS
+  no ip redirects
+  ip address 10.255.255.20/28
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 231 
+    authentication text vlan851
+    preempt delay minimum 300 
+    priority 210
+    ip 10.255.255.19
+
+interface Vlan852
+  description Mgmt_bane1
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 10.255.255.36/28
+
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 232 
+    authentication text vlan852
+    preempt delay minimum 300 
+    priority 210
+    ip 10.255.255.35
+
+interface Vlan853
+  description Mgmt_TS
+  no shutdown
+  vrf member TS
+  no ip redirects
+  ip address 10.255.255.52/28
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 233 
+    authentication text vlan853
+    preempt delay minimum 300 
+    priority 210
+    ip 10.255.255.51
+
+interface Vlan854
+
+  description Mgmt_InterConnect
+  no shutdown
+  vrf member MGMT
+  no ip redirects
+  ip address 10.255.255.68/28
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 234 
+    authentication text vlan854
+    preempt delay minimum 300 
+    priority 210
+    ip 10.255.255.67
+
+interface Vlan855
+  description Mgmt_fdrift
+  no shutdown
+  vrf member fdrift
+  no ip redirects
+  ip address 10.255.255.84/28
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 235 
+    authentication text vlan855
+
+    preempt delay minimum 300 
+    priority 210
+    ip 10.255.255.83
+
+interface Vlan856
+  description Mgmt_fservice
+  no shutdown
+  vrf member fservice
+  no ip redirects
+  ip address 10.255.255.100/28
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 236 
+    authentication text vlan856
+    preempt delay minimum 300 
+    priority 210
+    ip 10.255.255.99
+
+interface Vlan857
+  description Mgmt_signal-program
+  no shutdown
+  vrf member signal-program
+  no ip redirects
+
+  ip address 10.255.255.116/28
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 246 
+    authentication text vlan857
+    preempt delay minimum 300 
+    priority 210
+    ip 10.255.255.115
+
+interface Vlan858
+  description Mgmt_DWDM
+  no shutdown
+  vrf member DWDM
+  no ip redirects
+  ip address 10.255.255.132/28
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 238 
+    authentication text vlan858
+    preempt delay minimum 300 
+    priority 210
+    ip 10.255.255.131
+
+
+interface Vlan859
+  description MGMT_SPNS2-TRANSIT-JTTN
+  no shutdown
+  vrf member SPNS2-TRANSIT-JTTN
+  no ip redirects
+  ip address 10.255.255.166/28
+  no isis passive-interface level-2
+  hsrp 249 
+    authentication text vlan859
+    mac-address 0000.0C07.3333
+    preempt delay minimum 10 
+    priority 230
+    ip 10.255.255.163
+    track 310 decrement 20 
+
+interface Vlan1230
+  description xRail-Mgmt
+  no shutdown
+  vrf member CS
+  no ip redirects
+  ip address 10.185.230.4/24
+  ip router isis BDK-global
+  isis passive-interface level-2
+
+  hsrp 220 
+    authentication text Vlan1230
+    preempt 
+    priority 210
+    ip 10.185.230.1
+
+interface Vlan1231
+  description xRail-iDRAC
+  no shutdown
+  vrf member CS
+  no ip redirects
+  ip address 10.185.231.4/24
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 221 
+    authentication text Vlan1231
+    preempt 
+    priority 210
+    ip 10.185.231.1
+
+interface Vlan1233
+  description xRail-vSAN
+  no shutdown
+
+  vrf member CS
+  no ip redirects
+  ip address 10.185.233.4/24
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 222 
+    authentication text Vlan1233
+    preempt 
+    priority 210
+    ip 10.185.233.1
+
+interface Vlan1235
+  description DATADOMAIN
+  no shutdown
+  vrf member CS
+  no ip redirects
+  ip address 10.185.250.4/25
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 224 
+    authentication text Vlan1235
+    preempt 
+    priority 210
+
+    ip 10.185.250.1
+
+interface Vlan1950
+  description signal-program
+  no shutdown
+  vrf member signal-program
+  no ip redirects
+  ip address 10.138.63.84/28
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 245 
+    authentication text vlan1950
+    preempt delay minimum 300 
+    priority 210
+    ip 10.138.63.83
+
+interface Vlan2000
+  description TogstatusOBv2
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 172.27.210.13/28
+  ip router isis BDK-global
+
+  isis passive-interface level-2
+  hsrp 240 
+    authentication text vlan2000
+    preempt delay minimum 300 
+    priority 210
+    ip 172.27.210.1
+
+interface Vlan2001
+  description TogstatusOBv
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 172.27.210.29/28
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 244 
+    authentication text vlan2001
+    preempt delay minimum 300 
+    priority 210
+    ip 172.27.210.17
+
+interface Vlan2002
+  description OracleRGDC
+
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 172.27.210.45/28
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 241 
+    authentication text vlan2002
+    preempt delay minimum 300 
+    priority 210
+    ip 172.27.210.33
+
+interface Vlan2003
+  description OracleOBV
+  no shutdown
+  vrf member bane1
+  no ip redirects
+  ip address 172.27.210.77/28
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 245 
+    authentication text vlan2003
+    preempt delay minimum 300 
+
+    priority 210
+    ip 172.27.210.65
+
+interface Vlan3100
+  description SPNS2-JTTN_RGDC-CAT3-FW1-1
+  no shutdown
+  vrf member SPNS2-TRANSIT-JTTN
+  no ip redirects
+  ip address 100.73.0.4/29
+  hsrp 250 
+    preempt delay minimum 10 
+    priority 230
+    ip 100.73.0.2
+    track 310 decrement 20 
+
+interface Vlan3101
+  no shutdown
+  vrf member bane1
+  ip address 100.73.0.11/29
+  hsrp 251 
+    preempt delay minimum 10 
+    priority 230
+    ip 100.73.0.10
+
+    track 310 decrement 20 
+
+interface Vlan3102
+  no shutdown
+  vrf member signal-program
+  ip address 100.73.0.19/29
+  hsrp 252 
+    preempt delay minimum 10 
+    priority 230
+    ip 100.73.0.18
+    track 310 decrement 20 
+
+interface Vlan3401
+  description CAT3-DMZ-SERVICE01
+  no shutdown
+  vrf member CS
+  no ip redirects
+  ip address 100.73.35.27/27
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 192 
+    authentication text vlan192
+    preempt 
+
+    priority 210
+    ip 100.73.35.1
+
+interface Vlan3402
+  description CAT3-DMZ-SERVICE02
+  no shutdown
+  vrf member CS
+  no ip redirects
+  ip address 100.73.35.59/27
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 193 
+    authentication text vlan193
+    preempt 
+    priority 210
+    ip 100.73.35.33
+
+interface Vlan3409
+  description CAT3-DMZ-SERVICE09
+  no shutdown
+  vrf member CS
+  no ip redirects
+  ip address 100.73.36.27/27
+
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 194 
+    authentication text vlan194
+    preempt 
+    priority 210
+    ip 100.73.36.1
+
+interface Vlan3501
+  description CAT3-DMZ-SERVICE01W
+  no shutdown
+  vrf member CS
+  no ip redirects
+  ip address 100.73.3.27/27
+  ip router isis BDK-global
+  isis passive-interface level-2
+  hsrp 191 
+    authentication text vlan191
+    preempt 
+    priority 210
+    ip 100.73.3.1
+
+interface port-channel3
+
+  description vPC3 -> RGDC-CAT3-FW1-1_Po3
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 3100-3102
+  load-interval counter 1 60
+
+interface port-channel5
+  description vPC5 -> ASA1.RGDC - Management
+  switchport
+  switchport access vlan 1601
+  spanning-tree port type edge
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  vpc 5
+
+interface port-channel11
+  description vPC11 -> RGDCBrugerSw1-2
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 1,81
+  spanning-tree port type edge
+  storm-control broadcast level 10.00
+
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  lacp max-bundle 16
+  vpc 11
+
+interface port-channel13
+  description vPC13 -> ASA1.RGDC -FailoverLink
+  switchport
+  switchport access vlan 1601
+  spanning-tree port type edge
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  vpc 13
+
+interface port-channel15
+  description VPC Po -> (L2) RGDCMgmtCore
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 1,80,82,88,185,190,603,998,1231
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+
+  lacp max-bundle 16
+  vpc 15
+
+interface port-channel20
+  description vPC20 -> OBvDCPe1
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-3,10-13,15,50,56-57,59,88,91-92
+  switchport trunk allowed vlan add 97,101,133,137,185,189-190,200,202
+  switchport trunk allowed vlan add 256,410,451-453,555,570,660,703
+  switchport trunk allowed vlan add 718,726,746,850-859,1230-1231,1233
+  switchport trunk allowed vlan add 1235,1253,1601,1950,2000-2003,3401-3402
+  switchport trunk allowed vlan add 3409,3501
+  spanning-tree port type edge
+  spanning-tree vlan 1233 cost 10000
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  vpc 20
+
+interface port-channel41
+  description vPC41 -> RGDCDataSw1-2
+  switchport
+
+  switchport mode trunk
+  switchport trunk allowed vlan 50,200,2000,2002
+  spanning-tree port type edge
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  lacp max-bundle 16
+  vpc 41
+
+interface port-channel43
+  description vPC43 -> RGDCDmzSw1-2
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2,15,57,59,202,555,570,660,666,703
+  switchport trunk allowed vlan add 718,726,745-746,798-799,801,803
+  switchport trunk allowed vlan add 806,808-809,811-814,850-859,1950
+  spanning-tree port type edge
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  lacp max-bundle 16
+  vpc 43
+
+
+interface port-channel45
+  description vPC45 -> RGDCVxRail1Sw1-2
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 1-3,50,55-56,88,91-92,97,101,133
+  switchport trunk allowed vlan add 137,200,202,410,453,600,1230,1233
+  switchport trunk allowed vlan add 1235,1253-1254,2000-2001,3401-3402
+  switchport trunk allowed vlan add 3409,3501
+  spanning-tree port type edge
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  lacp max-bundle 16
+  vpc 45
+
+interface port-channel46
+  description vPC46 -> RGDCVxRail1Sw1-2
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 1-3,50,55-56,88,91-92,97,101,133
+  switchport trunk allowed vlan add 137,200,202,410,453,600,1230,1233
+  switchport trunk allowed vlan add 1235,1253-1254,2000-2001,3401-3402
+  switchport trunk allowed vlan add 3409,3501
+
+  spanning-tree port type edge
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  lacp max-bundle 16
+  vpc 46
+
+interface port-channel47
+  description vPC47 -> RGDCLaserscan
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 200
+  spanning-tree port type edge
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  lacp max-bundle 16
+  vpc 47
+
+interface port-channel4096
+  description Peer-Link -> RGDCPe2
+  switchport
+  switchport mode trunk
+
+  spanning-tree port type network
+  spanning-tree guard loop
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  lacp max-bundle 16
+  vpc peer-link
+
+interface Ethernet1/1
+  description Po4096 (Peer-Link) -> RGDCPe2 -10GE FO- bane 9280318
+  switchport
+  switchport mode trunk
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  channel-group 4096 mode active
+  no shutdown
+
+interface Ethernet1/2
+  description Po4096 (Peer-Link) -> RGDCPe2 -10GE FO- bane 9280319
+  switchport
+  switchport mode trunk
+  storm-control broadcast level 10.00
+
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  channel-group 4096 mode active
+  no shutdown
+
+interface Ethernet1/3
+  description RGDCPe1--RingstedP1 -10G FO- bane 9280316
+  mpls ip
+  mtu 1548
+  bfd interval 100 min_rx 100 multiplier 3
+  no ip redirects
+  ip address 172.17.138.106/30
+  isis metric 100 level-1
+  isis metric 100 level-2
+  isis circuit-type level-2
+  ip router isis BDK-global
+  isis bfd
+  no shutdown
+
+interface Ethernet1/4
+  description RGDCPe1--OBvP1 -10G FO- bane 9180620
+  mpls ip
+  mtu 1548
+
+  bfd interval 100 min_rx 100 multiplier 3
+  no ip redirects
+  ip address 172.17.90.230/30
+  isis metric 10 level-1
+  isis metric 10 level-2
+  isis circuit-type level-2
+  ip router isis BDK-global
+  isis bfd
+  no shutdown
+
+interface Ethernet1/5
+  description RGDCPe1--OBvDCPe1 -10GE FO- bane 9180621
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-3,10-13,15,50,56-57,59,88,91-92
+  switchport trunk allowed vlan add 97,101,133,137,185,189-190,200,202
+  switchport trunk allowed vlan add 256,410,451-453,555,570,660,703
+  switchport trunk allowed vlan add 718,726,746,850-859,1230-1231,1233
+  switchport trunk allowed vlan add 1235,1253,1601,1950,2000-2003,3401-3402
+  switchport trunk allowed vlan add 3409,3501
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+
+  channel-group 20 mode active
+  no shutdown
+
+interface Ethernet1/6
+  description Po5 -> ASA1.RGDC-Management Gi0/6 -GE UTP- 
+  switchport
+  switchport access vlan 1601
+  spanning-tree port type edge
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  channel-group 5
+  no shutdown
+
+interface Ethernet1/7
+  description RGDCPe1--RGDCDataSw1 -10GE FO- bane 9280320
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 50,200,2000,2002
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  channel-group 41 mode active
+
+  no shutdown
+
+interface Ethernet1/8
+  description RGDCPe1--RGDCDataSw2 -10GE FO- bane 9280321
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 50,200,2000,2002
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  channel-group 41 mode active
+  no shutdown
+
+interface Ethernet1/9
+  description RGDCPe1--RGDCDmzSw1 -10GE FO- bane 9280322
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2,15,57,59,202,555,570,660,666,703
+  switchport trunk allowed vlan add 718,726,745-746,798-799,801,803
+  switchport trunk allowed vlan add 806,808-809,811-814,850-859,1950
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+
+  channel-group 43 mode active
+  no shutdown
+
+interface Ethernet1/10
+  description RGDCPe1--RGDCDmzSw2 -10GE FO- bane 9280323
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2,15,57,59,202,555,570,660,666,703
+  switchport trunk allowed vlan add 718,726,745-746,798-799,801,803
+  switchport trunk allowed vlan add 806,808-809,811-814,850-859,1950
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  channel-group 43 mode active
+  no shutdown
+
+interface Ethernet1/11
+  description RGDCPe1--RGDCVxRail1Sw1 -10GE FO- bane 9280324
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 1-3,50,55-56,88,91-92,97,101,133
+  switchport trunk allowed vlan add 137,200,202,410,453,600,1230,1233
+  switchport trunk allowed vlan add 1235,1253-1254,2000-2001,3401-3402
+
+  switchport trunk allowed vlan add 3409,3501
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  channel-group 45 mode active
+  no shutdown
+
+interface Ethernet1/12
+  description RGDCPe1--RGDCVxRail1Sw2 -10GE FO- bane 9280325
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 1-3,50,55-56,88,91-92,97,101,133
+  switchport trunk allowed vlan add 137,200,202,410,453,600,1230,1233
+  switchport trunk allowed vlan add 1235,1253-1254,2000-2001,3401-3402
+  switchport trunk allowed vlan add 3409,3501
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  channel-group 46 mode active
+  no shutdown
+
+interface Ethernet1/13
+  description RGDCPe1--RGDC-CAT3-FW1-1 -10GE Bane
+
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 3100-3102
+  load-interval counter 1 60
+  channel-group 3 mode active
+  no shutdown
+
+interface Ethernet1/14
+  description -- RES SPNS CAT3
+
+interface Ethernet1/15
+  description RGDCPe1--RGDCLaserscanSw1 -10GE FO- bane 9280326
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 200
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  channel-group 47 mode active
+  no shutdown
+
+interface Ethernet1/16
+  description RGDCPe1--RGDCLaserscanSw2 -10GE FO- bane 9280327
+
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 200
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  channel-group 47 mode active
+  no shutdown
+
+interface Ethernet1/17
+  description RGDCPe1--RGDC-IC -10GE FO- bane 9280250
+  mpls ip
+  mtu 1548
+  bfd interval 100 min_rx 100 multiplier 3
+  ip address 10.30.2.245/31
+  isis metric 100 level-1
+  isis metric 100 level-2
+  isis circuit-type level-2
+  ip router isis BDK-global
+  isis bfd
+  no shutdown
+
+interface Ethernet1/18
+
+  description RGDCPe1--RDKGBVBADK02 -1G FO- bane 9180159
+  switchport
+  switchport access vlan 660
+  spanning-tree port type edge
+  no shutdown
+
+interface Ethernet1/19
+
+interface Ethernet1/20
+  description RGDCPe1--RGDCMgmtCore (L2) -10G FO- bane 9280328
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 1,80,82,88,185,190,603,998,1231
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  channel-group 15 mode active
+  no shutdown
+
+interface Ethernet1/21
+  description RGDCPe1--RGDCBrugerSw1 -1GE FO- bane
+  switchport
+  switchport mode trunk
+
+  switchport trunk allowed vlan 1,81
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  channel-group 11 mode active
+  no shutdown
+
+interface Ethernet1/22
+  description RGDCPe1--RGDCKMDSw1 -10GFO- bane 9280329
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan none
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  no shutdown
+
+interface Ethernet1/23
+
+interface Ethernet1/24
+  description RGDCPe1--BDK_DSB_sec -10GE FO- bane 9280401
+  switchport
+  switchport mode trunk
+
+  switchport trunk allowed vlan 256
+  spanning-tree port type edge trunk
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  no shutdown
+
+interface Ethernet1/25
+  description RGDCPe1-ASA1.RGDC(DSB_inside) -10GE FO- bane 9280401
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 256
+  spanning-tree port type edge trunk
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  no shutdown
+
+interface Ethernet1/26
+  description RGDCPe1-ASA1.RGDC(FailoverLink) -GE UTP- bane 8280111
+  switchport
+  switchport access vlan 1601
+  spanning-tree port type edge
+
+  storm-control broadcast level 10.00
+  storm-control multicast level 10.00
+  load-interval counter 1 60
+  channel-group 13
+  no shutdown
+
+interface Ethernet1/27
+
+interface Ethernet1/28
+
+interface Ethernet1/29
+
+interface Ethernet1/30
+
+interface Ethernet1/31
+
+interface Ethernet1/32
+
+interface Ethernet1/33
+
+interface Ethernet1/34
+
+interface Ethernet1/35
+
+
+
+interface Ethernet1/36
+
+interface Ethernet1/37
+
+interface Ethernet1/38
+
+interface Ethernet1/39
+
+interface Ethernet1/40
+
+interface Ethernet1/41
+
+interface Ethernet1/42
+
+interface Ethernet1/43
+
+interface Ethernet1/44
+
+interface Ethernet1/45
+
+interface Ethernet1/46
+
+
+interface Ethernet1/47
+
+interface Ethernet1/48
+
+interface loopback1
+  description management and global routing 
+  ip address 172.17.139.201/32
+  ip router isis BDK-global
+clock timezone CET 1 0
+clock summer-time CEST 5 sunday March 02:00 5 sunday October 03:00 60
+cli alias name wr copy running-config startup-config
+line console
+line vty
+boot kickstart bootflash:/n7700-s3-kickstart.8.4.4.bin sup-1
+boot system bootflash:/n7700-s3-dk9.8.4.4.bin sup-1
+boot kickstart bootflash:/n7700-s3-kickstart.8.4.4.bin sup-2
+boot system bootflash:/n7700-s3-dk9.8.4.4.bin sup-2
+mpls ldp configuration
+  router-id Lo1 force
+  label allocate global all-routes
+monitor session 1 
+  description WSA-monitor
+  source interface Ethernet1/30 both
+
+  rate-limit auto
+  destination interface Ethernet1/31
+  no shut
+no system auto-upgrade epld
+logging server 10.185.50.51 6 use-vrf default facility local1
+logging source-interface loopback1
+logging timestamp milliseconds
+router isis BDK-global
+  net 49.0000.0001.1720.1713.9201.00
+  is-type level-2
+  redistribute direct route-map EVERYTHING
+  redistribute static route-map EVERYTHING
+  metric-style transition
+router bgp 65020
+  router-id 172.17.139.201
+  graceful-restart stalepath-time 360
+  log-neighbor-changes
+  address-family vpnv4 unicast
+  address-family ipv4 unicast
+    redistribute direct route-map EVERYTHING
+    redistribute static route-map EVERYTHING
+    allocate-label all
+  template peer Bane-I-BGP-RR
+
+    remote-as 65020
+    update-source loopback1
+    address-family vpnv4 unicast
+      send-community extended
+      route-map IBGP-ROUTES-RR out
+    address-family ipv4 unicast
+      send-community extended
+  neighbor 10.30.2.244
+    remote-as 4250008190
+    description OBv-IC -- Labeled-unicast
+    address-family vpnv4 unicast
+      send-community extended
+      next-hop-self
+    address-family ipv4 labeled-unicast
+      send-community extended
+  neighbor 172.17.3.254
+    inherit peer Bane-I-BGP-RR
+  neighbor 172.17.3.255
+    inherit peer Bane-I-BGP-RR
+  vrf CS
+    router-id 172.17.139.201
+    address-family ipv4 unicast
+      network 10.185.10.0/26
+
+      redistribute direct route-map EVERYTHING
+      redistribute static route-map EVERYTHING
+      export-gateway-ip
+  vrf DWDM
+    router-id 172.17.139.201
+    address-family ipv4 unicast
+      redistribute direct route-map EVERYTHING
+      redistribute static route-map EVERYTHING
+  vrf Internet
+    router-id 172.17.139.201
+    address-family ipv4 unicast
+      redistribute direct route-map EVERYTHING
+      redistribute static route-map EVERYTHING
+  vrf JTL
+    router-id 172.17.139.201
+    address-family ipv4 unicast
+      redistribute direct route-map EVERYTHING
+      redistribute static route-map EVERYTHING
+  vrf MGMT
+    router-id 172.17.139.201
+    address-family ipv4 unicast
+      redistribute direct route-map EVERYTHING
+      redistribute static route-map EVERYTHING
+
+  vrf PSI-OCK
+    router-id 172.17.139.201
+    address-family ipv4 unicast
+      redistribute direct route-map EVERYTHING
+      redistribute static route-map EVERYTHING
+  vrf SIP-DMZ
+    router-id 172.17.139.201
+    address-family ipv4 unicast
+      redistribute direct route-map EVERYTHING
+      redistribute static route-map EVERYTHING
+  vrf SPNS2-TRANSIT-JTTN
+    router-id 172.17.139.201
+    timers bgp 7 21
+    address-family ipv4 unicast
+    neighbor 100.73.0.1 remote-as 4203000000
+      password 3 1669ca7bd54876b24d147f085c6027e3a4e4a3b4d98a5ddd
+      address-family ipv4 unicast
+        send-community extended
+        route-map NO_DEFAULT in
+        default-originate
+  vrf TS
+    router-id 172.17.139.201
+    address-family ipv4 unicast
+
+      redistribute direct route-map EVERYTHING
+      redistribute static route-map EVERYTHING
+  vrf bane1
+    router-id 172.17.139.201
+    address-family ipv4 unicast
+      redistribute direct route-map EVERYTHING
+      redistribute static route-map EVERYTHING
+    neighbor 100.73.0.9 remote-as 4203000000
+      address-family ipv4 unicast
+        send-community extended
+        route-map GSMR-IN in
+        route-map GSMR-TEST-OUT out
+  vrf fdrift
+    router-id 172.17.139.201
+    address-family ipv4 unicast
+      redistribute direct route-map EVERYTHING
+      redistribute static route-map EVERYTHING
+  vrf fservice
+    router-id 172.17.139.201
+    address-family ipv4 unicast
+      redistribute direct route-map EVERYTHING
+      redistribute static route-map EVERYTHING
+  vrf kdrift
+
+    router-id 172.17.139.201
+    address-family ipv4 unicast
+      redistribute direct route-map EVERYTHING
+      redistribute static route-map EVERYTHING
+  vrf overvaagning
+    router-id 172.17.139.201
+    address-family ipv4 unicast
+      redistribute direct route-map EVERYTHING
+      redistribute static route-map EVERYTHING
+  vrf signal-program
+    router-id 172.17.139.201
+    address-family ipv4 unicast
+      redistribute direct route-map signal-program-connected
+      redistribute static route-map signal-program-static
+    neighbor 100.73.0.17 remote-as 4203000000
+      address-family ipv4 unicast
+        send-community extended
+        route-map GSMR-IN in
+        route-map GSMR-KP-OUT out
+
+
+
+RGDCPe1#            sh [Jow vrf
+
+VRF-Name                           VRF-ID State   Reason                        
+CS                                      3 Up      --                            
+DWDM                                   16 Up      --                            
+Internet                                5 Up      --                            
+JTL                                     7 Up      --                            
+MGMT                                   20 Up      --                            
+PSI-OCK                                 8 Up      --                            
+SIP-DMZ                                17 Up      --                            
+SPNS2-TRANSIT-JTTN                     19 Up      --                            
+TS                                      9 Up      --                            
+bane1                                  10 Up      --                            
+default                                 1 Up      --                            
+fdrift                                 11 Up      --                            
+fservice                               12 Up      --                            
+kdrift                                 13 Up      --                            
+management                              2 Up      --                            
+overvaagning                           14 Up      --                            
+signal-program                         15 Up      --                            
+
+RGDCPe1#  show ip int brief vrfa [J[J all
+
+IP Interface Status for VRF "default"(1)
+Interface            IP Address      Interface Status
+Vlan88               172.17.88.226   protocol-up/link-up/admin-up       
+Vlan351              172.17.138.113  protocol-up/link-up/admin-up       
+Vlan850              10.255.255.4    protocol-up/link-up/admin-up       
+Lo1                  172.17.139.201  protocol-up/link-up/admin-up       
+Eth1/3               172.17.138.106  protocol-up/link-up/admin-up       
+Eth1/4               172.17.90.230   protocol-up/link-up/admin-up       
+Eth1/17              10.30.2.245     protocol-up/link-up/admin-up       
+
+IP Interface Status for VRF "management"(2)
+Interface            IP Address      Interface Status
+mgmt0                10.185.10.251   protocol-up/link-up/admin-up       
+
+IP Interface Status for VRF "CS"(3)
+Interface            IP Address      Interface Status
+Vlan1                10.185.10.2     protocol-up/link-up/admin-up       
+Vlan50               10.185.50.2     protocol-up/link-up/admin-up       
+Vlan600              10.186.0.2      protocol-up/link-up/admin-up       
+Vlan603              10.186.3.2      protocol-up/link-up/admin-up       
+Vlan851              10.255.255.20   protocol-up/link-up/admin-up       
+Vlan1230             10.185.230.4    protocol-up/link-up/admin-up       
+Vlan1231             10.185.231.4    protocol-up/link-up/admin-up       
+
+Vlan1233             10.185.233.4    protocol-up/link-up/admin-up       
+Vlan1235             10.185.250.4    protocol-up/link-up/admin-up       
+Vlan3401             100.73.35.27    protocol-up/link-up/admin-up       
+Vlan3402             100.73.35.59    protocol-up/link-up/admin-up       
+Vlan3409             100.73.36.27    protocol-up/link-up/admin-up       
+Vlan3501             100.73.3.27     protocol-up/link-up/admin-up       
+
+IP Interface Status for VRF "Internet"(5)
+Interface            IP Address      Interface Status
+Vlan555              10.60.0.5       protocol-up/link-up/admin-up       
+
+IP Interface Status for VRF "JTL"(7)
+Interface            IP Address      Interface Status
+Vlan59               172.20.59.8     protocol-up/link-up/admin-up       
+
+IP Interface Status for VRF "PSI-OCK"(8)
+Interface            IP Address      Interface Status
+Vlan15               10.84.15.84     protocol-up/link-up/admin-up       
+
+IP Interface Status for VRF "TS"(9)
+Interface            IP Address      Interface Status
+Vlan101              10.185.5.253    protocol-up/link-up/admin-up       
+Vlan853              10.255.255.52   protocol-up/link-up/admin-up       
+
+
+
+IP Interface Status for VRF "bane1"(10)
+Interface            IP Address      Interface Status
+Vlan2                172.27.2.2      protocol-up/link-up/admin-up       
+Vlan3                172.27.3.2      protocol-up/link-up/admin-up       
+Vlan10               172.18.254.8    protocol-up/link-up/admin-up       
+Vlan11               172.18.0.5      protocol-up/link-up/admin-up       
+Vlan12               172.18.16.5     protocol-up/link-up/admin-up       
+Vlan13               172.18.64.5     protocol-up/link-up/admin-up       
+Vlan56               172.27.56.253   protocol-up/link-up/admin-up       
+Vlan57               172.27.57.2     protocol-up/link-up/admin-up       
+Vlan80               10.147.207.2    protocol-up/link-up/admin-up       
+Vlan81               10.147.201.2    protocol-up/link-up/admin-up       
+Vlan82               10.147.202.2    protocol-up/link-up/admin-up       
+Vlan133              172.27.133.2    protocol-up/link-up/admin-up       
+Vlan137              172.27.137.2    protocol-up/link-up/admin-up       
+Vlan185              172.27.185.2    protocol-up/link-up/admin-up       
+Vlan189              172.27.189.2    protocol-up/link-up/admin-up       
+Vlan190              172.27.190.2    protocol-up/link-up/admin-up       
+Vlan200              172.27.200.2    protocol-up/link-up/admin-up       
+Vlan256              172.20.1.4      protocol-up/link-up/admin-up       
+Vlan410              172.27.4.2      protocol-up/link-up/admin-up       
+Vlan852              10.255.255.36   protocol-up/link-up/admin-up       
+
+Vlan2000             172.27.210.13   protocol-up/link-up/admin-up       
+Vlan2001             172.27.210.29   protocol-up/link-up/admin-up       
+Vlan2002             172.27.210.45   protocol-up/link-up/admin-up       
+Vlan2003             172.27.210.77   protocol-up/link-up/admin-up       
+Vlan3101             100.73.0.11     protocol-up/link-up/admin-up       
+
+IP Interface Status for VRF "fdrift"(11)
+Interface            IP Address      Interface Status
+Vlan718              172.21.1.150    protocol-up/link-up/admin-up       
+Vlan855              10.255.255.84   protocol-up/link-up/admin-up       
+
+IP Interface Status for VRF "fservice"(12)
+Interface            IP Address      Interface Status
+Vlan703              172.21.1.166    protocol-up/link-up/admin-up       
+Vlan856              10.255.255.100  protocol-up/link-up/admin-up       
+
+IP Interface Status for VRF "kdrift"(13)
+Interface            IP Address      Interface Status
+
+IP Interface Status for VRF "overvaagning"(14)
+Interface            IP Address      Interface Status
+Vlan570              10.99.2.6       protocol-up/link-up/admin-up       
+
+
+IP Interface Status for VRF "signal-program"(15)
+Interface            IP Address      Interface Status
+Vlan857              10.255.255.116  protocol-up/link-up/admin-up       
+Vlan1950             10.138.63.84    protocol-up/link-up/admin-up       
+Vlan3102             100.73.0.19     protocol-up/link-up/admin-up       
+
+IP Interface Status for VRF "DWDM"(16)
+Interface            IP Address      Interface Status
+Vlan451              10.26.0.4       protocol-up/link-up/admin-up       
+Vlan452              10.26.0.20      protocol-up/link-up/admin-up       
+Vlan453              10.26.0.36      protocol-up/link-up/admin-up       
+Vlan858              10.255.255.132  protocol-up/link-up/admin-up       
+
+IP Interface Status for VRF "SIP-DMZ"(17)
+Interface            IP Address      Interface Status
+Vlan726              172.21.2.198    protocol-up/link-up/admin-up       
+
+IP Interface Status for VRF "SPNS2-TRANSIT-JTTN"(19)
+Interface            IP Address      Interface Status
+Vlan859              10.255.255.166  protocol-up/link-up/admin-up       
+Vlan3100             100.73.0.4      protocol-up/link-up/admin-up       
+
+IP Interface Status for VRF "MGMT"(20)
+
+Interface            IP Address      Interface Status
+Vlan854              10.255.255.68   protocol-up/link-up/admin-up       
+
+
+RGDCPe1#  sh bgp ?
+  all              Display BGP information for all address families
+  bmp              Display BMP state
+  convergence      Display information about convergence
+  event-history    Show various event logs of BGP
+  evi              Display information about EVI database
+  internal         Show internal information
+  ipv4             Display BGP information for IPv4 address family
+  ipv6             Display BGP information for IPv6 address family
+  l2vpn            Display BGP information for L2VPN address family
+  l3vpn            BGP l3vpn information
+  paths            Display Path information
+  peer-policy      Display information about a peer-policy
+  peer-session     Display information about a peer-session
+  peer-template    Display information about a peer-template
+  private          Show BGP information intended for developer eyes only
+  process          BGP global information
+  segment-routing  Display segment-routing informstion
+  sessions         Display session information for all peers
+  statistics       BGP global statistics
+  vpnv4            Display BGP information for VPNv4 address family
+  vpnv6            Display BGP information for VPNv6 address family
+  vrf              Virtual Router Context
+
+[17D[J
+RGDCPe1# sh bgp l3vpn ?
+  <CR>    
+  >       Redirect it to a file
+  >>      Redirect it to a file in append mode
+  detail  Detailed information
+  vrf     Virtual Router Context
+  |       Pipe command output to filter
+
+[22D[J
+RGDCPe1# sh bgp l3vpn de[24D[J
+RGDCPe1# sh bgp l3vpn de[Jtail ?
+  <CR>   
+  >      Redirect it to a file
+  >>     Redirect it to a file in append mode
+  vrf    Virtual Router Context
+  |      Pipe command output to filter
+
+[29D[J
+RGDCPe1# sh bgp l3vpn detail 
+
+
+Information regarding configured VRFs:
+
+BGP L3VPN Information for VRF CS
+VRF Id                         : 3
+VRF RD                         : 172.17.139.201:101
+VRF state                      : UP
+  Address family IPv4 Unicast in VRF CS
+    Table Id                   : 0x3
+    Table state                : UP
+    Export RT list:
+        65020:102 
+    Import RT list:
+        65020:102 
+    Label mode                 : per-prefix
+    Aggregate label            : 492287
+  Address family IPv6 Unicast in VRF CS
+    Table Id                   : 0x80000003
+    Table state                : UP
+    Label mode                 : per-prefix
+
+BGP L3VPN Information for VRF DWDM
+VRF Id                         : 16
+
+VRF RD                         : 172.17.139.201:4001
+
+VRF state                      : UP
+
+  Address family IPv4 Unicast in VRF DWDM
+    Table Id                   : 0x10
+    Table state                : UP
+    Export RT list:
+        65020:4001 
+    Import RT list:
+        65020:4001 
+    Label mode                 : per-prefix
+    Aggregate label            : 492298
+  Address family IPv6 Unicast in VRF DWDM
+    Table Id                   : 0x80000010
+    Table state                : UP
+    Label mode                 : per-prefix
+
+BGP L3VPN Information for VRF Internet
+VRF Id                         : 5
+VRF RD                         : 65020:555
+VRF state                      : UP
+  Address family IPv4 Unicast in VRF Internet
+    Table Id                   : 0x5
+    Table state                : UP
+    Export RT list:
+        65020:555 
+
+    Import RT list:
+        65020:555 
+    Label mode                 : per-prefix
+    Aggregate label            : 492292
+  Address family IPv6 Unicast in VRF Internet
+    Table Id                   : 0x80000005
+    Table state                : UP
+    Label mode                 : per-prefix
+
+BGP L3VPN Information for VRF JTL
+VRF Id                         : 7
+VRF RD                         : 65020:59
+VRF state                      : UP
+  Address family IPv4 Unicast in VRF JTL
+    Table Id                   : 0x7
+    Table state                : UP
+    Export RT list:
+        65020:59 
+    Import RT list:
+        65020:59 
+    Label mode                 : per-prefix
+    Aggregate label            : 492290
+  Address family IPv6 Unicast in VRF JTL
+
+    Table Id                   : 0x80000007
+    Table state                : UP
+    Label mode                 : per-prefix
+
+BGP L3VPN Information for VRF MGMT
+VRF Id                         : 20
+VRF RD                         : 172.17.139.201:500
+VRF state                      : UP
+  Address family IPv4 Unicast in VRF MGMT
+    Table Id                   : 0x13
+    Table state                : UP
+    Export RT list:
+        65020:500 
+    Import RT list:
+        65020:500 
+    Label mode                 : per-prefix
+    Aggregate label            : 492301
+  Address family IPv6 Unicast in VRF MGMT
+    Table Id                   : 0x80000013
+    Table state                : UP
+    Label mode                 : per-prefix
+
+BGP L3VPN Information for VRF PSI-OCK
+
+VRF Id                         : 8
+VRF RD                         : 172.17.139.201:3001
+VRF state                      : UP
+  Address family IPv4 Unicast in VRF PSI-OCK
+    Table Id                   : 0x8
+    Table state                : UP
+    Export RT list:
+        65020:3001 
+    Import RT list:
+        65020:3001 
+    Label mode                 : per-prefix
+    Aggregate label            : 492289
+  Address family IPv6 Unicast in VRF PSI-OCK
+    Table Id                   : 0x80000008
+    Table state                : UP
+    Label mode                 : per-prefix
+
+BGP L3VPN Information for VRF SIP-DMZ
+VRF Id                         : 17
+VRF RD                         : 172.17.139.201:4011
+VRF state                      : UP
+  Address family IPv4 Unicast in VRF SIP-DMZ
+    Table Id                   : 0x11
+
+    Table state                : UP
+    Export RT list:
+        65020:4011 
+    Import RT list:
+        65020:4011 
+    Label mode                 : per-prefix
+    Aggregate label            : 492299
+  Address family IPv6 Unicast in VRF SIP-DMZ
+    Table Id                   : 0x80000011
+    Table state                : UP
+    Label mode                 : per-prefix
+
+BGP L3VPN Information for VRF SPNS2-TRANSIT-JTTN
+VRF Id                         : 19
+VRF RD                         : 172.17.139.201:859
+VRF state                      : UP
+  Address family IPv4 Unicast in VRF SPNS2-TRANSIT-JTTN
+    Table Id                   : 0x12
+    Table state                : UP
+    Export RT list:
+        65020:859 
+    Import RT list:
+        65020:859 
+
+    Label mode                 : per-prefix
+  Address family IPv6 Unicast in VRF SPNS2-TRANSIT-JTTN
+    Table Id                   : 0x80000012
+    Table state                : UP
+    Label mode                 : per-prefix
+
+BGP L3VPN Information for VRF TS
+VRF Id                         : 9
+VRF RD                         : 172.17.139.201:1071
+VRF state                      : UP
+  Address family IPv4 Unicast in VRF TS
+    Table Id                   : 0x9
+    Table state                : UP
+    Export RT list:
+        65020:1070 65020:1080 
+    Import RT list:
+        65020:1070 
+    Label mode                 : per-prefix
+    Aggregate label            : 492291
+  Address family IPv6 Unicast in VRF TS
+    Table Id                   : 0x80000009
+    Table state                : UP
+    Label mode                 : per-prefix
+
+
+
+BGP L3VPN Information for VRF bane1
+VRF Id                         : 10
+VRF RD                         : 172.17.139.201:1001
+VRF state                      : UP
+  Address family IPv4 Unicast in VRF bane1
+    Table Id                   : 0xa
+    Table state                : UP
+    Export RT list:
+        65020:1000 
+    Import RT list:
+        65020:100 65020:1000 
+    Label mode                 : per-prefix
+    Aggregate label            : 492288
+  Address family IPv6 Unicast in VRF bane1
+    Table Id                   : 0x8000000a
+    Table state                : UP
+    Label mode                 : per-prefix
+
+BGP L3VPN Information for VRF fdrift
+VRF Id                         : 11
+VRF RD                         : 172.17.139.201:1051
+VRF state                      : UP
+
+  Address family IPv4 Unicast in VRF fdrift
+    Table Id                   : 0xb
+    Table state                : UP
+    Export RT list:
+        65020:1050 
+    Import RT list:
+        65020:1050 65020:1090 
+    Label mode                 : per-prefix
+    Aggregate label            : 492294
+  Address family IPv6 Unicast in VRF fdrift
+    Table Id                   : 0x8000000b
+    Table state                : UP
+    Label mode                 : per-prefix
+
+BGP L3VPN Information for VRF fservice
+VRF Id                         : 12
+VRF RD                         : 172.17.139.201:1061
+VRF state                      : UP
+  Address family IPv4 Unicast in VRF fservice
+    Table Id                   : 0xc
+    Table state                : UP
+    Export RT list:
+        65020:1060 
+
+    Import RT list:
+        65020:1060 
+    Label mode                 : per-prefix
+    Aggregate label            : 492295
+  Address family IPv6 Unicast in VRF fservice
+    Table Id                   : 0x8000000c
+    Table state                : UP
+    Label mode                 : per-prefix
+
+BGP L3VPN Information for VRF kdrift
+VRF Id                         : 13
+VRF RD                         : 172.17.139.201:1091
+VRF state                      : UP
+  Address family IPv4 Unicast in VRF kdrift
+    Table Id                   : 0xd
+    Table state                : UP
+    Export RT list:
+        65020:1090 
+    Import RT list:
+        65020:1090 
+    Label mode                 : per-prefix
+  Address family IPv6 Unicast in VRF kdrift
+    Table Id                   : 0x8000000d
+
+    Table state                : UP
+    Label mode                 : per-prefix
+
+BGP L3VPN Information for VRF overvaagning
+VRF Id                         : 14
+VRF RD                         : 172.17.139.201:1201
+VRF state                      : UP
+  Address family IPv4 Unicast in VRF overvaagning
+    Table Id                   : 0xe
+    Table state                : UP
+    Export RT list:
+        65020:1200 
+    Import RT list:
+        65020:1200 
+    Label mode                 : per-prefix
+    Aggregate label            : 492297
+  Address family IPv6 Unicast in VRF overvaagning
+    Table Id                   : 0x8000000e
+    Table state                : UP
+    Label mode                 : per-prefix
+
+BGP L3VPN Information for VRF signal-program
+VRF Id                         : 15
+
+VRF RD                         : 172.17.139.201:2001
+VRF state                      : UP
+  Address family IPv4 Unicast in VRF signal-program
+    Table Id                   : 0xf
+    Table state                : UP
+    Export RT list:
+        65020:2001 
+    Import RT list:
+        65020:2001 
+    Label mode                 : per-prefix
+    Aggregate label            : 492296
+  Address family IPv6 Unicast in VRF signal-program
+    Table Id                   : 0x8000000f
+    Table state                : UP
+    Label mode                 : per-prefix
+
+
+          
+
+
+
+
+RGDCPe1# show hsrp active 
+
+Vlan1 - Group 1 (HSRP-V1) (IPv4)
+  Local state is Active, priority 240 (Cfged 240), may preempt
+    Forwarding threshold(for vPC), lower: 1 upper: 240 
+  Preemption Delay (Seconds) Minimum:300 
+  Hellotime 3 sec, holdtime 10 sec
+  Next hello sent in 2.578000 sec(s)
+  Virtual IP address is 10.185.10.1 (Cfged)
+  Active router is local
+  Standby router is 10.185.10.3 , priority 230 expires in 7.534000 sec(s)
+  Authentication text "vlan1"
+  Virtual mac address is 0000.0c07.ac01 (Default MAC)
+  2 state changes, last state change 5y8w
+  IP redundancy name is hsrp-Vlan1-1 (default)
+
+Vlan80 - Group 80 (HSRP-V1) (IPv4)
+  Local state is Active, priority 240 (Cfged 240), may preempt
+    Forwarding threshold(for vPC), lower: 1 upper: 240 
+  Hellotime 3 sec, holdtime 10 sec
+  Next hello sent in 0.902000 sec(s)
+  Virtual IP address is 10.147.207.1 (Cfged)
+  Active router is local
+  Standby router is 10.147.207.3 , priority 230 expires in 9.849000 sec(s)
+  Authentication text "RGvlan80"
+
+  Virtual mac address is 0000.0c07.ac50 (Default MAC)
+  1 state changes, last state change 5y8w
+  IP redundancy name is hsrp-Vlan80-80 (default)
+
+Vlan81 - Group 81 (HSRP-V1) (IPv4)
+  Local state is Active, priority 240 (Cfged 240), may preempt
+    Forwarding threshold(for vPC), lower: 1 upper: 240 
+  Hellotime 3 sec, holdtime 10 sec
+  Next hello sent in 0.615000 sec(s)
+  Virtual IP address is 10.147.201.1 (Cfged)
+  Active router is local
+  Standby router is 10.147.201.3 , priority 230 expires in 7.892000 sec(s)
+  Authentication text "RGvlan81"
+  Virtual mac address is 0000.0c07.ac51 (Default MAC)
+  5 state changes, last state change 5y3w
+  IP redundancy name is hsrp-Vlan81-81 (default)
+
+Vlan82 - Group 82 (HSRP-V1) (IPv4)
+  Local state is Active, priority 240 (Cfged 240), may preempt
+    Forwarding threshold(for vPC), lower: 1 upper: 240 
+  Hellotime 3 sec, holdtime 10 sec
+  Next hello sent in 0.303000 sec(s)
+  Virtual IP address is 10.147.202.1 (Cfged)
+
+  Active router is local
+  Standby router is 10.147.202.3 , priority 230 expires in 7.734000 sec(s)
+  Authentication text "RGvlan82"
+  Virtual mac address is 0000.0c07.ac52 (Default MAC)
+  2 state changes, last state change 4y49w
+  IP redundancy name is hsrp-Vlan82-82 (default)
+
+Vlan600 - Group 60 (HSRP-V1) (IPv4)
+  Local state is Active, priority 240 (Cfged 240), may preempt
+    Forwarding threshold(for vPC), lower: 1 upper: 240 
+  Hellotime 3 sec, holdtime 10 sec
+  Next hello sent in 0.667000 sec(s)
+  Virtual IP address is 10.186.0.1 (Cfged)
+  Active router is local
+  Standby router is 10.186.0.3 , priority 230 expires in 7.999000 sec(s)
+  Authentication text "RGv600"
+  Virtual mac address is 0000.0c07.ac3c (Default MAC)
+  2 state changes, last state change 5w1d
+  IP redundancy name is hsrp-Vlan600-60 (default)
+
+Vlan603 - Group 63 (HSRP-V1) (IPv4)
+  Local state is Active, priority 240 (Cfged 240), may preempt
+    Forwarding threshold(for vPC), lower: 1 upper: 240 
+
+  Hellotime 3 sec, holdtime 10 sec
+  Next hello sent in 2.509000 sec(s)
+  Virtual IP address is 10.186.3.1 (Cfged)
+  Active router is local
+  Standby router is 10.186.3.3 , priority 230 expires in 9.452000 sec(s)
+  Authentication text "RGv603"
+  Virtual mac address is 0000.0c07.ac3f (Default MAC)
+  2 state changes, last state change 5w1d
+  IP redundancy name is hsrp-Vlan603-63 (default)
+
+Vlan3100 - Group 250 (HSRP-V1) (IPv4)
+  Local state is Active, priority 230 (Cfged 230), may preempt
+    Forwarding threshold(for vPC), lower: 1 upper: 230 
+  Preemption Delay (Seconds) Minimum:10 
+  Hellotime 3 sec, holdtime 10 sec
+  Next hello sent in 1.760000 sec(s)
+  Virtual IP address is 100.73.0.2 (Cfged)
+  Active router is local
+  Standby router is 100.73.0.5 , priority 220 expires in 8.195000 sec(s)
+  Authentication text "cisco"
+  Virtual mac address is 0000.0c07.acfa (Default MAC)
+  125 state changes, last state change 1y49w
+    Track object 310 state UP decrement 20
+
+  IP redundancy name is hsrp-Vlan3100-250 (default)
+
+Vlan3101 - Group 251 (HSRP-V1) (IPv4)
+  Local state is Active, priority 230 (Cfged 230), may preempt
+    Forwarding threshold(for vPC), lower: 1 upper: 230 
+  Preemption Delay (Seconds) Minimum:10 
+  Hellotime 3 sec, holdtime 10 sec
+  Next hello sent in 0.305000 sec(s)
+  Virtual IP address is 100.73.0.10 (Cfged)
+  Active router is local
+  Standby router is 100.73.0.12 , priority 220 expires in 8.652000 sec(s)
+  Authentication text "cisco"
+  Virtual mac address is 0000.0c07.acfb (Default MAC)
+  2 state changes, last state change 9w1d
+    Track object 310 state UP decrement 20
+  IP redundancy name is hsrp-Vlan3101-251 (default)
+
+Vlan3102 - Group 252 (HSRP-V1) (IPv4)
+  Local state is Active, priority 230 (Cfged 230), may preempt
+    Forwarding threshold(for vPC), lower: 1 upper: 230 
+  Preemption Delay (Seconds) Minimum:10 
+  Hellotime 3 sec, holdtime 10 sec
+  Next hello sent in 0.584000 sec(s)
+
+  Virtual IP address is 100.73.0.18 (Cfged)
+  Active router is local
+  Standby router is 100.73.0.20 , priority 220 expires in 9.834000 sec(s)
+  Authentication text "cisco"
+  Virtual mac address is 0000.0c07.acfc (Default MAC)
+  2 state changes, last state change 6w4d
+    Track object 310 state UP decrement 20
+  IP redundancy name is hsrp-Vlan3102-252 (default)
+
+
+RGDCPe1#              
+RGDCPe1# show hsrp active all 
+
+Vlan1 - Group 1 (HSRP-V1) (IPv4)
+  Local state is Active, priority 240 (Cfged 240), may preempt
+    Forwarding threshold(for vPC), lower: 1 upper: 240 
+  Preemption Delay (Seconds) Minimum:300 
+  Hellotime 3 sec, holdtime 10 sec
+  Next hello sent in 2.453000 sec(s)
+  Virtual IP address is 10.185.10.1 (Cfged)
+  Active router is local
+  Standby router is 10.185.10.3 , priority 230 expires in 7.867000 sec(s)
+  Authentication text "vlan1"
+  Virtual mac address is 0000.0c07.ac01 (Default MAC)
+  2 state changes, last state change 5y8w
+  IP redundancy name is hsrp-Vlan1-1 (default)
+
+Vlan80 - Group 80 (HSRP-V1) (IPv4)
+  Local state is Active, priority 240 (Cfged 240), may preempt
+    Forwarding threshold(for vPC), lower: 1 upper: 240 
+  Hellotime 3 sec, holdtime 10 sec
+  Next hello sent in 0.695000 sec(s)
+  Virtual IP address is 10.147.207.1 (Cfged)
+  Active router is local
+  Standby router is 10.147.207.3 , priority 230 expires in 9.539000 sec(s)
+  Authentication text "RGvlan80"
+
+  Virtual mac address is 0000.0c07.ac50 (Default MAC)
+  1 state changes, last state change 5y8w
+  IP redundancy name is hsrp-Vlan80-80 (default)
+
+Vlan81 - Group 81 (HSRP-V1) (IPv4)
+  Local state is Active, priority 240 (Cfged 240), may preempt
+    Forwarding threshold(for vPC), lower: 1 upper: 240 
+  Hellotime 3 sec, holdtime 10 sec
+  Next hello sent in 1.426000 sec(s)
+  Virtual IP address is 10.147.201.1 (Cfged)
+  Active router is local
+  Standby router is 10.147.201.3 , priority 230 expires in 8.735000 sec(s)
+  Authentication text "RGvlan81"
+  Virtual mac address is 0000.0c07.ac51 (Default MAC)
+  5 state changes, last state change 5y3w
+  IP redundancy name is hsrp-Vlan81-81 (default)
+
+Vlan82 - Group 82 (HSRP-V1) (IPv4)
+  Local state is Active, priority 240 (Cfged 240), may preempt
+    Forwarding threshold(for vPC), lower: 1 upper: 240 
+  Hellotime 3 sec, holdtime 10 sec
+  Next hello sent in 1.148000 sec(s)
+  Virtual IP address is 10.147.202.1 (Cfged)
+
+  Active router is local
+  Standby router is 10.147.202.3 , priority 230 expires in 8.118000 sec(s)
+  Authentication text "RGvlan82"
+  Virtual mac address is 0000.0c07.ac52 (Default MAC)
+  2 state changes, last state change 4y49w
+  IP redundancy name is hsrp-Vlan82-82 (default)
+
+Vlan600 - Group 60 (HSRP-V1) (IPv4)
+  Local state is Active, priority 240 (Cfged 240), may preempt
+    Forwarding threshold(for vPC), lower: 1 upper: 240 
+  Hellotime 3 sec, holdtime 10 sec
+  Next hello sent in 0.499000 sec(s)
+  Virtual IP address is 10.186.0.1 (Cfged)
+  Active router is local
+  Standby router is 10.186.0.3 , priority 230 expires in 8.185000 sec(s)
+  Authentication text "RGv600"
+  Virtual mac address is 0000.0c07.ac3c (Default MAC)
+  2 state changes, last state change 5w1d
+  IP redundancy name is hsrp-Vlan600-60 (default)
+
+Vlan603 - Group 63 (HSRP-V1) (IPv4)
+  Local state is Active, priority 240 (Cfged 240), may preempt
+    Forwarding threshold(for vPC), lower: 1 upper: 240 
+
+  Hellotime 3 sec, holdtime 10 sec
+  Next hello sent in 2.602000 sec(s)
+  Virtual IP address is 10.186.3.1 (Cfged)
+  Active router is local
+  Standby router is 10.186.3.3 , priority 230 expires in 9.716000 sec(s)
+  Authentication text "RGv603"
+  Virtual mac address is 0000.0c07.ac3f (Default MAC)
+  2 state changes, last state change 5w1d
+  IP redundancy name is hsrp-Vlan603-63 (default)
+
+Vlan3100 - Group 250 (HSRP-V1) (IPv4)
+  Local state is Active, priority 230 (Cfged 230), may preempt
+    Forwarding threshold(for vPC), lower: 1 upper: 230 
+  Preemption Delay (Seconds) Minimum:10 
+  Hellotime 3 sec, holdtime 10 sec
+  Next hello sent in 1.542000 sec(s)
+  Virtual IP address is 100.73.0.2 (Cfged)
+  Active router is local
+  Standby router is 100.73.0.5 , priority 220 expires in 8.821000 sec(s)
+  Authentication text "cisco"
+  Virtual mac address is 0000.0c07.acfa (Default MAC)
+  125 state changes, last state change 1y49w
+    Track object 310 state UP decrement 20
+
+  IP redundancy name is hsrp-Vlan3100-250 (default)
+
+Vlan3101 - Group 251 (HSRP-V1) (IPv4)
+  Local state is Active, priority 230 (Cfged 230), may preempt
+    Forwarding threshold(for vPC), lower: 1 upper: 230 
+  Preemption Delay (Seconds) Minimum:10 
+  Hellotime 3 sec, holdtime 10 sec
+  Next hello sent in 1.173000 sec(s)
+  Virtual IP address is 100.73.0.10 (Cfged)
+  Active router is local
+  Standby router is 100.73.0.12 , priority 220 expires in 9.107000 sec(s)
+  Authentication text "cisco"
+  Virtual mac address is 0000.0c07.acfb (Default MAC)
+  2 state changes, last state change 9w1d
+    Track object 310 state UP decrement 20
+  IP redundancy name is hsrp-Vlan3101-251 (default)
+
+Vlan3102 - Group 252 (HSRP-V1) (IPv4)
+  Local state is Active, priority 230 (Cfged 230), may preempt
+    Forwarding threshold(for vPC), lower: 1 upper: 230 
+  Preemption Delay (Seconds) Minimum:10 
+  Hellotime 3 sec, holdtime 10 sec
+  Next hello sent in 0.864000 sec(s)
+
+  Virtual IP address is 100.73.0.18 (Cfged)
+  Active router is local
+  Standby router is 100.73.0.20 , priority 220 expires in 9.992000 sec(s)
+  Authentication text "cisco"
+  Virtual mac address is 0000.0c07.acfc (Default MAC)
+  2 state changes, last state change 6w4d
+    Track object 310 state UP decrement 20
+  IP redundancy name is hsrp-Vlan3102-252 (default)
+
+
+RGDCPe1#              exit
+

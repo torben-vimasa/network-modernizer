@@ -1,0 +1,2489 @@
+{
+    "SPNS2-TRANSIT-JTTN": {
+        "interfaces": 5,
+        "routers": [
+            "OBvDCPe1-20260424",
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "interface_list": [
+            {
+                "router": "OBvDCPe1-20260424",
+                "interface": "Vlan3100",
+                "description": "SPNS2-JTTN_OBV-CAT3-FW1-2",
+                "ip_address": "100.73.32.5/29",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan859",
+                "description": "MGMT_SPNS2-TRANSIT-JTTN",
+                "ip_address": "10.255.255.166/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan3100",
+                "description": "SPNS2-JTTN_RGDC-CAT3-FW1-1",
+                "ip_address": "100.73.0.4/29",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan859",
+                "description": "MGMT_SPNS2-TRANSIT-JTTN",
+                "ip_address": "10.255.255.167/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan3100",
+                "description": "SPNS2-JTTN_RGDC-CAT3-FW1-2",
+                "ip_address": "100.73.0.5/29",
+                "shutdown": false
+            }
+        ]
+    },
+    "bane1": {
+        "interfaces": 51,
+        "routers": [
+            "OBvDCPe1-20260424",
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "interface_list": [
+            {
+                "router": "OBvDCPe1-20260424",
+                "interface": "Vlan3101",
+                "description": "SPNS2-JTTN_OBV-CAT3-FW",
+                "ip_address": "100.73.32.13/29",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan2",
+                "description": "Server Vlan",
+                "ip_address": "172.27.2.2/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan3",
+                "description": "Server Vlan",
+                "ip_address": "172.27.3.2/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan10",
+                "description": "Wireless Controller Admin",
+                "ip_address": "172.18.254.8/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan11",
+                "description": "Wireless Bane1 Clients",
+                "ip_address": "172.18.0.5/21",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan12",
+                "description": "Wireless Voice",
+                "ip_address": "172.18.16.5/21",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan13",
+                "description": "Wireless Teknik",
+                "ip_address": "172.18.64.5/21",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan56",
+                "description": "AudioCtrl",
+                "ip_address": "172.27.56.253/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan57",
+                "description": "BDKLAN-Firewall",
+                "ip_address": "172.27.57.2/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan80",
+                "description": "e-PDU_Management_RGDC",
+                "ip_address": "10.147.207.2/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan81",
+                "description": "BDK Brugere i Ringsted",
+                "ip_address": "10.147.201.2/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan82",
+                "description": null,
+                "ip_address": "10.147.202.2/27",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan133",
+                "description": "PDHManagement",
+                "ip_address": "172.27.133.2/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan137",
+                "description": "Service_Console",
+                "ip_address": "172.27.137.2/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan185",
+                "description": "DRAC-ILO",
+                "ip_address": "172.27.185.2/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan189",
+                "description": "Capmon",
+                "ip_address": "172.27.189.2/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan190",
+                "description": "NAS-MGMT",
+                "ip_address": "172.27.190.2/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan200",
+                "description": "UCS-BDK-Teknik",
+                "ip_address": "172.27.200.2/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan256",
+                "description": "KlvAsa-Inside",
+                "ip_address": "172.20.1.4/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan410",
+                "description": "NPS Intern",
+                "ip_address": "172.27.4.2/25",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan852",
+                "description": "Mgmt_bane1",
+                "ip_address": "10.255.255.36/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan2000",
+                "description": "TogstatusOBv2",
+                "ip_address": "172.27.210.13/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan2001",
+                "description": "TogstatusOBv",
+                "ip_address": "172.27.210.29/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan2002",
+                "description": "OracleRGDC",
+                "ip_address": "172.27.210.45/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan2003",
+                "description": "OracleOBV",
+                "ip_address": "172.27.210.77/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan3101",
+                "description": null,
+                "ip_address": "100.73.0.11/29",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan2",
+                "description": "Server Vlan",
+                "ip_address": "172.27.2.3/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan3",
+                "description": "Server Vlan",
+                "ip_address": "172.27.3.3/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan10",
+                "description": "Wireless Controller Admin",
+                "ip_address": "172.18.254.9/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan11",
+                "description": "Wireless Bane1 Clients",
+                "ip_address": "172.18.0.6/21",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan12",
+                "description": "Wireless Voice",
+                "ip_address": "172.18.16.6/21",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan13",
+                "description": "Wireless Teknik",
+                "ip_address": "172.18.64.6/21",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan56",
+                "description": "AudioCtrl",
+                "ip_address": "172.27.56.254/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan57",
+                "description": "BDKLAN-Firewall",
+                "ip_address": "172.27.57.3/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan80",
+                "description": "e-PDU_Management_RGDC",
+                "ip_address": "10.147.207.3/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan81",
+                "description": "BDK Brugere i Ringsted",
+                "ip_address": "10.147.201.3/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan82",
+                "description": null,
+                "ip_address": "10.147.202.3/27",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan133",
+                "description": "PDHManagement",
+                "ip_address": "172.27.133.3/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan137",
+                "description": "Service_Console",
+                "ip_address": "172.27.137.3/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan185",
+                "description": "DRAC-ILO",
+                "ip_address": "172.27.185.3/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan189",
+                "description": "Capmon",
+                "ip_address": "172.27.189.3/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan190",
+                "description": "NAS-MGMT",
+                "ip_address": "172.27.190.3/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan200",
+                "description": "UCS-BDK-Teknik",
+                "ip_address": "172.27.200.3/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan256",
+                "description": "KlvAsa-Inside",
+                "ip_address": "172.20.1.5/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan410",
+                "description": "NPS Intern",
+                "ip_address": "172.27.4.3/25",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan852",
+                "description": "Mgmt_bane1",
+                "ip_address": "10.255.255.37/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan2000",
+                "description": "TogstatusOBv2",
+                "ip_address": "172.27.210.14/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan2001",
+                "description": "TogstatusOBv",
+                "ip_address": "172.27.210.30/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan2002",
+                "description": "OracleRGDC",
+                "ip_address": "172.27.210.46/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan2003",
+                "description": "OracleOBV",
+                "ip_address": "172.27.210.78/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan3101",
+                "description": null,
+                "ip_address": "100.73.0.12/29",
+                "shutdown": false
+            }
+        ]
+    },
+    "signal-program": {
+        "interfaces": 7,
+        "routers": [
+            "OBvDCPe1-20260424",
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "interface_list": [
+            {
+                "router": "OBvDCPe1-20260424",
+                "interface": "Vlan3102",
+                "description": "SPNS2-JTTN_OBV-CAT3-FW",
+                "ip_address": "100.73.32.21/29",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan857",
+                "description": "Mgmt_signal-program",
+                "ip_address": "10.255.255.116/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan1950",
+                "description": "signal-program",
+                "ip_address": "10.138.63.84/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan3102",
+                "description": null,
+                "ip_address": "100.73.0.19/29",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan857",
+                "description": "Mgmt_signal-program",
+                "ip_address": "10.255.255.117/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan1950",
+                "description": "signal-program",
+                "ip_address": "10.138.63.85/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan3102",
+                "description": null,
+                "ip_address": "100.73.0.20/29",
+                "shutdown": false
+            }
+        ]
+    },
+    "default": {
+        "interfaces": 213,
+        "routers": [
+            "OBvDCR1",
+            "OBvDCPe1-20260424",
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "interface_list": [
+            {
+                "router": "OBvDCPe1-20260424",
+                "interface": "Ethernet1/3",
+                "description": "OBvDCPe1--OBvP1 -10G FO- bane 9180396",
+                "ip_address": "172.17.90.214/30",
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCPe1-20260424",
+                "interface": "Ethernet1/4",
+                "description": "OBvDCPe1--OBvDC1 -10GE FO- TEMP TRUNK",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCPe1-20260424",
+                "interface": "mgmt0",
+                "description": null,
+                "ip_address": "172.20.100.11/24",
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCPe1-20260424",
+                "interface": "loopback1",
+                "description": "management and global routing",
+                "ip_address": "172.17.91.207/32",
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1",
+                "description": "BUNDLE--OBvDC-1-2",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.1 l2transport",
+                "description": "Nexus 5000 management",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.2 l2transport",
+                "description": "Server Vlan2",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.3 l2transport",
+                "description": "Server Vlan3",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.10 l2transport",
+                "description": "Wireless Controller Admin",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.11 l2transport",
+                "description": "Wireless Bane1 Clients",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.12 l2transport",
+                "description": "Wireless Voice",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.13 l2transport",
+                "description": "Wireless Teknik",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.15 l2transport",
+                "description": "PCI-OCK",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.50 l2transport",
+                "description": "NMSCisco",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.55 l2transport",
+                "description": "OBvDCMGMT",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.56 l2transport",
+                "description": "AudioCtrl",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.57 l2transport",
+                "description": "BDKLAN-Firewall",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.59 l2transport",
+                "description": "JTL",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.87 l2transport",
+                "description": "Vblock_dmz_ESXi",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.88 l2transport",
+                "description": "ASA Management",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.89 l2transport",
+                "description": "UCS/Storage Management Vlan",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.101 l2transport",
+                "description": "SDHManagement",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.133 l2transport",
+                "description": "PDHManagement",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.137 l2transport",
+                "description": "Service_Console",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.149 l2transport",
+                "description": "MD110 IPLU",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.157 l2transport",
+                "description": "OCS",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.185 l2transport",
+                "description": "DRAC-ILO",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.189 l2transport",
+                "description": "Capmon",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.190 l2transport",
+                "description": "NAS-MGMT",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.200 l2transport",
+                "description": "UCS-BDK-Teknik",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.256 l2transport",
+                "description": "KlvAsa-Inside",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.300 l2transport",
+                "description": "BSC management",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.301 l2transport",
+                "description": "BSC Pseudowires",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.350",
+                "description": "OBvDCR1--OBvDCR2",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.410 l2transport",
+                "description": "NPS Intern",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.451 l2transport",
+                "description": "DWDM-SRV-Main",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.452 l2transport",
+                "description": "DWDM-SRV-RDR",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.453 l2transport",
+                "description": "DWDM-Client",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.555 l2transport",
+                "description": "Public-Internet",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.570 l2transport",
+                "description": "overvaagning",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.703 l2transport",
+                "description": "BDK-Teknik - fservice",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.718 l2transport",
+                "description": "BDK-Teknik - fdrift",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.726 l2transport",
+                "description": "SIP-DMZ - Context BDK-Teknik",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.850 l2transport",
+                "description": "Mgmt_Global",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.851 l2transport",
+                "description": "Mgmt_CS",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.852 l2transport",
+                "description": "Mgmt_bane1",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.853 l2transport",
+                "description": "Mgmt_TS",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.854 l2transport",
+                "description": "Mgmt_InterConnect",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.855 l2transport",
+                "description": "Mgmt_fdrift",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.856 l2transport",
+                "description": "Mgmt_fservice",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.857 l2transport",
+                "description": "Mgmt_signal-program",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.858 l2transport",
+                "description": "Mgmt_DWDM",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.859 l2transport",
+                "description": "MGMT_SPNS2-TRANSIT-JTTN",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.1230 l2transport",
+                "description": "xRail-Mgmt",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.1231 l2transport",
+                "description": "xRail-iDRAC",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.1233 l2transport",
+                "description": "xRail-vSAN",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.1235 l2transport",
+                "description": "DATADOMAIN",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.1247 l2transport",
+                "description": "Vblock_dmz_Mgmt",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.1950 l2transport",
+                "description": "signal-program",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.2000 l2transport",
+                "description": "TogstatusOBv2",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.2001 l2transport",
+                "description": "TogstatusOBv",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.2002 l2transport",
+                "description": "OracleRGDC",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.2003 l2transport",
+                "description": "OracleOBV",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.3100 l2transport",
+                "description": "SPNS2-JTTN_OBV-CAT3-FW1-1",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.3401 l2transport",
+                "description": "CAT3-DMZ-SERVICE01",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.3402 l2transport",
+                "description": "CAT3-DMZ-SERVICE02",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.3409 l2transport",
+                "description": "CAT3-DMZ-SERVICE09",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Bundle-Ether1.3501 l2transport",
+                "description": "CAT3-DMZ-SERVICE01W",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Loopback0",
+                "description": "System-ID",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "Loopback1",
+                "description": "Management",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "TenGigE0/0/0/8",
+                "description": "OBvDCR1--OBvP1 -10GE FO- bane 9180831",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "TenGigE0/0/0/9",
+                "description": "OBvDCR1--KHP -10GE FO- bane 9100883",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "TenGigE0/0/0/10",
+                "description": "OBvDCR1--OBV-IC -10GE FO- bane 9180228",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI1",
+                "description": "Nexus 5000 management",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI2",
+                "description": "Server Vlan2",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI3",
+                "description": "Server Vlan3",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI10",
+                "description": "Wireless Controller Admin",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI11",
+                "description": "Wireless Bane1 Clients",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI12",
+                "description": "Wireless Voice",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI13",
+                "description": "Wireless Teknik",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI15",
+                "description": "PCI-OCK",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI50",
+                "description": "NMSCisco",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI55",
+                "description": "OBvDCMGMT Management",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI56",
+                "description": "AudioCtrl",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI57",
+                "description": "BDKLAN-Firewall",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI59",
+                "description": "JTL",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI87",
+                "description": "Vblock_dmz_ESXi",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI88",
+                "description": "ASA Management",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI89",
+                "description": "UCS/Storage Management Vlan",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI101",
+                "description": "SDHManagement",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI133",
+                "description": "PDHManagement",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI137",
+                "description": "Service_Console",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI149",
+                "description": "MD110 IPLU",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI157",
+                "description": "OCS",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI185",
+                "description": "DRAC-ILO",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI189",
+                "description": "Capmon",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI190",
+                "description": "NAS-MGMT",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI200",
+                "description": "UCS-BDK-Teknik",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI256",
+                "description": "KlvAsa-Inside",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI300",
+                "description": "BSC management",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI301",
+                "description": "BSC Pseudowires",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI410",
+                "description": "NPS Intern",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI451",
+                "description": "DWDM-SRV-Main",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI452",
+                "description": "DWDM-SRV-RDR",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI453",
+                "description": "DWDM-Client",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI555",
+                "description": "Public-Internet",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI570",
+                "description": "overvaagning",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI703",
+                "description": "BDK-Teknik - fservice",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI718",
+                "description": "BDK-Teknik - fdrift",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI726",
+                "description": "SIP-DMZ - Context BDK-Teknik",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI850",
+                "description": "Mgmt_Global",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI851",
+                "description": "Mgmt_CS",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI852",
+                "description": "Mgmt_bane1",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI853",
+                "description": "Mgmt_TS",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI854",
+                "description": "Mgmt_InterConnect",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI855",
+                "description": "Mgmt_fdrift",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI856",
+                "description": "Mgmt_fservice",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI857",
+                "description": "Mgmt_signal-program",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI858",
+                "description": "Mgmt_DWDM",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI859",
+                "description": "MGMT_SPNS2-TRANSIT-JTTN",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI1230",
+                "description": "xRail-Mgmt",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI1231",
+                "description": "xRail-iDRAC",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI1233",
+                "description": "xRail-vSAN",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI1235",
+                "description": "DATADOMAIN",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI1247",
+                "description": "Vblock_dmz_Mgmt",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI1950",
+                "description": "signal-program",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI2000",
+                "description": "TogstatusOBv2",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI2001",
+                "description": "TogstatusOBv",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI2002",
+                "description": "OracleRGDC",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI2003",
+                "description": "OracleOBV",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI3100",
+                "description": "SPNS2-JTTN_OBV-CAT3-FW1-1",
+                "ip_address": null,
+                "shutdown": true
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI3401",
+                "description": "CAT3-DMZ-SERVICE01",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI3402",
+                "description": "CAT3-DMZ-SERVICE01",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI3409",
+                "description": "CAT3-DMZ-SERVICE09",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "BVI3501",
+                "description": "CAT3-DMZ-SERVICE01W",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "HundredGigE0/0/0/20",
+                "description": "OBvDCR1--OBvDC1 -100GE FO- bane 9180833",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "HundredGigE0/0/0/21",
+                "description": "OBvDCR1--OBvDC2 -100GE FO- bane 9180832",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "OBvDCR1",
+                "interface": "TenGigE0/0/0/10",
+                "description": "Peering with RoskildeRR",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan88",
+                "description": "ASA Management",
+                "ip_address": "172.17.88.226/27",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan351",
+                "description": "L3 -> RGDCPe2",
+                "ip_address": "172.17.138.113/30",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan850",
+                "description": "Mgmt_Global",
+                "ip_address": "10.255.255.4/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "port-channel3",
+                "description": "vPC3 -> RGDC-CAT3-FW1-1_Po3",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "port-channel5",
+                "description": "vPC5 -> ASA1.RGDC - Management",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "port-channel11",
+                "description": "vPC11 -> RGDCBrugerSw1-2",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "port-channel13",
+                "description": "vPC13 -> ASA1.RGDC -FailoverLink",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "port-channel15",
+                "description": "VPC Po -> (L2) RGDCMgmtCore",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "port-channel20",
+                "description": "vPC20 -> OBvDCPe1",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "port-channel41",
+                "description": "vPC41 -> RGDCDataSw1-2",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "port-channel43",
+                "description": "vPC43 -> RGDCDmzSw1-2",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "port-channel45",
+                "description": "vPC45 -> RGDCVxRail1Sw1-2",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "port-channel46",
+                "description": "vPC46 -> RGDCVxRail1Sw1-2",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "port-channel47",
+                "description": "vPC47 -> RGDCLaserscan",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "port-channel4096",
+                "description": "Peer-Link -> RGDCPe2",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/1",
+                "description": "Po4096 (Peer-Link) -> RGDCPe2 -10GE FO- bane 9280318",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/2",
+                "description": "Po4096 (Peer-Link) -> RGDCPe2 -10GE FO- bane 9280319",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/3",
+                "description": "RGDCPe1--RingstedP1 -10G FO- bane 9280316",
+                "ip_address": "172.17.138.106/30",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/4",
+                "description": "RGDCPe1--OBvP1 -10G FO- bane 9180620",
+                "ip_address": "172.17.90.230/30",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/5",
+                "description": "RGDCPe1--OBvDCPe1 -10GE FO- bane 9180621",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/6",
+                "description": "Po5 -> ASA1.RGDC-Management Gi0/6 -GE UTP-",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/7",
+                "description": "RGDCPe1--RGDCDataSw1 -10GE FO- bane 9280320",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/8",
+                "description": "RGDCPe1--RGDCDataSw2 -10GE FO- bane 9280321",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/9",
+                "description": "RGDCPe1--RGDCDmzSw1 -10GE FO- bane 9280322",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/10",
+                "description": "RGDCPe1--RGDCDmzSw2 -10GE FO- bane 9280323",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/11",
+                "description": "RGDCPe1--RGDCVxRail1Sw1 -10GE FO- bane 9280324",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/12",
+                "description": "RGDCPe1--RGDCVxRail1Sw2 -10GE FO- bane 9280325",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/13",
+                "description": "RGDCPe1--RGDC-CAT3-FW1-1 -10GE Bane",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/14",
+                "description": "-- RES SPNS CAT3",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/15",
+                "description": "RGDCPe1--RGDCLaserscanSw1 -10GE FO- bane 9280326",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/16",
+                "description": "RGDCPe1--RGDCLaserscanSw2 -10GE FO- bane 9280327",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/17",
+                "description": "RGDCPe1--RGDC-IC -10GE FO- bane 9280250",
+                "ip_address": "10.30.2.245/31",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/18",
+                "description": "RGDCPe1--RDKGBVBADK02 -1G FO- bane 9180159",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/20",
+                "description": "RGDCPe1--RGDCMgmtCore (L2) -10G FO- bane 9280328",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/21",
+                "description": "RGDCPe1--RGDCBrugerSw1 -1GE FO- bane",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/22",
+                "description": "RGDCPe1--RGDCKMDSw1 -10GFO- bane 9280329",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/24",
+                "description": "RGDCPe1--BDK_DSB_sec -10GE FO- bane 9280401",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/25",
+                "description": "RGDCPe1-ASA1.RGDC(DSB_inside) -10GE FO- bane 9280401",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Ethernet1/26",
+                "description": "RGDCPe1-ASA1.RGDC(FailoverLink) -GE UTP- bane 8280111",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "loopback1",
+                "description": "OBv-IC -- Labeled-unicast",
+                "ip_address": "172.17.139.201/32",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan88",
+                "description": "ASA Management",
+                "ip_address": "172.17.88.227/27",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan351",
+                "description": "L3 -> RGDCPe1",
+                "ip_address": "172.17.138.114/30",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan850",
+                "description": "Mgmt_Global",
+                "ip_address": "10.255.255.5/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "port-channel3",
+                "description": "vPC3 -> RGDC-CAT3-FW1-2_Po3",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "port-channel5",
+                "description": "vPC5 -> ASA1.RGDC - Management",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "port-channel11",
+                "description": "vPC11 -> RGDCBrugerSw1-2",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "port-channel13",
+                "description": "vPC13 -> ASA1.RGDC -FailoverLink",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "port-channel15",
+                "description": "VPC Po -> (L2) RGDCMgmtCore",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "port-channel20",
+                "description": "vPC20 -> OBvDCPe2",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "port-channel41",
+                "description": "vPC41 -> RGDCDataSw1-2",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "port-channel43",
+                "description": "vPC43 -> RGDCDmzSw1-2",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "port-channel45",
+                "description": "vPC45 -> RGDCVxRail1Sw1-2",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "port-channel46",
+                "description": "vPC46 -> RGDCVxRail1Sw1-2",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "port-channel47",
+                "description": "vPC47 -> RGDCLaserscan",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "port-channel4096",
+                "description": "Peer-Link -> RGDCPe1",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Ethernet1/1",
+                "description": "Po4096 (Peer-Link) -> RGDCPe1 -10GE FO- bane 9280318",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Ethernet1/2",
+                "description": "Po4096 (Peer-Link) -> RGDCPe1 -10GE FO- bane 9280319",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Ethernet1/3",
+                "description": "RGDCPe2--RingstedP1 -10G FO- bane 9280317",
+                "ip_address": "172.17.138.110/30",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Ethernet1/4",
+                "description": "RGDCPe2--OBvP1 -10G FO- bane 9180622",
+                "ip_address": "172.17.90.234/30",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Ethernet1/5",
+                "description": "RGDCPe2--OBvDCPe2 -10GE FO- bane 9180623 -- MIGRATION --",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Ethernet1/6",
+                "description": "Po5 -> ASA1.RGDC-Management Gi0/6 -GE UTP-",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Ethernet1/7",
+                "description": "RGDCPe2--RGDCDataSw1 -10GE FO- bane 9280330",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Ethernet1/8",
+                "description": "RGDCPe2--RGDCDataSw2 -10GE FO- bane 9280331",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Ethernet1/9",
+                "description": "RGDCPe2--RGDCDmzSw1 -10GE FO- bane 9280332",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Ethernet1/10",
+                "description": "RGDCPe2--RGDCDmzSw2 -10GE FO- bane 9280333",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Ethernet1/11",
+                "description": "RGDCPe2--RGDCVxRail1Sw1 -10GE FO- bane 9280325",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Ethernet1/12",
+                "description": "RGDCPe2--RGDCVxRail1Sw2 -10GE FO- bane 9080335",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Ethernet1/13",
+                "description": "RGDCPe2--RGDC-CAT3-FW1-2 -10G bane",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Ethernet1/14",
+                "description": "-- RES SPNS CAT3",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Ethernet1/15",
+                "description": "RGDCPe2--RGDCLaserscanSw1 -10GE FO- bane 9280336",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Ethernet1/16",
+                "description": "RGDCPe2--RGDCLaserscanSw2 -10GE FO- bane 9280337",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Ethernet1/20",
+                "description": "RGDCPe2--RGDCMgmtCore (L2) -10G FO- bane 9280338",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Ethernet1/21",
+                "description": "RGDCPe2--RGDCBrugerSw1 -1GE FO- bane",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Ethernet1/26",
+                "description": "RGDCPe2-ASA1.RGDC(FailoverLink) -GE UTP- bane 8280113",
+                "ip_address": null,
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "loopback1",
+                "description": "management and global routing",
+                "ip_address": "172.17.139.202/32",
+                "shutdown": false
+            }
+        ]
+    },
+    "management": {
+        "interfaces": 2,
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "interface_list": [
+            {
+                "router": "RGDCPe1",
+                "interface": "mgmt0",
+                "description": null,
+                "ip_address": "10.185.10.251/29",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "mgmt0",
+                "description": null,
+                "ip_address": "10.185.10.252/29",
+                "shutdown": false
+            }
+        ]
+    },
+    "CS": {
+        "interfaces": 26,
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "interface_list": [
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan1",
+                "description": "Management",
+                "ip_address": "10.185.10.2/26",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan50",
+                "description": "NMSCisco",
+                "ip_address": "10.185.50.2/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan600",
+                "description": "QA-VxRail-MGMT",
+                "ip_address": "10.186.0.2/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan603",
+                "description": "QA-VxRail-iDrac",
+                "ip_address": "10.186.3.2/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan851",
+                "description": "Mgmt_CS",
+                "ip_address": "10.255.255.20/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan1230",
+                "description": "xRail-Mgmt",
+                "ip_address": "10.185.230.4/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan1231",
+                "description": "xRail-iDRAC",
+                "ip_address": "10.185.231.4/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan1233",
+                "description": "xRail-vSAN",
+                "ip_address": "10.185.233.4/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan1235",
+                "description": "DATADOMAIN",
+                "ip_address": "10.185.250.4/25",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan3401",
+                "description": "CAT3-DMZ-SERVICE01",
+                "ip_address": "100.73.35.27/27",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan3402",
+                "description": "CAT3-DMZ-SERVICE02",
+                "ip_address": "100.73.35.59/27",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan3409",
+                "description": "CAT3-DMZ-SERVICE09",
+                "ip_address": "100.73.36.27/27",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan3501",
+                "description": "CAT3-DMZ-SERVICE01W",
+                "ip_address": "100.73.3.27/27",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan1",
+                "description": "Management",
+                "ip_address": "10.185.10.3/26",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan50",
+                "description": "NMSCisco",
+                "ip_address": "10.185.50.3/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan600",
+                "description": "QA-VxRail-MGMT",
+                "ip_address": "10.186.0.3/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan603",
+                "description": "QA-VxRail-iDrac",
+                "ip_address": "10.186.3.3/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan851",
+                "description": "Mgmt_CS",
+                "ip_address": "10.255.255.21/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan1230",
+                "description": "xRail-Mgmt",
+                "ip_address": "10.185.230.5/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan1231",
+                "description": "xRail-iDRAC",
+                "ip_address": "10.185.231.5/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan1233",
+                "description": "xRail-vSAN",
+                "ip_address": "10.185.233.5/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan1235",
+                "description": "DATADOMAIN",
+                "ip_address": "10.185.250.5/25",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan3401",
+                "description": "CAT3-DMZ-SERVICE01",
+                "ip_address": "100.73.35.28/27",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan3402",
+                "description": "CAT3-DMZ-SERVICE02",
+                "ip_address": "100.73.35.60/27",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan3409",
+                "description": "CAT3-DMZ-SERVICE09",
+                "ip_address": "100.73.36.28/27",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan3501",
+                "description": "CAT3-DMZ-SERVICE01W",
+                "ip_address": "100.73.3.28/27",
+                "shutdown": false
+            }
+        ]
+    },
+    "PSI-OCK": {
+        "interfaces": 2,
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "interface_list": [
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan15",
+                "description": null,
+                "ip_address": "10.84.15.84/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan15",
+                "description": null,
+                "ip_address": "10.84.15.85/28",
+                "shutdown": false
+            }
+        ]
+    },
+    "JTL": {
+        "interfaces": 2,
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "interface_list": [
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan59",
+                "description": "JTL",
+                "ip_address": "172.20.59.8/26",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan59",
+                "description": "JTL",
+                "ip_address": "172.20.59.9/26",
+                "shutdown": false
+            }
+        ]
+    },
+    "TS": {
+        "interfaces": 4,
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "interface_list": [
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan101",
+                "description": "SDHManagement",
+                "ip_address": "10.185.5.253/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan853",
+                "description": "Mgmt_TS",
+                "ip_address": "10.255.255.52/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan101",
+                "description": "SDHManagement",
+                "ip_address": "10.185.5.254/24",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan853",
+                "description": "Mgmt_TS",
+                "ip_address": "10.255.255.53/28",
+                "shutdown": false
+            }
+        ]
+    },
+    "DWDM": {
+        "interfaces": 8,
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "interface_list": [
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan451",
+                "description": "DWDM-SRV-Main",
+                "ip_address": "10.26.0.4/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan452",
+                "description": "DWDM-SRV-RDR",
+                "ip_address": "10.26.0.20/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan453",
+                "description": "DWDM-Client",
+                "ip_address": "10.26.0.36/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan858",
+                "description": "Mgmt_DWDM",
+                "ip_address": "10.255.255.132/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan451",
+                "description": "DWDM-SRV-Main",
+                "ip_address": "10.26.0.5/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan452",
+                "description": "DWDM-SRV-RDR",
+                "ip_address": "10.26.0.21/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan453",
+                "description": "DWDM-Client",
+                "ip_address": "10.26.0.37/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan858",
+                "description": "Mgmt_DWDM",
+                "ip_address": "10.255.255.133/28",
+                "shutdown": false
+            }
+        ]
+    },
+    "Internet": {
+        "interfaces": 2,
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "interface_list": [
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan555",
+                "description": "Public-Internet",
+                "ip_address": "10.60.0.5/26",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan555",
+                "description": "Public-Internet",
+                "ip_address": "10.60.0.6/26",
+                "shutdown": false
+            }
+        ]
+    },
+    "overvaagning": {
+        "interfaces": 2,
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "interface_list": [
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan570",
+                "description": "overvaagning",
+                "ip_address": "10.99.2.6/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan570",
+                "description": "overvaagning",
+                "ip_address": "10.99.2.7/28",
+                "shutdown": false
+            }
+        ]
+    },
+    "fservice": {
+        "interfaces": 3,
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "interface_list": [
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan703",
+                "description": "BDK-Teknik - fservice",
+                "ip_address": "172.21.1.166/29",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan856",
+                "description": "Mgmt_fservice",
+                "ip_address": "10.255.255.100/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan856",
+                "description": "Mgmt_fservice",
+                "ip_address": "10.255.255.101/28",
+                "shutdown": false
+            }
+        ]
+    },
+    "fdrift": {
+        "interfaces": 3,
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "interface_list": [
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan718",
+                "description": "BDK-Teknik - fdrift",
+                "ip_address": "172.21.1.150/29",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan855",
+                "description": "Mgmt_fdrift",
+                "ip_address": "10.255.255.84/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan855",
+                "description": "Mgmt_fdrift",
+                "ip_address": "10.255.255.85/28",
+                "shutdown": false
+            }
+        ]
+    },
+    "SIP-DMZ": {
+        "interfaces": 2,
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "interface_list": [
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan726",
+                "description": "SIP-DMZ - Context BDK-Teknik",
+                "ip_address": "172.21.2.198/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan726",
+                "description": "SIP-DMZ - Context BDK-Teknik",
+                "ip_address": "172.21.2.199/28",
+                "shutdown": false
+            }
+        ]
+    },
+    "MGMT": {
+        "interfaces": 2,
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "interface_list": [
+            {
+                "router": "RGDCPe1",
+                "interface": "Vlan854",
+                "description": "Mgmt_InterConnect",
+                "ip_address": "10.255.255.68/28",
+                "shutdown": false
+            },
+            {
+                "router": "RGDCPe2",
+                "interface": "Vlan854",
+                "description": "Mgmt_InterConnect",
+                "ip_address": "10.255.255.69/28",
+                "shutdown": false
+            }
+        ]
+    }
+}

@@ -1,0 +1,3536 @@
+=~=~=~=~=~=~=~=~=~=~=~= PuTTY log 2026.06.24 10:20:40 =~=~=~=~=~=~=~=~=~=~=~=
+login as: t1ot-xtonj
+Pre-authentication banner message from server:
+| 
+| 
+|  *************************************************************************
+|  **+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+**
+|  **                         WARNING                                     **
+|  **  If you are not authorized to access this system, exit immediately. **
+|  ** Unauthorized access to this system is forbidden by company policies,**
+|  ** national and international laws. Unauthorized users are subject to  **
+|  **     criminal and civil penalties as well as company initiated       **
+|  **         disciplinary proceedings.                                   **
+|  **+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+**
+|  *************************************************************************
+| 
+| 
+End of banner message from server
+Keyboard-interactive authentication prompts from server:
+| Password:
+End of keyboard-interactive prompts from server
+
+
+RP/0/RSP0/CPU0:OBvDCR1#sh run
+
+Wed Jun 24 10:20:57.704 CEST
+!! Building configuration...
+!! IOS XR Configuration 7.11.21
+!! Last configuration change at Fri Jun 12 08:31:08 2026 by T1OT-AEVN-APTO
+!
+hostname OBvDCR1
+usergroup BDK-ADMIN
+ taskgroup root-lr
+ taskgroup cisco-support
+!
+clock timezone CET Europe/Copenhagen
+banner login %
+ *************************************************************************
+ **+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+**
+ **                         WARNING                                     **
+ **  If you are not authorized to access this system, exit immediately. **
+ ** Unauthorized access to this system is forbidden by company policies,**
+ ** national and international laws. Unauthorized users are subject to  **
+ **     criminal and civil penalties as well as company initiated       **
+ **         disciplinary proceedings.                                   **
+ **+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+**
+ *************************************************************************
+%
+logging ipv4 dscp cs2
+ --More--           logging trap informational
+logging console debugging
+logging buffered 2097152
+logging buffered informational
+logging facility syslog
+logging source-interface BVI55
+logging suppress duplicates
+service timestamps log datetime localtime msec show-timezone year
+service timestamps debug datetime localtime msec show-timezone year
+logging events link-status software-interfaces
+domain vrf CS lookup disable
+domain vrf CS lookup source-interface BVI55
+domain name baneisp.dk
+domain name-server 10.185.50.11
+domain name-server 10.185.50.12
+domain lookup disable
+tacacs source-interface BVI55 vrf CS
+tacacs-server host 100.73.35.15 port 49
+ key 7 1057004A5304135F59
+ timeout 5
+!
+tacacs-server host 100.73.3.15 port 49
+ key 7 1057004A5304135F59
+ --More--            timeout 5
+!
+tacacs-server ipv4 dscp cs2
+username admin
+ group root-lr
+ group cisco-support
+ secret 10 $6$26tg1GCvnC1.....$w7q2O.ZObzpVSH35VtSPfo48zBQmVp59XZuyWcZJL/L27x1Llffa6X2g23yZ0bPajptB8iql/9lPwVptNwKis1
+!
+username jttn
+ group root-lr
+ group cisco-support
+ secret 10 $6$PqLbY0xp7dRG8Y0.$XWBs7/gexKD.etCNv3W1SiexMzbND0hpVQfmvJItUpHXUdLRgsblsjh9iwW/riCyRDtmr.Rgu8XzPFiWtx09e/
+!
+aaa accounting exec default start-stop group TACACSGROUP
+aaa accounting system default start-stop group TACACSGROUP
+aaa accounting commands default start-stop group TACACSGROUP
+aaa accounting system rp-failover default start-stop none
+aaa group server tacacs+ TACACSGROUP
+ server 100.73.35.15
+ server 100.73.3.15
+ vrf CS
+!
+aaa authorization exec default group TACACSGROUP none
+ --More--           aaa authorization commands default group TACACSGROUP none
+aaa authentication login default group TACACSGROUP local
+aaa accounting update newinfo
+cdp
+vrf CS
+ address-family ipv4 unicast
+  import route-target
+   65020:102
+  !
+  export route-target
+   65020:102
+  !
+ !
+!
+vrf TS
+ address-family ipv4 unicast
+  import route-target
+   65020:1070
+  !
+  export route-target
+   65020:1070
+   65020:1080
+  !
+ --More--            !
+!
+vrf JTL
+ address-family ipv4 unicast
+  import route-target
+   65020:59
+  !
+  export route-target
+   65020:59
+  !
+ !
+!
+vrf DWDM
+ address-family ipv4 unicast
+  import route-target
+   65020:4001
+  !
+  export route-target
+   65020:4001
+  !
+ !
+!
+vrf MGMT
+ --More--            address-family ipv4 unicast
+  import route-target
+   65020:500
+  !
+  export route-target
+   65020:500
+  !
+ !
+!
+vrf LOCAL
+!
+vrf bane1
+ address-family ipv4 unicast
+  import route-target
+   65020:100
+   65020:1000
+  !
+  export route-target
+   65020:1000
+  !
+ !
+!
+vrf fdrift
+ --More--            address-family ipv4 unicast
+  import route-target
+   65020:1050
+   65020:1090
+  !
+  export route-target
+   65020:1050
+  !
+ !
+!
+vrf kdrift
+ address-family ipv4 unicast
+  import route-target
+   65020:1090
+  !
+  export route-target
+   65020:1090
+  !
+ !
+!
+vrf PSI-OCK
+ address-family ipv4 unicast
+  import route-target
+ --More--              65020:3001
+  !
+  export route-target
+   65020:3001
+  !
+ !
+!
+vrf SIP-DMZ
+ address-family ipv4 unicast
+  import route-target
+   65020:4011
+  !
+  export route-target
+   65020:4011
+  !
+ !
+!
+vrf Internet
+ address-family ipv4 unicast
+  import route-target
+   65020:555
+  !
+  export route-target
+ --More--              65020:555
+  !
+ !
+!
+vrf fservice
+ address-family ipv4 unicast
+  import route-target
+   65020:1060
+  !
+  export route-target
+   65020:1060
+  !
+ !
+!
+vrf overvaagning
+ address-family ipv4 unicast
+  import route-target
+   65020:1200
+  !
+  export route-target
+   65020:1200
+  !
+ !
+ --More--           !
+vrf signal-program
+ address-family ipv4 unicast
+  import route-target
+   65020:2001
+  !
+  export route-target
+   65020:2001
+  !
+ !
+!
+vrf SPNS2-TRANSIT-JTTN
+ address-family ipv4 unicast
+  import route-target
+   65020:859
+  !
+  export route-target
+   65020:859
+  !
+ !
+!
+tcp mss 1404
+tcp selective-ack
+ --More--           tcp window-size 65535
+tcp path-mtu-discovery
+tcp synwait-time 10
+tcp timestamp
+tcp accept-rate 200
+line console
+ login authentication default
+ exec-timeout 0 0
+ transport output ssh
+!
+line default
+ login authentication default
+ exec-timeout 30 0
+ access-class ingress VTY_ACCESS
+ transport input ssh
+ transport output ssh
+!
+vty-pool default 0 50
+http client vrf CS
+http client source-interface ipv4 BVI55
+snmp-server interface BVI55
+!
+snmp-server ifindex persist
+ --More--           snmp-server community 2ex3me RO IPv4 20
+snmp-server community h.0p16.y RW IPv4 20
+snmp-server location KH.257 - Otto Buesses Vej 8 - 2.sal, 2450 Koebenhavn SV
+snmp-server trap-source BVI55
+dhcp ipv4
+ profile DHCP-HELPER relay
+  helper-address vrf bane1 172.27.2.22
+ !
+ interface BVI11 relay profile DHCP-HELPER
+ interface BVI12 relay profile DHCP-HELPER
+ interface BVI13 relay profile DHCP-HELPER
+!
+fpd auto-reload enable
+fpd auto-upgrade enable
+icmp ipv4 rate-limit unreachable 600
+ntp
+ interface BVI55 vrf CS
+  broadcast
+ !
+ server vrf CS 10.185.50.11
+ server vrf CS 10.185.50.12
+ update-calendar
+!
+ --More--           bfd
+ interface TenGigE0/0/0/10
+  echo disable
+ !
+ interface GigabitEthernet0/0/0/0
+  echo disable
+ !
+ interface GigabitEthernet0/0/0/1
+  echo disable
+ !
+ multihop ttl-drop-threshold 3
+ multipath include location 0/0/CPU0
+!
+ipv4 assembler max-packets 5
+ipv4 unnumbered mpls traffic-eng Loopback0
+ipv4 assembler timeout 5
+frequency synchronization
+ quality itu-t option 1
+ clock-interface timing-mode system
+ log selection changes
+!
+key chain RR-KEY
+ key 10
+ --More--             accept-lifetime 00:00:00 january 01 1993 infinite
+  key-string password 06320E2C436A084F533C171242
+  send-lifetime 00:00:00 january 01 1993 infinite
+  cryptographic-algorithm HMAC-SHA1-12
+ !
+!
+key chain BGP-KEY
+ key 10
+  accept-lifetime 00:00:00 january 01 1993 infinite
+  key-string password 06320E2C436A084F533C171242
+  send-lifetime 00:00:00 january 01 1993 infinite
+  cryptographic-algorithm HMAC-SHA1-12
+ !
+!
+key chain ISIS-KEY
+ key 100
+  accept-lifetime 00:00:00 january 01 1993 infinite
+  key-string password 0529072B20655D200A2545425A58
+  send-lifetime 00:00:00 january 01 1993 infinite
+  cryptographic-algorithm HMAC-MD5
+ !
+!
+call-home
+ --More--            service active
+ contact-email-addr info@bane.dk
+ profile ssm
+  active
+  destination address http http://100.73.35.40:80/Transportgateway/services/DeviceRequestHandler
+  reporting smart-licensing-data
+  destination transport-method http
+ !
+!
+control-plane
+ management-plane
+  inband
+   interface all
+    allow SSH
+    allow SNMP
+   !
+  !
+ !
+!
+ipv4 access-list VTY_ACCESS
+ 10 permit tcp any any eq ssh
+ 99 deny ipv4 any any log
+!
+ --More--           interface Bundle-Ether1
+ description BUNDLE--OBvDC-1-2
+ mtu 9212
+ load-interval 60
+ dampening
+!
+interface Bundle-Ether1.1 l2transport
+ description Nexus 5000 management
+ encapsulation untagged
+!
+interface Bundle-Ether1.2 l2transport
+ description Server Vlan2
+ encapsulation dot1q 2
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.3 l2transport
+ description Server Vlan3
+ encapsulation dot1q 3
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.10 l2transport
+ description Wireless Controller Admin
+ encapsulation dot1q 10
+ --More--            rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.11 l2transport
+ description Wireless Bane1 Clients
+ encapsulation dot1q 11
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.12 l2transport
+ description Wireless Voice
+ encapsulation dot1q 12
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.13 l2transport
+ description Wireless Teknik
+ encapsulation dot1q 13
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.15 l2transport
+ description PCI-OCK
+ encapsulation dot1q 15
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.50 l2transport
+ --More--            description NMSCisco
+ encapsulation dot1q 50
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.55 l2transport
+ description OBvDCMGMT
+ encapsulation dot1q 55
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.56 l2transport
+ description AudioCtrl
+ encapsulation dot1q 56
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.57 l2transport
+ description BDKLAN-Firewall
+ encapsulation dot1q 57
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.59 l2transport
+ description JTL
+ encapsulation dot1q 59
+ rewrite ingress tag pop 1 symmetric
+ --More--           !
+interface Bundle-Ether1.87 l2transport
+ description Vblock_dmz_ESXi
+ encapsulation dot1q 87
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.88 l2transport
+ description ASA Management
+ encapsulation dot1q 88
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.89 l2transport
+ description UCS/Storage Management Vlan
+ encapsulation dot1q 89
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.101 l2transport
+ description SDHManagement
+ encapsulation dot1q 101
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.133 l2transport
+ description PDHManagement
+ --More--            encapsulation dot1q 133
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.137 l2transport
+ description Service_Console
+ encapsulation dot1q 137
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.149 l2transport
+ description MD110 IPLU
+ encapsulation dot1q 149
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.157 l2transport
+ description OCS
+ encapsulation dot1q 157
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.185 l2transport
+ description DRAC-ILO
+ encapsulation dot1q 185
+ rewrite ingress tag pop 1 symmetric
+!
+ --More--           interface Bundle-Ether1.189 l2transport
+ description Capmon
+ encapsulation dot1q 189
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.190 l2transport
+ description NAS-MGMT
+ encapsulation dot1q 190
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.200 l2transport
+ description UCS-BDK-Teknik
+ encapsulation dot1q 200
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.256 l2transport
+ description KlvAsa-Inside
+ encapsulation dot1q 256
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.300 l2transport
+ description BSC management
+ encapsulation dot1q 300
+ --More--            rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.301 l2transport
+ description BSC Pseudowires
+ encapsulation dot1q 301
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.350
+ description OBvDCR1--OBvDCR2
+ mtu 9212
+ ipv4 address 172.21.240.33 255.255.255.252
+ load-interval 60
+ dampening
+ encapsulation dot1q 350
+!
+interface Bundle-Ether1.410 l2transport
+ description NPS Intern
+ encapsulation dot1q 410
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.451 l2transport
+ description DWDM-SRV-Main
+ encapsulation dot1q 451
+ --More--            rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.452 l2transport
+ description DWDM-SRV-RDR
+ encapsulation dot1q 452
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.453 l2transport
+ description DWDM-Client
+ encapsulation dot1q 453
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.555 l2transport
+ description Public-Internet
+ encapsulation dot1q 555
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.570 l2transport
+ description overvaagning
+ encapsulation dot1q 570
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.703 l2transport
+ --More--            description BDK-Teknik - fservice
+ encapsulation dot1q 703
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.718 l2transport
+ description BDK-Teknik - fdrift
+ encapsulation dot1q 718
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.726 l2transport
+ description SIP-DMZ - Context BDK-Teknik
+ encapsulation dot1q 726
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.850 l2transport
+ description Mgmt_Global
+ encapsulation dot1q 850
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.851 l2transport
+ description Mgmt_CS
+ encapsulation dot1q 851
+ rewrite ingress tag pop 1 symmetric
+ --More--           !
+interface Bundle-Ether1.852 l2transport
+ description Mgmt_bane1
+ encapsulation dot1q 852
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.853 l2transport
+ description Mgmt_TS
+ encapsulation dot1q 853
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.854 l2transport
+ description Mgmt_InterConnect
+ encapsulation dot1q 854
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.855 l2transport
+ description Mgmt_fdrift
+ encapsulation dot1q 855
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.856 l2transport
+ description Mgmt_fservice
+ --More--            encapsulation dot1q 856
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.857 l2transport
+ description Mgmt_signal-program
+ encapsulation dot1q 857
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.858 l2transport
+ description Mgmt_DWDM
+ encapsulation dot1q 858
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.859 l2transport
+ description MGMT_SPNS2-TRANSIT-JTTN
+ encapsulation dot1q 859
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.1230 l2transport
+ description xRail-Mgmt
+ encapsulation dot1q 1230
+ rewrite ingress tag pop 1 symmetric
+!
+ --More--           interface Bundle-Ether1.1231 l2transport
+ description xRail-iDRAC
+ encapsulation dot1q 1231
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.1233 l2transport
+ description xRail-vSAN
+ encapsulation dot1q 1233
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.1235 l2transport
+ description DATADOMAIN
+ encapsulation dot1q 1235
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.1247 l2transport
+ description Vblock_dmz_Mgmt
+ encapsulation dot1q 1247
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.1950 l2transport
+ description signal-program
+ encapsulation dot1q 1950
+ --More--            rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.2000 l2transport
+ description TogstatusOBv2
+ encapsulation dot1q 2000
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.2001 l2transport
+ description TogstatusOBv
+ encapsulation dot1q 2001
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.2002 l2transport
+ description OracleRGDC
+ encapsulation dot1q 2002
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.2003 l2transport
+ description OracleOBV
+ encapsulation dot1q 2003
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.3100 l2transport
+ --More--            description SPNS2-JTTN_OBV-CAT3-FW1-1
+ encapsulation dot1q 3100
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.3401 l2transport
+ description CAT3-DMZ-SERVICE01
+ encapsulation dot1q 3401
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.3402 l2transport
+ description CAT3-DMZ-SERVICE02
+ encapsulation dot1q 3402
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.3409 l2transport
+ description CAT3-DMZ-SERVICE09
+ encapsulation dot1q 3409
+ rewrite ingress tag pop 1 symmetric
+!
+interface Bundle-Ether1.3501 l2transport
+ description CAT3-DMZ-SERVICE01W
+ encapsulation dot1q 3501
+ rewrite ingress tag pop 1 symmetric
+ --More--           !
+interface Loopback0
+ description System-ID
+ ipv4 address 172.17.91.208 255.255.255.255
+!
+interface Loopback1
+ description Management
+ vrf MGMT
+ ipv4 address 172.17.91.208 255.255.255.255
+!
+interface Loopback3100
+ vrf LOCAL
+ ipv4 address 100.73.32.2 255.255.255.255
+!
+interface MgmtEth0/RSP0/CPU0/0
+ shutdown
+!
+interface GigabitEthernet0/0/0/0
+ shutdown
+!
+interface GigabitEthernet0/0/0/1
+ shutdown
+!
+ --More--           interface GigabitEthernet0/0/0/2
+ shutdown
+!
+interface GigabitEthernet0/0/0/3
+ shutdown
+!
+interface GigabitEthernet0/0/0/4
+ shutdown
+!
+interface GigabitEthernet0/0/0/5
+ shutdown
+!
+interface GigabitEthernet0/0/0/6
+ shutdown
+!
+interface GigabitEthernet0/0/0/7
+ shutdown
+!
+interface GigabitEthernet0/0/0/34
+ shutdown
+!
+interface GigabitEthernet0/0/0/35
+ shutdown
+ --More--           !
+interface GigabitEthernet0/0/0/36
+ shutdown
+!
+interface GigabitEthernet0/0/0/37
+ shutdown
+!
+interface GigabitEthernet0/0/0/38
+ shutdown
+!
+interface GigabitEthernet0/0/0/39
+ shutdown
+!
+interface GigabitEthernet0/0/0/40
+ shutdown
+!
+interface GigabitEthernet0/0/0/41
+ shutdown
+!
+interface TenGigE0/0/0/8
+ description OBvDCR1--OBvP1 -10GE FO- bane 9180831
+ cdp
+ mtu 1562
+ --More--            ipv4 address 172.21.240.2 255.255.255.252
+ carrier-delay up 10 down 0
+ load-interval 60
+ dampening
+ frequency synchronization
+  selection input
+  priority 10
+  wait-to-restore 2
+ !
+!
+interface TenGigE0/0/0/9
+ description OBvDCR1--KHP -10GE FO- bane 9100883
+ cdp
+ mtu 1562
+ ipv4 address 172.21.240.6 255.255.255.252
+ carrier-delay up 10 down 0
+ load-interval 60
+ dampening
+ frequency synchronization
+  selection input
+  priority 90
+  wait-to-restore 2
+ !
+ --More--           !
+interface TenGigE0/0/0/10
+ description OBvDCR1--OBV-IC -10GE FO- bane 9180228
+ cdp
+ mtu 1562
+ ipv4 address 10.30.2.225 255.255.255.254
+ carrier-delay up 10 down 0
+ load-interval 60
+ dampening
+ frequency synchronization
+ !
+!
+interface TenGigE0/0/0/11
+ shutdown
+!
+interface TenGigE0/0/0/12
+ shutdown
+!
+interface TenGigE0/0/0/13
+ shutdown
+!
+interface TenGigE0/0/0/14
+ shutdown
+ --More--           !
+interface TenGigE0/0/0/15
+ shutdown
+!
+interface TenGigE0/0/0/16
+ shutdown
+!
+interface TenGigE0/0/0/17
+ shutdown
+!
+interface TenGigE0/0/0/18
+ shutdown
+!
+interface TenGigE0/0/0/19
+ shutdown
+!
+interface TenGigE0/0/0/22
+ shutdown
+!
+interface TenGigE0/0/0/23
+ shutdown
+!
+interface TenGigE0/0/0/24
+ --More--            shutdown
+!
+interface TenGigE0/0/0/25
+ shutdown
+!
+interface TenGigE0/0/0/26
+ shutdown
+!
+interface TenGigE0/0/0/27
+ shutdown
+!
+interface TenGigE0/0/0/28
+ shutdown
+!
+interface TenGigE0/0/0/29
+ shutdown
+!
+interface TenGigE0/0/0/30
+ shutdown
+!
+interface TenGigE0/0/0/31
+ shutdown
+!
+ --More--           interface TenGigE0/0/0/32
+ shutdown
+!
+interface TenGigE0/0/0/33
+ shutdown
+!
+interface BVI1
+ description Nexus 5000 management
+ ipv4 address 172.17.89.130 255.255.255.224
+!
+interface BVI2
+ description Server Vlan2
+ vrf bane1
+ ipv4 address 172.27.2.4 255.255.255.0
+!
+interface BVI3
+ description Server Vlan3
+ vrf bane1
+ ipv4 address 172.27.3.4 255.255.255.0
+!
+interface BVI10
+ description Wireless Controller Admin
+ vrf bane1
+ --More--            ipv4 address 172.18.254.2 255.255.255.0
+!
+interface BVI11
+ description Wireless Bane1 Clients
+ vrf bane1
+ ipv4 address 172.18.0.2 255.255.248.0
+!
+interface BVI12
+ description Wireless Voice
+ vrf bane1
+ ipv4 address 172.18.16.2 255.255.248.0
+!
+interface BVI13
+ description Wireless Teknik
+ vrf bane1
+ ipv4 address 172.18.64.2 255.255.248.0
+!
+interface BVI15
+ description PCI-OCK
+ vrf PSI-OCK
+ ipv4 address 10.84.15.82 255.255.255.240
+!
+interface BVI50
+ --More--            description NMSCisco
+ vrf CS
+ ipv4 address 10.185.50.4 255.255.255.0
+!
+interface BVI55
+ description OBvDCMGMT Management
+ vrf CS
+ ipv4 address 10.185.11.3 255.255.255.128
+!
+interface BVI56
+ description AudioCtrl
+ vrf bane1
+ ipv4 address 172.27.56.251 255.255.255.0
+!
+interface BVI57
+ description BDKLAN-Firewall
+ vrf bane1
+ ipv4 address 172.27.57.7 255.255.255.0
+!
+interface BVI59
+ description JTL
+ vrf JTL
+ ipv4 address 172.20.59.6 255.255.255.192
+ --More--           !
+interface BVI87
+ description Vblock_dmz_ESXi
+ ipv4 address 172.17.87.130 255.255.255.224
+!
+interface BVI88
+ description ASA Management
+ ipv4 address 172.17.88.228 255.255.255.224
+!
+interface BVI89
+ description UCS/Storage Management Vlan
+ ipv4 address 172.17.89.66 255.255.255.192
+!
+interface BVI101
+ description SDHManagement
+ vrf TS
+ ipv4 address 10.185.5.2 255.255.255.0
+!
+interface BVI133
+ description PDHManagement
+ vrf bane1
+ ipv4 address 172.27.133.4 255.255.255.0
+!
+ --More--           interface BVI137
+ description Service_Console
+ vrf bane1
+ ipv4 address 172.27.137.4 255.255.255.0
+!
+interface BVI149
+ description MD110 IPLU
+ vrf bane1
+ ipv4 address 172.27.149.4 255.255.255.0
+!
+interface BVI157
+ description OCS
+ vrf bane1
+ ipv4 address 172.27.157.7 255.255.255.0
+!
+interface BVI185
+ description DRAC-ILO
+ vrf bane1
+ ipv4 address 172.27.185.4 255.255.255.0
+!
+interface BVI189
+ description Capmon
+ vrf bane1
+ --More--            ipv4 address 172.27.189.4 255.255.255.0
+!
+interface BVI190
+ description NAS-MGMT
+ vrf bane1
+ ipv4 address 172.27.190.4 255.255.255.0
+!
+interface BVI200
+ description UCS-BDK-Teknik
+ vrf bane1
+ ipv4 address 172.27.200.4 255.255.255.0
+!
+interface BVI256
+ description KlvAsa-Inside
+ vrf bane1
+ ipv4 address 172.20.1.2 255.255.255.0
+!
+interface BVI300
+ description BSC management
+ ipv4 address 172.17.89.194 255.255.255.240
+!
+interface BVI301
+ description BSC Pseudowires
+ --More--            ipv4 address 172.17.89.226 255.255.255.240
+!
+interface BVI410
+ description NPS Intern
+ vrf bane1
+ ipv4 address 172.27.4.4 255.255.255.128
+!
+interface BVI451
+ description DWDM-SRV-Main
+ vrf DWDM
+ ipv4 address 10.26.0.2 255.255.255.240
+!
+interface BVI452
+ description DWDM-SRV-RDR
+ vrf DWDM
+ ipv4 address 10.26.0.18 255.255.255.240
+!
+interface BVI453
+ description DWDM-Client
+ vrf DWDM
+ ipv4 address 10.26.0.34 255.255.255.240
+!
+interface BVI555
+ --More--            description Public-Internet
+ vrf Internet
+ ipv4 address 10.60.0.7 255.255.255.192
+!
+interface BVI570
+ description overvaagning
+ vrf overvaagning
+ ipv4 address 10.99.2.4 255.255.255.240
+!
+interface BVI703
+ description BDK-Teknik - fservice
+ vrf fservice
+ ipv4 address 172.21.1.165 255.255.255.248
+!
+interface BVI718
+ description BDK-Teknik - fdrift
+ vrf fdrift
+ ipv4 address 172.21.1.146 255.255.255.248
+!
+interface BVI726
+ description SIP-DMZ - Context BDK-Teknik
+ vrf SIP-DMZ
+ ipv4 address 172.21.2.196 255.255.255.240
+ --More--           !
+interface BVI850
+ description Mgmt_Global
+ ipv4 address 10.255.255.6 255.255.255.240
+!
+interface BVI851
+ description Mgmt_CS
+ vrf CS
+ ipv4 address 10.255.255.22 255.255.255.240
+!
+interface BVI852
+ description Mgmt_bane1
+ vrf bane1
+ ipv4 address 10.255.255.38 255.255.255.240
+!
+interface BVI853
+ description Mgmt_TS
+ vrf TS
+ ipv4 address 10.255.255.54 255.255.255.240
+!
+interface BVI854
+ description Mgmt_InterConnect
+ vrf MGMT
+ --More--            ipv4 address 10.255.255.70 255.255.255.240
+!
+interface BVI855
+ description Mgmt_fdrift
+ vrf fdrift
+ ipv4 address 10.255.255.86 255.255.255.240
+!
+interface BVI856
+ description Mgmt_fservice
+ vrf fservice
+ ipv4 address 10.255.255.102 255.255.255.240
+!
+interface BVI857
+ description Mgmt_signal-program
+ vrf signal-program
+ ipv4 address 10.255.255.118 255.255.255.240
+!
+interface BVI858
+ description Mgmt_DWDM
+ vrf DWDM
+ ipv4 address 10.255.255.134 255.255.255.240
+!
+interface BVI859
+ --More--            description MGMT_SPNS2-TRANSIT-JTTN
+ vrf SPNS2-TRANSIT-JTTN
+ ipv4 address 10.255.255.164 255.255.255.240
+!
+interface BVI1230
+ description xRail-Mgmt
+ vrf CS
+ ipv4 address 10.185.230.2 255.255.255.0
+!
+interface BVI1231
+ description xRail-iDRAC
+ vrf CS
+ ipv4 address 10.185.231.2 255.255.255.0
+!
+interface BVI1233
+ description xRail-vSAN
+ vrf CS
+ ipv4 address 10.185.233.2 255.255.255.0
+!
+interface BVI1235
+ description DATADOMAIN
+ vrf CS
+ ipv4 address 10.185.250.2 255.255.255.128
+ --More--           !
+interface BVI1247
+ description Vblock_dmz_Mgmt
+ ipv4 address 172.17.87.189 255.255.255.224
+!
+interface BVI1950
+ description signal-program
+ vrf signal-program
+ ipv4 address 10.138.63.86 255.255.255.240
+!
+interface BVI2000
+ description TogstatusOBv2
+ vrf bane1
+ ipv4 address 172.27.210.2 255.255.255.240
+!
+interface BVI2001
+ description TogstatusOBv
+ vrf bane1
+ ipv4 address 172.27.210.18 255.255.255.240
+!
+interface BVI2002
+ description OracleRGDC
+ vrf bane1
+ --More--            ipv4 address 172.27.210.34 255.255.255.240
+!
+interface BVI2003
+ description OracleOBV
+ vrf bane1
+ ipv4 address 172.27.210.66 255.255.255.240
+!
+interface BVI3100
+ description SPNS2-JTTN_OBV-CAT3-FW1-1
+ vrf SPNS2-TRANSIT-JTTN
+ ipv4 address 100.73.32.4 255.255.255.248
+ shutdown
+!
+interface BVI3401
+ description CAT3-DMZ-SERVICE01
+ vrf CS
+ ipv4 address 100.73.35.29 255.255.255.224
+!
+interface BVI3402
+ description CAT3-DMZ-SERVICE01
+ vrf CS
+ ipv4 address 100.73.35.61 255.255.255.224
+!
+ --More--           interface BVI3409
+ description CAT3-DMZ-SERVICE09
+ vrf CS
+ ipv4 address 100.73.36.29 255.255.255.224
+!
+interface BVI3501
+ description CAT3-DMZ-SERVICE01W
+ vrf CS
+ ipv4 address 100.73.3.29 255.255.255.224
+!
+interface HundredGigE0/0/0/20
+ description OBvDCR1--OBvDC1 -100GE FO- bane 9180833
+ bundle id 1 mode active
+ cdp
+!
+interface HundredGigE0/0/0/21
+ description OBvDCR1--OBvDC2 -100GE FO- bane 9180832
+ bundle id 1 mode active
+ cdp
+!
+!
+prefix-set DEFAULT_ROUTE
+  0.0.0.0/0
+ --More--           end-set
+!
+prefix-set SIGNAL-STATIC-PREFIX
+  188.180.65.67/32,
+  10.138.63.240/28,
+  172.20.133.0/24,
+  172.20.137.0/24,
+  172.20.141.0/24,
+  172.21.2.48/28,
+  172.27.2.22/32,
+  172.27.2.23/32,
+  172.27.2.120/32,
+  172.27.3.22/32,
+  172.31.255.5/32,
+  172.31.255.6/32,
+  172.20.3.19/32,
+  172.27.3.140/32,
+  10.14.0.71/32,
+  10.110.2.0/23,
+  10.3.0.0/17,
+  172.21.1.72/29,
+  172.17.138.38/32,
+  172.27.3.22/32,
+ --More--             10.110.9.0/24,
+  172.27.210.5/32,
+  172.27.210.21/32,
+  172.27.3.242/32,
+  172.21.2.160/28,
+  172.27.200.24/32,
+  172.21.65.0/24,
+  100.72.36.64/27,
+  100.72.4.64/27,
+  172.27.200.17/32,
+  10.4.255.0/24
+end-set
+!
+prefix-set SIGNAL-CONNECT-PREFIX
+  10.138.63.80/28,
+  10.255.255.112/28
+end-set
+!
+route-policy DROP-ALL
+  drop
+end-policy
+!
+route-policy ALLOW-ALL
+ --More--             pass
+end-policy
+!
+route-policy NO_DEFAULT
+  if destination in DEFAULT_ROUTE then
+    drop
+  else
+    pass
+  endif
+end-policy
+!
+route-policy SIGNAL-STATIC
+  if destination in SIGNAL-STATIC-PREFIX then
+    pass
+  endif
+end-policy
+!
+route-policy IBGP-ROUTES-RR
+  if path-type is ibgp then
+    set next-hop unchanged
+  else
+    set next-hop self
+  endif
+ --More--           end-policy
+!
+route-policy SIGNAL-CONNECTED
+  if destination in SIGNAL-CONNECT-PREFIX then
+    pass
+  endif
+end-policy
+!
+route-policy SPNS2-TRANSIT-JTTN-OUT
+  if destination in DEFAULT_ROUTE then
+    pass
+  endif
+end-policy
+!
+router static
+ address-family ipv4 unicast
+  0.0.0.0/0 10.255.255.1 description MGMT_Global track BVI850 
+  10.30.2.224/32 TenGigE0/0/0/10
+  10.185.50.0/24 10.255.255.1 description MGMT_Global track BVI850 
+  100.64.15.0/24 10.255.255.1 description MGMT_Global track BVI850 
+  172.21.64.64/28 10.255.255.113 track BVI857
+  172.21.65.116/32 10.255.255.1 description MGMT_Global track BVI850 
+  172.21.65.117/32 10.255.255.1 description MGMT_Global track BVI850 
+ --More--            !
+ vrf CS
+  address-family ipv4 unicast
+   0.0.0.0/0 10.255.255.17 description MGMT_CS track BVI851 
+   10.30.8.0/24 10.255.255.17 description MGMT_JTTN1 track BVI851 
+   10.30.9.0/24 10.255.255.17 description MGMT_JTTN2 track BVI851 
+   10.80.0.0/16 10.255.255.17 description MGMT_JTTN3 track BVI851 
+   100.72.4.64/27 10.255.255.17 description SPNS2_Logpoint2 track BVI851 
+   100.72.4.160/27 10.255.255.17 description BDK-SPNS2-JUMPHOSTS-TCCW track BVI851 
+   100.72.36.64/27 10.255.255.17 description SPNS2_Logpoint track BVI851 
+   100.72.36.160/27 10.255.255.17 description BDK-SPNS2-JUMPHOSTS-TCCE track BVI851 
+   172.17.0.0/16 10.255.255.17 description MGMT_CS track BVI851 
+   172.17.89.128/28 10.255.255.17 description MGMT_CS track BVI851 
+   172.20.240.112/29 10.255.255.17 description TEMP track BVI851 
+   172.21.64.0/28 10.255.255.17 description MFA_SELFSERVICE track BVI851 
+   172.21.64.16/28 10.255.255.17 description MFA_NPS_EXT track BVI851 
+   172.21.64.32/28 10.255.255.17 description MFA_NPS_DK track BVI851 
+   172.21.64.48/28 10.255.255.17 description MFA_BACKEND track BVI851 
+   172.21.65.112/28 10.255.255.17 track BVI851
+   172.21.65.240/29 10.255.255.17 track BVI851
+   172.22.253.228/30 10.255.255.17 description TEMP track BVI851 
+  !
+ !
+ --More--            vrf TS
+  address-family ipv4 unicast
+   0.0.0.0/0 10.255.255.49 track BVI853
+   172.22.253.228/30 10.185.5.5 track BVI101
+   172.22.254.0/24 10.185.5.5 track BVI101
+  !
+ !
+ vrf JTL
+  address-family ipv4 unicast
+   0.0.0.0/0 172.20.59.1 track BVI59
+   10.35.10.0/24 172.20.59.1 description DSB_SERVER_NET track BVI59 
+   10.185.50.0/24 172.20.59.1 description IPAM_NET track BVI59 
+  !
+ !
+ vrf DWDM
+  address-family ipv4 unicast
+   0.0.0.0/0 10.255.255.129 track BVI858
+  !
+ !
+ vrf MGMT
+  address-family ipv4 unicast
+   0.0.0.0/0 10.255.255.65 track BVI854
+   10.185.50.0/24 10.255.255.65 track BVI854
+ --More--             !
+ !
+ vrf bane1
+  address-family ipv4 unicast
+   0.0.0.0/0 172.27.2.100 track BVI2
+   2.109.65.92/32 172.27.57.5 description Postnord_VPN track BVI57 
+   10.0.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.1.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.2.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.3.0.0/17 172.27.57.5 description KMD_BaneIT_ClientNet track BVI57 
+   10.3.128.0/17 172.27.57.5 description KMD_BaneIT_ClientNet track BVI57 
+   10.4.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.4.25.0/24 172.27.57.5 description UDV_machine_VLAN track BVI57 
+   10.4.26.0/24 172.27.57.5 description New_Server_VLAN track BVI57 
+   10.4.255.0/24 172.27.57.5 description KMD_INTERNAL track BVI57 
+   10.5.1.16/28 172.27.57.5 track BVI57
+   10.5.16.0/22 172.27.57.5 description BDK-BizTalk-Prod-01-vnet track BVI57 
+   10.5.20.0/22 172.27.57.5 description BDK-BizTalk-QA-01-vnet track BVI57 
+   10.5.24.0/22 172.27.57.5 description BDK-BizTalk-Dev-01-vnet track BVI57 
+   10.5.82.0/25 172.27.57.5 description AdminIT_Azure_DEV track BVI57 
+   10.5.83.0/25 172.27.57.5 description AdminIT_Azure_QA track BVI57 
+   10.5.84.0/25 172.27.57.5 description AdminIT_Azure track BVI57 
+   10.5.120.0/24 172.27.57.5 description KMD_BaneIT_ClientNet track BVI57 
+ --More--              10.5.121.4/32 172.27.57.5 description CHG0059340 track BVI57 
+   10.5.122.132/32 172.27.57.5 description CHG0059340 track BVI57 
+   10.6.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.10.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.11.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.12.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.14.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.15.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.18.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.19.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.20.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.22.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.26.0.0/22 10.255.255.33 track BVI852
+   10.29.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.30.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.30.8.0/24 10.255.255.33 description MGMT_JTTN1 track BVI852 
+   10.30.9.0/24 10.255.255.33 description MGMT_JTTN2 track BVI852 
+   10.31.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.33.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.35.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.36.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.40.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.42.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+ --More--              10.45.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.46.13.0/24 172.27.57.5 description PSI-OC-Server track BVI57 
+   10.46.19.0/24 172.27.57.5 description PSI-OC-Server track BVI57 
+   10.46.21.0/24 172.27.57.5 description PSI-OC-Server track BVI57 
+   10.46.77.0/24 172.27.57.5 description PSI-KC-Server track BVI57 
+   10.46.83.0/24 172.27.57.5 description PSI-KC-Server track BVI57 
+   10.46.85.0/24 172.27.57.5 description PSI-KC-Server track BVI57 
+   10.48.0.163/32 10.255.255.33 description Thales_ARAMIS_D track BVI852 
+   10.48.1.64/27 10.255.255.33 description Thales_HIS track BVI852 
+   10.48.2.64/27 10.255.255.33 description Thales_HIS track BVI852 
+   10.48.3.64/27 10.255.255.33 description Thales_HIS track BVI852 
+   10.48.4.64/27 10.255.255.33 description Thales_HIS track BVI852 
+   10.48.50.64/27 10.255.255.33 description Thales_HIS track BVI852 
+   10.48.51.64/27 10.255.255.33 description Thales_HIS track BVI852 
+   10.48.90.64/27 10.255.255.33 description Thales_HIS track BVI852 
+   10.48.101.14/32 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.49.73.64/27 10.255.255.33 description Thales_HIS track BVI852 
+   10.49.255.0/24 10.255.255.33 description Thales_HHT track BVI852 
+   10.50.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.50.1.64/27 10.255.255.33 description Thales_HIS track BVI852 
+   10.50.2.64/27 10.255.255.33 description Thales_HIS track BVI852 
+   10.50.3.64/27 10.255.255.33 description Thales_HIS track BVI852 
+   10.50.4.64/27 10.255.255.33 description Thales_HIS track BVI852 
+ --More--              10.50.50.64/27 10.255.255.33 description Thales_HIS track BVI852 
+   10.50.51.64/27 10.255.255.33 description Thales_HIS track BVI852 
+   10.50.90.64/27 10.255.255.33 description Thales_HIS track BVI852 
+   10.51.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.51.73.64/27 10.255.255.33 description Thales_HIS track BVI852 
+   10.54.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.56.60.0/24 172.27.57.5 track BVI57
+   10.60.0.0/16 172.27.57.5 track BVI57
+   10.60.9.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.61.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.62.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.63.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.64.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.71.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.72.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.73.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.75.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.80.0.0/16 10.255.255.33 description MGMT_JTTN3 track BVI852 
+   10.81.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.83.0.0/16 172.27.2.100 track BVI2
+   10.84.26.0/24 172.27.2.100 track BVI2
+   10.90.101.8/32 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.96.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+ --More--              10.100.0.0/16 172.27.2.100 track BVI2
+   10.101.101.7/32 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.102.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.110.0.0/23 172.27.57.5 description KMD_DRIFT track BVI57 
+   10.110.2.0/23 172.27.57.5 description KMD_INTERNAL track BVI57 
+   10.110.3.0/24 172.27.57.5 description KMD_INTERNAL track BVI57 
+   10.110.4.0/24 172.27.57.5 description KMD_DMZ track BVI57 
+   10.110.5.0/24 172.27.57.5 description KMD_PREPROD track BVI57 
+   10.110.6.0/28 172.27.57.5 description KMD_WANIP track BVI57 
+   10.110.6.16/28 172.27.57.5 description KMD_WANIP track BVI57 
+   10.110.6.32/28 172.27.57.5 description KMD_WANIP track BVI57 
+   10.110.6.64/28 172.27.57.5 description KMD_WANIP track BVI57 
+   10.110.6.128/28 172.27.57.5 description KMD_MGMT_WANIP track BVI57 
+   10.110.7.0/24 172.27.57.5 5 description KMD_InfoCare track BVI57 
+   10.110.8.0/25 172.27.57.5 description KMD_BaneIT track BVI57 
+   10.110.9.0/29 172.27.57.5 description KMD_INTERNAL track BVI57 
+   10.110.9.16/28 172.27.57.5 description KMD_INTERNAL track BVI57 
+   10.110.9.64/26 172.27.57.5 description KMD_Internal track BVI57 
+   10.111.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.116.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.117.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.124.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.125.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+ --More--              10.130.0.0/27 172.27.57.5 description Siemens_Inside_VPN track BVI57 
+   10.136.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.138.63.118/32 10.255.255.33 track BVI852
+   10.139.52.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.143.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.150.24.224/28 172.27.57.5 track BVI57
+   10.155.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.163.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.165.1.0/24 172.27.2.100 track BVI2
+   10.165.26.10/32 172.27.57.5 description Siemens_VPN track BVI57 
+   10.165.26.11/32 172.27.57.5 description Siemens_VPN track BVI57 
+   10.165.26.12/32 172.27.57.5 description Siemens_VPN track BVI57 
+   10.165.42.11/32 172.27.57.5 description Siemens_VPN track BVI57 
+   10.165.55.1/32 172.27.57.5 description Siemens_VPN track BVI57 
+   10.165.55.2/32 172.27.57.5 description Siemens_VPN track BVI57 
+   10.165.200.0/24 10.255.255.33 description BDK_MGMT_DICS track BVI852 
+   10.174.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.180.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.182.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.185.1.0/24 10.255.255.33 description BDK_MGMT_CS track BVI852 
+   10.185.5.0/24 10.255.255.33 description BDK_MGMT_TS track BVI852 
+   10.185.10.0/26 10.255.255.33 description BDK_MGMT_CS track BVI852 
+   10.185.11.0/25 10.255.255.33 description CHG0058878 track BVI852 
+ --More--              10.185.50.0/24 10.255.255.33 description BDK_MGMT_CS track BVI852 
+   10.185.138.0/28 10.255.255.33 description BDK_MGMT_CS track BVI852 
+   10.185.230.0/24 10.255.255.33 track BVI852
+   10.185.231.0/24 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   10.185.250.0/25 10.255.255.33 description BDK_MGMT_CS track BVI852 
+   10.194.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.198.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.199.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.200.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.202.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.204.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.206.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.210.208.36/32 172.20.1.15 track BVI256
+   10.210.208.39/32 172.20.1.15 track BVI256
+   10.213.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.215.44.128/25 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.215.47.128/25 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.217.0.0/16 172.27.2.100 track BVI2
+   10.231.9.128/26 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.231.16.64/26 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.231.61.0/24 172.20.1.15 description CHG0056395-DSB track BVI256 
+   10.231.66.0/24 172.20.1.15 description CHG0056395-DSB track BVI256 
+   10.231.68.0/24 172.20.1.15 description CHG0056395-DSB track BVI256 
+ --More--              10.233.19.0/24 172.27.57.5 description KMD_INTERNAL track BVI57 
+   10.233.40.0/24 172.27.57.5 description Aeven_DNOC track BVI57 
+   10.233.252.0/24 172.27.57.5 description KMD_INTERNAL track BVI57 
+   10.236.130.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.236.240.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.237.130.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.237.240.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.238.130.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.238.240.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.239.130.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.239.240.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.240.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.245.0.0/16 172.20.1.15 description KlvASA--DSB track BVI256 
+   10.254.2.0/24 172.27.57.5 track BVI57
+   10.255.0.0/23 172.27.57.5 description EIP-Dev track BVI57 
+   10.255.255.0/24 10.255.255.33 track BVI852
+   62.159.143.199/32 172.27.57.5 description PSI_Aschaffenburg track BVI57 
+   62.242.37.156/32 172.27.57.5 description trapeze track BVI57 
+   62.242.149.185/32 172.27.57.5 track BVI57
+   62.242.204.166/32 172.27.57.5 track BVI57
+   77.66.38.0/24 172.27.2.100 description CBrain track BVI2 
+   80.243.120.0/24 172.27.57.5 description Firewall track BVI57 
+   80.243.122.0/26 172.27.2.100 description ESB track BVI2 
+ --More--              80.243.122.64/26 172.27.57.5 description ESB track BVI57 
+   84.238.5.166/32 172.27.57.5 track BVI57
+   87.116.17.18/32 172.27.57.5 description Capmon track BVI57 
+   92.62.207.240/29 172.27.57.5 track BVI57
+   93.176.80.190/32 172.27.57.5 track BVI57
+   93.183.6.224/27 172.27.57.5 track BVI57
+   93.183.9.224/27 172.27.57.5 track BVI57
+   95.131.98.159/32 172.27.57.5 description PSI_Karlsruhe track BVI57 
+   100.64.15.0/24 172.27.57.5 track BVI57
+   100.65.2.1/32 10.255.255.33 description CTASK0040399 track BVI852 
+   100.65.2.9/32 10.255.255.33 description CTASK0040399 track BVI852 
+   100.65.2.193/32 10.255.255.33 description CTASK0040399 track BVI852 
+   100.72.0.0/16 10.255.255.33 description SPNS2_CAT2DMZ track BVI852 
+   100.72.3.0/24 10.255.255.33 description BDK_MGMT_CS track BVI852 
+   100.72.4.0/24 10.255.255.33 description BDK_MGMT_CS track BVI852 
+   100.72.35.0/24 10.255.255.33 description BDK_MGMT_CS track BVI852 
+   100.72.36.0/24 10.255.255.33 description BDK_MGMT_CS track BVI852 
+   100.73.0.0/16 10.255.255.33 description SPNS2_CAT3DMZ track BVI852 
+   100.73.3.0/24 10.255.255.33 description BDK_MGMT_CS track BVI852 
+   100.73.4.0/24 10.255.255.33 description BDK_MGMT_CS track BVI852 
+   100.73.35.0/24 10.255.255.33 description BDK_MGMT_CS track BVI852 
+   100.73.36.0/24 10.255.255.33 description BDK_MGMT_CS track BVI852 
+   109.202.140.125/32 172.27.57.5 track BVI57
+ --More--              131.165.61.182/32 172.27.57.5 description KMD track BVI57 
+   147.29.11.10/32 172.27.57.5 track BVI57
+   147.29.80.162/32 172.27.57.5 track BVI57
+   147.29.80.163/32 172.27.57.5 track BVI57
+   147.29.169.32/32 172.27.57.5 track BVI57
+   147.29.169.33/32 172.27.57.5 track BVI57
+   147.204.2.5/32 172.27.57.5 description SAP_Walldorf track BVI57 
+   149.212.21.132/32 172.27.57.5 track BVI57
+   149.212.21.133/32 172.27.57.5 track BVI57
+   149.212.27.92/32 172.27.57.5 track BVI57
+   149.212.166.8/32 172.27.57.5 track BVI57
+   157.250.163.240/29 172.27.2.100 description CHG0056517 track BVI2 
+   157.250.163.248/29 172.27.2.100 description CHG0056517 track BVI2 
+   172.17.0.0/16 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.17.89.160/28 172.27.57.5 description KMD_MGMT track BVI57 
+   172.21.0.0/16 172.27.2.100 track BVI2
+   172.21.1.88/29 172.27.57.5 description Ericsson_VPN track BVI57 
+   172.21.2.48/28 10.255.255.33 description STTN_MGMT track BVI852 
+   172.21.2.224/27 172.27.57.5 description Kemp-Lauritzen_VPN track BVI57 
+   172.21.3.0/28 172.27.57.5 track BVI57
+   172.21.64.0/28 172.27.2.100 description MFA_SELFSERVICE track BVI2 
+   172.21.64.16/28 172.27.2.100 description MFA_NPS_EXT track BVI2 
+   172.21.64.32/28 172.27.2.100 description MFA_NPS_DK track BVI2 
+ --More--              172.21.64.48/28 172.27.2.100 description MFA_BACKEND track BVI2 
+   172.21.65.16/28 172.27.2.100 description MDR track BVI2 
+   172.21.65.48/28 172.27.2.100 description Eltel_JHs track BVI2 
+   172.21.65.112/28 172.27.2.100 description Aeven_JHs track BVI2 
+   172.21.139.0/28 10.255.255.33 track BVI852
+   172.21.228.112/29 172.27.57.5 description PSI-KC-Server track BVI57 
+   172.21.228.120/29 172.27.57.5 description PSI-OC-Server track BVI57 
+   172.21.244.0/24 10.255.255.33 track BVI852
+   172.21.247.0/24 10.255.255.33 track BVI852
+   172.21.248.0/24 10.255.255.33 track BVI852
+   172.21.250.0/24 10.255.255.33 track BVI852
+   172.21.251.0/24 10.255.255.33 track BVI852
+   172.21.252.0/24 10.255.255.33 track BVI852
+   172.21.253.0/30 172.27.57.5 description PANTOINSPECT_VPN track BVI57 
+   172.21.253.8/29 10.255.255.33 track BVI852
+   172.21.253.16/29 10.255.255.33 track BVI852
+   172.21.254.0/27 10.255.255.33 description CITRIX-DATA track BVI852 
+   172.21.255.0/27 10.255.255.33 track BVI852
+   172.21.255.32/27 10.255.255.33 track BVI852
+   172.22.0.0/16 Null0
+   172.22.253.168/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.22.253.172/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.22.254.4/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+ --More--              172.22.254.8/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.22.254.12/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.22.254.16/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.22.254.236/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.22.254.244/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.22.254.248/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.22.255.0/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.22.255.4/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.22.255.28/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.22.255.76/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.22.255.172/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.22.255.176/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.22.255.192/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.22.255.220/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.22.255.224/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.22.255.244/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.22.255.248/30 10.255.255.33 description BDK_MGMT_Global track BVI852 
+   172.27.58.0/24 172.27.57.12 track BVI57
+   172.27.187.0/24 172.27.57.12 track BVI57
+   172.27.197.0/24 172.27.57.12 track BVI57
+   172.27.198.0/24 172.27.57.12 track BVI57
+   172.28.0.0/16 Null0
+   172.30.0.0/21 172.27.57.5 description CegalVPN track BVI57 
+ --More--              172.30.107.160/28 172.27.57.5 description KMD_DMZ track BVI57 
+   172.30.107.176/28 172.27.57.5 description KMD_DMZ track BVI57 
+   172.31.0.0/16 172.27.57.5 description Firewall track BVI57 
+   188.121.68.69/32 172.27.57.5 track BVI57
+   188.121.68.70/32 172.27.57.5 track BVI57
+   188.121.70.100/32 172.27.57.5 track BVI57
+   188.180.65.67/32 172.27.57.5 track BVI57
+   192.168.0.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.1.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.10.0/24 172.27.57.5 description BIREPO_VPN track BVI57 
+   192.168.11.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.12.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.13.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.14.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.19.2/32 172.27.57.5 description ERDMANN_TEST_VPN track BVI57 
+   192.168.20.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.22.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.72.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.74.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.75.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.100.20/32 172.27.2.100 track BVI2
+   192.168.101.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.120.0/24 172.27.57.5 track BVI57
+ --More--              192.168.122.0/24 172.27.57.5 track BVI57
+   192.168.150.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.151.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.156.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.192.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.200.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.201.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.216.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.220.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.234.0/24 172.20.1.15 description KlvASA--DSB track BVI256 
+   192.168.249.10/32 172.27.57.5 description DB_Cargo_VPN track BVI57 
+   192.168.254.0/23 172.27.57.5 description OOB-VPN track BVI57 
+   192.168.254.32/28 172.27.57.5 description STTN-OOB-TCCW track BVI57 
+   192.168.254.64/28 172.27.57.5 description STTN-OOB-TCCE track BVI57 
+   192.168.254.96/28 172.27.57.5 description STTN-OOB-OBV track BVI57 
+   192.176.229.196/32 172.27.57.5 track BVI57
+   194.39.131.34/32 172.27.57.5 description SAP_Walldorf track BVI57 
+   194.117.106.129/32 172.27.57.5 description SAP_Walldorf track BVI57 
+   195.50.37.64/28 172.27.57.5 description KMD_VPN_PUB track BVI57 
+   198.18.0.0/24 172.27.57.5 description KMD_BaneIT_ClientNet track BVI57 
+   212.93.32.30/32 172.27.57.5 track BVI57
+   212.93.35.18/32 172.27.57.5 track BVI57
+   212.93.52.163/32 172.27.57.5 track BVI57
+ --More--              217.116.213.136/29 172.27.57.5 description Itelligence track BVI57 
+  !
+ !
+ vrf fdrift
+  address-family ipv4 unicast
+   0.0.0.0/0 172.21.1.147 description PSI-TIG1 track BVI718 
+   10.84.1.0/24 172.21.1.147 description PSI-TIG1 track BVI718 
+   10.84.2.0/24 172.21.1.147 description PSI-TIG1 track BVI718 
+   10.185.50.0/24 10.255.255.81 description BDK_MGMT_CS track BVI855 
+   10.255.255.16/28 10.255.255.81 description BDK_MGMT_CS track BVI855 
+   100.73.3.0/27 10.255.255.81 description BDK_MGMT_CS track BVI855 
+   100.73.35.0/27 10.255.255.81 description BDK_MGMT_CS track BVI855 
+   100.73.35.32/27 10.255.255.81 description BDK_MGMT_CS track BVI855 
+   100.73.36.0/27 10.255.255.81 description BDK_MGMT_CS track BVI855 
+  !
+ !
+ vrf PCI-OCK
+  address-family ipv4 unicast
+   10.46.21.97/32 10.84.15.94 track BVI15
+   10.46.85.98/32 10.84.15.94 track BVI15
+  !
+ !
+ vrf SIP-DMZ
+ --More--             address-family ipv4 unicast
+   128.77.191.0/26 172.21.2.193 track BVI726
+   128.77.191.64/26 172.21.2.193 track BVI726
+  !
+ !
+ vrf Internet
+  address-family ipv4 unicast
+   0.0.0.0/0 10.60.0.1 track BVI555
+   172.21.70.0/24 10.60.0.9 track BVI555
+  !
+ !
+ vrf fservice
+  address-family ipv4 unicast
+   0.0.0.0/0 172.21.1.163 track BVI703
+   10.185.50.0/24 10.255.255.97 description BDK_MGMT_CS track BVI856 
+   10.255.255.16/28 10.255.255.97 description BDK_MGMT_CS track BVI856 
+   100.73.3.0/27 10.255.255.97 description BDK_MGMT_CS track BVI856 
+   100.73.35.0/27 10.255.255.97 description BDK_MGMT_CS track BVI856 
+   100.73.35.32/27 10.255.255.97 description BDK_MGMT_CS track BVI856 
+   100.73.36.0/27 10.255.255.97 description BDK_MGMT_CS track BVI856 
+  !
+ !
+ vrf overvaagning
+ --More--             address-family ipv4 unicast
+   172.21.131.192/26 10.99.2.14 description overvaagning track BVI570 
+   172.21.135.20/32 10.99.2.14 description overvaagning track BVI570 
+   172.21.135.21/32 10.99.2.14 description overvaagning track BVI570 
+  !
+ !
+ vrf signal-program
+  address-family ipv4 unicast
+   10.3.0.0/17 10.138.63.81 description KMD_BaneIT_ClientNet track BVI1950 
+   10.3.128.0/17 10.138.63.81 description KMD_BaneIT_ClientNet track BVI1950 
+   10.14.0.71/32 10.255.255.113 track BVI857
+   10.110.2.0/23 10.138.63.81 description KMD-DRIFT-BDK-INTERNAL track BVI1950 
+   10.110.3.0/24 10.138.63.81 description CTASK0029076 track BVI1950 
+   10.110.9.0/24 10.255.255.113 description CTASK0024848 track BVI857 
+   10.138.63.240/28 10.138.63.81 track BVI1950
+   10.185.50.0/24 10.255.255.113 track BVI857
+   10.185.250.0/25 10.255.255.113 track BVI857
+   93.183.6.224/27 10.138.63.81 description NOKIA-VPN track BVI1950 
+   93.183.9.224/27 10.138.63.81 description NOKIA-VPN track BVI1950 
+   100.64.15.0/24 10.138.63.81 description SRA track BVI1950 
+   100.72.4.64/27 10.255.255.113 description SPNS2_Logpoint2 track BVI857 
+   100.72.36.64/27 10.255.255.113 description SPNS2_Logpoint track BVI857 
+   100.73.70.64/27 10.255.255.113 description MDR track BVI857 
+ --More--              151.101.1.91/32 10.255.255.113 track BVI857
+   151.101.65.91/32 10.255.255.113 track BVI857
+   151.101.129.91/32 10.255.255.113 track BVI857
+   151.101.193.91/32 10.255.255.113 track BVI857
+   157.250.163.240/29 10.138.63.81 description CHG0056517 track BVI1950 
+   157.250.163.248/29 10.138.63.81 description CHG0056517 track BVI1950 
+   172.17.138.38/32 10.255.255.113 track BVI857
+   172.20.133.0/24 10.138.63.81 track BVI1950
+   172.20.137.0/24 10.138.63.81 track BVI1950
+   172.20.141.0/24 10.138.63.81 track BVI1950
+   172.21.1.72/29 10.255.255.113 description PBASE track BVI857 
+   172.21.2.48/28 10.255.255.113 description SPNS_STTN_WTS track BVI857 
+   172.21.2.160/28 10.255.255.113 description ALSTOMJUMPBANE1 track BVI857 
+   172.21.64.68/32 10.255.255.113 track BVI857
+   172.21.65.0/24 10.255.255.113 track BVI857
+   172.21.65.38/32 10.255.255.113 description AJUMPDIAM1 track BVI857 
+   172.27.2.0/24 10.255.255.113 track BVI857
+   172.27.2.22/32 10.255.255.113 track BVI857
+   172.27.2.23/32 10.255.255.113 track BVI857
+   172.27.2.120/32 10.255.255.113 track BVI857
+   172.27.3.22/32 10.255.255.113 track BVI857
+   172.27.3.140/32 10.255.255.113 track BVI857
+   172.27.3.148/32 10.255.255.113 track BVI857
+ --More--              172.27.3.242/32 10.255.255.113 description AAPPWEBENKS202 track BVI857 
+   172.27.200.17/32 10.255.255.113 track BVI857
+   172.27.200.24/32 10.255.255.113 description ASMTP1 track BVI857 
+   172.27.200.34/32 10.255.255.113 description AWSUS01 track BVI857 
+   172.27.200.36/32 10.255.255.113 description AJUMPTSS1BANE1 track BVI857 
+   172.27.200.37/32 10.255.255.113 description AELTJUMPBANE1 track BVI857 
+   172.27.200.40/32 10.255.255.113 description ARDLICENSE01 track BVI857 
+   172.27.210.5/32 10.255.255.113 description TogStatus track BVI857 
+   172.27.210.21/32 10.255.255.113 description TogStatus track BVI857 
+   172.31.100.0/22 10.138.63.81 track BVI1950
+   172.31.255.5/32 10.138.63.81 track BVI1950
+   172.31.255.6/32 10.138.63.81 track BVI1950
+   188.180.65.67/32 10.138.63.81 track BVI1950
+  !
+ !
+ vrf SPNS2-TRANSIT-JTTN
+  address-family ipv4 unicast
+   0.0.0.0/0 10.255.255.161 description MGMT_SPNS2-TRANSIT-JTTN track BVI859 
+   100.73.35.40/32 10.255.255.161 description MGMT_SPNS2-TRANSIT-JTTN track BVI859 
+  !
+ !
+!
+router isis core
+ --More--            set-overload-bit on-startup wait-for-bgp level 2
+ is-type level-2-only
+ net 49.0000.0001.1720.1709.1208.00
+ nsf cisco
+ log adjacency changes
+ lsp-gen-interval initial-wait 10 secondary-wait 200 maximum-wait 5000
+ lsp-refresh-interval 65000
+ max-lsp-lifetime 65535
+ address-family ipv4 unicast
+  metric-style wide
+  default-information originate
+  spf-interval initial-wait 10 secondary-wait 200 maximum-wait 5000
+  redistribute connected
+  redistribute static
+ !
+ interface Bundle-Ether1.350
+  bfd minimum-interval 100
+  bfd multiplier 3
+  bfd fast-detect ipv4
+  point-to-point
+  hello-password keychain ISIS-KEY
+  address-family ipv4 unicast
+   metric 10
+ --More--              mpls ldp sync
+  !
+ !
+ interface Loopback0
+  passive
+  address-family ipv4 unicast
+  !
+ !
+ interface TenGigE0/0/0/8
+  bfd minimum-interval 100
+  bfd multiplier 3
+  bfd fast-detect ipv4
+  point-to-point
+  hello-password keychain ISIS-KEY
+  address-family ipv4 unicast
+   metric 10
+   mpls ldp sync
+  !
+ !
+ interface TenGigE0/0/0/9
+  bfd minimum-interval 100
+  bfd multiplier 3
+  bfd fast-detect ipv4
+ --More--             address-family ipv4 unicast
+   metric 50
+   mpls ldp sync
+  !
+ !
+!
+snmp-server traps isis all
+snmp-server traps bgp
+router bgp 65020
+ bfd minimum-interval 100
+ bfd multiplier 3
+ bgp router-id 172.17.91.208
+ default-information originate
+ bgp graceful-restart restart-time 120
+ mpls activate
+  interface TenGigE0/0/0/10
+ !
+ bgp graceful-restart stalepath-time 360
+ bgp graceful-restart
+ bgp log neighbor changes detail
+ ibgp policy out enforce-modifications
+ address-family ipv4 unicast
+  additional-paths receive
+ --More--             additional-paths send
+  network 0.0.0.0/0
+  network 172.17.91.208/32
+  redistribute connected
+  redistribute static
+  allocate-label all unlabeled-path
+ !
+ address-family vpnv4 unicast
+ !
+ neighbor-group IBGP
+  remote-as 65020
+  update-source Loopback0
+  address-family ipv4 unicast
+   route-policy IBGP-ROUTES-RR out
+  !
+  address-family vpnv4 unicast
+   route-policy IBGP-ROUTES-RR out
+  !
+ !
+ neighbor 10.30.2.224
+  remote-as 4250008180
+  bfd fast-detect
+  bfd multiplier 3
+ --More--             bfd minimum-interval 15
+  keychain BGP-KEY
+  description OBv-IC -- Labeled-unicast
+  address-family ipv4 labeled-unicast
+   route-policy ALLOW-ALL in
+   route-policy ALLOW-ALL out
+  !
+  address-family vpnv4 unicast
+   next-hop-self
+   route-policy ALLOW-ALL in
+   route-policy ALLOW-ALL out
+  !
+ !
+ neighbor 172.17.3.254
+  use neighbor-group IBGP
+  description Peering with FredericiaRR
+ !
+ neighbor 172.17.3.255
+  use neighbor-group IBGP
+  description Peering with RoskildeRR
+ !
+ vrf CS
+  rd auto
+ --More--             default-information originate
+  address-family ipv4 unicast
+   redistribute connected
+   redistribute static
+  !
+ !
+ vrf TS
+  rd auto
+  default-information originate
+  address-family ipv4 unicast
+   redistribute connected
+   redistribute static
+  !
+ !
+ vrf JTL
+  rd auto
+  default-information originate
+  address-family ipv4 unicast
+   redistribute connected
+   redistribute static
+  !
+ !
+ vrf DWDM
+ --More--             rd auto
+  default-information originate
+  address-family ipv4 unicast
+   redistribute connected
+   redistribute static
+  !
+ !
+ vrf MGMT
+  rd auto
+  default-information originate
+  address-family ipv4 unicast
+   redistribute connected
+   redistribute static
+  !
+ !
+ vrf bane1
+  rd auto
+  default-information originate
+  address-family ipv4 unicast
+   redistribute connected
+   redistribute static
+  !
+ !
+ --More--            vrf fdrift
+  rd auto
+  default-information originate
+  address-family ipv4 unicast
+   redistribute connected
+   redistribute static
+  !
+ !
+ vrf kdrift
+  rd auto
+  address-family ipv4 unicast
+   redistribute connected
+   redistribute static
+  !
+ !
+ vrf PSI-OCK
+  rd auto
+  address-family ipv4 unicast
+   redistribute connected
+   redistribute static
+  !
+ !
+ vrf SIP-DMZ
+ --More--             rd auto
+  address-family ipv4 unicast
+   redistribute connected
+   redistribute static
+  !
+ !
+ vrf Internet
+  rd auto
+  default-information originate
+  address-family ipv4 unicast
+   redistribute connected
+   redistribute static
+  !
+ !
+ vrf fservice
+  rd auto
+  default-information originate
+  address-family ipv4 unicast
+   redistribute connected
+   redistribute static
+  !
+ !
+ vrf overvaagning
+ --More--             rd auto
+  address-family ipv4 unicast
+   redistribute connected
+   redistribute static
+  !
+ !
+ vrf signal-program
+  rd auto
+  address-family ipv4 unicast
+   redistribute connected route-policy SIGNAL-CONNECTED
+   redistribute static route-policy SIGNAL-STATIC
+  !
+ !
+ vrf SPNS2-TRANSIT-JTTN
+  rd auto
+  timers bgp 7 21
+  default-information originate
+  address-family ipv4 unicast
+   label mode per-vrf
+   redistribute connected
+   redistribute static
+  !
+  neighbor 100.73.32.1
+ --More--              remote-as 4203000000
+   password encrypted 002101021D771B2A0A0C1A4F500C2D46243815271F7E102162
+   update-source Loopback3100
+   address-family ipv4 unicast
+    route-policy NO_DEFAULT in
+    route-policy ALLOW-ALL out
+   !
+  !
+ !
+!
+cef adjacency route override rib
+cef encap-sharing disable
+l2vpn
+ bridge group TRUNK
+  bridge-domain 1
+   interface Bundle-Ether1.1
+   !
+   routed interface BVI1
+   !
+  !
+  bridge-domain 2
+   interface Bundle-Ether1.2
+   !
+ --More--              routed interface BVI2
+   !
+  !
+  bridge-domain 3
+   interface Bundle-Ether1.3
+   !
+   routed interface BVI3
+   !
+  !
+  bridge-domain 10
+   interface Bundle-Ether1.10
+   !
+   routed interface BVI10
+   !
+  !
+  bridge-domain 11
+   interface Bundle-Ether1.11
+   !
+   routed interface BVI11
+   !
+  !
+  bridge-domain 12
+   interface Bundle-Ether1.12
+ --More--              !
+   routed interface BVI12
+   !
+  !
+  bridge-domain 13
+   interface Bundle-Ether1.13
+   !
+   routed interface BVI13
+   !
+  !
+  bridge-domain 15
+   interface Bundle-Ether1.15
+   !
+   routed interface BVI15
+   !
+  !
+  bridge-domain 50
+   interface Bundle-Ether1.50
+   !
+   routed interface BVI50
+   !
+  !
+  bridge-domain 55
+ --More--              interface Bundle-Ether1.55
+   !
+   routed interface BVI55
+   !
+  !
+  bridge-domain 56
+   interface Bundle-Ether1.56
+   !
+   routed interface BVI56
+   !
+  !
+  bridge-domain 57
+   interface Bundle-Ether1.57
+   !
+   routed interface BVI57
+   !
+  !
+  bridge-domain 59
+   interface Bundle-Ether1.59
+   !
+   routed interface BVI59
+   !
+  !
+ --More--             bridge-domain 87
+   interface Bundle-Ether1.87
+   !
+   routed interface BVI87
+   !
+  !
+  bridge-domain 88
+   interface Bundle-Ether1.88
+   !
+   routed interface BVI88
+   !
+  !
+  bridge-domain 89
+   interface Bundle-Ether1.89
+   !
+   routed interface BVI89
+   !
+  !
+  bridge-domain 101
+   interface Bundle-Ether1.101
+   !
+   routed interface BVI101
+   !
+ --More--             !
+  bridge-domain 133
+   interface Bundle-Ether1.133
+   !
+   routed interface BVI133
+   !
+  !
+  bridge-domain 137
+   interface Bundle-Ether1.137
+   !
+   routed interface BVI137
+   !
+  !
+  bridge-domain 149
+   interface Bundle-Ether1.149
+   !
+   routed interface BVI149
+   !
+  !
+  bridge-domain 157
+   interface Bundle-Ether1.157
+   !
+   routed interface BVI157
+ --More--              !
+  !
+  bridge-domain 185
+   interface Bundle-Ether1.185
+   !
+   routed interface BVI185
+   !
+  !
+  bridge-domain 189
+   interface Bundle-Ether1.189
+   !
+   routed interface BVI189
+   !
+  !
+  bridge-domain 190
+   interface Bundle-Ether1.190
+   !
+   routed interface BVI190
+   !
+  !
+  bridge-domain 200
+   interface Bundle-Ether1.200
+   !
+ --More--              routed interface BVI200
+   !
+  !
+  bridge-domain 256
+   interface Bundle-Ether1.256
+   !
+   routed interface BVI256
+   !
+  !
+  bridge-domain 300
+   interface Bundle-Ether1.300
+   !
+   routed interface BVI300
+   !
+  !
+  bridge-domain 301
+   interface Bundle-Ether1.301
+   !
+   routed interface BVI301
+   !
+  !
+  bridge-domain 410
+   interface Bundle-Ether1.410
+ --More--              !
+   routed interface BVI410
+   !
+  !
+  bridge-domain 451
+   interface Bundle-Ether1.451
+   !
+   routed interface BVI451
+   !
+  !
+  bridge-domain 452
+   interface Bundle-Ether1.452
+   !
+   routed interface BVI452
+   !
+  !
+  bridge-domain 453
+   interface Bundle-Ether1.453
+   !
+   routed interface BVI453
+   !
+  !
+  bridge-domain 555
+ --More--              interface Bundle-Ether1.555
+   !
+   routed interface BVI555
+   !
+  !
+  bridge-domain 570
+   interface Bundle-Ether1.570
+   !
+   routed interface BVI570
+   !
+  !
+  bridge-domain 703
+   interface Bundle-Ether1.703
+   !
+   routed interface BVI703
+   !
+  !
+  bridge-domain 718
+   interface Bundle-Ether1.718
+   !
+   routed interface BVI718
+   !
+  !
+ --More--             bridge-domain 726
+   interface Bundle-Ether1.726
+   !
+   routed interface BVI726
+   !
+  !
+  bridge-domain 850
+   interface Bundle-Ether1.850
+   !
+   routed interface BVI850
+   !
+  !
+  bridge-domain 851
+   interface Bundle-Ether1.851
+   !
+   routed interface BVI851
+   !
+  !
+  bridge-domain 852
+   interface Bundle-Ether1.852
+   !
+   routed interface BVI852
+   !
+ --More--             !
+  bridge-domain 853
+   interface Bundle-Ether1.853
+   !
+   routed interface BVI853
+   !
+  !
+  bridge-domain 854
+   interface Bundle-Ether1.854
+   !
+   routed interface BVI854
+   !
+  !
+  bridge-domain 855
+   interface Bundle-Ether1.855
+   !
+   routed interface BVI855
+   !
+  !
+  bridge-domain 856
+   interface Bundle-Ether1.856
+   !
+   routed interface BVI856
+ --More--              !
+  !
+  bridge-domain 857
+   interface Bundle-Ether1.857
+   !
+   routed interface BVI857
+   !
+  !
+  bridge-domain 858
+   interface Bundle-Ether1.858
+   !
+   routed interface BVI858
+   !
+  !
+  bridge-domain 859
+   interface Bundle-Ether1.859
+   !
+   routed interface BVI859
+   !
+  !
+  bridge-domain 1230
+   interface Bundle-Ether1.1230
+   !
+ --More--              routed interface BVI1230
+   !
+  !
+  bridge-domain 1231
+   interface Bundle-Ether1.1231
+   !
+   routed interface BVI1231
+   !
+  !
+  bridge-domain 1233
+   interface Bundle-Ether1.1233
+   !
+   routed interface BVI1233
+   !
+  !
+  bridge-domain 1235
+   interface Bundle-Ether1.1235
+   !
+   routed interface BVI1235
+   !
+  !
+  bridge-domain 1247
+   interface Bundle-Ether1.1247
+ --More--              !
+   routed interface BVI1247
+   !
+  !
+  bridge-domain 1950
+   interface Bundle-Ether1.1950
+   !
+   routed interface BVI1950
+   !
+  !
+  bridge-domain 2000
+   interface Bundle-Ether1.2000
+   !
+   routed interface BVI2000
+   !
+  !
+  bridge-domain 2001
+   interface Bundle-Ether1.2001
+   !
+   routed interface BVI2001
+   !
+  !
+  bridge-domain 2002
+ --More--              interface Bundle-Ether1.2002
+   !
+   routed interface BVI2002
+   !
+  !
+  bridge-domain 2003
+   interface Bundle-Ether1.2003
+   !
+   routed interface BVI2003
+   !
+  !
+  bridge-domain 3100
+   interface Bundle-Ether1.3100
+   !
+   routed interface BVI3100
+   !
+  !
+  bridge-domain 3401
+   interface Bundle-Ether1.3401
+   !
+   routed interface BVI3401
+   !
+  !
+ --More--             bridge-domain 3402
+   interface Bundle-Ether1.3402
+   !
+   routed interface BVI3402
+   !
+  !
+  bridge-domain 3409
+   interface Bundle-Ether1.3409
+   !
+   routed interface BVI3409
+   !
+  !
+  bridge-domain 3501
+   interface Bundle-Ether1.3501
+   !
+   routed interface BVI3501
+   !
+  !
+ !
+!
+router hsrp
+ interface BVI1
+  address-family ipv4
+ --More--              hsrp 1
+    authentication vlan1obv
+    preempt delay 60
+    priority 240
+    address 172.17.89.129
+   !
+  !
+ !
+ interface BVI2
+  address-family ipv4
+   hsrp 2
+    authentication vlan2
+    preempt delay 60
+    priority 240
+    address 172.27.2.1
+   !
+  !
+ !
+ interface BVI3
+  address-family ipv4
+   hsrp 3
+    authentication vlan3
+    preempt delay 60
+ --More--               priority 240
+    address 172.27.3.1
+   !
+  !
+ !
+ interface BVI10
+  address-family ipv4
+   hsrp 10
+    authentication vlan10
+    preempt delay 60
+    priority 240
+    address 172.18.254.1
+   !
+  !
+ !
+ interface BVI11
+  address-family ipv4
+   hsrp 11
+    authentication vlan11
+    preempt delay 60
+    priority 240
+    address 172.18.0.1
+   !
+ --More--             !
+ !
+ interface BVI12
+  address-family ipv4
+   hsrp 12
+    authentication vlan12
+    preempt delay 60
+    priority 240
+    address 172.18.16.1
+   !
+  !
+ !
+ interface BVI13
+  address-family ipv4
+   hsrp 13
+    authentication vlan13
+    preempt delay 60
+    priority 240
+    address 172.18.64.1
+   !
+  !
+ !
+ interface BVI15
+ --More--             address-family ipv4
+   hsrp 15
+    authentication vlan15
+    preempt delay 60
+    priority 240
+    address 10.84.15.81
+   !
+  !
+ !
+ interface BVI50
+  address-family ipv4
+   hsrp 50
+    authentication vlan50
+    preempt delay 60
+    priority 240
+    address 10.185.50.1
+   !
+  !
+ !
+ interface BVI55
+  address-family ipv4
+   hsrp 55
+    authentication VL55
+ --More--               preempt delay 60
+    priority 240
+    address 10.185.11.1
+   !
+  !
+ !
+ interface BVI56
+  address-family ipv4
+   hsrp 56
+    authentication vlan56
+    preempt delay 60
+    priority 240
+    address 172.27.56.1
+   !
+  !
+ !
+ interface BVI57
+  address-family ipv4
+   hsrp 57
+    authentication vlan57
+    preempt delay 60
+    priority 240
+    address 172.27.57.1
+ --More--              !
+  !
+ !
+ interface BVI59
+  address-family ipv4
+   hsrp 59
+    authentication JTL
+    preempt delay 60
+    priority 240
+    address 172.20.59.3
+   !
+  !
+ !
+ interface BVI87
+  address-family ipv4
+   hsrp 87
+    authentication vlan87
+    preempt delay 60
+    priority 240
+    address 172.17.87.129
+   !
+  !
+ !
+ --More--            interface BVI88
+  address-family ipv4
+   hsrp 88
+    authentication vlan88
+    preempt delay 60
+    priority 240
+    address 172.17.88.225
+   !
+  !
+ !
+ interface BVI89
+  address-family ipv4
+   hsrp 3
+    authentication vlan89
+    preempt delay 60
+    priority 240
+    address 172.17.89.65
+   !
+  !
+ !
+ interface BVI101
+  address-family ipv4
+   hsrp 101
+ --More--               authentication vlan101
+    preempt delay 60
+    priority 240
+    address 10.185.5.1
+   !
+  !
+ !
+ interface BVI133
+  address-family ipv4
+   hsrp 133
+    authentication vlan133
+    preempt delay 60
+    priority 240
+    address 172.27.133.1
+   !
+  !
+ !
+ interface BVI137
+  address-family ipv4
+   hsrp 137
+    authentication vlan137
+    preempt delay 60
+    priority 240
+ --More--               address 172.27.137.1
+   !
+  !
+ !
+ interface BVI149
+  address-family ipv4
+   hsrp 149
+    authentication vlan149
+    preempt delay 60
+    priority 240
+    address 172.27.149.1
+   !
+  !
+ !
+ interface BVI157
+  address-family ipv4
+   hsrp 157
+    authentication vlan157
+    preempt delay 60
+    priority 240
+    address 172.27.157.1
+   !
+  !
+ --More--            !
+ interface BVI185
+  address-family ipv4
+   hsrp 185
+    authentication vlan185
+    preempt delay 60
+    priority 240
+    address 172.27.185.1
+   !
+  !
+ !
+ interface BVI189
+  address-family ipv4
+   hsrp 237
+    authentication vlan237
+    preempt delay 60
+    priority 240
+    address 172.27.189.1
+   !
+  !
+ !
+ interface BVI190
+  address-family ipv4
+ --More--              hsrp 190
+    authentication vlan190
+    preempt delay 60
+    priority 240
+    address 172.27.190.1
+   !
+  !
+ !
+ interface BVI200
+  address-family ipv4
+   hsrp 200
+    authentication vlan200
+    preempt delay 60
+    priority 240
+    address 172.27.200.1
+   !
+  !
+ !
+ interface BVI256
+  address-family ipv4
+   hsrp 201
+    authentication vlan256
+    preempt delay 60
+ --More--               priority 240
+    address 172.20.1.1
+   !
+  !
+ !
+ interface BVI300
+  address-family ipv4
+   hsrp 1
+    authentication vlan300
+    preempt delay 60
+    priority 240
+    address 172.17.89.193
+   !
+  !
+ !
+ interface BVI301
+  address-family ipv4
+   hsrp 1
+    authentication vlan301
+    preempt delay 60
+    priority 240
+    address 172.17.89.225
+   !
+ --More--             !
+ !
+ interface BVI410
+  address-family ipv4
+   hsrp 102
+    authentication vlan400
+    preempt delay 60
+    priority 240
+    address 172.27.4.1
+   !
+  !
+ !
+ interface BVI451
+  address-family ipv4
+   hsrp 103
+    authentication vlan451
+    preempt delay 60
+    priority 240
+    address 10.26.0.1
+   !
+  !
+ !
+ interface BVI452
+ --More--             address-family ipv4
+   hsrp 104
+    authentication vlan452
+    preempt delay 60
+    priority 240
+    address 10.26.0.17
+   !
+  !
+ !
+ interface BVI453
+  address-family ipv4
+   hsrp 105
+    authentication vlan453
+    preempt delay 60
+    priority 240
+    address 10.26.0.33
+   !
+  !
+ !
+ interface BVI555
+  address-family ipv4
+   hsrp 241
+    authentication Internet
+ --More--               preempt delay 60
+    priority 240
+    address 10.60.0.3
+   !
+  !
+ !
+ interface BVI570
+  address-family ipv4
+   hsrp 70
+    authentication vlan570
+    preempt delay 60
+    priority 240
+    address 10.99.2.1
+   !
+  !
+ !
+ interface BVI703
+  address-family ipv4
+   hsrp 170
+    authentication vlan703
+    preempt delay 60
+    priority 240
+    address 172.21.1.161
+ --More--              !
+  !
+ !
+ interface BVI718
+  address-family ipv4
+   hsrp 171
+    authentication vlan718
+    preempt delay 60
+    priority 240
+    address 172.21.1.145
+   !
+  !
+ !
+ interface BVI726
+  address-family ipv4
+   hsrp 172
+    authentication vlan726
+    preempt delay 60
+    priority 240
+    address 172.21.2.195
+   !
+  !
+ !
+ --More--            interface BVI850
+  address-family ipv4
+   hsrp 230
+    authentication vlan850
+    preempt delay 60
+    priority 240
+    address 10.255.255.3
+   !
+  !
+ !
+ interface BVI851
+  address-family ipv4
+   hsrp 231
+    authentication vlan851
+    preempt delay 60
+    priority 240
+    address 10.255.255.19
+   !
+  !
+ !
+ interface BVI852
+  address-family ipv4
+   hsrp 232
+ --More--               authentication vlan852
+    preempt delay 60
+    priority 240
+    address 10.255.255.35
+   !
+  !
+ !
+ interface BVI853
+  address-family ipv4
+   hsrp 233
+    authentication vlan853
+    preempt delay 60
+    priority 240
+    address 10.255.255.51
+   !
+  !
+ !
+ interface BVI854
+  address-family ipv4
+   hsrp 234
+    authentication vlan854
+    preempt delay 300
+    priority 240
+ --More--               address 10.255.255.67
+   !
+  !
+ !
+ interface BVI855
+  address-family ipv4
+   hsrp 235
+    authentication vlan855
+    preempt delay 60
+    priority 240
+    address 10.255.255.83
+   !
+  !
+ !
+ interface BVI856
+  address-family ipv4
+   hsrp 236
+    authentication vlan856
+    preempt delay 60
+    priority 240
+    address 10.255.255.99
+   !
+  !
+ --More--            !
+ interface BVI857
+  address-family ipv4
+   hsrp 246
+    authentication vlan857
+    preempt delay 60
+    priority 240
+    address 10.255.255.115
+   !
+  !
+ !
+ interface BVI858
+  address-family ipv4
+   hsrp 238
+    authentication vlan858
+    preempt delay 60
+    priority 240
+    address 10.255.255.131
+   !
+  !
+ !
+ interface BVI859
+  address-family ipv4
+ --More--              hsrp 249
+    authentication vlan859
+    preempt delay 60
+    priority 241
+    address 10.255.255.163
+   !
+  !
+ !
+ interface BVI1230
+  address-family ipv4
+   hsrp 220
+    authentication Vlan1230
+    preempt delay 60
+    priority 240
+    address 10.185.230.1
+   !
+  !
+ !
+ interface BVI1231
+  address-family ipv4
+   hsrp 221
+    authentication Vlan1231
+    preempt delay 60
+ --More--               priority 240
+    address 10.185.231.1
+   !
+  !
+ !
+ interface BVI1233
+  address-family ipv4
+   hsrp 222
+    authentication Vlan1233
+    preempt delay 60
+    priority 240
+    address 10.185.233.1
+   !
+  !
+ !
+ interface BVI1235
+  address-family ipv4
+   hsrp 224
+    authentication Vlan1235
+    preempt delay 60
+    priority 240
+    address 10.185.250.1
+   !
+ --More--             !
+ !
+ interface BVI1247
+  address-family ipv4
+   hsrp 247
+    authentication vlan1247
+    preempt delay 60
+    priority 240
+    address 172.17.87.161
+   !
+  !
+ !
+ interface BVI1950
+  address-family ipv4
+   hsrp 245
+    authentication vlan1950
+    preempt delay 60
+    priority 240
+    address 10.138.63.83
+   !
+  !
+ !
+ interface BVI2000
+ --More--             address-family ipv4
+   hsrp 240
+    authentication vlan2000
+    preempt delay 60
+    priority 240
+    address 172.27.210.1
+   !
+  !
+ !
+ interface BVI2001
+  address-family ipv4
+   hsrp 244
+    authentication vlan2001
+    preempt delay 60
+    priority 240
+    address 172.27.210.17
+   !
+  !
+ !
+ interface BVI2002
+  address-family ipv4
+   hsrp 241
+    authentication vlan2002
+ --More--               preempt delay 60
+    priority 240
+    address 172.27.210.33
+   !
+  !
+ !
+ interface BVI2003
+  address-family ipv4
+   hsrp 245
+    authentication vlan2003
+    preempt delay 60
+    priority 240
+    address 172.27.210.65
+   !
+  !
+ !
+ interface BVI3100
+  address-family ipv4
+   hsrp 250
+    preempt delay 60
+    priority 241
+    address 100.73.32.2
+   !
+ --More--             !
+ !
+ interface BVI3401
+  address-family ipv4
+   hsrp 192
+    authentication vlan192
+    preempt delay 60
+    priority 240
+    address 100.73.35.1
+   !
+  !
+ !
+ interface BVI3402
+  address-family ipv4
+   hsrp 193
+    authentication vlan193
+    preempt delay 60
+    priority 240
+    address 100.73.35.33
+   !
+  !
+ !
+ interface BVI3409
+ --More--             address-family ipv4
+   hsrp 194
+    authentication vlan194
+    preempt delay 60
+    priority 240
+    address 100.73.36.1
+   !
+  !
+ !
+ interface BVI3501
+  address-family ipv4
+   hsrp 191
+    authentication vlan191
+    preempt delay 60
+    priority 240
+    address 100.73.3.1
+   !
+  !
+ !
+!
+mpls oam
+!
+mpls ldp
+ --More--            log
+  nsr
+  graceful-restart
+ !
+ graceful-restart forwarding-state-holdtime 600
+ igp sync delay on-session-up 5
+ router-id 172.17.91.208
+ session protection
+ address-family ipv4
+ !
+ interface TenGigE0/0/0/8
+  address-family ipv4
+  !
+ !
+ interface TenGigE0/0/0/9
+  address-family ipv4
+  !
+ !
+ interface TenGigE0/0/0/10
+  address-family ipv4
+  !
+ !
+!
+ --More--           segment-routing
+ global-block 500000 599999
+!
+mpls label range table 0 24000 99999
+ssh client source-interface BVI55
+ssh timeout 30
+ssh server rekey-time 1440
+ssh server session-limit 50
+ssh server v2
+ssh server vrf CS
+track BVI2
+ type line-protocol state
+  interface BVI2
+ !
+ delay up 90
+!
+track BVI15
+ type line-protocol state
+  interface BVI15
+ !
+ delay up 90
+!
+track BVI57
+ --More--            type line-protocol state
+  interface BVI57
+ !
+ delay up 90
+!
+track BVI59
+ type line-protocol state
+  interface BVI59
+ !
+ delay up 90
+!
+track BVI101
+ type line-protocol state
+  interface BVI101
+ !
+ delay up 90
+!
+track BVI256
+ type line-protocol state
+  interface BVI256
+ !
+ delay up 90
+!
+ --More--           track BVI555
+ type line-protocol state
+  interface BVI555
+ !
+ delay up 90
+!
+track BVI570
+ type line-protocol state
+  interface BVI570
+ !
+ delay up 90
+!
+track BVI703
+ type line-protocol state
+  interface BVI703
+ !
+ delay up 90
+!
+track BVI718
+ type line-protocol state
+  interface BVI718
+ !
+ delay up 90
+ --More--           !
+track BVI726
+ type line-protocol state
+  interface BVI726
+ !
+ delay up 90
+!
+track BVI850
+ type line-protocol state
+  interface BVI850
+ !
+ delay up 90
+!
+track BVI851
+ type line-protocol state
+  interface BVI851
+ !
+ delay up 90
+!
+track BVI852
+ type line-protocol state
+  interface BVI852
+ !
+ --More--            delay up 90
+!
+track BVI853
+ type line-protocol state
+  interface BVI853
+ !
+ delay up 90
+!
+track BVI854
+ type line-protocol state
+  interface BVI854
+ !
+ delay up 90
+!
+track BVI855
+ type line-protocol state
+  interface BVI855
+ !
+ delay up 90
+!
+track BVI856
+ type line-protocol state
+  interface BVI856
+ --More--            !
+ delay up 90
+!
+track BVI857
+ type line-protocol state
+  interface BVI857
+ !
+ delay up 90
+!
+track BVI858
+ type line-protocol state
+  interface BVI858
+ !
+ delay up 90
+!
+track BVI859
+ type line-protocol state
+  interface BVI859
+ !
+ delay up 90
+!
+track BVI1950
+ type line-protocol state
+ --More--             interface BVI1950
+ !
+ delay up 90
+!
+end
+
+RP/0/RSP0/CPU0:OBvDCR1#            sh vrf
+
+% Incomplete command.
+RP/0/RSP0/CPU0:OBvDCR1#            sh vrf ?
+
+  all                 All VRFs
+  CS                  VRF Name
+  DWDM                VRF Name
+  Internet            VRF Name
+  JTL                 VRF Name
+  LOCAL               VRF Name
+  MGMT                VRF Name
+  PSI-OCK             VRF Name
+  SIP-DMZ             VRF Name
+  SPNS2-TRANSIT-JTTN  VRF Name
+  TS                  VRF Name
+  bane1               VRF Name
+  fdrift              VRF Name
+  fservice            VRF Name
+  kdrift              VRF Name
+  overvaagning        VRF Name
+  signal-program      VRF Name
+  WORD                VRF Name
+
+RP/0/RSP0/CPU0:OBvDCR1#sh vrf all
+
+Wed Jun 24 10:21:17.732 CEST
+VRF                  RD                  RT                         AFI   SAFI     
+CS                   172.17.91.208:0    
+                                         import  65020:102           IPV4  Unicast  
+                                         export  65020:102           IPV4  Unicast  
+DWDM                 172.17.91.208:5    
+                                         import  65020:4001          IPV4  Unicast  
+                                         export  65020:4001          IPV4  Unicast  
+Internet             172.17.91.208:11   
+                                         import  65020:555           IPV4  Unicast  
+                                         export  65020:555           IPV4  Unicast  
+JTL                  172.17.91.208:7    
+                                         import  65020:59            IPV4  Unicast  
+                                         export  65020:59            IPV4  Unicast  
+LOCAL                not set            
+MGMT                 172.17.91.208:1    
+                                         import  65020:500           IPV4  Unicast  
+                                         export  65020:500           IPV4  Unicast  
+PSI-OCK              172.17.91.208:9    
+                                         import  65020:3001          IPV4  Unicast  
+                                         export  65020:3001          IPV4  Unicast  
+SIP-DMZ              172.17.91.208:10   
+                                         import  65020:4011          IPV4  Unicast  
+                                         export  65020:4011          IPV4  Unicast  
+ --More--           SPNS2-TRANSIT-JTTN   172.17.91.208:14   
+                                         import  65020:859           IPV4  Unicast  
+                                         export  65020:859           IPV4  Unicast  
+TS                   172.17.91.208:15   
+                                         import  65020:1070          IPV4  Unicast  
+                                         export  65020:1070          IPV4  Unicast  
+                                         export  65020:1080          IPV4  Unicast  
+bane1                172.17.91.208:2    
+                                         import  65020:100           IPV4  Unicast  
+                                         import  65020:1000          IPV4  Unicast  
+                                         export  65020:1000          IPV4  Unicast  
+fdrift               172.17.91.208:8    
+                                         import  65020:1050          IPV4  Unicast  
+                                         import  65020:1090          IPV4  Unicast  
+                                         export  65020:1050          IPV4  Unicast  
+fservice             172.17.91.208:12   
+                                         import  65020:1060          IPV4  Unicast  
+                                         export  65020:1060          IPV4  Unicast  
+kdrift               172.17.91.208:3    
+                                         import  65020:1090          IPV4  Unicast  
+                                         export  65020:1090          IPV4  Unicast  
+overvaagning         172.17.91.208:13   
+                                         import  65020:1200          IPV4  Unicast  
+ --More--                                                    export  65020:1200          IPV4  Unicast  
+signal-program       172.17.91.208:4    
+                                         import  65020:2001          IPV4  Unicast  
+                                         export  65020:2001          IPV4  Unicast  
+RP/0/RSP0/CPU0:OBvDCR1#                  show ip interface brief vrf all
+
+                                               ^
+% Invalid input detected at '^' marker.
+RP/0/RSP0/CPU0:OBvDCR1#                  show ip interface brief vrf all                     ?
+
+  BVI                   Bridge-Group Virtual Interface | short name is BV
+  Bundle-Ether          Aggregated Ethernet interface(s) | short name is BE
+  Bundle-POS            Aggregated POS interface(s) | short name is BP
+  FastEthernet          FastEthernet/IEEE 802.3 interface(s) | short name is Fa
+  FiftyGigE             FiftyGigabitEthernet/IEEE 802.3 interface(s) | short nam
+e is Fi
+  FortyGigE             FortyGigabitEthernet/IEEE 802.3 interface(s) | short nam
+e is Fo
+  FourHundredGigE       FourHundredGigabitEthernet/IEEE 802.3 interface(s) | sho
+rt name is FH
+  GCC0                  OTN GCC0 interface(s) | short name is G0
+  GCC1                  OTN GCC1 interface(s) | short name is G1
+  GCC2                  OTN GCC2 interface(s) | short name is G2
+  GigabitEthernet       GigabitEthernet/IEEE 802.3 interface(s) | short name is 
+Gi
+  HundredGigE           HundredGigabitEthernet/IEEE 802.3 interface(s) | short n
+ame is Hu
+  Loopback              Loopback interface(s) | short name is Lo
+  MgmtEth               Ethernet/IEEE 802.3 interface(s) | short name is Mg
+  Multilink             Multilink network interface(s) | short name is Ml
+  Null                  Null interface | short name is Nu
+  POS                   Packet over SONET/SDH network interface(s) | short name 
+is POS
+ --More--             PTP                   FastEthernet/IEEE 802.3 interface(s) | short name is PTP
+  PW-Ether              PWHE Ethernet Interface | short name is PE
+  PW-IW                 PWHE VC11 IP Interworking Interface | short name is PI
+  SRP                   SRP interface(s) | short name is SRP
+  Serial                Serial network interface(s) | short name is Se
+  Service-Engine        Cisco Integrated Service Module Traffic interface(s) | s
+hort name is Se
+  Service-Mgmt          Cisco Integrated Service Module Management interface(s) 
+| short name is SeMg
+  TenGigE               TenGigabitEthernet/IEEE 802.3 interface(s) | short name 
+is Te
+  TwentyFiveGigE        TwentyFiveGigabitEthernet/IEEE 802.3 interface(s) | shor
+t name is TF
+  brief                 Brief info
+  events                Event info(cisco-support)
+  internal              Internal details for all interface
+  location              Location
+  lpts                  LPTS Interface(s) | short name is lpts
+  nVFabric-FortyGigE    nV Fabric FortyGigE Interface | short name is nF
+  nVFabric-GigE         nv Fabric GigE Interface | short name is nG
+  nVFabric-HundredGigE  nv Fabric HundredGigE Interface | short name is nH
+  nVFabric-TenGigE      nv Fabric TenGigE Interface | short name is nT
+  nve                   Network Virtualization Endpoint Interface(s) | short nam
+ --More--           e is nve
+  summary               Summary info
+  tunnel-ip             GRE/IPinIP Tunnel Interface(s)
+  tunnel-ipsec          IPSec Tunnel interface(s) | short name is tsec
+  tunnel-mte            MPLS Traffic Engineering P2MP Tunnel interface(s) | shor
+t name is tmte
+  tunnel-te             MPLS Traffic Engineering Tunnel interface(s) | short nam
+e is tt
+  tunnel-tp             MPLS Transport Protocol Tunnel interface | short name is
+ tp
+  |                     Output Modifiers
+  <cr>                  
+RP/0/RSP0/CPU0:OBvDCR1#show ip int brief ?
+
+  BVI                   Bridge-Group Virtual Interface | short name is BV
+  Bundle-Ether          Aggregated Ethernet interface(s) | short name is BE
+  Bundle-POS            Aggregated POS interface(s) | short name is BP
+  FastEthernet          FastEthernet/IEEE 802.3 interface(s) | short name is Fa
+  FiftyGigE             FiftyGigabitEthernet/IEEE 802.3 interface(s) | short nam
+e is Fi
+  FortyGigE             FortyGigabitEthernet/IEEE 802.3 interface(s) | short nam
+e is Fo
+  FourHundredGigE       FourHundredGigabitEthernet/IEEE 802.3 interface(s) | sho
+rt name is FH
+  GCC0                  OTN GCC0 interface(s) | short name is G0
+  GCC1                  OTN GCC1 interface(s) | short name is G1
+  GCC2                  OTN GCC2 interface(s) | short name is G2
+  GigabitEthernet       GigabitEthernet/IEEE 802.3 interface(s) | short name is 
+Gi
+  HundredGigE           HundredGigabitEthernet/IEEE 802.3 interface(s) | short n
+ame is Hu
+  Loopback              Loopback interface(s) | short name is Lo
+  MgmtEth               Ethernet/IEEE 802.3 interface(s) | short name is Mg
+  Multilink             Multilink network interface(s) | short name is Ml
+  Null                  Null interface | short name is Nu
+  POS                   Packet over SONET/SDH network interface(s) | short name 
+is POS
+ --More--             PTP                   FastEthernet/IEEE 802.3 interface(s) | short name is PTP
+  PW-Ether              PWHE Ethernet Interface | short name is PE
+  PW-IW                 PWHE VC11 IP Interworking Interface | short name is PI
+  SRP                   SRP interface(s) | short name is SRP
+  Serial                Serial network interface(s) | short name is Se
+  Service-Engine        Cisco Integrated Service Module Traffic interface(s) | s
+hort name is Se
+  Service-Mgmt          Cisco Integrated Service Module Management interface(s) 
+| short name is SeMg
+  TenGigE               TenGigabitEthernet/IEEE 802.3 interface(s) | short name 
+is Te
+  TwentyFiveGigE        TwentyFiveGigabitEthernet/IEEE 802.3 interface(s) | shor
+t name is TF
+  enabled               Show interfaces with ipv4 address configured
+  location              Location
+  lpts                  LPTS Interface(s) | short name is lpts
+  nVFabric-FortyGigE    nV Fabric FortyGigE Interface | short name is nF
+  nVFabric-GigE         nv Fabric GigE Interface | short name is nG
+  nVFabric-HundredGigE  nv Fabric HundredGigE Interface | short name is nH
+  nVFabric-TenGigE      nv Fabric TenGigE Interface | short name is nT
+  nve                   Network Virtualization Endpoint Interface(s) | short nam
+e is nve
+  tunnel-ip             GRE/IPinIP Tunnel Interface(s)
+ --More--             tunnel-ipsec          IPSec Tunnel interface(s) | short name is tsec
+  tunnel-mte            MPLS Traffic Engineering P2MP Tunnel interface(s) | shor
+t name is tmte
+  tunnel-te             MPLS Traffic Engineering Tunnel interface(s) | short nam
+e is tt
+  tunnel-tp             MPLS Transport Protocol Tunnel interface | short name is
+ tp
+  |                     Output Modifiers
+  <cr>                  
+RP/0/RSP0/CPU0:OBvDCR1#show ip int brief 
+
+Wed Jun 24 10:22:09.685 CEST
+
+Interface                      IP-Address      Status          Protocol Vrf-Name
+BVI1                           172.17.89.130   Up              Up       default 
+BVI2                           172.27.2.4      Up              Up       bane1   
+BVI3                           172.27.3.4      Up              Up       bane1   
+BVI10                          172.18.254.2    Up              Up       bane1   
+BVI11                          172.18.0.2      Up              Up       bane1   
+BVI12                          172.18.16.2     Up              Up       bane1   
+BVI13                          172.18.64.2     Up              Up       bane1   
+BVI15                          10.84.15.82     Up              Up       PSI-OCK 
+BVI50                          10.185.50.4     Up              Up       CS      
+BVI55                          10.185.11.3     Up              Up       CS      
+BVI56                          172.27.56.251   Up              Up       bane1   
+BVI57                          172.27.57.7     Up              Up       bane1   
+BVI59                          172.20.59.6     Up              Up       JTL     
+BVI87                          172.17.87.130   Up              Up       default 
+BVI88                          172.17.88.228   Up              Up       default 
+BVI89                          172.17.89.66    Up              Up       default 
+BVI101                         10.185.5.2      Up              Up       TS      
+BVI133                         172.27.133.4    Up              Up       bane1   
+BVI137                         172.27.137.4    Up              Up       bane1   
+BVI149                         172.27.149.4    Up              Up       bane1   
+BVI157                         172.27.157.7    Up              Up       bane1   
+BVI185                         172.27.185.4    Up              Up       bane1   
+BVI189                         172.27.189.4    Up              Up       bane1   
+BVI190                         172.27.190.4    Up              Up       bane1   
+BVI200                         172.27.200.4    Up              Up       bane1   
+BVI256                         172.20.1.2      Up              Up       bane1   
+BVI300                         172.17.89.194   Up              Up       default 
+BVI301                         172.17.89.226   Up              Up       default 
+BVI410                         172.27.4.4      Up              Up       bane1   
+BVI451                         10.26.0.2       Up              Up       DWDM    
+BVI452                         10.26.0.18      Up              Up       DWDM    
+BVI453                         10.26.0.34      Up              Up       DWDM    
+BVI555                         10.60.0.7       Up              Up       Internet
+BVI570                         10.99.2.4       Up              Up       overvaagning
+BVI703                         172.21.1.165    Up              Up       fservice
+BVI718                         172.21.1.146    Up              Up       fdrift  
+BVI726                         172.21.2.196    Up              Up       SIP-DMZ 
+BVI850                         10.255.255.6    Up              Up       default 
+BVI851                         10.255.255.22   Up              Up       CS      
+BVI852                         10.255.255.38   Up              Up       bane1   
+BVI853                         10.255.255.54   Up              Up       TS      
+BVI854                         10.255.255.70   Up              Up       MGMT    
+BVI855                         10.255.255.86   Up              Up       fdrift  
+BVI856                         10.255.255.102  Up              Up       fservice
+BVI857                         10.255.255.118  Up              Up       signal-program
+BVI858                         10.255.255.134  Up              Up       DWDM    
+BVI859                         10.255.255.164  Up              Up       SPNS2-TRANSIT-JTTN
+BVI1230                        10.185.230.2    Up              Up       CS      
+BVI1231                        10.185.231.2    Up              Up       CS      
+BVI1233                        10.185.233.2    Up              Up       CS      
+BVI1235                        10.185.250.2    Up              Up       CS      
+BVI1247                        172.17.87.189   Up              Up       default 
+BVI1950                        10.138.63.86    Up              Up       signal-program
+BVI2000                        172.27.210.2    Up              Up       bane1   
+BVI2001                        172.27.210.18   Up              Up       bane1   
+BVI2002                        172.27.210.34   Up              Up       bane1   
+BVI2003                        172.27.210.66   Up              Up       bane1   
+BVI3100                        100.73.32.4     Shutdown        Down     SPNS2-TRANSIT-JTTN
+BVI3401                        100.73.35.29    Up              Up       CS      
+BVI3402                        100.73.35.61    Up              Up       CS      
+ --More--           BVI3409                        100.73.36.29    Up              Up       CS      
+BVI3501                        100.73.3.29     Up              Up       CS      
+Bundle-Ether1                  unassigned      Up              Up       default 
+Bundle-Ether1.1                unassigned      Up              Up       default 
+Bundle-Ether1.2                unassigned      Up              Up       default 
+Bundle-Ether1.3                unassigned      Up              Up       default 
+Bundle-Ether1.10               unassigned      Up              Up       default 
+Bundle-Ether1.11               unassigned      Up              Up       default 
+Bundle-Ether1.12               unassigned      Up              Up       default 
+Bundle-Ether1.13               unassigned      Up              Up       default 
+Bundle-Ether1.15               unassigned      Up              Up       default 
+Bundle-Ether1.50               unassigned      Up              Up       default 
+Bundle-Ether1.55               unassigned      Up              Up       default 
+Bundle-Ether1.56               unassigned      Up              Up       default 
+Bundle-Ether1.57               unassigned      Up              Up       default 
+Bundle-Ether1.59               unassigned      Up              Up       default 
+Bundle-Ether1.87               unassigned      Up              Up       default 
+Bundle-Ether1.88               unassigned      Up              Up       default 
+Bundle-Ether1.89               unassigned      Up              Up       default 
+Bundle-Ether1.101              unassigned      Up              Up       default 
+Bundle-Ether1.133              unassigned      Up              Up       default 
+Bundle-Ether1.137              unassigned      Up              Up       default 
+Bundle-Ether1.149              unassigned      Up              Up       default 
+Bundle-Ether1.157              unassigned      Up              Up       default 
+Bundle-Ether1.185              unassigned      Up              Up       default 
+Bundle-Ether1.189              unassigned      Up              Up       default 
+Bundle-Ether1.190              unassigned      Up              Up       default 
+Bundle-Ether1.200              unassigned      Up              Up       default 
+Bundle-Ether1.256              unassigned      Up              Up       default 
+Bundle-Ether1.300              unassigned      Up              Up       default 
+Bundle-Ether1.301              unassigned      Up              Up       default 
+Bundle-Ether1.350              172.21.240.33   Up              Up       default 
+Bundle-Ether1.410              unassigned      Up              Up       default 
+Bundle-Ether1.451              unassigned      Up              Up       default 
+Bundle-Ether1.452              unassigned      Up              Up       default 
+Bundle-Ether1.453              unassigned      Up              Up       default 
+Bundle-Ether1.555              unassigned      Up              Up       default 
+Bundle-Ether1.570              unassigned      Up              Up       default 
+Bundle-Ether1.703              unassigned      Up              Up       default 
+Bundle-Ether1.718              unassigned      Up              Up       default 
+Bundle-Ether1.726              unassigned      Up              Up       default 
+Bundle-Ether1.850              unassigned      Up              Up       default 
+Bundle-Ether1.851              unassigned      Up              Up       default 
+Bundle-Ether1.852              unassigned      Up              Up       default 
+Bundle-Ether1.853              unassigned      Up              Up       default 
+Bundle-Ether1.854              unassigned      Up              Up       default 
+Bundle-Ether1.855              unassigned      Up              Up       default 
+Bundle-Ether1.856              unassigned      Up              Up       default 
+Bundle-Ether1.857              unassigned      Up              Up       default 
+Bundle-Ether1.858              unassigned      Up              Up       default 
+Bundle-Ether1.859              unassigned      Up              Up       default 
+Bundle-Ether1.1230             unassigned      Up              Up       default 
+Bundle-Ether1.1231             unassigned      Up              Up       default 
+Bundle-Ether1.1233             unassigned      Up              Up       default 
+Bundle-Ether1.1235             unassigned      Up              Up       default 
+Bundle-Ether1.1247             unassigned      Up              Up       default 
+Bundle-Ether1.1950             unassigned      Up              Up       default 
+Bundle-Ether1.2000             unassigned      Up              Up       default 
+Bundle-Ether1.2001             unassigned      Up              Up       default 
+Bundle-Ether1.2002             unassigned      Up              Up       default 
+Bundle-Ether1.2003             unassigned      Up              Up       default 
+Bundle-Ether1.3100             unassigned      Up              Up       default 
+ --More--           Bundle-Ether1.3401             unassigned      Up              Up       default 
+Bundle-Ether1.3402             unassigned      Up              Up       default 
+Bundle-Ether1.3409             unassigned      Up              Up       default 
+Bundle-Ether1.3501             unassigned      Up              Up       default 
+Loopback0                      172.17.91.208   Up              Up       default 
+Loopback1                      172.17.91.208   Up              Up       MGMT    
+Loopback3100                   100.73.32.2     Up              Up       LOCAL   
+MgmtEth0/RSP0/CPU0/0           unassigned      Shutdown        Down     default 
+GigabitEthernet0/0/0/0         unassigned      Shutdown        Down     default 
+GigabitEthernet0/0/0/1         unassigned      Shutdown        Down     default 
+GigabitEthernet0/0/0/2         unassigned      Shutdown        Down     default 
+GigabitEthernet0/0/0/3         unassigned      Shutdown        Down     default 
+GigabitEthernet0/0/0/4         unassigned      Shutdown        Down     default 
+GigabitEthernet0/0/0/5         unassigned      Shutdown        Down     default 
+GigabitEthernet0/0/0/6         unassigned      Shutdown        Down     default 
+GigabitEthernet0/0/0/7         unassigned      Shutdown        Down     default 
+TenGigE0/0/0/8                 172.21.240.2    Up              Up       default 
+TenGigE0/0/0/9                 172.21.240.6    Up              Up       default 
+TenGigE0/0/0/10                10.30.2.225     Up              Up       default 
+TenGigE0/0/0/11                unassigned      Shutdown        Down     default 
+TenGigE0/0/0/12                unassigned      Shutdown        Down     default 
+TenGigE0/0/0/13                unassigned      Shutdown        Down     default 
+TenGigE0/0/0/14                unassigned      Shutdown        Down     default 
+TenGigE0/0/0/15                unassigned      Shutdown        Down     default 
+TenGigE0/0/0/16                unassigned      Shutdown        Down     default 
+TenGigE0/0/0/17                unassigned      Shutdown        Down     default 
+TenGigE0/0/0/18                unassigned      Shutdown        Down     default 
+TenGigE0/0/0/19                unassigned      Shutdown        Down     default 
+HundredGigE0/0/0/20            unassigned      Up              Up       default 
+HundredGigE0/0/0/21            unassigned      Up              Up       default 
+TenGigE0/0/0/22                unassigned      Shutdown        Down     default 
+TenGigE0/0/0/23                unassigned      Shutdown        Down     default 
+TenGigE0/0/0/24                unassigned      Shutdown        Down     default 
+TenGigE0/0/0/25                unassigned      Shutdown        Down     default 
+TenGigE0/0/0/26                unassigned      Shutdown        Down     default 
+TenGigE0/0/0/27                unassigned      Shutdown        Down     default 
+TenGigE0/0/0/28                unassigned      Shutdown        Down     default 
+TenGigE0/0/0/29                unassigned      Shutdown        Down     default 
+TenGigE0/0/0/30                unassigned      Shutdown        Down     default 
+TenGigE0/0/0/31                unassigned      Shutdown        Down     default 
+TenGigE0/0/0/32                unassigned      Shutdown        Down     default 
+TenGigE0/0/0/33                unassigned      Shutdown        Down     default 
+GigabitEthernet0/0/0/34        unassigned      Shutdown        Down     default 
+GigabitEthernet0/0/0/35        unassigned      Shutdown        Down     default 
+GigabitEthernet0/0/0/36        unassigned      Shutdown        Down     default 
+GigabitEthernet0/0/0/37        unassigned      Shutdown        Down     default 
+GigabitEthernet0/0/0/38        unassigned      Shutdown        Down     default 
+GigabitEthernet0/0/0/39        unassigned      Shutdown        Down     default 
+GigabitEthernet0/0/0/40        unassigned      Shutdown        Down     default 
+GigabitEthernet0/0/0/41        unassigned      Shutdown        Down     default 
+RP/0/RSP0/CPU0:OBvDCR1#  

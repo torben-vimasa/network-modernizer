@@ -1,0 +1,452 @@
+{
+    "bane1": [
+        {
+            "asa_context": "BDK-DSB",
+            "asa_interface": "inside",
+            "asa_ip": "172.20.1.15",
+            "asa_subnet": "172.20.1.0/24",
+            "asa_access_group": "ind-fra-inside",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan256",
+            "router_ip": "172.20.1.4/24"
+        },
+        {
+            "asa_context": "BDK-DSB",
+            "asa_interface": "inside",
+            "asa_ip": "172.20.1.15",
+            "asa_subnet": "172.20.1.0/24",
+            "asa_access_group": "ind-fra-inside",
+            "router": "RGDCPe2",
+            "router_interface": "Vlan256",
+            "router_ip": "172.20.1.5/24"
+        },
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "Bane1",
+            "asa_ip": "10.255.255.33",
+            "asa_subnet": "10.255.255.32/28",
+            "asa_access_group": "access-in-bane1",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan852",
+            "router_ip": "10.255.255.36/28"
+        },
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "Bane1",
+            "asa_ip": "10.255.255.33",
+            "asa_subnet": "10.255.255.32/28",
+            "asa_access_group": "access-in-bane1",
+            "router": "RGDCPe2",
+            "router_interface": "Vlan852",
+            "router_ip": "10.255.255.37/28"
+        },
+        {
+            "asa_context": "BDK-Teknik",
+            "asa_interface": "inside",
+            "asa_ip": "172.27.2.100",
+            "asa_subnet": "172.27.2.0/24",
+            "asa_access_group": "acc_in_inside",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan2",
+            "router_ip": "172.27.2.2/24"
+        },
+        {
+            "asa_context": "BDK-Teknik",
+            "asa_interface": "inside",
+            "asa_ip": "172.27.2.100",
+            "asa_subnet": "172.27.2.0/24",
+            "asa_access_group": "acc_in_inside",
+            "router": "RGDCPe2",
+            "router_interface": "Vlan2",
+            "router_ip": "172.27.2.3/24"
+        },
+        {
+            "asa_context": "Site2Site-VPN",
+            "asa_interface": "inside",
+            "asa_ip": "172.27.57.5",
+            "asa_subnet": "172.27.57.0/24",
+            "asa_access_group": "CSM_FW_ACL_inside",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan57",
+            "router_ip": "172.27.57.2/24"
+        },
+        {
+            "asa_context": "Site2Site-VPN",
+            "asa_interface": "inside",
+            "asa_ip": "172.27.57.5",
+            "asa_subnet": "172.27.57.0/24",
+            "asa_access_group": "CSM_FW_ACL_inside",
+            "router": "RGDCPe2",
+            "router_interface": "Vlan57",
+            "router_ip": "172.27.57.3/24"
+        }
+    ],
+    "default": [
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "Global",
+            "asa_ip": "10.255.255.1",
+            "asa_subnet": "10.255.255.0/28",
+            "asa_access_group": null,
+            "router": "RGDCPe1",
+            "router_interface": "Vlan850",
+            "router_ip": "10.255.255.4/28"
+        },
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "Global",
+            "asa_ip": "10.255.255.1",
+            "asa_subnet": "10.255.255.0/28",
+            "asa_access_group": null,
+            "router": "RGDCPe2",
+            "router_interface": "Vlan850",
+            "router_ip": "10.255.255.5/28"
+        }
+    ],
+    "CS": [
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "CS",
+            "asa_ip": "10.255.255.17",
+            "asa_subnet": "10.255.255.16/28",
+            "asa_access_group": "access-in-cs",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan851",
+            "router_ip": "10.255.255.20/28"
+        },
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "CS",
+            "asa_ip": "10.255.255.17",
+            "asa_subnet": "10.255.255.16/28",
+            "asa_access_group": "access-in-cs",
+            "router": "RGDCPe2",
+            "router_interface": "Vlan851",
+            "router_ip": "10.255.255.21/28"
+        }
+    ],
+    "TS": [
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "TS",
+            "asa_ip": "10.255.255.49",
+            "asa_subnet": "10.255.255.48/28",
+            "asa_access_group": "access-in-ts",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan853",
+            "router_ip": "10.255.255.52/28"
+        },
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "TS",
+            "asa_ip": "10.255.255.49",
+            "asa_subnet": "10.255.255.48/28",
+            "asa_access_group": "access-in-ts",
+            "router": "RGDCPe2",
+            "router_interface": "Vlan853",
+            "router_ip": "10.255.255.53/28"
+        }
+    ],
+    "MGMT": [
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "MGMT_JTTN",
+            "asa_ip": "10.255.255.65",
+            "asa_subnet": "10.255.255.64/28",
+            "asa_access_group": "access-in-mgmt_jttn",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan854",
+            "router_ip": "10.255.255.68/28"
+        },
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "MGMT_JTTN",
+            "asa_ip": "10.255.255.65",
+            "asa_subnet": "10.255.255.64/28",
+            "asa_access_group": "access-in-mgmt_jttn",
+            "router": "RGDCPe2",
+            "router_interface": "Vlan854",
+            "router_ip": "10.255.255.69/28"
+        }
+    ],
+    "fdrift": [
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "Fdrift",
+            "asa_ip": "10.255.255.81",
+            "asa_subnet": "10.255.255.80/28",
+            "asa_access_group": "access-in-fdrift",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan855",
+            "router_ip": "10.255.255.84/28"
+        },
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "Fdrift",
+            "asa_ip": "10.255.255.81",
+            "asa_subnet": "10.255.255.80/28",
+            "asa_access_group": "access-in-fdrift",
+            "router": "RGDCPe2",
+            "router_interface": "Vlan855",
+            "router_ip": "10.255.255.85/28"
+        },
+        {
+            "asa_context": "BDK-Teknik",
+            "asa_interface": "eth-s3p1c13",
+            "asa_ip": "172.21.1.147",
+            "asa_subnet": "172.21.1.144/29",
+            "asa_access_group": "acc_in_eth-s3p1c13",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan718",
+            "router_ip": "172.21.1.150/29"
+        }
+    ],
+    "fservice": [
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "Fservice",
+            "asa_ip": "10.255.255.97",
+            "asa_subnet": "10.255.255.96/28",
+            "asa_access_group": "access-in-fservice",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan856",
+            "router_ip": "10.255.255.100/28"
+        },
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "Fservice",
+            "asa_ip": "10.255.255.97",
+            "asa_subnet": "10.255.255.96/28",
+            "asa_access_group": "access-in-fservice",
+            "router": "RGDCPe2",
+            "router_interface": "Vlan856",
+            "router_ip": "10.255.255.101/28"
+        },
+        {
+            "asa_context": "BDK-Teknik",
+            "asa_interface": "eth-s3p1c10",
+            "asa_ip": "172.21.1.163",
+            "asa_subnet": "172.21.1.160/29",
+            "asa_access_group": "acc_in_eth-s3p1c10",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan703",
+            "router_ip": "172.21.1.166/29"
+        }
+    ],
+    "signal-program": [
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "Signal-Program",
+            "asa_ip": "10.255.255.113",
+            "asa_subnet": "10.255.255.112/28",
+            "asa_access_group": "access-in-signal_program",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan857",
+            "router_ip": "10.255.255.116/28"
+        },
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "Signal-Program",
+            "asa_ip": "10.255.255.113",
+            "asa_subnet": "10.255.255.112/28",
+            "asa_access_group": "access-in-signal_program",
+            "router": "RGDCPe2",
+            "router_interface": "Vlan857",
+            "router_ip": "10.255.255.117/28"
+        },
+        {
+            "asa_context": "Site2Site-VPN",
+            "asa_interface": "GSMR_Phase3",
+            "asa_ip": "10.138.63.81",
+            "asa_subnet": "10.138.63.80/28",
+            "asa_access_group": "CSM_FW_ACL_GSMR_Phase3",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan1950",
+            "router_ip": "10.138.63.84/28"
+        },
+        {
+            "asa_context": "Site2Site-VPN",
+            "asa_interface": "GSMR_Phase3",
+            "asa_ip": "10.138.63.81",
+            "asa_subnet": "10.138.63.80/28",
+            "asa_access_group": "CSM_FW_ACL_GSMR_Phase3",
+            "router": "RGDCPe2",
+            "router_interface": "Vlan1950",
+            "router_ip": "10.138.63.85/28"
+        }
+    ],
+    "DWDM": [
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "DWDM",
+            "asa_ip": "10.255.255.129",
+            "asa_subnet": "10.255.255.128/28",
+            "asa_access_group": "access-in-dwdm",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan858",
+            "router_ip": "10.255.255.132/28"
+        },
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "DWDM",
+            "asa_ip": "10.255.255.129",
+            "asa_subnet": "10.255.255.128/28",
+            "asa_access_group": "access-in-dwdm",
+            "router": "RGDCPe2",
+            "router_interface": "Vlan858",
+            "router_ip": "10.255.255.133/28"
+        }
+    ],
+    "SPNS2-TRANSIT-JTTN": [
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "SPNS2-TRANSIT-JTTN",
+            "asa_ip": "10.255.255.161",
+            "asa_subnet": "10.255.255.160/28",
+            "asa_access_group": "access-in-SPNS2-TRANSIT-JTTN",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan859",
+            "router_ip": "10.255.255.166/28"
+        },
+        {
+            "asa_context": "BDK-Mgmt",
+            "asa_interface": "SPNS2-TRANSIT-JTTN",
+            "asa_ip": "10.255.255.161",
+            "asa_subnet": "10.255.255.160/28",
+            "asa_access_group": "access-in-SPNS2-TRANSIT-JTTN",
+            "router": "RGDCPe2",
+            "router_interface": "Vlan859",
+            "router_ip": "10.255.255.167/28"
+        }
+    ],
+    "PSI-OCK": [
+        {
+            "asa_context": "BDK-Teknik",
+            "asa_interface": "PSI-OCK",
+            "asa_ip": "10.84.15.94",
+            "asa_subnet": "10.84.15.80/28",
+            "asa_access_group": "acc_in_PSI-OCK",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan15",
+            "router_ip": "10.84.15.84/28"
+        },
+        {
+            "asa_context": "BDK-Teknik",
+            "asa_interface": "PSI-OCK",
+            "asa_ip": "10.84.15.94",
+            "asa_subnet": "10.84.15.80/28",
+            "asa_access_group": "acc_in_PSI-OCK",
+            "router": "RGDCPe2",
+            "router_interface": "Vlan15",
+            "router_ip": "10.84.15.85/28"
+        }
+    ],
+    "Internet": [
+        {
+            "asa_context": "BDK-Teknik",
+            "asa_interface": "Internet_service",
+            "asa_ip": "10.60.0.9",
+            "asa_subnet": "10.60.0.0/27",
+            "asa_access_group": "acc_in_Internet_service",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan555",
+            "router_ip": "10.60.0.5/26"
+        },
+        {
+            "asa_context": "BDK-Teknik",
+            "asa_interface": "Internet_service",
+            "asa_ip": "10.60.0.9",
+            "asa_subnet": "10.60.0.0/27",
+            "asa_access_group": "acc_in_Internet_service",
+            "router": "RGDCPe2",
+            "router_interface": "Vlan555",
+            "router_ip": "10.60.0.6/26"
+        },
+        {
+            "asa_context": "Site2Site-VPN",
+            "asa_interface": "Internet_service",
+            "asa_ip": "10.60.0.1",
+            "asa_subnet": "10.60.0.0/27",
+            "asa_access_group": "BIX-to-TMG_Internet_access",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan555",
+            "router_ip": "10.60.0.5/26"
+        },
+        {
+            "asa_context": "Site2Site-VPN",
+            "asa_interface": "Internet_service",
+            "asa_ip": "10.60.0.1",
+            "asa_subnet": "10.60.0.0/27",
+            "asa_access_group": "BIX-to-TMG_Internet_access",
+            "router": "RGDCPe2",
+            "router_interface": "Vlan555",
+            "router_ip": "10.60.0.6/26"
+        }
+    ],
+    "overvaagning": [
+        {
+            "asa_context": "BDK-Teknik",
+            "asa_interface": "SCADA-Overvaagning",
+            "asa_ip": "10.99.2.14",
+            "asa_subnet": "10.99.2.0/28",
+            "asa_access_group": "acc_in_SCADA-Overvaagning",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan570",
+            "router_ip": "10.99.2.6/28"
+        },
+        {
+            "asa_context": "BDK-Teknik",
+            "asa_interface": "SCADA-Overvaagning",
+            "asa_ip": "10.99.2.14",
+            "asa_subnet": "10.99.2.0/28",
+            "asa_access_group": "acc_in_SCADA-Overvaagning",
+            "router": "RGDCPe2",
+            "router_interface": "Vlan570",
+            "router_ip": "10.99.2.7/28"
+        }
+    ],
+    "SIP-DMZ": [
+        {
+            "asa_context": "BDK-Teknik",
+            "asa_interface": "SIP-DMZ",
+            "asa_ip": "172.21.2.193",
+            "asa_subnet": "172.21.2.192/28",
+            "asa_access_group": "acc_in_SIP-DMZ",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan726",
+            "router_ip": "172.21.2.198/28"
+        },
+        {
+            "asa_context": "BDK-Teknik",
+            "asa_interface": "SIP-DMZ",
+            "asa_ip": "172.21.2.193",
+            "asa_subnet": "172.21.2.192/28",
+            "asa_access_group": "acc_in_SIP-DMZ",
+            "router": "RGDCPe2",
+            "router_interface": "Vlan726",
+            "router_ip": "172.21.2.199/28"
+        }
+    ],
+    "JTL": [
+        {
+            "asa_context": "Site2Site-VPN",
+            "asa_interface": "JTL",
+            "asa_ip": "172.20.59.1",
+            "asa_subnet": "172.20.59.0/26",
+            "asa_access_group": "CSM_FW_ACL_JTL",
+            "router": "RGDCPe1",
+            "router_interface": "Vlan59",
+            "router_ip": "172.20.59.8/26"
+        },
+        {
+            "asa_context": "Site2Site-VPN",
+            "asa_interface": "JTL",
+            "asa_ip": "172.20.59.1",
+            "asa_subnet": "172.20.59.0/26",
+            "asa_access_group": "CSM_FW_ACL_JTL",
+            "router": "RGDCPe2",
+            "router_interface": "Vlan59",
+            "router_ip": "172.20.59.9/26"
+        }
+    ]
+}

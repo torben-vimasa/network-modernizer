@@ -1,0 +1,309 @@
+{
+    "bane1": {
+        "contexts": [
+            "BDK-DSB",
+            "BDK-Mgmt",
+            "BDK-Teknik",
+            "Site2Site-VPN"
+        ],
+        "asa_interfaces": [
+            "Bane1",
+            "inside"
+        ],
+        "access_groups": [
+            "CSM_FW_ACL_inside",
+            "acc_in_inside",
+            "access-in-bane1",
+            "ind-fra-inside"
+        ],
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "router_interfaces": [
+            "Vlan2",
+            "Vlan256",
+            "Vlan57",
+            "Vlan852"
+        ],
+        "link_count": 8
+    },
+    "default": {
+        "contexts": [
+            "BDK-Mgmt"
+        ],
+        "asa_interfaces": [
+            "Global"
+        ],
+        "access_groups": [],
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "router_interfaces": [
+            "Vlan850"
+        ],
+        "link_count": 2
+    },
+    "CS": {
+        "contexts": [
+            "BDK-Mgmt"
+        ],
+        "asa_interfaces": [
+            "CS"
+        ],
+        "access_groups": [
+            "access-in-cs"
+        ],
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "router_interfaces": [
+            "Vlan851"
+        ],
+        "link_count": 2
+    },
+    "TS": {
+        "contexts": [
+            "BDK-Mgmt"
+        ],
+        "asa_interfaces": [
+            "TS"
+        ],
+        "access_groups": [
+            "access-in-ts"
+        ],
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "router_interfaces": [
+            "Vlan853"
+        ],
+        "link_count": 2
+    },
+    "MGMT": {
+        "contexts": [
+            "BDK-Mgmt"
+        ],
+        "asa_interfaces": [
+            "MGMT_JTTN"
+        ],
+        "access_groups": [
+            "access-in-mgmt_jttn"
+        ],
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "router_interfaces": [
+            "Vlan854"
+        ],
+        "link_count": 2
+    },
+    "fdrift": {
+        "contexts": [
+            "BDK-Mgmt",
+            "BDK-Teknik"
+        ],
+        "asa_interfaces": [
+            "Fdrift",
+            "eth-s3p1c13"
+        ],
+        "access_groups": [
+            "acc_in_eth-s3p1c13",
+            "access-in-fdrift"
+        ],
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "router_interfaces": [
+            "Vlan718",
+            "Vlan855"
+        ],
+        "link_count": 3
+    },
+    "fservice": {
+        "contexts": [
+            "BDK-Mgmt",
+            "BDK-Teknik"
+        ],
+        "asa_interfaces": [
+            "Fservice",
+            "eth-s3p1c10"
+        ],
+        "access_groups": [
+            "acc_in_eth-s3p1c10",
+            "access-in-fservice"
+        ],
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "router_interfaces": [
+            "Vlan703",
+            "Vlan856"
+        ],
+        "link_count": 3
+    },
+    "signal-program": {
+        "contexts": [
+            "BDK-Mgmt",
+            "Site2Site-VPN"
+        ],
+        "asa_interfaces": [
+            "GSMR_Phase3",
+            "Signal-Program"
+        ],
+        "access_groups": [
+            "CSM_FW_ACL_GSMR_Phase3",
+            "access-in-signal_program"
+        ],
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "router_interfaces": [
+            "Vlan1950",
+            "Vlan857"
+        ],
+        "link_count": 4
+    },
+    "DWDM": {
+        "contexts": [
+            "BDK-Mgmt"
+        ],
+        "asa_interfaces": [
+            "DWDM"
+        ],
+        "access_groups": [
+            "access-in-dwdm"
+        ],
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "router_interfaces": [
+            "Vlan858"
+        ],
+        "link_count": 2
+    },
+    "SPNS2-TRANSIT-JTTN": {
+        "contexts": [
+            "BDK-Mgmt"
+        ],
+        "asa_interfaces": [
+            "SPNS2-TRANSIT-JTTN"
+        ],
+        "access_groups": [
+            "access-in-SPNS2-TRANSIT-JTTN"
+        ],
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "router_interfaces": [
+            "Vlan859"
+        ],
+        "link_count": 2
+    },
+    "PSI-OCK": {
+        "contexts": [
+            "BDK-Teknik"
+        ],
+        "asa_interfaces": [
+            "PSI-OCK"
+        ],
+        "access_groups": [
+            "acc_in_PSI-OCK"
+        ],
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "router_interfaces": [
+            "Vlan15"
+        ],
+        "link_count": 2
+    },
+    "Internet": {
+        "contexts": [
+            "BDK-Teknik",
+            "Site2Site-VPN"
+        ],
+        "asa_interfaces": [
+            "Internet_service"
+        ],
+        "access_groups": [
+            "BIX-to-TMG_Internet_access",
+            "acc_in_Internet_service"
+        ],
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "router_interfaces": [
+            "Vlan555"
+        ],
+        "link_count": 4
+    },
+    "overvaagning": {
+        "contexts": [
+            "BDK-Teknik"
+        ],
+        "asa_interfaces": [
+            "SCADA-Overvaagning"
+        ],
+        "access_groups": [
+            "acc_in_SCADA-Overvaagning"
+        ],
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "router_interfaces": [
+            "Vlan570"
+        ],
+        "link_count": 2
+    },
+    "SIP-DMZ": {
+        "contexts": [
+            "BDK-Teknik"
+        ],
+        "asa_interfaces": [
+            "SIP-DMZ"
+        ],
+        "access_groups": [
+            "acc_in_SIP-DMZ"
+        ],
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "router_interfaces": [
+            "Vlan726"
+        ],
+        "link_count": 2
+    },
+    "JTL": {
+        "contexts": [
+            "Site2Site-VPN"
+        ],
+        "asa_interfaces": [
+            "JTL"
+        ],
+        "access_groups": [
+            "CSM_FW_ACL_JTL"
+        ],
+        "routers": [
+            "RGDCPe1",
+            "RGDCPe2"
+        ],
+        "router_interfaces": [
+            "Vlan59"
+        ],
+        "link_count": 2
+    }
+}
