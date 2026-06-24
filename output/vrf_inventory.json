@@ -26,7 +26,8 @@
             "Vlan57",
             "Vlan852"
         ],
-        "link_count": 8
+        "link_count": 8,
+        "complexity_score": 28
     },
     "default": {
         "contexts": [
@@ -43,7 +44,8 @@
         "router_interfaces": [
             "Vlan850"
         ],
-        "link_count": 2
+        "link_count": 2,
+        "complexity_score": 6
     },
     "CS": {
         "contexts": [
@@ -62,7 +64,8 @@
         "router_interfaces": [
             "Vlan851"
         ],
-        "link_count": 2
+        "link_count": 2,
+        "complexity_score": 8
     },
     "TS": {
         "contexts": [
@@ -81,7 +84,8 @@
         "router_interfaces": [
             "Vlan853"
         ],
-        "link_count": 2
+        "link_count": 2,
+        "complexity_score": 8
     },
     "MGMT": {
         "contexts": [
@@ -100,7 +104,8 @@
         "router_interfaces": [
             "Vlan854"
         ],
-        "link_count": 2
+        "link_count": 2,
+        "complexity_score": 8
     },
     "fdrift": {
         "contexts": [
@@ -123,7 +128,8 @@
             "Vlan718",
             "Vlan855"
         ],
-        "link_count": 3
+        "link_count": 3,
+        "complexity_score": 16
     },
     "fservice": {
         "contexts": [
@@ -146,7 +152,8 @@
             "Vlan703",
             "Vlan856"
         ],
-        "link_count": 3
+        "link_count": 3,
+        "complexity_score": 16
     },
     "signal-program": {
         "contexts": [
@@ -169,7 +176,8 @@
             "Vlan1950",
             "Vlan857"
         ],
-        "link_count": 4
+        "link_count": 4,
+        "complexity_score": 16
     },
     "DWDM": {
         "contexts": [
@@ -188,7 +196,8 @@
         "router_interfaces": [
             "Vlan858"
         ],
-        "link_count": 2
+        "link_count": 2,
+        "complexity_score": 8
     },
     "SPNS2-TRANSIT-JTTN": {
         "contexts": [
@@ -207,7 +216,8 @@
         "router_interfaces": [
             "Vlan859"
         ],
-        "link_count": 2
+        "link_count": 2,
+        "complexity_score": 8
     },
     "PSI-OCK": {
         "contexts": [
@@ -226,7 +236,8 @@
         "router_interfaces": [
             "Vlan15"
         ],
-        "link_count": 2
+        "link_count": 2,
+        "complexity_score": 8
     },
     "Internet": {
         "contexts": [
@@ -247,7 +258,8 @@
         "router_interfaces": [
             "Vlan555"
         ],
-        "link_count": 4
+        "link_count": 4,
+        "complexity_score": 13
     },
     "overvaagning": {
         "contexts": [
@@ -266,7 +278,8 @@
         "router_interfaces": [
             "Vlan570"
         ],
-        "link_count": 2
+        "link_count": 2,
+        "complexity_score": 8
     },
     "SIP-DMZ": {
         "contexts": [
@@ -285,7 +298,8 @@
         "router_interfaces": [
             "Vlan726"
         ],
-        "link_count": 2
+        "link_count": 2,
+        "complexity_score": 8
     },
     "JTL": {
         "contexts": [
@@ -304,6 +318,7 @@
         "router_interfaces": [
             "Vlan59"
         ],
-        "link_count": 2
+        "link_count": 2,
+        "complexity_score": 8
     }
 }

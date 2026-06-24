@@ -105,7 +105,13 @@ for vrf, links in vrf_topology.items():
         "access_groups": sorted(list(access_groups)),
         "routers": sorted(list(routers)),
         "router_interfaces": sorted(list(router_interfaces)),
-        "link_count": len(links)
+        "link_count": len(links),
+        "complexity_score": (
+    len(contexts) * 3
+    + len(asa_interfaces) * 2
+    + len(access_groups) * 2
+    + len(router_interfaces)
+      )
     }
 
 with open(output_dir / "vrf_inventory.json", "w") as f:
@@ -119,4 +125,13 @@ for link in topology_links[:20]:
         f'→ {link["router"]} / {link["router_interface"]} '
         f'→ VRF {link["vrf"]}'
     )
-    
+    vrf_ranking = sorted(
+    vrf_inventory.items(),
+    key=lambda x: x[1]["complexity_score"],
+    reverse=True
+)
+
+with open(output_dir / "vrf_complexity_ranking.json", "w") as f:
+    json.dump(vrf_ranking, f, indent=4)
+
+print("Output gemt: output/vrf_complexity_ranking.json")
