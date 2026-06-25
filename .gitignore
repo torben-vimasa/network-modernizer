@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+
+# Generated output
+output/
+
+# Customer configuration
+data/router_raw/
+data/contexts/
+data/system/
