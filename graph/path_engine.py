@@ -1,53 +1,133 @@
 import ipaddress
 
+from models.path_result import PathResult
+
 
 class PathEngine:
     def __init__(self, graph):
         self.graph = graph
 
-    def explain_ip(self, source_ip, destination_ip):
+    def analyze_ip_path(self, source_ip, destination_ip):
         source_matches = self._find_interfaces_for_ip(source_ip)
         destination_matches = self._find_interfaces_for_ip(destination_ip)
+
+        result = PathResult(
+            source_ip=source_ip,
+            destination_ip=destination_ip
+        )
+
+        result.source_matches = source_matches
+        result.destination_matches = destination_matches
+
+        self._add_summary(result)
+        self._add_findings(result)
+
+        return result
+
+    def explain_ip(self, source_ip, destination_ip):
+        result = self.analyze_ip_path(source_ip, destination_ip)
 
         print()
         print("=" * 60)
         print("PATH EXPLAIN")
         print("=" * 60)
-        print(f"Source:      {source_ip}")
-        print(f"Destination: {destination_ip}")
+        print(f"Source:      {result.source_ip}")
+        print(f"Destination: {result.destination_ip}")
 
         print("\nSource candidates")
         print("-" * 20)
-        self._print_matches(source_matches)
+        self._print_matches(result.source_matches)
 
         print("\nDestination candidates")
         print("-" * 20)
-        self._print_matches(destination_matches)
+        self._print_matches(result.destination_matches)
 
-        print("\nInterpretation")
+        print("\nFindings")
         print("-" * 20)
 
-        if not source_matches:
-            print("Source IP blev ikke matchet til kendt ASA/router subnet endnu.")
+        for finding in result.findings:
+            print(f"- {finding}")
 
-        if not destination_matches:
-            print("Destination IP blev ikke matchet til kendt ASA/router subnet endnu.")
+        if result.warnings:
+            print("\nWarnings")
+            print("-" * 20)
 
-        if source_matches and destination_matches:
-            for src in source_matches:
-                for dst in destination_matches:
-                    print()
-                    print(f"{source_ip} kan være i/ved {src['node'].name}")
-                    print(f"{destination_ip} kan være i/ved {dst['node'].name}")
+            for warning in result.warnings:
+                print(f"- {warning}")
 
-                    if src["vrf"] and dst["vrf"]:
-                        print(f"Source VRF:      {src['vrf']}")
-                        print(f"Destination VRF: {dst['vrf']}")
+        print("\nSummary")
+        print("-" * 20)
+        print(f"VRFs:       {result.vrfs}")
+        print(f"Firewalls:  {result.firewalls}")
+        print(f"Routers:    {result.routers}")
+        print(f"Confidence: {result.confidence}")
 
-                        if src["vrf"] == dst["vrf"]:
-                            print("Foreløbig vurdering: samme VRF.")
-                        else:
-                            print("Foreløbig vurdering: kryds-VRF trafik — firewall/route/VPN/NAT skal undersøges.")
+    def _add_summary(self, result):
+        vrfs = set()
+        firewalls = set()
+        routers = set()
+
+        for match in result.source_matches + result.destination_matches:
+            node = match["node"]
+
+            if match["vrf"]:
+                vrfs.add(match["vrf"])
+
+            if node.type == "ASAInterface":
+                context = node.properties.get("context")
+                if context:
+                    firewalls.add(context)
+
+            if node.type == "RouterInterface":
+                router = node.properties.get("router")
+                if router:
+                    routers.add(router)
+
+        result.vrfs = sorted(list(vrfs))
+        result.firewalls = sorted(list(firewalls))
+        result.routers = sorted(list(routers))
+
+    def _add_findings(self, result):
+        if not result.source_matches:
+            result.warnings.append(
+                "Source IP blev ikke matchet til kendt ASA/router subnet endnu."
+            )
+
+        if not result.destination_matches:
+            result.warnings.append(
+                "Destination IP blev ikke matchet til kendt ASA/router subnet endnu."
+            )
+
+        if result.source_matches and result.destination_matches:
+            source_vrfs = {
+                match["vrf"]
+                for match in result.source_matches
+                if match["vrf"]
+            }
+
+            destination_vrfs = {
+                match["vrf"]
+                for match in result.destination_matches
+                if match["vrf"]
+            }
+
+            if source_vrfs and destination_vrfs:
+                if source_vrfs == destination_vrfs:
+                    result.findings.append("Source og destination ser ud til at være i samme VRF.")
+                    result.confidence = 60
+                else:
+                    result.findings.append(
+                        "Source og destination ser ud til at være i forskellige VRF'er."
+                    )
+                    result.findings.append(
+                        "Kryds-VRF trafik kræver videre analyse af firewall, routes, NAT og/eller VPN."
+                    )
+                    result.confidence = 50
+            else:
+                result.findings.append(
+                    "VRF kunne ikke bestemmes entydigt for source eller destination."
+                )
+                result.confidence = 30
 
     def _find_interfaces_for_ip(self, ip):
         matches = []
@@ -59,7 +139,6 @@ class PathEngine:
 
             subnet = node.properties.get("subnet")
             interface_ip = node.properties.get("ip")
-
             network = None
 
             if subnet:
