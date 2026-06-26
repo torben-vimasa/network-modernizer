@@ -1,4 +1,5 @@
 from graph.graph import KnowledgeGraph
+from models.security_result import SecurityResult
 
 
 class SecurityEngine:
@@ -7,15 +8,25 @@ class SecurityEngine:
         self.graph = graph
 
     def is_permitted(self, source, destination, protocol=None, service=None):
+        result = SecurityResult()
+
         for rule in self._matching_rules(source, destination, protocol, service):
             if rule.properties.get("action") == "deny":
-                return rule
+                result.permitted = False
+                result.rule = rule
+                result.reason = f"Matched deny rule {rule.name}"
+                return result
 
         for rule in self._matching_rules(source, destination, protocol, service):
             if rule.properties.get("action") == "permit":
-                return rule
+                result.permitted = True
+                result.rule = rule
+                result.reason = f"Matched permit rule {rule.name}"
+                return result
 
-        return None
+        result.permitted = False
+        result.reason = "No ACL rule matched"
+        return result
 
     def _matching_rules(self, source, destination, protocol, service):
         matches = []

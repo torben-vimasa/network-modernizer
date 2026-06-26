@@ -31,16 +31,15 @@ for test in tests:
     print(test["name"])
     print("-" * 40)
 
-    rule = engine.is_permitted(
+    result = engine.is_permitted(
         test["source"],
         test["destination"],
         protocol=test["protocol"],
         service=test["service"]
     )
 
-    if rule:
-        print(rule.name)
-        print(rule.properties["action"])
-        print(rule.properties["raw"])
-    else:
-        print("No match")
+    print(result.reason)
+
+    if result.rule:
+        print(result.rule.properties["action"])
+        print(result.rule.properties["raw"])
