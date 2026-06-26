@@ -6,30 +6,109 @@ class SecurityEngine:
     def __init__(self, graph: KnowledgeGraph):
         self.graph = graph
 
-    def is_permitted(self, source, destination):
-
-        matches = []
-
-        for node in self.graph.nodes.values():
-
-            if node.type != "ACLRule":
-                continue
-
-            src = node.properties.get("source_value")
-            dst = node.properties.get("destination_value")
-
-            if src == source and dst == destination:
-                matches.append(node)
-
-        if not matches:
-            return None
-
-        for rule in matches:
-            if rule.properties["action"] == "deny":
+    def is_permitted(self, source, destination, protocol=None, service=None):
+        for rule in self._matching_rules(source, destination, protocol, service):
+            if rule.properties.get("action") == "deny":
                 return rule
 
-        for rule in matches:
-            if rule.properties["action"] == "permit":
+        for rule in self._matching_rules(source, destination, protocol, service):
+            if rule.properties.get("action") == "permit":
                 return rule
 
         return None
+
+    def _matching_rules(self, source, destination, protocol, service):
+        matches = []
+
+        for rule in self.graph.nodes.values():
+            if rule.type != "ACLRule":
+                continue
+
+            if not self._protocol_matches(rule, protocol):
+                continue
+
+            if not self._service_matches(rule, service):
+                continue
+
+            source_targets = self._targets(rule.id, "USES_SOURCE")
+            destination_targets = self._targets(rule.id, "USES_DESTINATION")
+
+            if not source_targets or not destination_targets:
+                continue
+
+            source_match = any(
+                self._node_matches_value(target, source)
+                for target in source_targets
+            )
+
+            destination_match = any(
+                self._node_matches_value(target, destination)
+                for target in destination_targets
+            )
+
+            if source_match and destination_match:
+                matches.append(rule)
+
+        return matches
+
+    def _protocol_matches(self, rule, protocol):
+        if not protocol:
+            return True
+
+        rule_protocol = rule.properties.get("protocol")
+
+        return rule_protocol == protocol
+
+    def _service_matches(self, rule, service):
+        if not service:
+            return True
+
+        rule_service = rule.properties.get("service")
+
+        return rule_service == service
+
+    def _targets(self, node_id, relationship_type):
+        return [
+            neighbor
+            for relation, neighbor in self.graph.neighbors(node_id)
+            if relation == relationship_type
+        ]
+
+    def _node_matches_value(self, node, value):
+        if node.type == "NetworkObject":
+            return self._network_object_matches(node, value)
+
+        if node.type == "ObjectGroup":
+            return self._object_group_matches(node, value)
+
+        return False
+
+    def _network_object_matches(self, node, value):
+        if node.name == "any":
+            return True
+
+        object_value = node.properties.get("value")
+
+        if object_value == value:
+            return True
+
+        if node.name == value:
+            return True
+
+        if node.name.endswith(f"_{value}"):
+            return True
+
+        if node.name.endswith(f":{value}"):
+            return True
+
+        return False
+
+    def _object_group_matches(self, node, value):
+        for relation, member in self.graph.neighbors(node.id):
+            if relation != "HAS_MEMBER":
+                continue
+
+            if self._node_matches_value(member, value):
+                return True
+
+        return False

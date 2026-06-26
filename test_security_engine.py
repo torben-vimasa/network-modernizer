@@ -7,7 +7,9 @@ engine = SecurityEngine(graph)
 
 rule = engine.is_permitted(
     "172.27.210.20",
-    "SPNS2_Logpoint_100.72.36.70"
+    "SPNS2_Logpoint_100.72.36.70",
+    protocol="object-group",
+    service="Windows_Logging"
 )
 
 print()
