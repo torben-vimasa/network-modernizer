@@ -10,13 +10,14 @@ class GraphBuilder:
         self.output_dir = Path("output")
 
     def build_from_vrf_inventory(self):
+        graph = KnowledgeGraph()
+
         vrf_inventory = self._load_json("vrf_inventory.json")
         vrf_topology = self._load_json("vrf_asa_topology.json")
 
-        graph = KnowledgeGraph()
-
         self._add_vrf_nodes(graph, vrf_inventory)
         self._add_topology_links(graph, vrf_topology)
+        self._add_objects_and_groups(graph)
         self._add_acl_rules(graph)
 
         return graph
@@ -41,69 +42,52 @@ class GraphBuilder:
             vrf_node = graph.add_node("VRF", vrf_name)
 
             for link in links:
-                self._add_topology_link(graph, vrf_node, link)
+                context_node = graph.add_node("Context", link["asa_context"])
 
-    def _add_topology_link(self, graph, vrf_node, link):
-        context_node = graph.add_node("Context", link["asa_context"])
-        asa_interface_node = self._add_asa_interface(graph, link)
+                asa_interface_node = graph.add_node(
+                    "ASAInterface",
+                    f'{link["asa_context"]}:{link["asa_interface"]}',
+                    {
+                        "context": link["asa_context"],
+                        "interface": link["asa_interface"],
+                        "ip": link["asa_ip"],
+                        "subnet": link["asa_subnet"]
+                    }
+                )
 
-        graph.add_relationship(context_node, asa_interface_node, "HAS_INTERFACE")
-        graph.add_relationship(asa_interface_node, vrf_node, "BELONGS_TO_VRF")
+                graph.add_relationship(context_node, asa_interface_node, "HAS_INTERFACE")
+                graph.add_relationship(asa_interface_node, vrf_node, "BELONGS_TO_VRF")
 
-        self._add_acl(graph, asa_interface_node, vrf_node, link)
+                if link["asa_access_group"]:
+                    acl_node = graph.add_node("ACL", link["asa_access_group"])
+                    graph.add_relationship(asa_interface_node, acl_node, "USES_ACL")
+                    graph.add_relationship(acl_node, vrf_node, "PROTECTS")
 
-        router_node = graph.add_node("Router", link["router"])
-        router_interface_node = self._add_router_interface(graph, link)
+                router_node = graph.add_node("Router", link["router"])
 
-        graph.add_relationship(router_node, router_interface_node, "HAS_INTERFACE")
-        graph.add_relationship(router_interface_node, vrf_node, "BELONGS_TO_VRF")
+                router_interface_node = graph.add_node(
+                    "RouterInterface",
+                    f'{link["router"]}:{link["router_interface"]}',
+                    {
+                        "router": link["router"],
+                        "interface": link["router_interface"],
+                        "ip": link["router_ip"]
+                    }
+                )
 
-        graph.add_relationship(
-            asa_interface_node,
-            router_interface_node,
-            "CONNECTED_TO",
-            {
-                "asa_ip": link["asa_ip"],
-                "router_ip": link["router_ip"],
-                "subnet": link["asa_subnet"]
-            }
-        )
+                graph.add_relationship(router_node, router_interface_node, "HAS_INTERFACE")
+                graph.add_relationship(router_interface_node, vrf_node, "BELONGS_TO_VRF")
 
-    def _add_asa_interface(self, graph, link):
-        name = f'{link["asa_context"]}:{link["asa_interface"]}'
-
-        return graph.add_node(
-            "ASAInterface",
-            name,
-            {
-                "context": link["asa_context"],
-                "interface": link["asa_interface"],
-                "ip": link["asa_ip"],
-                "subnet": link["asa_subnet"]
-            }
-        )
-
-    def _add_router_interface(self, graph, link):
-        name = f'{link["router"]}:{link["router_interface"]}'
-
-        return graph.add_node(
-            "RouterInterface",
-            name,
-            {
-                "router": link["router"],
-                "interface": link["router_interface"],
-                "ip": link["router_ip"]
-            }
-        )
-
-    def _add_acl(self, graph, asa_interface_node, vrf_node, link):
-        if not link["asa_access_group"]:
-            return
-
-        acl_node = graph.add_node("ACL", link["asa_access_group"])
-
-        graph.add_relationship(asa_interface_node, acl_node, "USES_ACL")
-        graph.add_relationship(acl_node, vrf_node, "PROTECTS")
+                graph.add_relationship(
+                    asa_interface_node,
+                    router_interface_node,
+                    "CONNECTED_TO",
+                    {
+                        "asa_ip": link["asa_ip"],
+                        "router_ip": link["router_ip"],
+                        "subnet": link["asa_subnet"]
+                    }
+                )
 
     def _add_acl_rules(self, graph):
         rules_file = self.output_dir / "rules.json"
@@ -112,19 +96,15 @@ class GraphBuilder:
             return
 
         raw_rules = self._load_json("rules.json")
-
-        parser = ACLRuleParser()
-        acls = parser.parse_rules(raw_rules)
+        acls = ACLRuleParser().parse_rules(raw_rules)
 
         for acl in acls:
             acl_node = graph.add_node("ACL", acl.name)
 
             for rule in acl.rules:
-                rule_name = f"{acl.name}:{rule.sequence}"
-
                 rule_node = graph.add_node(
                     "ACLRule",
-                    rule_name,
+                    f"{acl.name}:{rule.sequence}",
                     {
                         "acl": rule.acl_name,
                         "sequence": rule.sequence,
@@ -134,8 +114,130 @@ class GraphBuilder:
                         "destination": rule.destination,
                         "service": rule.service,
                         "hitcnt": rule.hitcnt,
+                        "source_type": getattr(rule, "source_type", None),
+                        "source_value": getattr(rule, "source_value", None),
+                        "destination_type": getattr(rule, "destination_type", None),
+                        "destination_value": getattr(rule, "destination_value", None),
                         "raw": rule.properties.get("raw")
                     }
                 )
 
                 graph.add_relationship(acl_node, rule_node, "HAS_RULE")
+
+                self._connect_acl_rule_endpoint(
+                    graph,
+                    rule_node,
+                    "USES_SOURCE",
+                    getattr(rule, "source_type", None),
+                    getattr(rule, "source_value", None)
+                )
+
+                self._connect_acl_rule_endpoint(
+                    graph,
+                    rule_node,
+                    "USES_DESTINATION",
+                    getattr(rule, "destination_type", None),
+                    getattr(rule, "destination_value", None)
+                )
+
+    def _add_objects_and_groups(self, graph):
+        network_objects_file = self.output_dir / "network_objects.json"
+        object_groups_file = self.output_dir / "object_groups.json"
+
+        if network_objects_file.exists():
+            for obj in self._load_json("network_objects.json"):
+                graph.add_node(
+                    "NetworkObject",
+                    obj["name"],
+                    {
+                        "type": obj["type"],
+                        "value": obj["value"]
+                    }
+                )
+
+        if object_groups_file.exists():
+            for group in self._load_json("object_groups.json"):
+                group_node = graph.add_node(
+                    "ObjectGroup",
+                    group["name"],
+                    {
+                        "member_count": len(group["members"])
+                    }
+                )
+
+                for member in group["members"]:
+                    member_node = graph.add_node(
+                        "NetworkObject",
+                        member,
+                        {
+                            "type": "raw_member",
+                            "value": member
+                        }
+                    )
+
+                    graph.add_relationship(group_node, member_node, "HAS_MEMBER")
+
+    def _connect_acl_rule_endpoint(
+        self,
+        graph,
+        rule_node,
+        relationship_type,
+        endpoint_type,
+        endpoint_value
+    ):
+        if not endpoint_type or not endpoint_value:
+            return
+
+        if endpoint_type == "any":
+            target_node = graph.add_node(
+                "NetworkObject",
+                "any",
+                {
+                    "type": "any",
+                    "value": "any"
+                }
+            )
+            graph.add_relationship(rule_node, target_node, relationship_type)
+            return
+
+        if endpoint_type == "host":
+            target_node = graph.add_node(
+                "NetworkObject",
+                endpoint_value,
+                {
+                    "type": "host",
+                    "value": endpoint_value
+                }
+            )
+            graph.add_relationship(rule_node, target_node, relationship_type)
+            return
+
+        if endpoint_type == "object":
+            target_node = self._find_best_node(graph, "NetworkObject", endpoint_value)
+            if target_node:
+                graph.add_relationship(rule_node, target_node, relationship_type)
+            return
+
+        if endpoint_type == "object-group":
+            target_node = self._find_best_node(graph, "ObjectGroup", endpoint_value)
+            if target_node:
+                graph.add_relationship(rule_node, target_node, relationship_type)
+            return
+
+    def _find_best_node(self, graph, node_type, short_name):
+        exact = graph.find(node_type, short_name)
+
+        if exact:
+            return exact.id
+
+        matches = [
+            node
+            for node in graph.nodes.values()
+            if node.type == node_type
+            and node.name.endswith(f":{short_name}")
+        ]
+
+        if not matches:
+            return None
+
+        return sorted(matches, key=lambda node: node.name)[0].id

@@ -47,11 +47,14 @@ class Explorer:
 
             print("-" * len(neighbor_type))
 
-            for relation, neighbor in grouped[neighbor_type]:
+            items = grouped[neighbor_type]
 
-                print(
-                    f"{relation:20} {neighbor.name}"
-                )
+            for relation, neighbor in items[:25]:
+                print(f"{relation:20} {neighbor.name}")
+
+            if len(items) > 25:
+                print(f"... {len(items) - 25} more")
+
     def dependencies(self, node_type, name, depth=2):
         engine = DependencyEngine(self.graph)
         result = engine.collect(node_type, name, depth)

@@ -14,7 +14,7 @@ class ACLRuleParser:
 
             parts = line.split()
 
-            if len(parts) < 6:
+            if len(parts) < 5:
                 continue
 
             acl_name = parts[1]
@@ -22,8 +22,28 @@ class ACLRuleParser:
             if acl_name not in acls:
                 acls[acl_name] = ACL(name=acl_name)
 
-            action = self._find_action(parts)
-            protocol = self._find_protocol(parts)
+            action_index = self._find_action_index(parts)
+
+            if action_index is None:
+                continue
+
+            action = parts[action_index]
+
+            protocol, service, endpoint_index = self._parse_protocol_and_service(
+                parts,
+                action_index + 1
+            )
+
+            source_type, source_value, next_index = self._parse_endpoint(
+                parts,
+                endpoint_index
+            )
+
+            destination_type, destination_value, _ = self._parse_endpoint(
+                parts,
+                next_index
+            )
+
             hitcnt = self._find_hitcnt(line)
 
             rule = ACLRule(
@@ -31,9 +51,17 @@ class ACLRuleParser:
                 sequence=index,
                 action=action,
                 protocol=protocol,
-                source=self._safe_token(parts, 5),
-                destination=self._safe_token(parts, 6),
-                service=self._extract_service(parts),
+
+                source=source_value,
+                destination=destination_value,
+
+                source_type=source_type,
+                source_value=source_value,
+
+                destination_type=destination_type,
+                destination_value=destination_value,
+
+                service=service or self._extract_service(parts),
                 hitcnt=hitcnt,
                 properties={
                     "raw": line
@@ -44,19 +72,48 @@ class ACLRuleParser:
 
         return list(acls.values())
 
-    def _find_action(self, parts):
+    def _find_action_index(self, parts):
         for action in ["permit", "deny"]:
             if action in parts:
-                return action
+                return parts.index(action)
 
-        return "unknown"
+        return None
 
-    def _find_protocol(self, parts):
-        for protocol in ["tcp", "udp", "icmp", "ip"]:
-            if protocol in parts:
-                return protocol
+    def _parse_protocol_and_service(self, parts, index):
+        if len(parts) <= index:
+            return "unknown", None, index
 
-        return "unknown"
+        token = parts[index]
+
+        if token in ["tcp", "udp", "icmp", "ip"]:
+            return token, None, index + 1
+
+        # ASA can use object-group as service/protocol position:
+        # permit object-group SERVICE_GROUP host x object y
+        if token == "object-group" and len(parts) > index + 1:
+            return "object-group", parts[index + 1], index + 2
+
+        return token, None, index + 1
+
+    def _parse_endpoint(self, parts, index):
+        if len(parts) <= index:
+            return "unknown", "unknown", index
+
+        token = parts[index]
+
+        if token == "any":
+            return "any", "any", index + 1
+
+        if token == "host" and len(parts) > index + 1:
+            return "host", parts[index + 1], index + 2
+
+        if token == "object" and len(parts) > index + 1:
+            return "object", parts[index + 1], index + 2
+
+        if token == "object-group" and len(parts) > index + 1:
+            return "object-group", parts[index + 1], index + 2
+
+        return "raw", token, index + 1
 
     def _find_hitcnt(self, line):
         marker = "hitcnt="
@@ -86,9 +143,3 @@ class ACLRuleParser:
                 return parts[index + 1]
 
         return None
-
-    def _safe_token(self, parts, index):
-        if len(parts) > index:
-            return parts[index]
-
-        return "unknown"

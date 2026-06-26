@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from models.acl_endpoint import ACLEndpoint
 
 
 @dataclass
@@ -11,9 +12,15 @@ class ACLRule:
 
     protocol: str
 
-    source: str
+    source: ACLEndpoint
 
-    destination: str
+    destination: ACLEndpoint
+
+    source_type: str | None = None
+    source_value: str | None = None
+
+    destination_type: str | None = None
+    destination_value: str | None = None
 
     service: str | None = None
 

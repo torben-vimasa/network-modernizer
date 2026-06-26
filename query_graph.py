@@ -72,6 +72,12 @@ def main():
 
     explorer.explore_acl("access-in-bane1")
     explorer.explore_acl_rule("access-in-bane1:1")
+    explorer.explore("ObjectGroup", "BDK-Mgmt:GSMR_ALL_HOSTS")
+    explorer.explore("ObjectGroup", "BDK-Teknik:GSMR_SSH_HOSTS")
+    explorer.explore_acl_rule("access-in-bane1:467")
+    explorer.explore_acl_rule("access-in-bane1:468")
+    explorer.explore_acl_rule("access-in-bane1:469")
+    explorer.explore_acl_rule("access-in-cs:513")
 
 if __name__ == "__main__":
     main()
