@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 from graph.graph import KnowledgeGraph
+from parsers.acl_rule_parser import ACLRuleParser
 
 
 class GraphBuilder:
@@ -16,6 +17,7 @@ class GraphBuilder:
 
         self._add_vrf_nodes(graph, vrf_inventory)
         self._add_topology_links(graph, vrf_topology)
+        self._add_acl_rules(graph)
 
         return graph
 
@@ -43,37 +45,18 @@ class GraphBuilder:
 
     def _add_topology_link(self, graph, vrf_node, link):
         context_node = graph.add_node("Context", link["asa_context"])
-
         asa_interface_node = self._add_asa_interface(graph, link)
 
-        graph.add_relationship(
-            context_node,
-            asa_interface_node,
-            "HAS_INTERFACE"
-        )
-
-        graph.add_relationship(
-            asa_interface_node,
-            vrf_node,
-            "BELONGS_TO_VRF"
-        )
+        graph.add_relationship(context_node, asa_interface_node, "HAS_INTERFACE")
+        graph.add_relationship(asa_interface_node, vrf_node, "BELONGS_TO_VRF")
 
         self._add_acl(graph, asa_interface_node, vrf_node, link)
 
         router_node = graph.add_node("Router", link["router"])
         router_interface_node = self._add_router_interface(graph, link)
 
-        graph.add_relationship(
-            router_node,
-            router_interface_node,
-            "HAS_INTERFACE"
-        )
-
-        graph.add_relationship(
-            router_interface_node,
-            vrf_node,
-            "BELONGS_TO_VRF"
-        )
+        graph.add_relationship(router_node, router_interface_node, "HAS_INTERFACE")
+        graph.add_relationship(router_interface_node, vrf_node, "BELONGS_TO_VRF")
 
         graph.add_relationship(
             asa_interface_node,
@@ -119,14 +102,40 @@ class GraphBuilder:
 
         acl_node = graph.add_node("ACL", link["asa_access_group"])
 
-        graph.add_relationship(
-            asa_interface_node,
-            acl_node,
-            "USES_ACL"
-        )
+        graph.add_relationship(asa_interface_node, acl_node, "USES_ACL")
+        graph.add_relationship(acl_node, vrf_node, "PROTECTS")
 
-        graph.add_relationship(
-            acl_node,
-            vrf_node,
-            "PROTECTS"
-        )
+    def _add_acl_rules(self, graph):
+        rules_file = self.output_dir / "rules.json"
+
+        if not rules_file.exists():
+            return
+
+        raw_rules = self._load_json("rules.json")
+
+        parser = ACLRuleParser()
+        acls = parser.parse_rules(raw_rules)
+
+        for acl in acls:
+            acl_node = graph.add_node("ACL", acl.name)
+
+            for rule in acl.rules:
+                rule_name = f"{acl.name}:{rule.sequence}"
+
+                rule_node = graph.add_node(
+                    "ACLRule",
+                    rule_name,
+                    {
+                        "acl": rule.acl_name,
+                        "sequence": rule.sequence,
+                        "action": rule.action,
+                        "protocol": rule.protocol,
+                        "source": rule.source,
+                        "destination": rule.destination,
+                        "service": rule.service,
+                        "hitcnt": rule.hitcnt,
+                        "raw": rule.properties.get("raw")
+                    }
+                )
+
+                graph.add_relationship(acl_node, rule_node, "HAS_RULE")

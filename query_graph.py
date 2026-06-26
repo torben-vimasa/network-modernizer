@@ -70,5 +70,10 @@ def main():
 
     print("Output gemt: output/path_analysis.json")
 
+    explorer.explore_acl("access-in-bane1")
+    explorer.explore_acl_rule("access-in-bane1:1")
+
 if __name__ == "__main__":
     main()
+
+    

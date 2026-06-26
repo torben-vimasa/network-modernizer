@@ -74,3 +74,9 @@ class Explorer:
                 print(f"{indent}{relation} -> {node.type}: {node.name}")
             else:
                 print(f"{indent}{node.type}: {node.name}")
+    
+    def explore_acl(self, name):
+        self.explore("ACL", name)
+
+    def explore_acl_rule(self, name):
+        self.explore("ACLRule", name)
