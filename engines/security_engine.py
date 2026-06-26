@@ -92,13 +92,22 @@ class SecurityEngine:
         if object_value == value:
             return True
 
+        if object_value == f"host {value}":
+            return True
+
         if node.name == value:
+            return True
+
+        if node.name == f"host {value}":
             return True
 
         if node.name.endswith(f"_{value}"):
             return True
 
         if node.name.endswith(f":{value}"):
+            return True
+
+        if node.name.endswith(f":host {value}"):
             return True
 
         return False
