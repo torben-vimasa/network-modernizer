@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from parsers.router_inventory_parser import RouterInventoryParser
 
 from graph.graph import KnowledgeGraph
 from parsers.acl_rule_parser import ACLRuleParser
@@ -8,6 +9,7 @@ from parsers.acl_rule_parser import ACLRuleParser
 class GraphBuilder:
     def __init__(self):
         self.output_dir = Path("output")
+        self.router_parser = RouterInventoryParser()
 
     def build_from_vrf_inventory(self):
         graph = KnowledgeGraph()
@@ -19,7 +21,7 @@ class GraphBuilder:
         self._add_topology_links(graph, vrf_topology)
         self._add_objects_and_groups(graph)
         self._add_acl_rules(graph)
-
+        self._add_router_inventory(graph)
         return graph
 
     def _load_json(self, filename):
@@ -241,3 +243,72 @@ class GraphBuilder:
             return None
 
         return sorted(matches, key=lambda node: node.name)[0].id
+        
+    def _add_router_inventory(self, graph):
+
+        router_dir = Path("data/router_raw")
+
+        if not router_dir.exists():
+            return
+
+        for router_file in router_dir.glob("*.txt"):
+
+            with open(router_file, encoding="utf-8", errors="ignore") as f:
+                router = self.router_parser.parse(
+                    router_file.stem,
+                    f.readlines()
+                )
+
+            router_node = graph.add_node(
+                "Router",
+                router.name
+            )
+
+            for interface in router.interfaces:
+
+                interface_node = graph.add_node(
+                    "Interface",
+                    f"{router.name}:{interface.name}",
+                    {
+                        "vrf": interface.vrf,
+                        "description": interface.description
+                    }
+                )
+
+                graph.add_relationship(
+                    router_node,
+                    interface_node,
+                    "HAS_INTERFACE"
+                )
+
+                if interface.ip:
+
+                    ip_node = graph.add_node(
+                        "IPAddress",
+                        interface.ip,
+                        {
+                            "address": interface.ip
+                        }
+                    )
+
+                    graph.add_relationship(
+                        interface_node,
+                        ip_node,
+                        "HAS_IP"
+                    )
+
+                if interface.prefix:
+
+                    subnet_node = graph.add_node(
+                        "Subnet",
+                        interface.prefix,
+                        {
+                            "prefix": interface.prefix
+                        }
+                    )
+
+                    graph.add_relationship(
+                        interface_node,
+                        subnet_node,
+                        "IN_SUBNET"
+                    )
