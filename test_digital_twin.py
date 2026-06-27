@@ -47,3 +47,10 @@ if result.route and result.route.matched:
 else:
 
     print("No route")
+    print()
+print("EXPLANATION")
+print("------------------------")
+
+if result.explanation:
+    for step in result.explanation.steps:
+        print(step)

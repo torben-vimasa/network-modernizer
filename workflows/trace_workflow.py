@@ -1,5 +1,6 @@
 from engines.topology_engine import TopologyEngine
 
+from models.explanation import Explanation
 from models.hop import Hop
 from models.route_result import RouteResult
 from models.trace_result import TraceResult
@@ -8,7 +9,6 @@ from models.trace_result import TraceResult
 class TraceWorkflow:
 
     def __init__(self, twin):
-
         self.twin = twin
         self.topology = TopologyEngine()
 
@@ -22,10 +22,8 @@ class TraceWorkflow:
         vrf=None,
         route_destination=None,
     ):
+        explanation = Explanation()
 
-        #
-        # Step 1 - Security
-        #
         security = self.twin.security.is_permitted(
             source,
             destination,
@@ -33,20 +31,20 @@ class TraceWorkflow:
             service
         )
 
-        if not security.permitted:
+        explanation.add(
+            f"ACL decision: {security.reason}"
+        )
 
+        if not security.permitted:
             return TraceResult(
                 security=security,
-                route=None
+                route=None,
+                explanation=explanation
             )
 
-        #
-        # Step 2 - Routing
-        #
         route_result = None
 
         if route_destination:
-
             route = self.twin.route.lookup(
                 router,
                 vrf,
@@ -54,10 +52,22 @@ class TraceWorkflow:
             )
 
             if route:
+                explanation.add(
+                    f"Route matched: {route['prefix']}"
+                )
+
+                explanation.add(
+                    f"Next hop: {route['next_hop']}"
+                )
 
                 next_device = self.topology.resolve_router(
                     route["next_hop"]
                 )
+
+                if next_device:
+                    explanation.add(
+                        f"Next hop resolved to {next_device['router']} VRF {next_device['vrf']}"
+                    )
 
                 hop = Hop(
                     router=next_device["router"] if next_device else router,
@@ -72,16 +82,15 @@ class TraceWorkflow:
                 )
 
             else:
+                explanation.add("No route matched")
 
                 route_result = RouteResult(
                     matched=False,
                     hop=None
                 )
 
-        #
-        # Final result
-        #
         return TraceResult(
             security=security,
-            route=route_result
+            route=route_result,
+            explanation=explanation
         )
