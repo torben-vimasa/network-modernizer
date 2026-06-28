@@ -24,3 +24,26 @@ class DigitalTwin:
         self.trace = TraceWorkflow(self)
 
         self.application = ApplicationEngine(self.graph)
+
+    def trace_application(
+        self,
+        application,
+        router,
+        vrf,
+        route_destination=None
+    ):
+
+        packet = self.application.build_packet(application)
+
+        if not packet:
+            return None
+
+        return self.trace.trace(
+            source=packet.source,
+            destination=packet.destination,
+            protocol=packet.protocol,
+            service=packet.service,
+            router=router,
+            vrf=vrf,
+            route_destination=route_destination or packet.destination
+        )
