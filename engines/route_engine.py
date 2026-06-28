@@ -1,6 +1,7 @@
 import ipaddress
 import json
 from pathlib import Path
+from models.route_explanation import RouteExplanation
 
 
 class RouteEngine:
@@ -33,3 +34,18 @@ class RouteEngine:
 
         matches.sort(key=lambda item: item[0], reverse=True)
         return matches[0][1]
+
+    def explain(self, router, vrf, destination):
+
+        route = self.lookup(router, vrf, destination)
+
+        if not route:
+            return None
+
+        return RouteExplanation(
+            destination=destination,
+            matched_prefix=route["prefix"],
+            protocol=route["protocol"],
+            next_hop=route["next_hop"],
+            reason="Longest prefix match"
+        )

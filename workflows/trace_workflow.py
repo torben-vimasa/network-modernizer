@@ -5,6 +5,7 @@ from models.explanation import Explanation
 from models.hop import Hop
 from models.route_result import RouteResult
 from models.trace_result import TraceResult
+from models.packet import Packet
 
 
 class TraceWorkflow:
@@ -25,7 +26,28 @@ class TraceWorkflow:
         route_destination=None,
         max_hops=5,
     ):
+        if isinstance(source, Packet):
+            packet = source
+
+            source = packet.source
+            destination = packet.destination
+            protocol = packet.protocol
+            service = packet.service
+            router = packet.current_router
+            vrf = packet.current_vrf
+            route_destination = packet.destination
+        else:
+            packet = Packet(
+                source=source,
+                destination=route_destination or destination,
+                protocol=protocol,
+                service=service,
+                current_router=router,
+                current_vrf=vrf
+            )
+        
         explanation = Explanation()
+        packet.add_history("Trace started")
         hops = []
 
         security = self.twin.security.is_permitted(
@@ -36,6 +58,27 @@ class TraceWorkflow:
         )
 
         explanation.add(f"ACL decision: {security.reason}")
+        packet.add_history(f"ACL decision: {security.reason}")
+
+        if isinstance(source, Packet):
+            packet = source
+
+            source = packet.source
+            destination = packet.destination
+            protocol = packet.protocol
+            service = packet.service
+            router = packet.current_router
+            vrf = packet.current_vrf
+            route_destination = packet.destination
+        else:
+            packet = Packet(
+                source=source,
+                destination=route_destination or destination,
+                protocol=protocol,
+                service=service,
+                current_router=router,
+                current_vrf=vrf
+            )
 
         if not security.permitted:
             return TraceResult(
@@ -83,9 +126,16 @@ class TraceWorkflow:
                 f"Hop {hop_number}: {current_router} VRF {current_vrf} matched route {route['prefix']}"
             )
 
+            packet.add_history(
+                f"Hop {hop_number}: {current_router} VRF {current_vrf} matched route {route['prefix']}"
+            )
+
             explanation.add(
                 f"Hop {hop_number}: next hop {route['next_hop']}"
             )
+
+            packet.next_hop = route["next_hop"]
+            packet.add_history(f"Hop {hop_number}: next hop {route['next_hop']}")
 
             next_device = self.topology.resolve_router(
                 route["next_hop"]

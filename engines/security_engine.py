@@ -48,6 +48,10 @@ class SecurityEngine:
                         if rel2 == "HAS_INTERFACE" and ctx.type == "Context":
                             context = ctx.name
 
+                    for rel3, fw in self.graph.neighbors(ctx.id):
+                        if rel3 == "HAS_CONTEXT" and fw.type == "Firewall":
+                            firewall = fw.name
+
         return ACLMatch(
             firewall=firewall,
             context=context,

@@ -24,6 +24,7 @@ print(result.security.reason)
 
 
 if result.security.match:
+    print("Firewall :", result.security.match.firewall)
     print("Context  :", result.security.match.context)
     print("Interface:", result.security.match.interface)
     print("ACL      :", result.security.match.acl)

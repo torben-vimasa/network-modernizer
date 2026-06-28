@@ -45,6 +45,26 @@ class GraphBuilder:
 
             for link in links:
                 context_node = graph.add_node("Context", link["asa_context"])
+                firewall_node = graph.add_node(
+                    "Firewall",
+                    link.get("asa_firewall", "UnknownFirewall")
+                )
+
+                graph.add_relationship(
+                    firewall_node,
+                    context_node,
+                    "HAS_CONTEXT"
+                )
+                firewall_node = graph.add_node(
+                    "Firewall",
+                    link.get("asa_firewall", "UnknownFirewall")
+                )
+
+                graph.add_relationship(
+                    firewall_node,
+                    context_node,
+                    "HAS_CONTEXT"
+                )
 
                 asa_interface_node = graph.add_node(
                     "ASAInterface",
