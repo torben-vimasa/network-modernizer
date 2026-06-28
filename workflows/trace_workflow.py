@@ -10,7 +10,7 @@ class TraceWorkflow:
 
     def __init__(self, twin):
         self.twin = twin
-        self.topology = TopologyEngine()
+        self.topology = TopologyEngine(twin.graph)
 
     def trace(
         self,

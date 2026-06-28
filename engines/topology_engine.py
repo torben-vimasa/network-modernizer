@@ -1,22 +1,25 @@
-import json
-from pathlib import Path
-
-
 class TopologyEngine:
 
-    def __init__(self, routes_file=Path("output/routes.json")):
-
-        with open(routes_file, "r") as f:
-            self.routes = json.load(f)
+    def __init__(self, graph):
+        self.graph = graph
 
     def resolve_router(self, next_hop):
+        ip_node = self.graph.find("IPAddress", next_hop)
 
-        for route in self.routes:
+        if not ip_node:
+            return None
 
-            if route["next_hop"] == next_hop:
-                return {
-                    "router": route["router"],
-                    "vrf": route["vrf"]
-                }
+        for relation, interface in self.graph.neighbors(ip_node.id):
+            if relation != "HAS_IP":
+                continue
+
+            for rel2, router in self.graph.neighbors(interface.id):
+                if rel2 == "HAS_INTERFACE" and router.type == "Router":
+                    return {
+                        "router": router.name,
+                        "vrf": interface.properties.get("vrf"),
+                        "interface": interface.name,
+                        "ip": next_hop
+                    }
 
         return None
