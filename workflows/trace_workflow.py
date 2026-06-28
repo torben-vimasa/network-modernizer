@@ -1,3 +1,4 @@
+from engines.resolver_engine import ResolverEngine
 from engines.topology_engine import TopologyEngine
 
 from models.explanation import Explanation
@@ -11,6 +12,7 @@ class TraceWorkflow:
     def __init__(self, twin):
         self.twin = twin
         self.topology = TopologyEngine(twin.graph)
+        self.resolver = ResolverEngine(twin.graph)
 
     def trace(
         self,
@@ -70,6 +72,7 @@ class TraceWorkflow:
 
             if not route:
                 explanation.add(f"No route matched on {current_router} VRF {current_vrf}")
+
                 last_route_result = RouteResult(
                     matched=False,
                     hop=None
@@ -103,9 +106,22 @@ class TraceWorkflow:
             )
 
             if not next_device:
+                resolution = self.resolver.resolve_ip(route["next_hop"])
+
                 explanation.add(
-                    f"Trace stopped: next hop {route['next_hop']} could not be resolved"
+                    f"Trace stopped: next hop {route['next_hop']} could not be directly resolved"
                 )
+
+                explanation.add(
+                    f"Resolver: {resolution['reason']} ({resolution['confidence']} confidence)"
+                )
+
+                if resolution.get("references"):
+                    for ref in resolution["references"][:3]:
+                        explanation.add(
+                            f"Evidence: {ref['router']} VRF {ref['vrf']} routes {ref['prefix']} via {route['next_hop']}"
+                        )
+
                 break
 
             explanation.add(
