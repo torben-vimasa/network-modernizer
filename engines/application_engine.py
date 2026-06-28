@@ -27,3 +27,28 @@ class ApplicationEngine:
             )
 
         return None
+
+    def build_packets(self, application_name):
+
+        app = self.graph.find("Application", application_name)
+
+        if not app:
+            return []
+
+        packets = []
+
+        for relation, flow in self.graph.neighbors(app.id):
+
+            if relation != "HAS_FLOW":
+                continue
+
+            packets.append(
+                Packet(
+                    source=flow.properties["source"],
+                    destination=flow.properties["destination"],
+                    protocol=flow.properties["protocol"],
+                    service=flow.properties["service"]
+                )
+            )
+
+        return packets

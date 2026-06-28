@@ -47,3 +47,31 @@ class DigitalTwin:
             vrf=vrf,
             route_destination=route_destination or packet.destination
         )
+
+    def trace_application_flows(
+        self,
+        application,
+        router,
+        vrf,
+        route_destination=None
+    ):
+
+        packets = self.application.build_packets(application)
+
+        results = []
+
+        for packet in packets:
+
+            result = self.trace.trace(
+                source=packet.source,
+                destination=packet.destination,
+                protocol=packet.protocol,
+                service=packet.service,
+                router=router,
+                vrf=vrf,
+                route_destination=route_destination or packet.destination
+            )
+
+            results.append(result)
+
+        return results
