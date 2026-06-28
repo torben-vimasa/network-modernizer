@@ -22,6 +22,14 @@ print("SECURITY")
 print("------------------------")
 print(result.security.reason)
 
+
+if result.security.match:
+    print("Context  :", result.security.match.context)
+    print("Interface:", result.security.match.interface)
+    print("ACL      :", result.security.match.acl)
+    print("Rule     :", result.security.match.rule)
+    print("Action   :", result.security.match.action)
+
 print()
 print("HOPS")
 print("------------------------")

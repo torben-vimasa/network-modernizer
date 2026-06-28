@@ -1,4 +1,5 @@
 from graph.graph import KnowledgeGraph
+from models.acl_match import ACLMatch
 from models.security_result import SecurityResult
 
 
@@ -14,6 +15,7 @@ class SecurityEngine:
             if rule.properties.get("action") == "deny":
                 result.permitted = False
                 result.rule = rule
+                result.match = self._build_acl_match(rule)
                 result.reason = f"Matched deny rule {rule.name}"
                 return result
 
@@ -21,12 +23,40 @@ class SecurityEngine:
             if rule.properties.get("action") == "permit":
                 result.permitted = True
                 result.rule = rule
+                result.match = self._build_acl_match(rule)
                 result.reason = f"Matched permit rule {rule.name}"
                 return result
 
         result.permitted = False
         result.reason = "No ACL rule matched"
         return result
+
+    def _build_acl_match(self, rule):
+        acl_name = rule.properties.get("acl")
+        acl_node = self.graph.find("ACL", acl_name)
+
+        context = None
+        interface = None
+        firewall = None
+
+        if acl_node:
+            for relation, neighbor in self.graph.neighbors(acl_node.id):
+                if relation == "USES_ACL" and neighbor.type == "ASAInterface":
+                    interface = neighbor.properties.get("interface")
+
+                    for rel2, ctx in self.graph.neighbors(neighbor.id):
+                        if rel2 == "HAS_INTERFACE" and ctx.type == "Context":
+                            context = ctx.name
+
+        return ACLMatch(
+            firewall=firewall,
+            context=context,
+            interface=interface,
+            acl=acl_name,
+            rule=rule.properties.get("sequence"),
+            action=rule.properties.get("action"),
+            raw=rule.properties.get("raw")
+        )
 
     def _matching_rules(self, source, destination, protocol, service):
         matches = []
@@ -66,17 +96,13 @@ class SecurityEngine:
         if not protocol:
             return True
 
-        rule_protocol = rule.properties.get("protocol")
-
-        return rule_protocol == protocol
+        return rule.properties.get("protocol") == protocol
 
     def _service_matches(self, rule, service):
         if not service:
             return True
 
-        rule_service = rule.properties.get("service")
-
-        return rule_service == service
+        return rule.properties.get("service") == service
 
     def _targets(self, node_id, relationship_type):
         return [
