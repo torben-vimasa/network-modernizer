@@ -33,6 +33,14 @@ class NATEngine:
                 translated.source = result.source_after
                 translated.destination = result.destination_after
 
+                translated.add_history(
+                    f"NAT: {result.source_before} -> {result.source_after}"
+                )
+
+                translated.add_history(
+                    f"NAT destination: {result.destination_before} -> {result.destination_after}"
+                )
+
                 return translated, result
 
         result = NATResult(
