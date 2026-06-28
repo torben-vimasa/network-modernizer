@@ -10,6 +10,8 @@ from workflows.trace_workflow import TraceWorkflow
 
 from engines.nat_engine import NATEngine
 
+from models.nat_rule import NATRule
+
 
 class DigitalTwin:
 
@@ -27,7 +29,15 @@ class DigitalTwin:
 
         self.trace = TraceWorkflow(self)
 
-        self.nat = NATEngine()
+        self.nat = NATEngine(
+            rules=[
+                NATRule(
+                    name="TEST_SNAT",
+                    source_original="172.27.210.20",
+                    source_translated="10.255.255.17"
+                )
+            ]
+        )
 
     def trace_application(
         self,
