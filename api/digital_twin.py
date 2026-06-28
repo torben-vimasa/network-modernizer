@@ -8,6 +8,8 @@ from models.application_trace_result import ApplicationTraceResult
 
 from workflows.trace_workflow import TraceWorkflow
 
+from engines.nat_engine import NATEngine
+
 
 class DigitalTwin:
 
@@ -24,6 +26,8 @@ class DigitalTwin:
         self.application = ApplicationEngine(self.graph)
 
         self.trace = TraceWorkflow(self)
+
+        self.nat = NATEngine()
 
     def trace_application(
         self,

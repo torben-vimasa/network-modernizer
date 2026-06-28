@@ -3,9 +3,9 @@ from engines.topology_engine import TopologyEngine
 
 from models.explanation import Explanation
 from models.hop import Hop
+from models.packet import Packet
 from models.route_result import RouteResult
 from models.trace_result import TraceResult
-from models.packet import Packet
 
 
 class TraceWorkflow:
@@ -18,7 +18,7 @@ class TraceWorkflow:
     def trace(
         self,
         source,
-        destination,
+        destination=None,
         protocol=None,
         service=None,
         router=None,
@@ -26,16 +26,16 @@ class TraceWorkflow:
         route_destination=None,
         max_hops=5,
     ):
+
         if isinstance(source, Packet):
             packet = source
-
             source = packet.source
             destination = packet.destination
             protocol = packet.protocol
             service = packet.service
-            router = packet.current_router
-            vrf = packet.current_vrf
-            route_destination = packet.destination
+            router = packet.current_router or router
+            vrf = packet.current_vrf or vrf
+            route_destination = route_destination or packet.destination
         else:
             packet = Packet(
                 source=source,
@@ -45,7 +45,7 @@ class TraceWorkflow:
                 current_router=router,
                 current_vrf=vrf
             )
-        
+
         explanation = Explanation()
         packet.add_history("Trace started")
         hops = []
@@ -60,26 +60,6 @@ class TraceWorkflow:
         explanation.add(f"ACL decision: {security.reason}")
         packet.add_history(f"ACL decision: {security.reason}")
 
-        if isinstance(source, Packet):
-            packet = source
-
-            source = packet.source
-            destination = packet.destination
-            protocol = packet.protocol
-            service = packet.service
-            router = packet.current_router
-            vrf = packet.current_vrf
-            route_destination = packet.destination
-        else:
-            packet = Packet(
-                source=source,
-                destination=route_destination or destination,
-                protocol=protocol,
-                service=service,
-                current_router=router,
-                current_vrf=vrf
-            )
-
         if not security.permitted:
             return TraceResult(
                 security=security,
@@ -87,6 +67,28 @@ class TraceWorkflow:
                 hops=hops,
                 explanation=explanation
             )
+
+        translated_packet, nat_result = self.twin.nat.translate(packet)
+
+        explanation.add(f"NAT decision: {nat_result.reason}")
+        packet.add_history(f"NAT decision: {nat_result.reason}")
+
+        if nat_result.matched:
+            explanation.add(
+                f"NAT source: {nat_result.source_before} -> {nat_result.source_after}"
+            )
+            explanation.add(
+                f"NAT destination: {nat_result.destination_before} -> {nat_result.destination_after}"
+            )
+
+            packet.add_history(
+                f"NAT source: {nat_result.source_before} -> {nat_result.source_after}"
+            )
+            packet.add_history(
+                f"NAT destination: {nat_result.destination_before} -> {nat_result.destination_after}"
+            )
+
+        packet = translated_packet
 
         current_router = router
         current_vrf = vrf
