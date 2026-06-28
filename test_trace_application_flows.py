@@ -2,7 +2,7 @@ from api.digital_twin import DigitalTwin
 
 dt = DigitalTwin()
 
-results = dt.trace_application_flows(
+result = dt.trace_application_flows(
     application="KMS",
     router="RGDCPe1",
     vrf="CS",
@@ -10,24 +10,30 @@ results = dt.trace_application_flows(
 )
 
 print()
-print("APPLICATION FLOW TRACES")
+print("APPLICATION TRACE")
 print("=" * 60)
 
-print("Flows:", len(results))
+print()
+print("Application :", result.application)
+print("Criticality :", result.criticality)
+print("Max outage  :", result.max_outage_minutes, "minutes")
 
-for index, result in enumerate(results, start=1):
+print()
+print("Flows :", len(result.traces))
+
+for index, trace in enumerate(result.traces, start=1):
 
     print()
     print(f"FLOW {index}")
     print("-" * 40)
 
-    print(result.security.reason)
+    print(trace.security.reason)
 
-    for hop in result.hops:
+    for hop in trace.hops:
         print("Route   :", hop.route)
         print("Next hop:", hop.next_hop)
 
     print()
 
-    for step in result.explanation.steps:
+    for step in trace.explanation.steps:
         print(step)

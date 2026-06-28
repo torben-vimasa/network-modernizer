@@ -1,10 +1,12 @@
 from builders.graph_builder import GraphBuilder
 
+from engines.application_engine import ApplicationEngine
 from engines.route_engine import RouteEngine
 from engines.security_engine import SecurityEngine
 
+from models.application_trace_result import ApplicationTraceResult
+
 from workflows.trace_workflow import TraceWorkflow
-from engines.application_engine import ApplicationEngine
 
 
 class DigitalTwin:
@@ -18,12 +20,10 @@ class DigitalTwin:
         print("Knowledge Graph loaded")
 
         self.security = SecurityEngine(self.graph)
-
         self.route = RouteEngine()
+        self.application = ApplicationEngine(self.graph)
 
         self.trace = TraceWorkflow(self)
-
-        self.application = ApplicationEngine(self.graph)
 
     def trace_application(
         self,
@@ -56,13 +56,22 @@ class DigitalTwin:
         route_destination=None
     ):
 
+        app = self.graph.find("Application", application)
+
+        if not app:
+            return None
+
         packets = self.application.build_packets(application)
 
-        results = []
+        result = ApplicationTraceResult(
+            application=app.name,
+            criticality=app.properties.get("criticality"),
+            max_outage_minutes=app.properties.get("max_outage_minutes")
+        )
 
         for packet in packets:
 
-            result = self.trace.trace(
+            trace = self.trace.trace(
                 source=packet.source,
                 destination=packet.destination,
                 protocol=packet.protocol,
@@ -72,6 +81,6 @@ class DigitalTwin:
                 route_destination=route_destination or packet.destination
             )
 
-            results.append(result)
+            result.traces.append(trace)
 
-        return results
+        return result
