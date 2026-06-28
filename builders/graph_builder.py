@@ -1,14 +1,15 @@
 import json
 from pathlib import Path
-from parsers.router_inventory_parser import RouterInventoryParser
 
 from graph.graph import KnowledgeGraph
 from parsers.acl_rule_parser import ACLRuleParser
+from parsers.router_inventory_parser import RouterInventoryParser
 
 
 class GraphBuilder:
     def __init__(self):
         self.output_dir = Path("output")
+        self.knowledge_dir = Path("knowledge")
         self.router_parser = RouterInventoryParser()
 
     def build_from_vrf_inventory(self):
@@ -22,10 +23,16 @@ class GraphBuilder:
         self._add_objects_and_groups(graph)
         self._add_acl_rules(graph)
         self._add_router_inventory(graph)
+        self._add_applications(graph)
+
         return graph
 
     def _load_json(self, filename):
         with open(self.output_dir / filename, "r") as f:
+            return json.load(f)
+
+    def _load_knowledge(self, filename):
+        with open(self.knowledge_dir / filename, "r", encoding="utf-8") as f:
             return json.load(f)
 
     def _add_vrf_nodes(self, graph, vrf_inventory):
@@ -45,16 +52,7 @@ class GraphBuilder:
 
             for link in links:
                 context_node = graph.add_node("Context", link["asa_context"])
-                firewall_node = graph.add_node(
-                    "Firewall",
-                    link.get("asa_firewall", "UnknownFirewall")
-                )
 
-                graph.add_relationship(
-                    firewall_node,
-                    context_node,
-                    "HAS_CONTEXT"
-                )
                 firewall_node = graph.add_node(
                     "Firewall",
                     link.get("asa_firewall", "UnknownFirewall")
@@ -111,6 +109,43 @@ class GraphBuilder:
                     }
                 )
 
+    def _add_objects_and_groups(self, graph):
+        network_objects_file = self.output_dir / "network_objects.json"
+        object_groups_file = self.output_dir / "object_groups.json"
+
+        if network_objects_file.exists():
+            for obj in self._load_json("network_objects.json"):
+                graph.add_node(
+                    "NetworkObject",
+                    obj["name"],
+                    {
+                        "type": obj["type"],
+                        "value": obj["value"]
+                    }
+                )
+
+        if object_groups_file.exists():
+            for group in self._load_json("object_groups.json"):
+                group_node = graph.add_node(
+                    "ObjectGroup",
+                    group["name"],
+                    {
+                        "member_count": len(group["members"])
+                    }
+                )
+
+                for member in group["members"]:
+                    member_node = graph.add_node(
+                        "NetworkObject",
+                        member,
+                        {
+                            "type": "raw_member",
+                            "value": member
+                        }
+                    )
+
+                    graph.add_relationship(group_node, member_node, "HAS_MEMBER")
+
     def _add_acl_rules(self, graph):
         rules_file = self.output_dir / "rules.json"
 
@@ -161,43 +196,6 @@ class GraphBuilder:
                     getattr(rule, "destination_type", None),
                     getattr(rule, "destination_value", None)
                 )
-
-    def _add_objects_and_groups(self, graph):
-        network_objects_file = self.output_dir / "network_objects.json"
-        object_groups_file = self.output_dir / "object_groups.json"
-
-        if network_objects_file.exists():
-            for obj in self._load_json("network_objects.json"):
-                graph.add_node(
-                    "NetworkObject",
-                    obj["name"],
-                    {
-                        "type": obj["type"],
-                        "value": obj["value"]
-                    }
-                )
-
-        if object_groups_file.exists():
-            for group in self._load_json("object_groups.json"):
-                group_node = graph.add_node(
-                    "ObjectGroup",
-                    group["name"],
-                    {
-                        "member_count": len(group["members"])
-                    }
-                )
-
-                for member in group["members"]:
-                    member_node = graph.add_node(
-                        "NetworkObject",
-                        member,
-                        {
-                            "type": "raw_member",
-                            "value": member
-                        }
-                    )
-
-                    graph.add_relationship(group_node, member_node, "HAS_MEMBER")
 
     def _connect_acl_rule_endpoint(
         self,
@@ -263,16 +261,14 @@ class GraphBuilder:
             return None
 
         return sorted(matches, key=lambda node: node.name)[0].id
-        
-    def _add_router_inventory(self, graph):
 
+    def _add_router_inventory(self, graph):
         router_dir = Path("data/router_raw")
 
         if not router_dir.exists():
             return
 
         for router_file in router_dir.glob("*.txt"):
-
             with open(router_file, encoding="utf-8", errors="ignore") as f:
                 router = self.router_parser.parse(
                     router_file.stem,
@@ -285,7 +281,6 @@ class GraphBuilder:
             )
 
             for interface in router.interfaces:
-
                 interface_node = graph.add_node(
                     "Interface",
                     f"{router.name}:{interface.name}",
@@ -302,7 +297,6 @@ class GraphBuilder:
                 )
 
                 if interface.ip:
-
                     ip_node = graph.add_node(
                         "IPAddress",
                         interface.ip,
@@ -318,7 +312,6 @@ class GraphBuilder:
                     )
 
                 if interface.prefix:
-
                     subnet_node = graph.add_node(
                         "Subnet",
                         interface.prefix,
@@ -332,3 +325,37 @@ class GraphBuilder:
                         subnet_node,
                         "IN_SUBNET"
                     )
+
+    def _add_applications(self, graph):
+        applications_file = self.knowledge_dir / "applications.json"
+
+        if not applications_file.exists():
+            return
+
+        applications = self._load_knowledge("applications.json")
+
+        for app in applications:
+            app_node = graph.add_node(
+                "Application",
+                app["name"],
+                {
+                    "business_service": app["business_service"],
+                    "owner": app["owner"],
+                    "criticality": app["criticality"],
+                    "max_outage_minutes": app["max_outage_minutes"],
+                    "description": app["description"]
+                }
+            )
+
+            for flow in app["flows"]:
+                flow_node = graph.add_node(
+                    "ApplicationFlow",
+                    f'{app["name"]}:{flow["service"]}',
+                    flow
+                )
+
+                graph.add_relationship(
+                    app_node,
+                    flow_node,
+                    "HAS_FLOW"
+                )

@@ -4,6 +4,7 @@ from engines.route_engine import RouteEngine
 from engines.security_engine import SecurityEngine
 
 from workflows.trace_workflow import TraceWorkflow
+from engines.application_engine import ApplicationEngine
 
 
 class DigitalTwin:
@@ -21,3 +22,5 @@ class DigitalTwin:
         self.route = RouteEngine()
 
         self.trace = TraceWorkflow(self)
+
+        self.application = ApplicationEngine(self.graph)

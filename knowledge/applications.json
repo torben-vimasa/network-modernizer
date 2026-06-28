@@ -1,0 +1,20 @@
+[
+    {
+        "name": "KMS",
+        "business_service": "Rail Power",
+        "owner": "Banedanmark",
+        "criticality": "mission-critical",
+        "max_outage_minutes": 10,
+        "description": "Power monitoring",
+
+        "flows": [
+            {
+                "source": "172.27.210.20",
+                "destination": "SPNS2_Logpoint_100.72.36.70",
+                "protocol": "object-group",
+                "service": "Windows_Logging",
+                "description": "Operational logging"
+            }
+        ]
+    }
+]
