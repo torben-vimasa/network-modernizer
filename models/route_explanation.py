@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from models.confidence import Confidence
 
 
 @dataclass
@@ -13,3 +14,5 @@ class RouteExplanation:
     protocol: str
 
     next_hop: str
+
+    confidence: Confidence

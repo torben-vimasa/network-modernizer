@@ -1,7 +1,9 @@
 import ipaddress
 import json
 from pathlib import Path
+
 from models.route_explanation import RouteExplanation
+from models.confidence import Confidence
 
 
 class RouteEngine:
@@ -45,7 +47,12 @@ class RouteEngine:
         return RouteExplanation(
             destination=destination,
             matched_prefix=route["prefix"],
+            reason="Longest prefix match",
             protocol=route["protocol"],
             next_hop=route["next_hop"],
-            reason="Longest prefix match"
+            confidence=Confidence(
+                level="high",
+                score=1.0,
+                reason="Static route parsed directly from router configuration"
+            )
         )

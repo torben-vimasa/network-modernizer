@@ -17,3 +17,11 @@ print(exp.matched_prefix)
 print(exp.protocol)
 print(exp.next_hop)
 print(exp.reason)
+
+print()
+print("Confidence")
+print("----------------")
+
+print(exp.confidence.level)
+print(exp.confidence.score)
+print(exp.confidence.reason)
