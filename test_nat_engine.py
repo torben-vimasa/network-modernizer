@@ -25,13 +25,24 @@ engine = NATEngine(
     ]
 )
 
-result = engine.translate(packet)
+translated_packet, result = engine.translate(packet)
 
 print()
 print("NAT Engine Test")
 print("=" * 50)
 
+print()
 print("Matched :", result.matched)
 print("Reason  :", result.reason)
-print("Source  :", result.source_before, "->", result.source_after)
-print("Dest    :", result.destination_before, "->", result.destination_after)
+
+print()
+print("Original Packet")
+print(packet)
+
+print()
+print("Translated Packet")
+print(translated_packet)
+
+print()
+print("NAT Result")
+print(result)

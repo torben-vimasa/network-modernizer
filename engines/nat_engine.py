@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from models.nat_result import NATResult
 
 
@@ -8,32 +10,42 @@ class NATEngine:
 
     def translate(self, packet):
 
+        translated = deepcopy(packet)
+
         for rule in self.rules:
 
-            if self._matches_source(rule, packet.source) and self._matches_destination(rule, packet.destination):
+            if (
+                self._matches_source(rule, translated.source)
+                and
+                self._matches_destination(rule, translated.destination)
+            ):
 
-                source_after = rule.source_translated or packet.source
-                destination_after = rule.destination_translated or packet.destination
-
-                return NATResult(
+                result = NATResult(
                     matched=True,
                     rule=rule,
-                    source_before=packet.source,
-                    source_after=source_after,
-                    destination_before=packet.destination,
-                    destination_after=destination_after,
+                    source_before=translated.source,
+                    source_after=rule.source_translated or translated.source,
+                    destination_before=translated.destination,
+                    destination_after=rule.destination_translated or translated.destination,
                     reason="Matched NAT rule"
                 )
 
-        return NATResult(
+                translated.source = result.source_after
+                translated.destination = result.destination_after
+
+                return translated, result
+
+        result = NATResult(
             matched=False,
             rule=None,
-            source_before=packet.source,
-            source_after=packet.source,
-            destination_before=packet.destination,
-            destination_after=packet.destination,
+            source_before=translated.source,
+            source_after=translated.source,
+            destination_before=translated.destination,
+            destination_after=translated.destination,
             reason="No NAT rule matched"
         )
+
+        return translated, result
 
     def _matches_source(self, rule, source):
 
