@@ -2,6 +2,8 @@ from dataclasses import dataclass
 
 from models.nat_rule import NATRule
 
+from models.nat_explanation import NATExplanation
+
 
 @dataclass
 class NATResult:
@@ -16,3 +18,5 @@ class NATResult:
     destination_after: str | None = None
 
     reason: str | None = None
+
+    explanation: NATExplanation | None = None

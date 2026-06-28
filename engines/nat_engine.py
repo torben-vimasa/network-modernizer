@@ -1,5 +1,7 @@
 from copy import deepcopy
 
+from models.confidence import Confidence
+from models.nat_explanation import NATExplanation
 from models.nat_result import NATResult
 
 
@@ -30,6 +32,23 @@ class NATEngine:
                     reason="Matched NAT rule"
                 )
 
+                result.explanation = NATExplanation(
+                    matched=True,
+                    reason="Matched static source NAT",
+                    source_before=result.source_before,
+                    source_after=result.source_after,
+                    destination_before=result.destination_before,
+                    destination_after=result.destination_after,
+                    rule_name=rule.name,
+                    direction=rule.direction,
+                    section=rule.section,
+                    confidence=Confidence(
+                        level="high",
+                        score=1.0,
+                        reason="Exact NAT rule match"
+                    )
+                )
+
                 translated.source = result.source_after
                 translated.destination = result.destination_after
 
@@ -51,6 +70,16 @@ class NATEngine:
             destination_before=translated.destination,
             destination_after=translated.destination,
             reason="No NAT rule matched"
+        )
+
+        result.explanation = NATExplanation(
+            matched=False,
+            reason="No NAT rule matched",
+            confidence=Confidence(
+                level="high",
+                score=1.0,
+                reason="All configured NAT rules evaluated"
+            )
         )
 
         return translated, result
