@@ -1,3 +1,4 @@
 nat (inside,outside) source static CLIENT_REAL CLIENT_NAT
 nat (inside,outside) source dynamic CLIENTS PAT_POOL
 nat (inside,outside) source static SRC_REAL SRC_NAT destination static DST_REAL DST_NAT
+nat (inside,outside) source static 172.27.210.20 10.255.255.17
