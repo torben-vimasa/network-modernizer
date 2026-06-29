@@ -2,6 +2,8 @@ from loaders.asa_config_loader import ASAConfigLoader
 
 from parsers.asa_nat_parser import ASANATParser
 
+from models.asa_import_result import ASAImportResult
+
 
 class ASAImporter:
 
@@ -15,8 +17,8 @@ class ASAImporter:
 
         lines = self.loader.load(filename)
 
-        result = {}
+        result = ASAImportResult()
 
-        result["nat_rules"] = self.nat_parser.parse_lines(lines)
+        result.nat_rules = self.nat_parser.parse_lines(lines)
 
         return result

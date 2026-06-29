@@ -10,7 +10,7 @@ print()
 print("ASA Importer")
 print("=" * 50)
 
-print("NAT Rules :", len(result["nat_rules"]))
+print("NAT Rules :", len(result.nat_rules))
 
-for rule in result["nat_rules"]:
+for rule in result.nat_rules:
     print(rule)
