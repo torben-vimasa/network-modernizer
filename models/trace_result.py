@@ -1,14 +1,15 @@
-from dataclasses import dataclass, field
-
-from models.security_result import SecurityResult
-from models.route_result import RouteResult
-from models.hop import Hop
-from models.explanation import Explanation
-
-
-@dataclass
 class TraceResult:
-    security: SecurityResult
-    route: RouteResult | None = None
-    hops: list[Hop] = field(default_factory=list)
-    explanation: Explanation | None = None
+
+    def __init__(
+        self,
+        security=None,
+        route=None,
+        hops=None,
+        firewall_hops=None,
+        explanation=None
+    ):
+        self.security = security
+        self.route = route
+        self.hops = hops or []
+        self.firewall_hops = firewall_hops or []
+        self.explanation = explanation
