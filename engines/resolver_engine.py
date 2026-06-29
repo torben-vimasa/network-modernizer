@@ -11,10 +11,15 @@ class ResolverEngine:
             self.routes = json.load(f)
 
     def resolve_ip(self, ip):
-        direct = self._resolve_from_graph(ip)
+        direct = self._resolve_from_router_inventory(ip)
 
         if direct:
             return direct
+
+        asa = self._resolve_from_asa_interface(ip)
+
+        if asa:
+            return asa
 
         references = self._find_route_references(ip)
 
@@ -37,7 +42,7 @@ class ResolverEngine:
             "references": [],
         }
 
-    def _resolve_from_graph(self, ip):
+    def _resolve_from_router_inventory(self, ip):
         ip_node = self.graph.find("IPAddress", ip)
 
         if not ip_node:
@@ -60,6 +65,44 @@ class ResolverEngine:
                         "reason": f"IP found on interface {interface.name} on router {router.name}",
                         "references": [],
                     }
+
+        return None
+
+    def _resolve_from_asa_interface(self, ip):
+        for node in self.graph.nodes.values():
+
+            if node.type != "ASAInterface":
+                continue
+
+            if node.properties.get("ip") != ip:
+                continue
+
+            context = node.properties.get("context")
+            nameif = node.properties.get("interface")
+            subnet = node.properties.get("subnet")
+
+            firewall = None
+
+            context_node = self.graph.find("Context", context)
+
+            if context_node:
+                for relation, neighbor in self.graph.neighbors(context_node.id):
+                    if relation == "HAS_CONTEXT" and neighbor.type == "Firewall":
+                        firewall = neighbor.name
+                        break
+
+            return {
+                "resolved": True,
+                "ip": ip,
+                "confidence": "high",
+                "method": "asa_interface",
+                "firewall": firewall,
+                "context": context,
+                "interface": nameif,
+                "subnet": subnet,
+                "reason": f"IP found on ASA interface {context}:{nameif}",
+                "references": [],
+            }
 
         return None
 

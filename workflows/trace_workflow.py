@@ -160,6 +160,15 @@ class TraceWorkflow:
             if not next_device:
                 resolution = self.resolver.resolve_ip(route["next_hop"])
 
+                if resolution.get("resolved") and resolution.get("method") == "asa_interface":
+                    explanation.add(
+                        f"Trace reached ASA interface {resolution['context']}:{resolution['interface']}"
+                    )
+                    explanation.add(
+                        f"Resolver: {resolution['reason']} ({resolution['confidence']} confidence)"
+                    )
+                    break
+
                 explanation.add(
                     f"Trace stopped: next hop {route['next_hop']} could not be directly resolved"
                 )

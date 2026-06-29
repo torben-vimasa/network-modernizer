@@ -1,0 +1,3372 @@
+
+TCCWFw1/pri/act/SP-LAN-FW-W#
+TCCWFw1/pri/act/SP-LAN-FW-W# sh run
+: Saved
+
+:
+: Hardware:   FPR4K-SM-12
+:
+ASA Version 9.12(3) <context>
+!
+hostname SP-LAN-FW-W
+domain-name wr
+enable password ***** pbkdf2
+names
+name 10.150.87.5 VRS_TCCW_10.150.87.5
+name 10.150.71.5 VRS_OBV_10.150.71.5
+name 10.150.71.7 VRS_OBV_10.150.71.7
+name 172.27.189.10 CapMon_Prod_172.27.189.10
+name 172.27.189.11 CapMon_Prod_172.27.189.11
+name 10.150.91.13 NetAct_COBRA_10.150.91.13
+name 10.150.91.14 NetAct_COBRA2_10.150.91.14
+name 10.150.91.18 NetAct-FM-ASCII_10.150.91.18
+name 10.150.74.169 NetAct_OBV_10.150.74.169
+name 10.150.90.169 NetAct_FA_10.150.90.169
+name 10.150.79.25 OBV-OAM-FMS_10.150.79.25
+name 10.150.95.25 FA-OAM-FMS_10.150.95.25
+name 10.150.91.30 NetAct_DC1_10.150.91.30
+name 10.150.91.32 NetAct_CTXDC1_10.150.91.32
+name 10.150.91.31 NetAct_VDA1_10.150.91.31
+
+!
+interface Ethernet1/1.1
+ nameif mgmt
+ security-level 100
+ ip address 172.17.72.156 255.255.255.248 standby 172.17.72.157
+!
+interface Ethernet1/1.306
+ nameif ertms-dmz
+ security-level 0
+ ip address 100.65.2.49 255.255.255.248 standby 100.65.2.50
+!
+interface Ethernet1/1.500
+ nameif SPNS-MGMT-ILO-ZONE0
+ security-level 0
+ ip address 100.65.5.73 255.255.255.248 standby 100.65.5.74
+!
+interface Ethernet1/1.800
+ nameif SPNS-SRV-NET-ZONE0
+ security-level 0
+ ip address 100.65.8.73 255.255.255.248 standby 100.65.8.74
+!
+interface Ethernet1/3.326
+ nameif gsmr
+ security-level 0
+ ip address 10.138.63.13 255.255.255.248 standby 10.138.63.14
+!
+interface Ethernet1/3.1960
+ nameif fbane
+ security-level 10
+ ip address 10.150.195.65 255.255.255.248 standby 10.150.195.66
+!
+interface Ethernet1/3.2005
+ nameif bane1
+ security-level 0
+ ip address 10.138.63.5 255.255.255.248 standby 10.138.63.6
+!
+interface Ethernet1/5
+ nameif ToMgmt
+ security-level 100
+ ip address 10.150.249.1 255.255.255.0 standby 10.150.249.2
+!
+dns server-group DefaultDNS
+ domain-name wr
+same-security-traffic permit inter-interface
+same-security-traffic permit intra-interface
+object network Eitzen_office_Network
+ subnet 172.18.2.0 255.255.255.0
+object network STTN-MGMT-RED-Net
+ subnet 172.19.128.0 255.255.240.0
+object network STTN-MGMT-BLUE-Net
+ subnet 172.19.192.0 255.255.240.0
+object network Netact_(FA-DR)
+ subnet 10.150.90.160 255.255.255.224
+object network NEBR_FA
+ subnet 10.150.91.160 255.255.255.224
+object network Netact_(FA-Mgmt)
+ subnet 10.150.90.0 255.255.255.128
+object network Netact_(OBV-DR)
+ subnet 10.150.74.160 255.255.255.224
+object network NEBR_OBV
+ subnet 10.150.91.128 255.255.255.224
+object network Netact_(OBV-Mgmt)
+ subnet 10.150.74.0 255.255.255.128
+object network Netact_SB
+ subnet 10.150.91.0 255.255.255.128
+object network Obj-100.65.2.142
+ host 100.65.2.142
+ description Pentest-machine
+object network Obj-80.243.122.5
+ host 80.243.122.5
+object network Obj-100.65.2.136-29
+ subnet 100.65.2.136 255.255.255.248
+object network Obj-10.185.50.0-24
+ subnet 10.185.50.0 255.255.255.0
+object network Obj-100.126.255.0-24
+ subnet 100.126.255.0 255.255.255.0
+object network Obj-172.17.59.206
+ host 172.17.59.206
+object network Obj-172.17.59.207
+ host 172.17.59.207
+object network Obj-172.17.88.240
+ host 172.17.88.240
+object network Obj-172.17.88.236
+ host 172.17.88.236
+object network Obj-10.185.50.55
+ host 10.185.50.55
+object network Obj-10.255.255.0-24
+ subnet 10.255.255.0 255.255.255.0
+object network PRIME_PI_10.185.50.51
+ host 10.185.50.51
+object network ELETEL_VPN_NOC_172.27.200.36
+ host 172.27.200.36
+object network Obj-100.65.2.150
+ host 100.65.2.150
+ description Pentest-machine 2
+object network STTN_WTS_172.21.2.62
+ host 172.21.2.62
+object network NokiaSAMIPSubnet_1
+ subnet 172.19.255.8 255.255.255.248
+object network NokiaSAMIPSubnet_2
+ subnet 172.19.255.16 255.255.255.248
+object network OBV_FRQ_CTSS_Management_Server_1
+ host 10.150.79.25
+object network OBV_FRQ_CTSS_Application_Manager_iLO_1
+ host 10.150.79.22
+object network OBV_FRQ_CTSS_Application_Manager_iLO_2
+ host 10.150.79.24
+object network OBV_FRQ_CTSS_Management_Server_iLO_1
+ host 10.150.79.26
+object network FA_FRQ_CTSS_Application_Manager_1
+ host 10.150.95.21
+object network FA_FRQ_CTSS_Application_Manager_2
+ host 10.150.95.23
+object network FA_FRQ_CTSS_Management_Server_1
+ host 10.150.95.25
+object network FA_FRQ_CTSS_Application_Manager_iLO_1
+ host 10.150.95.22
+object network FA_FRQ_CTSS_Application_Manager_iLO_2
+ host 10.150.95.24
+object network FA_FRQ_CTSS_Management_Server_iLO_1
+ host 10.150.95.26
+object network FA_FRQ_CTSS_TCCE_Quorum_Node
+ host 10.150.148.10
+object network FA_FRQ_CTSS_TCCE_Quorum_Node_iLo
+ host 10.150.148.11
+object network OBV_CS_CORE_MSS1OBV_MML_Access
+ host 10.150.69.4
+object network OBV_CS_CORE_MSS1FA_OMU-0_MML_Access
+ host 10.150.69.36
+object network OBV_CS_CORE_CDS1OBV
+ host 10.150.69.196
+object network OBV_CS_CORE_MGW1OBV
+ host 10.150.69.132
+object network OBV_CS_CORE_MGW1OBV_CLA-0
+ host 10.150.69.145
+object network OBV_CS_CORE_MGW1OBV_CLA-0_loadbalanced
+ host 10.150.69.149
+object network OBV_CS_CORE_MGW1OBV_CLA-1
+ host 10.150.69.153
+object network OBV_CS_CORE_MGW1OBV_CLA-1_loadbalanced
+ host 10.150.69.157
+object network FA_CS_CORE_MML_Access_1
+ host 10.150.85.4
+object network FA_CS_CORE_MML_Access_2
+ host 10.150.85.36
+object network FA_CS_CORE_CDS1FA
+ host 10.150.85.196
+object network FA_CS_CORE_MGW1FA
+ host 10.150.85.132
+object network FA_CS_CORE_MGW1FA_CLA_0
+ host 10.150.85.146
+object network FA_CS_CORE_MGW1FA_CLA_0_Loadbalanced
+ host 10.150.85.150
+object network FA_CS_CORE_MGW1FA_CLA_1
+ host 10.150.85.154
+object network FA_CS_CORE_MGW1FA_CLA_1_Loadbalanced
+ host 10.150.85.158
+object network IN_OBV_Client_PC
+ host 10.150.77.54
+object network IN_BV_Install_Server
+ host 10.150.77.41
+object network IN_OBV_SS7_Dispatcher_1
+ host 10.150.77.49
+object network IN_OBV_SS7_Dispatcher_2
+ host 10.150.77.53
+object network IN_OBV_Farm_Nodes_1
+ host 10.150.77.8
+object network IN_OBV_Server_1
+ host 10.150.77.7
+object network IN_OBV_Farm_Nodes_2
+ host 10.150.77.14
+object network IN_OBV_Server_2
+ host 10.150.77.9
+object network IN_OBV_EMS_over_NetAct
+ host 10.150.77.28
+object network IN_OBV_Customer_DB_1
+ host 10.150.77.21
+object network IN_OBV_Customer_DB_2
+ host 10.150.77.27
+object network IN_OBV_Filer
+ host 10.150.77.34
+object network IN_OBV_Server_3
+ host 10.150.77.35
+object network IN_FA_Client_PC_cpc1fa-oam
+ host 10.150.93.60
+object network IN_FA_Install_Server_ins1fa
+ host 10.150.93.41
+object network IN_FA_SS7_Dispatcher_ss71fa
+ host 10.150.93.55
+object network IN_FA_SS7_Dispatcher_ss72fa
+ host 10.150.93.59
+object network IN_FA_Farm_Nodes_afn1fa
+ host 10.150.93.8
+object network IN_FA_Server_iLo_1
+ host 10.150.93.7
+object network IN_FA_Farm_Nodes_afn2fa
+ host 10.150.93.10
+object network IN_FA_Server_iLo_2
+ host 10.150.93.11
+object network IN_FA_EMS_over_NetAct_ems1fa
+ host 10.150.93.24
+object network IN_FA_Customer_DB_cdb1fa
+ host 10.150.93.17
+object network IN_FA_Customer_DB_cdb2fa
+ host 10.150.93.23
+object network IN_FA_Filer_flr1fa
+ host 10.150.93.34
+object network IN_FA_Server
+ host 10.150.93.35
+object network OBV_SMSC_Server
+ host 10.150.76.72
+object network FA_SMSC_Server
+ host 10.150.92.72
+object network OBV_CDR_CMD1OBV
+ host 10.150.76.70
+object network OBV_CDR_CMD2OBV
+ host 10.150.76.71
+object network FA_CDR_CMD1FA
+ host 10.150.92.70
+object network FA_CDR_CMD2FA
+ host 10.150.92.71
+object network OBV_OneNDS_NDS_INSTALL_s1dsins01
+ host 10.150.72.4
+object network OBV_OneNDS_iLO_54
+ host 10.150.72.54
+object network OBV_OneNDS_ADM01_s1adm01
+ host 10.150.72.5
+object network OBV_OneNDS_BE_DS_02_s1beds02
+ host 10.150.72.8
+object network OBV_OneNDS_R_DS_01_s1rds01
+ host 10.150.72.17
+object network OBV_OneNDS_BE-DS_01_s1beds01
+ host 10.150.72.7
+object network OBV_OneNDS_R_DS_02_s1rds02
+ host 10.150.72.18
+object network OBV_OneNDS_PGW_01_s1pgw01
+ host 10.150.72.23
+object network OBV_OneNDS_PGW_DS_01_s1pgwds01
+ host 10.150.72.28
+object network OBV_OneNDS_Chassis_1_Onboard_Admin1
+ host 10.150.72.43
+object network OBV_OneNDS_Chassis_1_Onboard_Admin2
+ host 10.150.72.44
+object network OBV_OneNDS_Chassis-1_HP_VC_Flex_10_10D_1
+ host 10.150.72.45
+object network OBV_OneNDS_Chassis-1_HP_VC_Flex_10_10D_2
+ host 10.150.72.46
+object network FA_OneNDS_NDS_INSTALL_s2dsins01
+ host 10.150.88.4
+object network FA_OneNDS_iLO_54
+ host 10.150.88.54
+object network FA_OneNDS_ADM01_s2adm01
+ host 10.150.88.5
+object network FA_OneNDS_BE_DS_01_s2beds01
+ host 10.150.88.7
+object network FA_OneNDS_BE_DS_02_s2beds02
+ host 10.150.88.8
+object network FA_OneNDS_R_DS_01_s2rds01
+ host 10.150.88.17
+object network FA_OneNDS_R_DS_02_s2rds02
+ host 10.150.88.18
+object network FA_OneNDS_PGW_01_s2pgw01
+ host 10.150.88.23
+object network FA_OneNDS_PGW_DS_01_s2pgwds01
+ host 10.150.88.28
+object network FA_OneNDS_Chassis_1_Onboard_Admin1
+ host 10.150.88.43
+object network FA_OneNDS_Chassis_1_Onboard_Admin2
+ host 10.150.88.44
+object network FA_OneNDS_Chassis_1_HP_VC_Flex_10_10D_1
+ host 10.150.88.45
+object network FA_OneNDS_Chassis-1_HP_VC_Flex_10_10D_2
+ host 10.150.88.46
+object network OBV_HLR_iLO_50
+ host 10.150.73.50
+object network OBV_HLR_HLR_FE_01_s1hlrfe101
+ host 10.150.73.7
+object network OBV_HLR_HLR_FE_02_s1hlrfe102
+ host 10.150.73.8
+object network OBV_HLR_Chassis-1_Onboard_Admin1
+ host 10.150.73.43
+object network OBV_HLR_Chassis-1_Onboard_Admin2
+ host 10.150.73.44
+object network OBV_HLR_Chassis-1_HP_VC_Flex_10_10D_2
+ host 10.150.73.46
+object network FA_HLR_TIAMS01_s2sdmtia11
+ host 10.150.89.4
+object network FA_HLR_iLO_50
+ host 10.150.89.50
+object network FA_HLR_TIAMS02_s2sdmtia12
+ host 10.150.89.4
+object network FA_HLR_HLR_FE_01_s2hlrfe101
+ host 10.150.89.7
+object network FA_HLR_HLR_FE_02_s2hlrfe102
+ host 10.150.89.8
+object network FA_HLR_Chassis_1_Onboard_Admin1
+ host 10.150.89.43
+object network FA_HLR_Chassis_1_Onboard_Admin2
+ host 10.150.89.44
+object network FA_HLR_Chassis_1_HP_VC_Flex_10_10D_2
+ host 10.150.89.46
+object network FA_HLR_Chassis-1_HP_VC_Flex_10_10D_1
+ host 10.150.89.46
+object network CE_ROUTER_CE1OBV
+ host 10.150.192.161
+object network CE_ROUTER_CE2OBV
+ host 10.150.192.162
+object network CE_ROUTER_CE1FA
+ host 10.150.193.161
+object network CE_ROUTER_CE2FA
+ host 10.150.193.162
+object network DNS1OBV
+ host 10.150.65.124
+object network OBV_BSC
+ host 10.150.96.196
+object network FA_OBV
+ host 10.150.97.196
+object network OBV_PS_Core_FNG1OBV
+ host 10.150.65.83
+object network OBV_PS_Core_FNS1OBV
+ host 10.150.64.60
+object network FA_PS_Core_FNG1FA
+ host 10.150.81.83
+object network FA_PS_Core_FNS1FA
+ host 10.150.80.60
+object network Voice_Recorder_VRS1FA
+ host 10.150.87.5
+object network Voice_Recorder_Server_1
+ host 10.150.87.4
+object network Voice_Recorder_VRS1OBV
+ host 10.150.71.5
+object network Voice_Recorder_Server_2
+ host 10.150.71.4
+object network Voice_Recorder_VRS_Archive
+ host 10.150.71.7
+object network Voice_Recorder_Server_3
+ host 10.150.71.6
+object network SIMtellegent_sim1obv
+ host 10.150.76.68
+object network SIMtellegent_sim2obv
+ host 10.150.76.69
+object network SIMtellegent_sim1fa
+ host 10.150.92.68
+object network SIMtellegent_sim2fa
+ host 10.150.92.69
+object network OBV_NetAct_Onboard_Administrator
+ host 10.150.74.6
+object network OBV_NetAct_NEBR_iLO
+ host 10.150.74.34
+object network OBV_NetAct_SAN
+ host 10.150.74.28
+object network OBV_NetAct_SAN_29
+ host 10.150.74.29
+object network OBV_NetAct_NEBR_SAN
+ host 10.150.74.32
+object network OBV_NetAct_NEBR_SAN_33
+ host 10.150.74.33
+object network OBV_NetAct_NTP_Time_Provider
+ host 10.150.200.12
+object network OBV_NetAct_FA_NTP_Time_Provider
+ host 10.150.200.4
+object network OBV_NetAct_Server1
+ host 10.150.91.7
+object network OBV_NetAct_Server2
+ host 10.150.91.8
+object network OBV_NetAct_Server3
+ host 10.150.91.9
+object network OBV_NetAct_Server4
+ host 10.150.91.10
+object network OBV_NetAct_Server5
+ host 10.150.91.11
+object network OBV_NetAct_Server6
+ host 10.150.91.12
+object network OBV_NetAct_Server7
+ host 10.150.91.13
+object network OBV_NetAct_Server8
+ host 10.150.91.14
+object network OBV_NetAct_Server9
+ host 10.150.91.15
+object network OBV_NetAct_Server10
+ host 10.150.91.16
+object network OBV_NetAct_Server11
+ host 10.150.91.17
+object network OBV_NetAct_Server12
+ host 10.150.91.18
+object network OBV_NetAct_Server13
+ host 10.150.91.19
+object network OBV_NetAct_Server14
+ host 10.150.91.20
+object network OBV_NetAct_Server15
+ host 10.150.91.21
+object network OBV_NetAct_Server16
+ host 10.150.91.22
+object network OBV_NetAct_Server17
+ host 10.150.91.26
+object network OBV_NetAct_Server18
+ host 10.150.91.27
+object network OBV_NetAct_Server19
+ host 10.150.91.5
+object network OBV_NetAct_Server20
+ host 10.150.91.6
+object network OBV_NetAct_Server21
+ host 10.150.74.168
+object network OBV_NetAct_Server22
+ host 10.150.74.169
+object network OBV_NetAct_Server23
+ host 10.150.74.170
+object network OBV_NetAct_Server24
+ host 10.150.90.168
+object network OBV_NetAct_Server25
+ host 10.150.90.169
+object network OBV_NetAct_Server26
+ host 10.150.90.170
+object network OBV_NetAct_Server27
+ host 10.150.91.42
+object network OBV_NetAct_Server28
+ host 10.150.91.43
+object network OBV_NetAct_Server29
+ host 10.150.91.23
+object network OBV_NetAct_Server30
+ host 10.150.91.24
+object network OBV_NetAct_Server31
+ host 10.150.91.25
+object network OBV_NetAct_Server32
+ host 10.150.74.38
+object network OBV_NetAct_Server33
+ host 10.150.74.39
+object network OBV_NetAct_Server34
+ host 10.150.74.40
+object network OBV_NetAct_Server35
+ host 10.150.74.41
+object network OBV_NetAct_Server36
+ host 10.150.90.38
+object network OBV_NetAct_Server37
+ host 10.150.90.39
+object network OBV_NetAct_Server38
+ host 10.150.90.40
+object network OBV_NetAct_Server39
+ host 10.150.90.41
+object network OBV_NetAct_NEBR_Host1
+ host 10.150.91.133
+object network OBV_NetAct_NEBR_Host2
+ host 10.150.91.132
+object network OBV_NetAct_NEBR_Host3
+ host 10.150.91.165
+object network OBV_NetAct_NEBR_Host4
+ host 10.150.91.164
+object network OBV_NetAct_VaaS_Host1
+ host 10.150.74.42
+object network OBV_NetAct_VaaS_Host2
+ host 10.150.74.43
+object network OBV_NetAct_VaaS_Host3
+ host 10.150.76.80
+object network OBV_NetAct_VaaS_Host4
+ host 10.150.92.80
+object network OBV_NetAct_VaaS_Host5
+ host 10.150.90.42
+object network OBV_NetAct_VaaS_Host6
+ host 10.150.90.43
+object network FA_NetAct_Onboard_Admin_nea1faoa1
+ host 10.150.90.6
+object network FA_NetAct_NEBR_iLO_nebr1failo
+ host 10.150.90.34
+object network FA_NetAct_SAN_nea1faneas1
+ host 10.150.90.28
+object network FA_NetAct_SAN_nea1faneas2
+ host 10.150.90.29
+object network FA_NetAct_FANEBR_SAN_nea1fanes1
+ host 10.150.90.32
+object network FA_NetAct_FANEBR_SAN_nea1fanes2
+ host 10.150.90.33
+object network OBV_FRQ_CTSS_Application_Manager_1
+ host 10.150.79.21
+object network OBV_FRQ_CTSS_Application_Manager_2
+ host 10.150.79.23
+object network GSMR_jump
+ host 10.185.50.85
+object network OBV_OneNDS_iLO_47
+ host 10.150.72.47
+object network OBV_OneNDS_iLO_48
+ host 10.150.72.48
+object network OBV_OneNDS_iLO_49
+ host 10.150.72.49
+object network OBV_OneNDS_iLO_50
+ host 10.150.72.50
+object network OBV_OneNDS_iLO_51
+ host 10.150.72.51
+object network OBV_OneNDS_iLO_52
+ host 10.150.72.52
+object network OBV_OneNDS_iLO_53
+ host 10.150.72.53
+object network FA_OneNDS_iLO_47
+ host 10.150.88.47
+object network FA_OneNDS_iLO_48
+ host 10.150.88.48
+object network FA_OneNDS_iLO_49
+ host 10.150.88.49
+object network FA_OneNDS_iLO_50
+ host 10.150.88.50
+object network FA_OneNDS_iLO_51
+ host 10.150.88.51
+object network FA_OneNDS_iLO_52
+ host 10.150.88.52
+object network FA_OneNDS_iLO_53
+ host 10.150.88.53
+object network OBV_HLR_iLO_48
+ host 10.150.73.48
+object network OBV_HLR_iLO_49
+ host 10.150.73.49
+object network OBV_HLR_TIAMS01_s1sdmtia11
+ host 10.150.73.4
+object network OBV_HLR_iLO_47
+ host 10.150.73.47
+object network OBV_HLR_Chassis-1_HP_VC_Flex_10_10D_1
+ host 10.150.73.45
+object network FA_HLR_iLO_47
+ host 10.150.89.47
+object network FA_HLR_iLO_48
+ host 10.150.89.48
+object network FA_HLR_iLO_49
+ host 10.150.89.49
+object network FA_HLR_Chassis_1_HP_VC_Flex_10_10D_1
+ host 10.150.89.45
+object network CBO_Proxy_172.21.251.17
+ host 172.21.251.17
+object network ADBSLA1_10.110.2.48
+ host 10.110.2.48
+object network PBASE_172.27.3.140
+ host 172.27.3.140
+object network TPS_DB_SRV_10.14.0.71
+ host 10.14.0.71
+object network AAPPCTXTPX_172.21.250.75_.118
+ range 172.21.250.75 172.21.250.118
+ description Citrix App Server Range
+object network ACTXVCENT01_172.21.248.22
+ host 172.21.248.22
+object network abanekh3.bane.dk_172.20.3.19
+ host 172.20.3.19
+object network ABANE16.bane.dk_172.27.2.22
+ host 172.27.2.22
+object network abane17.bane.dk_172.27.3.22
+ host 172.27.3.22
+object network IP_HELPER_172.21.250.1
+ host 172.21.250.1
+object network AESXCTXOBV01-12_172.21.248.10-21
+ range 172.21.248.10 172.21.248.21
+object network ACTXUPDTMGMT01_172.21.248.23
+ host 172.21.248.23
+object network ACTXJUMP01_172.21.248.24
+ host 172.21.248.24
+object network AAPPCTXXDC01_172.21.250.65
+ host 172.21.250.65
+object network AAPPCTXXDC02_172.21.250.66
+ host 172.21.250.66
+object network AAPPCTXSFT01_172.21.250.67
+ host 172.21.250.67
+object network AAPPCTXSFT02_172.21.250.68
+ host 172.21.250.68
+object network AAPPCTXLIC01_172.21.250.69
+ host 172.21.250.69
+object network AAPPCTXPVS01_172.21.250.70
+ host 172.21.250.70
+object network AAPPCTXPVS02_172.21.250.71
+ host 172.21.250.71
+object network AAPPCTXFIL01_172.21.250.72
+ host 172.21.250.72
+object network AAPPCTXSQL01_172.21.250.73
+ host 172.21.250.73
+object network AAPPCTXSQL02_172.21.250.74
+ host 172.21.250.74
+object service SQLNET-1521
+ service tcp destination eq sqlnet
+object network appgpo1.bane.dk_10.110.2.82
+ host 10.110.2.82
+object network ANSCTXBH01_ANSCTXBH02_172.27.2.213
+ host 172.27.2.213
+object network AAPPCTXTPX_172.21.250.97_.118
+ range 172.21.250.97 172.21.250.118
+object network ANSCTXOBV01_172.21.250.13
+ host 172.21.250.13
+object network proxy_wsa1_bane_dk_172.27.2.120
+ host 172.27.2.120
+object network Obj_172.19.208.0_24
+ subnet 172.19.208.0 255.255.255.0
+object network Obj_172.19.144.0_24
+ subnet 172.19.144.0 255.255.255.0
+object network AFILSYNC1.BANE.DK_172.27.2.23
+ host 172.27.2.23
+object network AFILCTX1.BANE.DK_172.21.250.119
+ host 172.21.250.119
+object network ADIACENTSOB1_172.21.252.11
+ host 172.21.252.11
+object network ADIASSRANOB2_172.21.252.13
+ host 172.21.252.13
+object network ADIASSCNOB1_172.21.252.12
+ host 172.21.252.12
+object network ADIASSGPRSOB4_172.21.252.15
+ host 172.21.252.15
+object network ADIASSRBCOB3_172.21.252.14
+ host 172.21.252.14
+object network ADIATSOB1_172.21.249.16
+ host 172.21.249.16
+object network ADIACENTSOB1_172.21.249.11
+ host 172.21.249.11
+object network ADIASSRANOB2_172.21.249.13
+ host 172.21.249.13
+object network ADIASSCNOB1_172.21.249.12
+ host 172.21.249.12
+object network ADIASSGPRSOB4_172.21.249.15
+ host 172.21.249.15
+object network ADIASSRBCOB3_172.21.249.14
+ host 172.21.249.14
+object service TCP-808
+ service tcp destination eq 808
+object service TCP_623
+ service tcp destination eq 623
+object service UDP-623
+ service udp destination eq 623
+object service VNC_5900
+ service tcp destination eq 5900
+object service TCP-8889
+ service tcp destination eq 8889
+object network ADIATSOB1_172.21.252.16
+ host 172.21.252.16
+object network sts.bane.dk_10.110.2.167
+ host 10.110.2.167
+object network TCC_EAST_GREEN_MGMT_10.14.31.0_25
+ subnet 10.14.31.0 255.255.255.128
+object network OBV_NetAct_Server40
+ host 10.150.91.31
+object network ADIASSRBCFA3_172.21.244.14
+ host 172.21.244.14
+object network ADIASSGPRSFA4_172.21.244.15
+ host 172.21.244.15
+object network ADIASSCNFA1_172.21.244.12
+ host 172.21.244.12
+object network ADIASSRANFA2_172.21.244.13
+ host 172.21.244.13
+object network ADIACENTSFA1_172.21.244.11
+ host 172.21.244.11
+object network ADIATSFA1_172.21.244.16
+ host 172.21.244.16
+object network ASPFIL01_172.21.251.18
+ host 172.21.251.18
+object network APBASEFTP_172.21.1.76
+ host 172.21.1.76
+object network aexchcas4_10.110.2.138
+ host 10.110.2.138
+object network APRINTSAFE1_10.110.2.75
+ host 10.110.2.75
+object network mailrelay.bane.dk_10.110.2.137
+ host 10.110.2.137
+object network asmtprelay01_172.21.251.19
+ host 172.21.251.19
+object network aapptogstapri1m_172.27.210.5
+ host 172.27.210.5
+object network aapptogstasec1m_172.27.210.21
+ host 172.27.210.21
+object network masterclock.bane.dk_172.17.138.38
+ host 172.17.138.38
+object network HHT_VPN_POOL_INSIDE
+ subnet 172.21.144.0 255.255.252.0
+ description HHT VPN Pool inside firewall
+object network mailrelay_10.110.9.21
+ host 10.110.9.21
+object network mailrelay_10.110.9.22
+ host 10.110.9.22
+object network Thales_ARAMIS_D_10.48.0.163
+ host 10.48.0.163
+object network AELTJUMPBANE1_172.27.200.37
+ host 172.27.200.37
+object network CTX_Servers
+ range 172.21.250.65 172.21.250.118
+object network TPS_DB_SRV_10.14.0.70
+ host 10.14.0.70
+object network AWSUS01_172.27.200.34
+ host 172.27.200.34
+object network AELTCTXMON1_172.21.2.61
+ host 172.21.2.61
+object network NokiaNSPIPSubnet_1
+ subnet 172.19.255.128 255.255.255.248
+object network NokiaNSPIPSubnet_2
+ subnet 172.19.255.136 255.255.255.248
+object network AAPPLOGPOINT1
+ subnet 100.72.35.32 255.255.255.224
+object network aapplogpoint_100.72.35.50
+ host 100.72.35.50
+object network BHADOBVAD_10.185.50.11
+ host 10.185.50.11
+object network BHADOBVAD_10.185.50.12
+ host 10.185.50.12
+object network AAPPWEBENKS202.bane.dk
+ host 172.27.3.242
+ description Web ENK server
+object network ABITDEFEND1_172.27.200.17
+ host 172.27.200.17
+object network AALSTOMJUMP2_172.21.248.50
+ host 172.21.248.50
+object network AALSTOMJUMP1_172.21.2.164
+ host 172.21.2.164
+object network NetAct_ave
+ host 10.150.91.33
+ description CTASK0028168
+object network NetAct_avecp
+ host 10.150.91.34
+ description CTASK0028168
+object network NetAct_OBV_ave
+ host 10.150.74.179
+ description CTASK0028168
+object network NetAct_OBV_avecp
+ host 10.150.74.180
+ description CTASK0028168
+object network NetAct_FA_ave
+ host 10.150.90.179
+ description CTASK0028168
+object network NetAct_FA_avecp
+ host 10.150.90.180
+ description CTASK0028168
+object network sts.bane.dk_10.110.3.41
+ host 10.110.3.41
+object network AJUMPTSS1BANE1_172.27.200.36
+ host 172.27.200.36
+object network ASMTP1.BANE.DK_172.27.200.24
+ host 172.27.200.24
+object network IF_JTTN_VRF_SIGNAL_PROGRAM_TCCWPE_1_2
+ host 10.150.195.68
+ description Interface for VRF signal-program in JTTN TCCWPE1 and 2.
+object network IF_VRF_ERTMS_DMZ_TCCWCORE01
+ host 100.126.255.1
+ description Loopback interface for SPNS TCCWCore01 VRF ERTMS_DMZ
+object network IF_VRF_ERTMS_DMZ_TCCWCORE02
+ host 100.126.255.2
+ description Loopback interface for SPNS TCCWCore02 VRF ERTMS_DMZ
+object network IF_VRF_ERTMS_DMZ_OBVCORE01
+ host 100.126.255.65
+ description Loopback interface for SPNS OBVCore01 VRF ERTMS_DMZ
+object network IF_VRF_ERTMS_DMZ_OBVCORE02
+ host 100.126.255.66
+ description Loopback interface for SPNS OBVCore02 VRF ERTMS_DMZ
+object network LogPoint_100.72.35.34
+ host 100.72.35.34
+object network FXOS_UPDATE_HOST
+ host 10.23.240.131
+ description Host to update FXOS from
+object network TCCWFW1-1-MGMT
+ host 10.150.249.13
+ description Mgmt interface for TCCWFW1-1
+object network TCCWFW1-2-MGMT
+ host 10.150.249.12
+ description Mgmt interface for TCCWFW1-2
+object network ABANECTXDC1_172.21.247.10
+ host 172.21.247.10
+object network ABANECTXDC2_172.21.247.11
+ host 172.21.247.11
+object network CTX_DHCP_172_21_247_100_199
+ range 172.21.247.100 172.21.247.199
+object network f.esbbane.dk_80.243.122.4
+ host 80.243.122.4
+object network ADWHREPPBR01.BANE.DK_172.21.254.4
+ host 172.21.254.4
+object network ADWHSTGPBR01.BANE.DK_172.21.254.5
+ host 172.21.254.5
+object network ADBDWHPBR00_172.27.2.103
+ host 172.27.2.103
+object network ADIADTSOB1_IPMI_172.21.249.25
+ host 172.21.249.25
+object network ADIARESPOB1_IPMI_172.21.249.31
+ host 172.21.249.31
+object network ADIANUCOB1_IPMI_172.21.249.32
+ host 172.21.249.32
+object network ADIADTSFA1_IPMI_172.21.241.25
+ host 172.21.241.25
+object network ADIADTSOB1_172.21.252.25
+ host 172.21.252.25
+object network ADIADTSFA1_172.21.244.25
+ host 172.21.244.25
+object network ADIARESPOB1_DATADMZ_172.21.253.14
+ host 172.21.253.14
+object network ADIANUCOB1_DATADMZ_172.21.253.22
+ host 172.21.253.22
+object network AREPOPBR01.BANE.DK_172.27.2.206
+ host 172.27.2.206
+object network AWTSDIAM1_172.21.65.38
+ host 172.21.65.38
+object network adwhreppbr01.bane.dk_172.21.254.4
+ host 172.21.254.4
+object-group network BDK_Bruger_Net
+ network-object 10.9.241.0 255.255.255.0
+ network-object 10.9.249.0 255.255.255.0
+ network-object 10.9.250.0 255.255.255.0
+ network-object 10.9.255.0 255.255.255.0
+ network-object 10.147.57.0 255.255.255.0
+ network-object 10.147.63.0 255.255.255.0
+ network-object 172.20.37.0 255.255.255.0
+ network-object 172.20.38.0 255.255.255.0
+ network-object 172.20.39.0 255.255.255.0
+ network-object 172.20.89.0 255.255.255.0
+ network-object 172.20.91.0 255.255.255.0
+ network-object 172.20.93.0 255.255.255.0
+ network-object 172.20.95.0 255.255.255.0
+ network-object 172.20.132.0 255.255.255.0
+ network-object 172.20.133.0 255.255.255.0
+ network-object 172.20.136.0 255.255.255.0
+ network-object 172.20.137.0 255.255.255.0
+ network-object 172.20.140.0 255.255.255.0
+ network-object 172.20.141.0 255.255.255.0
+ network-object 172.20.225.0 255.255.255.0
+ network-object 172.20.226.0 255.255.255.0
+ network-object 172.25.150.0 255.255.255.0
+ network-object 172.25.169.0 255.255.255.0
+ network-object 10.138.57.0 255.255.255.0
+ network-object 10.138.59.0 255.255.255.0
+ network-object 172.18.0.0 255.255.255.0
+ network-object 172.27.0.0 255.255.192.0
+ network-object 172.25.181.0 255.255.255.0
+ network-object 172.25.182.0 255.255.255.0
+ network-object 172.23.0.0 255.255.240.0
+ network-object 172.23.226.0 255.255.255.0
+ network-object 10.139.0.0 255.255.0.0
+ network-object 10.157.137.0 255.255.255.0
+ network-object 172.20.0.0 255.255.0.0
+ network-object 172.27.147.0 255.255.255.0
+ network-object 10.3.0.0 255.255.128.0
+ network-object 172.18.0.0 255.255.248.0
+object-group network WingconServers_OBV_ARC_FA
+ network-object host VRS_OBV_10.150.71.5
+ network-object host VRS_OBV_10.150.71.7
+ network-object host VRS_TCCW_10.150.87.5
+object-group service VRS_Services tcp
+ port-object eq ssh
+ port-object eq www
+ port-object eq https
+ port-object eq 1935
+object-group network CapMonServers
+ network-object host CapMon_Prod_172.27.189.10
+ network-object host CapMon_Prod_172.27.189.11
+object-group network NetActServers
+ network-object host NetAct_COBRA_10.150.91.13
+ network-object host NetAct-FM-ASCII_10.150.91.18
+ network-object host NetAct_DC1_10.150.91.30
+ network-object host NetAct_CTXDC1_10.150.91.32
+ network-object host NetAct_VDA1_10.150.91.31
+object-group network NetActServers_OBV_FA
+ network-object host NetAct_OBV_10.150.74.169
+ network-object host NetAct_FA_10.150.90.169
+object-group network CTTSServers_OBV_FA
+ network-object host OBV-OAM-FMS_10.150.79.25
+ network-object host FA-OAM-FMS_10.150.95.25
+object-group service CTTS_OAM_FMS_Service_TCP tcp
+ port-object eq www
+ port-object eq https
+ port-object eq 1000
+object-group network BDK_User_VPN_172.21.100.0_24
+ network-object 172.21.100.0 255.255.255.0
+object-group network GSMR-Devices
+ network-object 10.150.144.0 255.255.255.0
+ network-object 10.150.145.0 255.255.255.0
+object-group network FTSVOIP-Devices
+ network-object 10.150.146.0 255.255.255.128
+ network-object 10.150.146.128 255.255.255.128
+object-group network GSMR-Voice-Prod
+ network-object host 10.150.78.21
+ network-object host 10.150.78.23
+ network-object host 10.150.94.23
+ network-object host 10.150.94.21
+object-group network Eltel-NOC-Devices
+ network-object host 188.180.65.67
+ network-object 10.138.63.240 255.255.255.240
+object-group service GSMR-OAM_Netact_FA_DR_Service_Grp_TCP tcp
+ port-object eq ssh
+ port-object eq www
+ port-object eq https
+ port-object eq citrix-ica
+ port-object eq 2598
+ port-object eq 3389
+object-group service GSMR-OAM_Netact_SB_Service_Grp_TCP tcp
+ port-object eq ssh
+ port-object eq www
+ port-object eq https
+ port-object eq 902
+ port-object eq 1080
+ port-object eq 1158
+ port-object eq 3389
+ port-object eq 5480
+ port-object eq 7286
+ port-object eq 7331
+ port-object eq 8443
+ port-object eq 8543
+ port-object eq 9009
+ port-object eq 9100
+ port-object eq 9402
+ port-object eq 9443
+ port-object eq 9810
+ port-object eq 9812
+ port-object eq 9875
+ port-object eq 9876
+ port-object eq 9877
+ port-object eq 10443
+ port-object eq 12443
+ port-object eq 50000
+object-group service GSMR-OAM_NEBR_FA_Service_Grp_TCP tcp
+ port-object eq ssh
+ port-object eq 9000
+object-group service GSMR-OAM_NEBR_FA_Service_Grp_UDP udp
+ port-object eq 9001
+object-group service GSMR-OAM_Netact_FA_Mgmt_Service_Grp_TCP tcp
+ port-object eq ssh
+ port-object eq www
+ port-object eq https
+ port-object eq 427
+ port-object eq 902
+ port-object eq 3389
+ port-object eq 17990
+object-group network COBRA_Servers
+ network-object host NetAct_COBRA_10.150.91.13
+ network-object host NetAct_COBRA2_10.150.91.14
+object-group network Thales-ESB
+ network-object host 80.243.122.4
+ network-object host 80.243.122.6
+ network-object host 80.243.122.8
+ network-object host 80.243.122.14
+object-group network SSH-access
+ network-object object Obj-172.17.59.206
+ network-object object Obj-172.17.59.207
+ network-object object Obj-172.17.88.236
+ network-object object Obj-172.17.88.240
+ network-object object Obj-10.185.50.0-24
+ network-object object Obj-10.255.255.0-24
+ network-object 100.64.15.0 255.255.255.0
+object-group network SAM_MGMT
+ network-object 172.19.255.8 255.255.255.248
+ network-object 172.19.255.16 255.255.255.248
+ network-object 172.19.255.128 255.255.255.248
+ network-object 172.19.255.136 255.255.255.248
+object-group network SAM_NETWORKS
+ network-object 172.19.255.8 255.255.255.248
+ network-object 172.19.255.16 255.255.255.248
+ network-object 172.19.255.128 255.255.255.248
+ network-object 172.19.255.136 255.255.255.248
+object-group network NEW_ELTEL_BDK_JUMPHOSTS
+ network-object host 172.27.200.36
+object-group network ELTEL_PRIME_HOST
+ network-object host 10.185.50.51
+object-group network PentestMachines
+ network-object object Obj-100.65.2.142
+ network-object object Obj-100.65.2.150
+object-group network Frequentis_CTSS_ssh_http_https
+ network-object object OBV_FRQ_CTSS_Application_Manager_iLO_1
+ network-object object OBV_FRQ_CTSS_Application_Manager_iLO_2
+ network-object object FA_FRQ_CTSS_Application_Manager_iLO_1
+ network-object object FA_FRQ_CTSS_Application_Manager_iLO_2
+ network-object object FA_FRQ_CTSS_Management_Server_iLO_1
+ network-object object FA_FRQ_CTSS_TCCE_Quorum_Node
+ network-object object FA_FRQ_CTSS_TCCE_Quorum_Node_iLo
+object-group network Frequentis_CTSS_ssh_http_rdp
+ network-object object OBV_FRQ_CTSS_Management_Server_1
+ network-object object OBV_FRQ_CTSS_Management_Server_iLO_1
+ network-object object FA_FRQ_CTSS_Management_Server_1
+object-group network OBV_CS_CORE_SSH
+ network-object object OBV_CS_CORE_MSS1OBV_MML_Access
+ network-object object OBV_CS_CORE_MSS1FA_OMU-0_MML_Access
+ network-object object OBV_CS_CORE_CDS1OBV
+ network-object object OBV_CS_CORE_MGW1OBV
+ network-object object OBV_CS_CORE_MGW1OBV_CLA-0
+ network-object object OBV_CS_CORE_MGW1OBV_CLA-0_loadbalanced
+ network-object object OBV_CS_CORE_MGW1OBV_CLA-1
+ network-object object OBV_CS_CORE_MGW1OBV_CLA-1_loadbalanced
+object-group network FA_CS_CORE_SSH
+ network-object object FA_CS_CORE_MML_Access_1
+ network-object object FA_CS_CORE_MML_Access_2
+ network-object object FA_CS_CORE_CDS1FA
+ network-object object FA_CS_CORE_MGW1FA
+ network-object object FA_CS_CORE_MGW1FA_CLA_0
+ network-object object FA_CS_CORE_MGW1FA_CLA_0_Loadbalanced
+ network-object object FA_CS_CORE_MGW1FA_CLA_1
+ network-object object FA_CS_CORE_MGW1FA_CLA_1_Loadbalanced
+object-group network IN_OBV_SSH
+ network-object object IN_OBV_Client_PC
+ network-object object IN_BV_Install_Server
+ network-object object IN_OBV_SS7_Dispatcher_1
+ network-object object IN_OBV_SS7_Dispatcher_2
+ network-object object IN_OBV_Farm_Nodes_1
+ network-object object IN_OBV_Server_1
+ network-object object IN_OBV_Farm_Nodes_2
+ network-object object IN_OBV_Server_2
+ network-object object IN_OBV_EMS_over_NetAct
+ network-object object IN_OBV_Customer_DB_1
+ network-object object IN_OBV_Customer_DB_2
+ network-object object IN_OBV_Filer
+ network-object object IN_OBV_Server_3
+object-group network IN_FA_SSH
+ network-object object IN_FA_Client_PC_cpc1fa-oam
+ network-object object IN_FA_Install_Server_ins1fa
+ network-object object IN_FA_SS7_Dispatcher_ss71fa
+ network-object object IN_FA_SS7_Dispatcher_ss72fa
+ network-object object IN_FA_Farm_Nodes_afn1fa
+ network-object object IN_FA_Server_iLo_1
+ network-object object IN_FA_Farm_Nodes_afn2fa
+ network-object object IN_FA_Server_iLo_2
+ network-object object IN_FA_EMS_over_NetAct_ems1fa
+ network-object object IN_FA_Customer_DB_cdb1fa
+ network-object object IN_FA_Customer_DB_cdb2fa
+ network-object object IN_FA_Filer_flr1fa
+ network-object object IN_FA_Server
+object-group network SMSC_SSH_HTTP_HTTPS
+ network-object object OBV_SMSC_Server
+ network-object object FA_SMSC_Server
+object-group network CDR_SSH_HTTP_HTTPS_8080_3306
+ network-object object OBV_CDR_CMD1OBV
+ network-object object OBV_CDR_CMD2OBV
+ network-object object FA_CDR_CMD1FA
+ network-object object FA_CDR_CMD2FA
+object-group network OneNDS_OBV_SSH
+ network-object object OBV_OneNDS_ADM01_s1adm01
+ network-object object OBV_OneNDS_iLO_54
+ network-object object OBV_OneNDS_BE-DS_01_s1beds01
+ network-object object OBV_OneNDS_BE_DS_02_s1beds02
+ network-object object OBV_OneNDS_R_DS_01_s1rds01
+ network-object object OBV_OneNDS_R_DS_02_s1rds02
+ network-object object OBV_OneNDS_PGW_01_s1pgw01
+ network-object object OBV_OneNDS_PGW_DS_01_s1pgwds01
+ network-object object OBV_OneNDS_Chassis_1_Onboard_Admin1
+ network-object object OBV_OneNDS_Chassis_1_Onboard_Admin2
+ network-object object OBV_OneNDS_Chassis-1_HP_VC_Flex_10_10D_1
+ network-object object OBV_OneNDS_Chassis-1_HP_VC_Flex_10_10D_2
+ network-object object OBV_OneNDS_iLO_48
+ network-object object OBV_OneNDS_iLO_49
+ network-object object OBV_OneNDS_iLO_50
+ network-object object OBV_OneNDS_iLO_51
+ network-object object OBV_OneNDS_iLO_52
+ network-object object OBV_OneNDS_iLO_53
+ network-object object OBV_OneNDS_NDS_INSTALL_s1dsins01
+object-group network OneNDS_OBV_HTTP
+ network-object object OBV_OneNDS_iLO_47
+ network-object object OBV_OneNDS_iLO_48
+ network-object object OBV_OneNDS_iLO_49
+ network-object object OBV_OneNDS_iLO_50
+ network-object object OBV_OneNDS_iLO_51
+ network-object object OBV_OneNDS_iLO_52
+ network-object object OBV_OneNDS_iLO_53
+ network-object object OBV_OneNDS_iLO_54
+ network-object object OBV_OneNDS_PGW_01_s1pgw01
+ network-object object OBV_OneNDS_PGW_DS_01_s1pgwds01
+ network-object object OBV_OneNDS_Chassis_1_Onboard_Admin1
+ network-object object OBV_OneNDS_Chassis_1_Onboard_Admin2
+ network-object object OBV_OneNDS_Chassis-1_HP_VC_Flex_10_10D_1
+ network-object object OBV_OneNDS_Chassis-1_HP_VC_Flex_10_10D_2
+object-group network OneNDS_OBV_HTTPS
+ network-object object OBV_OneNDS_ADM01_s1adm01
+ network-object object OBV_OneNDS_PGW_01_s1pgw01
+ network-object object OBV_OneNDS_PGW_DS_01_s1pgwds01
+ network-object object OBV_OneNDS_Chassis_1_Onboard_Admin1
+ network-object object OBV_OneNDS_Chassis_1_Onboard_Admin2
+ network-object object OBV_OneNDS_Chassis-1_HP_VC_Flex_10_10D_1
+ network-object object OBV_OneNDS_Chassis-1_HP_VC_Flex_10_10D_2
+object-group network OneNDS_FA_SSH
+ network-object object FA_OneNDS_NDS_INSTALL_s2dsins01
+ network-object object FA_OneNDS_iLO_47
+ network-object object FA_OneNDS_ADM01_s2adm01
+ network-object object FA_OneNDS_iLO_48
+ network-object object FA_OneNDS_BE_DS_01_s2beds01
+ network-object object FA_OneNDS_iLO_49
+ network-object object FA_OneNDS_BE_DS_02_s2beds02
+ network-object object FA_OneNDS_iLO_50
+ network-object object FA_OneNDS_R_DS_01_s2rds01
+ network-object object FA_OneNDS_iLO_51
+ network-object object FA_OneNDS_R_DS_02_s2rds02
+ network-object object FA_OneNDS_iLO_52
+ network-object object FA_OneNDS_PGW_01_s2pgw01
+ network-object object FA_OneNDS_iLO_53
+ network-object object FA_OneNDS_PGW_DS_01_s2pgwds01
+ network-object object FA_OneNDS_iLO_54
+ network-object object FA_OneNDS_Chassis_1_Onboard_Admin1
+ network-object object FA_OneNDS_Chassis_1_Onboard_Admin2
+ network-object object FA_OneNDS_Chassis_1_HP_VC_Flex_10_10D_1
+ network-object object FA_OneNDS_Chassis-1_HP_VC_Flex_10_10D_2
+object-group network OneNDS_FA_HTTP
+ network-object object FA_OneNDS_iLO_47
+ network-object object FA_OneNDS_iLO_48
+ network-object object FA_OneNDS_iLO_49
+ network-object object FA_OneNDS_iLO_50
+ network-object object FA_OneNDS_iLO_51
+ network-object object FA_OneNDS_iLO_52
+ network-object object FA_OneNDS_PGW_01_s2pgw01
+ network-object object FA_OneNDS_iLO_53
+ network-object object FA_OneNDS_iLO_54
+ network-object object FA_OneNDS_Chassis_1_Onboard_Admin1
+ network-object object FA_OneNDS_Chassis_1_Onboard_Admin2
+ network-object object FA_OneNDS_Chassis_1_HP_VC_Flex_10_10D_1
+ network-object object FA_OneNDS_Chassis-1_HP_VC_Flex_10_10D_2
+object-group network OneNDS_FA_HTTPS
+ network-object object FA_OneNDS_iLO_47
+ network-object object FA_OneNDS_iLO_48
+ network-object object FA_OneNDS_iLO_49
+ network-object object FA_OneNDS_iLO_50
+ network-object object FA_OneNDS_iLO_51
+ network-object object FA_OneNDS_iLO_52
+ network-object object FA_OneNDS_PGW_01_s2pgw01
+ network-object object FA_OneNDS_iLO_53
+ network-object object FA_OneNDS_iLO_54
+ network-object object FA_OneNDS_Chassis_1_Onboard_Admin1
+ network-object object FA_OneNDS_Chassis_1_Onboard_Admin2
+ network-object object FA_OneNDS_Chassis_1_HP_VC_Flex_10_10D_1
+ network-object object FA_OneNDS_Chassis-1_HP_VC_Flex_10_10D_2
+object-group network HLR_OBV_SSH
+ network-object object OBV_HLR_TIAMS01_s1sdmtia11
+ network-object object OBV_HLR_iLO_47
+ network-object object OBV_HLR_HLR_FE_01_s1hlrfe101
+ network-object object OBV_HLR_HLR_FE_02_s1hlrfe102
+ network-object object OBV_HLR_Chassis-1_Onboard_Admin1
+ network-object object OBV_HLR_Chassis-1_Onboard_Admin2
+ network-object object OBV_HLR_Chassis-1_HP_VC_Flex_10_10D_2
+ network-object object OBV_HLR_iLO_48
+ network-object object OBV_HLR_iLO_49
+ network-object object OBV_HLR_iLO_50
+ network-object object OBV_HLR_Chassis-1_HP_VC_Flex_10_10D_1
+object-group network HLR_OBV_HTTP
+ network-object object OBV_HLR_iLO_47
+ network-object object OBV_HLR_iLO_48
+ network-object object OBV_HLR_HLR_FE_01_s1hlrfe101
+ network-object object OBV_HLR_iLO_49
+ network-object object OBV_HLR_HLR_FE_02_s1hlrfe102
+ network-object object OBV_HLR_iLO_50
+ network-object object OBV_HLR_Chassis-1_Onboard_Admin1
+ network-object object OBV_HLR_Chassis-1_Onboard_Admin2
+ network-object object OBV_HLR_Chassis-1_HP_VC_Flex_10_10D_1
+ network-object object OBV_HLR_Chassis-1_HP_VC_Flex_10_10D_2
+object-group network HLR_OBV_HTTPS
+ network-object object OBV_HLR_TIAMS01_s1sdmtia11
+ network-object object OBV_HLR_iLO_47
+ network-object object OBV_HLR_iLO_48
+ network-object object OBV_HLR_HLR_FE_01_s1hlrfe101
+ network-object object OBV_HLR_iLO_49
+ network-object object OBV_HLR_HLR_FE_02_s1hlrfe102
+ network-object object OBV_HLR_iLO_50
+ network-object object OBV_HLR_Chassis-1_Onboard_Admin1
+ network-object object OBV_HLR_Chassis-1_Onboard_Admin2
+ network-object object OBV_HLR_Chassis-1_HP_VC_Flex_10_10D_1
+ network-object object OBV_HLR_Chassis-1_HP_VC_Flex_10_10D_2
+object-group network HLR_OBV_8080_9099_9880
+ network-object object OBV_HLR_HLR_FE_01_s1hlrfe101
+ network-object object OBV_HLR_HLR_FE_02_s1hlrfe102
+object-group network HLR_FA_SSH
+ network-object object FA_HLR_TIAMS01_s2sdmtia11
+ network-object object FA_HLR_iLO_47
+ network-object object FA_HLR_TIAMS02_s2sdmtia12
+ network-object object FA_HLR_iLO_48
+ network-object object FA_HLR_HLR_FE_01_s2hlrfe101
+ network-object object FA_HLR_iLO_49
+ network-object object FA_HLR_HLR_FE_02_s2hlrfe102
+ network-object object FA_HLR_iLO_50
+ network-object object FA_HLR_Chassis_1_Onboard_Admin1
+ network-object object FA_HLR_Chassis_1_Onboard_Admin2
+ network-object object FA_HLR_Chassis_1_HP_VC_Flex_10_10D_1
+ network-object object FA_HLR_Chassis_1_HP_VC_Flex_10_10D_2
+object-group network HLR_FA_HTTP
+ network-object object FA_HLR_iLO_48
+ network-object object FA_HLR_HLR_FE_01_s2hlrfe101
+ network-object object FA_HLR_iLO_49
+ network-object object FA_HLR_HLR_FE_02_s2hlrfe102
+ network-object object FA_HLR_iLO_50
+ network-object object FA_HLR_Chassis_1_Onboard_Admin1
+ network-object object FA_HLR_Chassis_1_Onboard_Admin2
+ network-object object FA_HLR_Chassis_1_HP_VC_Flex_10_10D_1
+ network-object object FA_HLR_Chassis_1_HP_VC_Flex_10_10D_2
+ network-object object FA_HLR_iLO_47
+object-group network HLR_FA_HTTPS
+ network-object object FA_HLR_iLO_48
+ network-object object FA_HLR_HLR_FE_01_s2hlrfe101
+ network-object object FA_HLR_iLO_49
+ network-object object FA_HLR_HLR_FE_02_s2hlrfe102
+ network-object object FA_HLR_iLO_50
+ network-object object FA_HLR_Chassis_1_Onboard_Admin1
+ network-object object FA_HLR_Chassis_1_Onboard_Admin2
+ network-object object FA_HLR_Chassis_1_HP_VC_Flex_10_10D_1
+ network-object object FA_HLR_Chassis_1_HP_VC_Flex_10_10D_2
+ network-object object FA_HLR_iLO_47
+object-group network HLR_FA_8080_9099_9880
+ network-object object FA_HLR_HLR_FE_01_s2hlrfe101
+ network-object object FA_HLR_HLR_FE_02_s2hlrfe102
+object-group network CE_ROUTER_TELNET_SSH
+ network-object object CE_ROUTER_CE1OBV
+ network-object object CE_ROUTER_CE2OBV
+ network-object object CE_ROUTER_CE1FA
+ network-object object CE_ROUTER_CE2FA
+object-group network BSC_SSH
+ network-object object OBV_BSC
+ network-object object FA_OBV
+object-group network PS_CORE_SSH_HTTP_HTTPS
+ network-object object OBV_PS_Core_FNG1OBV
+ network-object object OBV_PS_Core_FNS1OBV
+ network-object object FA_PS_Core_FNG1FA
+ network-object object FA_PS_Core_FNS1FA
+object-group network VOICE_SSH_HTTP_HTTPS
+ network-object object Voice_Recorder_VRS1FA
+ network-object object Voice_Recorder_Server_1
+ network-object object Voice_Recorder_VRS1OBV
+ network-object object Voice_Recorder_Server_2
+ network-object object Voice_Recorder_VRS_Archive
+ network-object object Voice_Recorder_Server_3
+object-group network SIM_SSH_HTTP_HTTPS
+ network-object object SIMtellegent_sim1obv
+ network-object object SIMtellegent_sim2obv
+ network-object object SIMtellegent_sim1fa
+ network-object object SIMtellegent_sim2fa
+object-group network NETACT_OBV_SSH_HTTP_HTTPS
+ network-object object OBV_NetAct_Onboard_Administrator
+ network-object object OBV_NetAct_NEBR_iLO
+ network-object object OBV_NetAct_SAN
+ network-object object OBV_NetAct_SAN_29
+ network-object object OBV_NetAct_NEBR_SAN
+ network-object object OBV_NetAct_NEBR_SAN_33
+ network-object object OBV_NetAct_NTP_Time_Provider
+ network-object object OBV_NetAct_FA_NTP_Time_Provider
+ network-object object OBV_NetAct_Server1
+ network-object object OBV_NetAct_Server2
+ network-object object OBV_NetAct_Server3
+ network-object object OBV_NetAct_Server4
+ network-object object OBV_NetAct_Server5
+ network-object object OBV_NetAct_Server6
+ network-object object OBV_NetAct_Server7
+ network-object object OBV_NetAct_Server8
+ network-object object OBV_NetAct_Server9
+ network-object object OBV_NetAct_Server10
+ network-object object OBV_NetAct_Server11
+ network-object object OBV_NetAct_Server12
+ network-object object OBV_NetAct_Server13
+ network-object object OBV_NetAct_Server14
+ network-object object OBV_NetAct_Server15
+ network-object object OBV_NetAct_Server16
+ network-object object OBV_NetAct_Server17
+ network-object object OBV_NetAct_Server18
+ network-object object OBV_NetAct_Server19
+ network-object object OBV_NetAct_Server20
+ network-object object OBV_NetAct_Server21
+ network-object object OBV_NetAct_Server22
+ network-object object OBV_NetAct_Server23
+ network-object object OBV_NetAct_Server24
+ network-object object OBV_NetAct_Server25
+ network-object object OBV_NetAct_Server26
+ network-object object OBV_NetAct_Server27
+ network-object object OBV_NetAct_Server28
+ network-object object OBV_NetAct_Server29
+ network-object object OBV_NetAct_Server30
+ network-object object OBV_NetAct_Server31
+ network-object object OBV_NetAct_Server32
+ network-object object OBV_NetAct_Server33
+ network-object object OBV_NetAct_Server34
+ network-object object OBV_NetAct_Server35
+ network-object object OBV_NetAct_Server36
+ network-object object OBV_NetAct_Server37
+ network-object object OBV_NetAct_Server38
+ network-object object OBV_NetAct_Server39
+ network-object object OBV_NetAct_NEBR_Host1
+ network-object object OBV_NetAct_NEBR_Host2
+ network-object object OBV_NetAct_NEBR_Host3
+ network-object object OBV_NetAct_NEBR_Host4
+ network-object object OBV_NetAct_VaaS_Host1
+ network-object object OBV_NetAct_VaaS_Host2
+ network-object object OBV_NetAct_VaaS_Host3
+ network-object object OBV_NetAct_VaaS_Host4
+ network-object object OBV_NetAct_VaaS_Host5
+ network-object object OBV_NetAct_VaaS_Host6
+ network-object object OBV_NetAct_Server40
+object-group network NETACT_OBV_1521
+ network-object object OBV_NetAct_Server2
+ network-object object OBV_NetAct_Server3
+ network-object object OBV_NetAct_Server4
+object-group network NETACT_OBV_9000
+ network-object object OBV_NetAct_NEBR_Host1
+ network-object object OBV_NetAct_NEBR_Host2
+ network-object object OBV_NetAct_NEBR_Host3
+ network-object object OBV_NetAct_NEBR_Host4
+object-group network NETACT_FA_SSH_HTTP_HTTPS
+ network-object object FA_NetAct_Onboard_Admin_nea1faoa1
+ network-object object FA_NetAct_NEBR_iLO_nebr1failo
+ network-object object FA_NetAct_SAN_nea1faneas1
+ network-object object FA_NetAct_SAN_nea1faneas2
+ network-object object FA_NetAct_FANEBR_SAN_nea1fanes1
+ network-object object FA_NetAct_FANEBR_SAN_nea1fanes2
+object-group network Frequentis_CTSS_ssh_10000
+ network-object object OBV_FRQ_CTSS_Application_Manager_1
+ network-object object OBV_FRQ_CTSS_Application_Manager_2
+ network-object object FA_FRQ_CTSS_Application_Manager_1
+ network-object object FA_FRQ_CTSS_Application_Manager_2
+object-group service SERVICE_RDP
+ description RDP
+ service-object tcp destination eq 3389
+ service-object udp destination eq 3389
+object-group network CitrixDCs
+ network-object host 172.21.250.65
+ network-object host 172.21.250.66
+object-group network BDK_DCs
+ network-object host 172.27.2.22
+ network-object host 172.27.3.22
+object-group network CitrixSFTs
+ network-object host 172.21.250.67
+ network-object host 172.21.250.68
+object-group service SERVICE_icmp_www
+ description Service ICMP and HTTP
+ service-object icmp
+ service-object tcp destination eq www
+object-group network CitrixNetscGW
+ network-object host 172.21.250.12
+ network-object host 172.21.250.14
+object-group network DHCP_Servers
+ description DHCP Servers for Citrix Clients
+ network-object object abanekh3.bane.dk_172.20.3.19
+ network-object object ABANE16.bane.dk_172.27.2.22
+object-group network BDK-LDAP
+ network-object host 172.27.2.22
+ network-object host 172.27.3.22
+object-group service SERVICE_dhcp
+ service-object udp destination eq bootps
+object-group network Citrix_DHCP_Clients
+ description Citrix Clients needing DHCP
+ network-object object IP_HELPER_172.21.250.1
+ network-object object AAPPCTXTPX_172.21.250.75_.118
+object-group service SERVICE_ntp
+ service-object udp destination eq ntp
+object-group network Citrix_NTP_Clients
+ description Citrix Clients needing NTP
+ network-object object AESXCTXOBV01-12_172.21.248.10-21
+ network-object object ACTXVCENT01_172.21.248.22
+ network-object object ACTXUPDTMGMT01_172.21.248.23
+ network-object object ACTXJUMP01_172.21.248.24
+ network-object object AAPPCTXXDC01_172.21.250.65
+ network-object object AAPPCTXXDC02_172.21.250.66
+ network-object object AAPPCTXSFT01_172.21.250.67
+ network-object object AAPPCTXSFT02_172.21.250.68
+ network-object object AAPPCTXLIC01_172.21.250.69
+ network-object object AAPPCTXPVS01_172.21.250.70
+ network-object object AAPPCTXPVS02_172.21.250.71
+ network-object object AAPPCTXFIL01_172.21.250.72
+ network-object object AAPPCTXSQL01_172.21.250.73
+ network-object object AAPPCTXSQL02_172.21.250.74
+ network-object object AAPPCTXTPX_172.21.250.75_.118
+object-group network DNS_Servers
+ description BDKs Domain Name Servers
+ network-object object ABANE16.bane.dk_172.27.2.22
+ network-object object abane17.bane.dk_172.27.3.22
+object-group service DNS-Resolving
+ service-object tcp destination eq domain
+ service-object udp destination eq domain
+object-group network Citrix_DNS_Clients
+ description Citrix Clients needing DNS
+ network-object object ACTXVCENT01_172.21.248.22
+ network-object object ACTXJUMP01_172.21.248.24
+ network-object object AAPPCTXXDC01_172.21.250.65
+ network-object object AAPPCTXXDC02_172.21.250.66
+ network-object object AAPPCTXSFT01_172.21.250.67
+ network-object object AAPPCTXSFT02_172.21.250.68
+ network-object object AAPPCTXLIC01_172.21.250.69
+ network-object object AAPPCTXPVS01_172.21.250.70
+ network-object object AAPPCTXPVS02_172.21.250.71
+ network-object object AAPPCTXFIL01_172.21.250.72
+ network-object object AAPPCTXSQL01_172.21.250.73
+ network-object object AAPPCTXSQL02_172.21.250.74
+ network-object object AAPPCTXTPX_172.21.250.75_.118
+object-group service SERVICE_tcp_49151-65535
+ service-object tcp destination range 49151 65535
+object-group service SERVICE_tcp_88_135_389_464_3268_3269
+ service-object tcp destination eq 88
+ service-object tcp destination eq 135
+ service-object tcp destination eq ldap
+ service-object tcp destination eq 464
+ service-object tcp destination eq 3268
+ service-object tcp destination eq 3269
+ service-object udp destination eq 389
+ service-object tcp destination eq 445
+object-group network TS_CAL_LICENSE_GROUP
+ description Citrix host needing to rach the TS CAL License Server
+ network-object object ACTXUPDTMGMT01_172.21.248.23
+ network-object object ACTXJUMP01_172.21.248.24
+ network-object object AAPPCTXXDC01_172.21.250.65
+ network-object object AAPPCTXXDC02_172.21.250.66
+ network-object object AAPPCTXSFT01_172.21.250.67
+ network-object object AAPPCTXSFT02_172.21.250.68
+ network-object object AAPPCTXLIC01_172.21.250.69
+ network-object object AAPPCTXPVS01_172.21.250.70
+ network-object object AAPPCTXPVS02_172.21.250.71
+ network-object object AAPPCTXFIL01_172.21.250.72
+ network-object object AAPPCTXSQL01_172.21.250.73
+ network-object object AAPPCTXSQL02_172.21.250.74
+ network-object object AAPPCTXTPX_172.21.250.75_.118
+object-group network Citrix_TCP_to_DCs
+ description Citrix Clients needing various TCP connections to DCs
+ network-object object ACTXVCENT01_172.21.248.22
+ network-object object ACTXJUMP01_172.21.248.24
+ network-object object AAPPCTXXDC01_172.21.250.65
+ network-object object AAPPCTXXDC02_172.21.250.66
+ network-object object AAPPCTXSFT01_172.21.250.67
+ network-object object AAPPCTXSFT02_172.21.250.68
+ network-object object AAPPCTXLIC01_172.21.250.69
+ network-object object AAPPCTXPVS01_172.21.250.70
+ network-object object AAPPCTXPVS02_172.21.250.71
+ network-object object AAPPCTXFIL01_172.21.250.72
+ network-object object AAPPCTXSQL01_172.21.250.73
+ network-object object AAPPCTXSQL02_172.21.250.74
+ network-object object AAPPCTXTPX_172.21.250.75_.118
+object-group service SERVICE_tcp_135_445_49151..65535
+ service-object tcp destination eq 135
+ service-object tcp destination eq 445
+ group-object SERVICE_tcp_49151-65535
+object-group service SERVICE_tcp_1494_2598_udp_1494_2598
+ service-object udp destination eq 1494
+ service-object tcp destination eq citrix-ica
+ service-object udp destination eq 2598
+ service-object tcp destination eq 2598
+object-group service SERVICE_tcp_1494_2598_udp_1494_2598_3224..3324_16500..16509
+ service-object udp destination eq 1494
+ service-object tcp destination eq citrix-ica
+ service-object udp destination eq 2598
+ service-object tcp destination eq 2598
+ service-object udp destination range 3224 3324
+ service-object udp destination range 16500 16509
+object-group service SERVICE_tcp_80_443
+ service-object tcp destination eq www
+ service-object tcp destination eq https
+object-group network AAPPCTXXDCs
+ description Citrix DCs
+ network-object object AAPPCTXXDC01_172.21.250.65
+ network-object object AAPPCTXXDC02_172.21.250.66
+object-group network AAPPCTXXFTs
+ description Citrix FTs
+ network-object object AAPPCTXSFT01_172.21.250.67
+ network-object object AAPPCTXSFT02_172.21.250.68
+object-group service SERVICE_tcp_88_135_389_445_464_3268_3269_5985_udp_389_5985
+ service-object tcp destination eq 88
+ service-object tcp destination eq 135
+ service-object tcp destination eq ldap
+ service-object tcp destination eq 445
+ service-object tcp destination eq 464
+ service-object tcp destination eq 3268
+ service-object tcp destination eq 3269
+ service-object tcp destination eq 5985
+ service-object udp destination eq 389
+ service-object udp destination eq 5985
+object-group service SERVICE_tcp_53_389_445_464_636_udp_53_123_389_icmp
+ service-object icmp
+ service-object tcp destination eq domain
+ service-object tcp destination eq ldap
+ service-object tcp destination eq 445
+ service-object tcp destination eq ldaps
+ service-object udp destination eq domain
+ service-object udp destination eq ntp
+ service-object udp destination eq 389
+object-group network DiaMont-Servers_172.21.252.1x
+ network-object object ADIACENTSOB1_172.21.252.11
+ network-object object ADIASSRANOB2_172.21.252.13
+ network-object object ADIASSCNOB1_172.21.252.12
+ network-object object ADIASSGPRSOB4_172.21.252.15
+ network-object object ADIASSRBCOB3_172.21.252.14
+ network-object object ADIATSOB1_172.21.252.16
+object-group network PSS_172.19.144.0_24
+object-group network DiaMont-servers_172.21.249.1x
+ network-object object ADIATSOB1_172.21.249.16
+ network-object object ADIACENTSOB1_172.21.249.11
+ network-object object ADIASSRANOB2_172.21.249.13
+ network-object object ADIASSCNOB1_172.21.249.12
+ network-object object ADIASSGPRSOB4_172.21.249.15
+ network-object object ADIASSRBCOB3_172.21.249.14
+object-group service STTN_EAST_MGMT_ports
+ service-object tcp destination eq www
+ service-object tcp destination eq https
+ service-object tcp destination eq 1000
+ service-object tcp destination eq ssh
+ service-object tcp destination eq 3306
+ service-object tcp destination eq 135
+ service-object tcp destination eq 64385
+ service-object tcp destination eq 3389
+ service-object tcp destination eq 5900
+ service-object tcp destination eq 502
+ service-object udp destination eq snmp
+object-group network DiaMont-Servers_172.21.244.1x
+ network-object object ADIASSRBCFA3_172.21.244.14
+ network-object object ADIASSGPRSFA4_172.21.244.15
+ network-object object ADIASSCNFA1_172.21.244.12
+ network-object object ADIASSRANFA2_172.21.244.13
+ network-object object ADIACENTSFA1_172.21.244.11
+ network-object object ADIATSFA1_172.21.244.16
+ network-object host 172.21.244.11
+ network-object host 172.21.244.12
+ network-object host 172.21.244.13
+ network-object host 172.21.244.14
+ network-object host 172.21.244.15
+object-group service RDP
+ description RDP
+ service-object tcp destination eq 3389
+ service-object udp destination eq 3389
+object-group service SERVICE_icmp_tcp_53_88_389_484_636_3268_udp_53_88_123_389_484_636_3268
+ service-object icmp
+ service-object udp destination eq domain
+ service-object udp destination eq 88
+ service-object udp destination eq ntp
+ service-object udp destination eq 389
+ service-object udp destination eq 484
+ service-object udp destination eq 636
+ service-object udp destination eq 3268
+ service-object tcp destination eq domain
+ service-object tcp destination eq 88
+ service-object tcp destination eq ldap
+ service-object tcp destination eq 484
+ service-object tcp destination eq ldaps
+ service-object tcp destination eq 3268
+object-group service TPS_AD_ports
+ service-object udp destination eq 389
+ service-object tcp destination eq ldap
+ service-object udp destination eq 636
+ service-object tcp destination eq ldaps
+ service-object udp destination eq 3269
+ service-object tcp destination eq 3268
+ service-object udp destination eq 88
+ service-object tcp destination eq 88
+ service-object udp destination eq domain
+ service-object tcp destination eq domain
+ service-object udp destination eq ntp
+ service-object udp destination eq 464
+ service-object tcp destination eq 464
+object-group network Domain_group
+ network-object object abane17.bane.dk_172.27.3.22
+ network-object object ABANE16.bane.dk_172.27.2.22
+object-group service SERVICE_icmp_dns_ldaps
+ service-object object icmp
+ service-object udp destination eq domain
+ service-object tcp destination eq domain
+ service-object tcp destination eq ldaps
+object-group network Thales_HIS_ixl
+ network-object host 10.48.1.67
+ network-object host 10.48.1.68
+ network-object host 10.48.1.69
+ network-object host 10.48.1.70
+ network-object host 10.48.1.71
+ network-object host 10.48.1.72
+ network-object host 10.48.1.73
+ network-object host 10.48.1.74
+ network-object host 10.48.1.75
+ network-object host 10.48.1.76
+ network-object host 10.48.1.77
+ network-object host 10.48.1.78
+ network-object host 10.48.1.79
+ network-object host 10.48.1.80
+ network-object host 10.48.1.81
+ network-object host 10.48.2.66
+ network-object host 10.48.2.67
+ network-object host 10.48.2.68
+ network-object host 10.48.2.69
+ network-object host 10.48.2.70
+ network-object host 10.48.2.71
+ network-object host 10.48.2.72
+ network-object host 10.48.2.73
+ network-object host 10.48.2.74
+ network-object host 10.48.2.75
+ network-object host 10.48.2.76
+ network-object host 10.48.2.77
+ network-object host 10.48.2.78
+ network-object host 10.48.2.79
+ network-object host 10.48.2.80
+ network-object host 10.48.2.81
+ network-object host 10.48.3.66
+ network-object host 10.48.3.67
+ network-object host 10.48.3.68
+ network-object host 10.48.3.69
+ network-object host 10.48.3.70
+ network-object host 10.48.3.71
+ network-object host 10.48.3.72
+ network-object host 10.48.3.73
+ network-object host 10.48.3.74
+ network-object host 10.48.3.75
+ network-object host 10.48.3.76
+ network-object host 10.48.3.77
+ network-object host 10.48.3.78
+ network-object host 10.48.3.79
+ network-object host 10.48.3.80
+ network-object host 10.48.3.81
+ network-object host 10.48.4.66
+ network-object host 10.48.4.67
+ network-object host 10.48.4.68
+ network-object host 10.48.4.69
+ network-object host 10.48.4.70
+ network-object host 10.48.4.71
+ network-object host 10.48.4.72
+ network-object host 10.48.4.73
+ network-object host 10.48.4.74
+ network-object host 10.48.4.75
+ network-object host 10.48.4.76
+ network-object host 10.48.4.77
+ network-object host 10.48.4.78
+ network-object host 10.48.4.79
+ network-object host 10.48.4.80
+ network-object host 10.48.4.81
+ network-object host 10.48.50.66
+ network-object host 10.48.50.67
+ network-object host 10.48.50.68
+ network-object host 10.48.50.69
+ network-object host 10.48.50.70
+ network-object host 10.48.50.71
+ network-object host 10.48.50.72
+ network-object host 10.48.50.73
+ network-object host 10.48.50.74
+ network-object host 10.48.50.75
+ network-object host 10.48.50.76
+ network-object host 10.48.50.77
+ network-object host 10.48.50.78
+ network-object host 10.48.50.79
+ network-object host 10.48.50.80
+ network-object host 10.48.50.81
+ network-object host 10.48.90.66
+ network-object host 10.48.90.67
+ network-object host 10.48.90.68
+ network-object host 10.48.90.69
+ network-object host 10.48.90.70
+ network-object host 10.48.90.71
+ network-object host 10.48.90.72
+ network-object host 10.48.90.73
+ network-object host 10.48.90.74
+ network-object host 10.48.90.75
+ network-object host 10.48.90.76
+ network-object host 10.48.90.77
+ network-object host 10.48.90.78
+ network-object host 10.48.90.79
+ network-object host 10.48.90.80
+ network-object host 10.48.90.81
+ network-object host 10.48.51.66
+ network-object host 10.48.51.67
+ network-object host 10.48.51.68
+ network-object host 10.48.51.69
+ network-object host 10.48.51.70
+ network-object host 10.48.51.71
+ network-object host 10.48.51.72
+ network-object host 10.48.51.73
+ network-object host 10.48.51.74
+ network-object host 10.48.51.75
+ network-object host 10.48.51.76
+ network-object host 10.48.51.77
+ network-object host 10.48.51.78
+ network-object host 10.48.51.79
+ network-object host 10.48.51.80
+ network-object host 10.48.51.81
+ network-object host 10.49.73.66
+ network-object host 10.49.73.67
+ network-object host 10.49.73.68
+ network-object host 10.49.73.69
+ network-object host 10.49.73.70
+ network-object host 10.49.73.71
+ network-object host 10.49.73.72
+ network-object host 10.49.73.73
+ network-object host 10.49.73.74
+ network-object host 10.49.73.75
+ network-object host 10.49.73.76
+ network-object host 10.49.73.77
+ network-object host 10.49.73.78
+ network-object host 10.49.73.79
+ network-object host 10.49.73.80
+ network-object host 10.49.73.81
+ network-object host 10.50.1.67
+ network-object host 10.50.1.68
+ network-object host 10.50.1.69
+ network-object host 10.50.1.70
+
+ network-object host 10.50.2.71
+ network-object host 10.50.2.72
+ network-object host 10.50.2.73
+ network-object host 10.50.2.74
+ network-object host 10.50.2.75
+ network-object host 10.50.2.76
+ network-object host 10.50.2.77
+ network-object host 10.50.2.78
+ network-object host 10.50.2.79
+ network-object host 10.50.2.80
+ network-object host 10.50.2.81
+ network-object host 10.50.3.66
+ network-object host 10.50.3.67
+ network-object host 10.50.3.68
+ network-object host 10.50.3.69
+ network-object host 10.50.3.70
+ network-object host 10.50.3.71
+ network-object host 10.50.3.72
+ network-object host 10.50.3.73
+ network-object host 10.50.3.74
+ network-object host 10.50.3.75
+ network-object host 10.50.3.76
+ network-object host 10.50.3.77
+ network-object host 10.50.3.78
+ network-object host 10.50.3.79
+ network-object host 10.50.3.80
+ network-object host 10.50.3.81
+ network-object host 10.50.4.66
+ network-object host 10.50.4.67
+ network-object host 10.50.4.68
+ network-object host 10.50.4.69
+ network-object host 10.50.4.70
+ network-object host 10.50.4.71
+ network-object host 10.50.4.72
+ network-object host 10.50.4.73
+ network-object host 10.50.4.74
+ network-object host 10.50.4.75
+ network-object host 10.50.4.76
+ network-object host 10.50.4.77
+ network-object host 10.50.4.78
+ network-object host 10.50.4.79
+ network-object host 10.50.4.80
+ network-object host 10.50.4.81
+ network-object host 10.50.50.66
+ network-object host 10.50.50.67
+ network-object host 10.50.50.68
+ network-object host 10.50.50.69
+ network-object host 10.50.50.70
+ network-object host 10.50.50.71
+ network-object host 10.50.50.72
+ network-object host 10.50.50.73
+ network-object host 10.50.50.74
+ network-object host 10.50.50.75
+ network-object host 10.50.50.76
+ network-object host 10.50.50.77
+ network-object host 10.50.50.78
+ network-object host 10.50.50.79
+ network-object host 10.50.50.80
+ network-object host 10.50.50.81
+ network-object host 10.50.51.66
+ network-object host 10.50.51.67
+ network-object host 10.50.51.68
+ network-object host 10.50.51.69
+ network-object host 10.50.51.70
+ network-object host 10.50.51.71
+ network-object host 10.50.51.72
+ network-object host 10.50.51.73
+ network-object host 10.50.51.74
+ network-object host 10.50.51.75
+ network-object host 10.50.51.76
+ network-object host 10.50.51.77
+ network-object host 10.50.51.78
+ network-object host 10.50.51.79
+ network-object host 10.50.51.80
+ network-object host 10.50.51.81
+ network-object host 10.50.90.66
+ network-object host 10.50.90.67
+ network-object host 10.50.90.68
+ network-object host 10.50.90.69
+ network-object host 10.50.90.70
+ network-object host 10.50.90.71
+ network-object host 10.50.90.72
+ network-object host 10.50.90.73
+ network-object host 10.50.90.74
+ network-object host 10.50.90.75
+ network-object host 10.50.90.76
+ network-object host 10.50.90.77
+ network-object host 10.50.90.78
+ network-object host 10.50.90.79
+ network-object host 10.50.90.80
+ network-object host 10.50.90.81
+ network-object host 10.51.73.66
+ network-object host 10.51.73.67
+ network-object host 10.51.73.68
+ network-object host 10.51.73.69
+ network-object host 10.51.73.70
+ network-object host 10.51.73.71
+ network-object host 10.51.73.72
+ network-object host 10.51.73.73
+ network-object host 10.51.73.74
+ network-object host 10.51.73.75
+ network-object host 10.51.73.76
+ network-object host 10.51.73.77
+ network-object host 10.51.73.78
+ network-object host 10.51.73.79
+ network-object host 10.51.73.80
+ network-object host 10.51.73.81
+object-group network Thales_HHT
+ network-object host 10.49.255.2
+ network-object host 10.49.255.3
+ network-object host 10.49.255.4
+ network-object host 10.49.255.5
+ network-object host 10.49.255.6
+ network-object host 10.49.255.7
+ network-object host 10.49.255.8
+ network-object host 10.49.255.9
+ network-object host 10.49.255.10
+ network-object host 10.49.255.11
+ network-object host 10.49.255.12
+ network-object host 10.49.255.13
+ network-object host 10.49.255.14
+ network-object host 10.49.255.15
+ network-object host 10.49.255.16
+ network-object host 10.49.255.17
+ network-object host 10.49.255.18
+ network-object host 10.49.255.19
+ network-object host 10.49.255.20
+ network-object host 10.49.255.21
+ network-object host 10.49.255.22
+ network-object host 10.49.255.23
+ network-object host 10.49.255.24
+ network-object host 10.49.255.25
+ network-object host 10.49.255.26
+ network-object host 10.49.255.27
+ network-object host 10.49.255.28
+ network-object host 10.49.255.29
+ network-object host 10.49.255.30
+ network-object host 10.49.255.31
+ network-object host 10.49.255.32
+ network-object host 10.49.255.33
+ network-object host 10.49.255.34
+ network-object host 10.49.255.35
+ network-object host 10.49.255.36
+ network-object host 10.49.255.37
+ network-object host 10.49.255.38
+ network-object host 10.49.255.39
+ network-object host 10.49.255.40
+ network-object host 10.49.255.41
+ network-object host 10.49.255.42
+ network-object host 10.49.255.43
+ network-object host 10.49.255.44
+ network-object host 10.49.255.45
+ network-object host 10.49.255.46
+ network-object host 10.49.255.47
+ network-object host 10.49.255.48
+ network-object host 10.49.255.49
+ network-object host 10.49.255.50
+ network-object host 10.49.255.51
+ network-object host 10.49.255.52
+ network-object host 10.49.255.53
+ network-object host 10.49.255.54
+ network-object host 10.49.255.55
+ network-object host 10.49.255.56
+ network-object host 10.49.255.57
+ network-object host 10.49.255.58
+ network-object host 10.49.255.59
+ network-object host 10.49.255.60
+ network-object host 10.49.255.61
+ network-object host 10.49.255.62
+ network-object host 10.49.255.63
+ network-object host 10.49.255.64
+ network-object host 10.49.255.65
+ network-object host 10.49.255.66
+ network-object host 10.49.255.67
+ network-object host 10.49.255.68
+ network-object host 10.49.255.69
+ network-object host 10.49.255.70
+ network-object host 10.49.255.71
+ network-object host 10.49.255.72
+ network-object host 10.49.255.73
+ network-object host 10.49.255.74
+ network-object host 10.49.255.75
+ network-object host 10.49.255.76
+ network-object host 10.49.255.77
+ network-object host 10.49.255.78
+ network-object host 10.49.255.79
+ network-object host 10.49.255.80
+ network-object host 10.49.255.81
+ network-object host 10.49.255.82
+ network-object host 10.49.255.83
+ network-object host 10.49.255.84
+ network-object host 10.49.255.85
+ network-object host 10.49.255.86
+ network-object host 10.49.255.87
+ network-object host 10.49.255.88
+ network-object host 10.49.255.89
+ network-object host 10.49.255.90
+ network-object host 10.49.255.91
+ network-object host 10.49.255.92
+ network-object host 10.49.255.93
+ network-object host 10.49.255.94
+ network-object host 10.49.255.95
+ network-object host 10.49.255.96
+ network-object host 10.49.255.97
+ network-object host 10.49.255.98
+ network-object host 10.49.255.99
+ network-object host 10.49.255.100
+ network-object host 10.49.255.101
+ network-object host 10.49.255.102
+ network-object host 10.49.255.103
+ network-object host 10.49.255.104
+ network-object host 10.49.255.105
+ network-object host 10.49.255.106
+ network-object host 10.49.255.107
+ network-object host 10.49.255.108
+ network-object host 10.49.255.109
+ network-object host 10.49.255.110
+ network-object host 10.49.255.111
+ network-object host 10.49.255.112
+ network-object host 10.49.255.113
+ network-object host 10.49.255.114
+ network-object host 10.49.255.115
+ network-object host 10.49.255.116
+ network-object host 10.49.255.117
+ network-object host 10.49.255.118
+ network-object host 10.49.255.119
+ network-object host 10.49.255.120
+ network-object host 10.49.255.121
+ network-object host 10.49.255.122
+ network-object host 10.49.255.123
+ network-object host 10.49.255.124
+ network-object host 10.49.255.125
+ network-object host 10.49.255.126
+ network-object host 10.49.255.127
+ network-object host 10.49.255.128
+ network-object host 10.49.255.129
+ network-object host 10.49.255.130
+ network-object host 10.49.255.131
+ network-object host 10.49.255.132
+ network-object host 10.49.255.133
+ network-object host 10.49.255.134
+ network-object host 10.49.255.135
+ network-object host 10.49.255.136
+ network-object host 10.49.255.137
+ network-object host 10.49.255.138
+ network-object host 10.49.255.139
+ network-object host 10.49.255.140
+ network-object host 10.49.255.141
+ network-object host 10.49.255.142
+ network-object host 10.49.255.143
+ network-object host 10.49.255.144
+ network-object host 10.49.255.145
+ network-object host 10.49.255.146
+ network-object host 10.49.255.147
+ network-object host 10.49.255.148
+ network-object host 10.49.255.149
+ network-object host 10.49.255.150
+ network-object host 10.49.255.151
+ network-object host 10.49.255.152
+ network-object host 10.49.255.153
+ network-object host 10.49.255.154
+ network-object host 10.49.255.155
+ network-object host 10.49.255.156
+ network-object host 10.49.255.157
+ network-object host 10.49.255.158
+ network-object host 10.49.255.159
+ network-object host 10.49.255.160
+ network-object host 10.49.255.161
+ network-object host 10.49.255.162
+ network-object host 10.49.255.163
+ network-object host 10.49.255.164
+ network-object host 10.49.255.165
+ network-object host 10.49.255.166
+ network-object host 10.49.255.167
+ network-object host 10.49.255.168
+ network-object host 10.49.255.169
+ network-object host 10.49.255.170
+ network-object host 10.49.255.171
+ network-object host 10.49.255.172
+ network-object host 10.49.255.173
+ network-object host 10.49.255.174
+ network-object host 10.49.255.175
+ network-object host 10.49.255.176
+ network-object host 10.49.255.177
+ network-object host 10.49.255.178
+ network-object host 10.49.255.179
+ network-object host 10.49.255.180
+ network-object host 10.49.255.181
+ network-object host 10.49.255.182
+ network-object host 10.49.255.183
+ network-object host 10.49.255.184
+ network-object host 10.49.255.185
+ network-object host 10.49.255.186
+ network-object host 10.49.255.187
+ network-object host 10.49.255.188
+ network-object host 10.49.255.189
+ network-object host 10.49.255.190
+ network-object host 10.49.255.191
+ network-object host 10.49.255.192
+ network-object host 10.49.255.193
+ network-object host 10.49.255.194
+ network-object host 10.49.255.195
+ network-object host 10.49.255.196
+ network-object host 10.49.255.197
+ network-object host 10.49.255.198
+ network-object host 10.49.255.199
+ network-object host 10.49.255.200
+ network-object host 10.49.255.201
+ network-object host 10.49.255.202
+ network-object host 10.49.255.203
+ network-object host 10.49.255.204
+ network-object host 10.49.255.205
+ network-object host 10.49.255.206
+ network-object host 10.49.255.207
+ network-object host 10.49.255.208
+ network-object host 10.49.255.209
+ network-object host 10.49.255.210
+ network-object host 10.49.255.211
+ network-object host 10.49.255.212
+ network-object host 10.49.255.213
+ network-object host 10.49.255.214
+ network-object host 10.49.255.215
+ network-object host 10.49.255.216
+ network-object host 10.49.255.217
+ network-object host 10.49.255.218
+ network-object host 10.49.255.219
+ network-object host 10.49.255.220
+ network-object host 10.49.255.221
+ network-object host 10.49.255.222
+ network-object host 10.49.255.223
+ network-object host 10.49.255.224
+ network-object host 10.49.255.225
+ network-object host 10.49.255.226
+ network-object host 10.49.255.227
+ network-object host 10.49.255.228
+ network-object host 10.49.255.229
+ network-object host 10.49.255.230
+ network-object host 10.49.255.231
+ network-object host 10.49.255.232
+ network-object host 10.49.255.233
+ network-object host 10.49.255.234
+ network-object host 10.49.255.235
+ network-object host 10.49.255.236
+ network-object host 10.49.255.237
+ network-object host 10.49.255.238
+ network-object host 10.49.255.239
+ network-object host 10.49.255.240
+ network-object host 10.49.255.241
+ network-object host 10.49.255.242
+ network-object host 10.49.255.243
+ network-object host 10.49.255.244
+ network-object host 10.49.255.245
+ network-object host 10.49.255.246
+ network-object host 10.49.255.247
+ network-object host 10.49.255.248
+ network-object host 10.49.255.249
+ network-object host 10.49.255.250
+ network-object host 10.49.255.251
+ network-object host 10.49.255.252
+ network-object host 10.49.255.253
+ network-object host 10.49.255.254
+object-group network GSMR_HOSTS
+ network-object host 10.150.91.132
+ network-object host 10.150.65.83
+ network-object host 10.150.192.161
+ network-object host 10.150.73.8
+ network-object host 10.150.72.8
+ network-object host 10.150.77.14
+ network-object host 10.150.69.4
+ network-object host 10.150.69.145
+ network-object host 10.150.148.10
+ network-object host 10.150.79.21
+ network-object host 10.150.96.196
+ network-object host OBV-OAM-FMS_10.150.79.25
+ network-object 10.150.77.0 255.255.255.0
+ network-object 10.150.74.0 255.255.255.0
+ network-object 10.150.85.0 255.255.255.0
+ network-object 10.150.91.0 255.255.255.0
+ network-object 10.150.93.0 255.255.255.0
+ network-object 10.150.0.0 255.255.0.0
+ network-object 10.150.71.0 255.255.255.0
+ network-object 10.150.87.0 255.255.255.0
+ network-object host 172.21.8.135
+object-group service UDP_53_123_389_636
+ service-object udp destination eq domain
+ service-object udp destination eq ntp
+ service-object udp destination eq 389
+ service-object udp destination eq 636
+object-group service Alstom_AD_ports
+ service-object tcp destination eq domain
+ service-object tcp destination eq 88
+ service-object tcp destination eq 135
+ service-object tcp destination eq ldap
+ service-object tcp destination eq 445
+ service-object tcp destination eq 464
+ service-object tcp destination eq ldaps
+ service-object tcp destination eq 3268
+ service-object tcp destination eq 3269
+ service-object udp destination eq domain
+ service-object udp destination eq ntp
+ service-object udp destination eq 135
+ service-object udp destination eq netbios-ns
+ service-object udp destination eq 389
+ service-object udp destination eq 445
+ service-object udp destination eq 464
+object-group service SERVICE_tcp_49152_65535
+ service-object tcp destination range 49152 65535
+object-group service SERVICE_tcp_7074_7075_7081_8443
+ service-object tcp destination eq 7074
+ service-object tcp destination eq 7075
+ service-object tcp destination eq 7081
+ service-object tcp destination eq 8443
+object-group network CTX_Servers_2
+ network-object host 172.21.248.70
+ network-object host 172.21.248.71
+ network-object host 172.21.248.72
+ network-object host 172.21.248.73
+ network-object host 172.21.248.51
+ network-object host 172.21.248.52
+ network-object host 172.21.248.53
+ network-object host 172.21.248.54
+ network-object host 172.21.248.55
+object-group network Servers_Access_MasterClock_For_NTP
+ description List of servers with NTP Access to MasterClock.bane.dk
+ group-object DiaMont-Servers_172.21.252.1x
+ group-object CTX_Servers_2
+ network-object object LogPoint_100.72.35.34
+object-group network Servers_Access_ASMTP1_for_SMTP
+ description List of servers with access to asmtp1.bane.dk for smtp
+ network-object object LogPoint_100.72.35.34
+object-group service AD_SERVICES_CTX_VXRAIL_DELL
+ service-object tcp destination eq 88
+ service-object tcp destination eq 135
+ service-object tcp destination eq 137
+ service-object tcp destination eq netbios-ssn
+ service-object tcp destination eq ldap
+ service-object tcp destination eq 445
+ service-object tcp destination eq 464
+ service-object tcp destination eq 3268
+ service-object icmp
+ service-object udp destination eq 389
+object-group network HOSTS_ALLOWED_FOR_NTP_FROM_TCCWPE_1_2
+ description List of hosts allowed for NTP access to TCCWPE1 and 2
+ network-object object IF_VRF_ERTMS_DMZ_TCCWCORE01
+ network-object object IF_VRF_ERTMS_DMZ_TCCWCORE02
+ network-object object IF_VRF_ERTMS_DMZ_OBVCORE01
+ network-object object IF_VRF_ERTMS_DMZ_OBVCORE02
+object-group service SERVICE_icmp_ntp
+ service-object icmp
+ service-object udp destination eq ntp
+object-group network TCCWFW1-MGMT
+ description TCCWFW1 Mgmt Interfaces
+ network-object object TCCWFW1-1-MGMT
+ network-object object TCCWFW1-2-MGMT
+object-group network ACCESS_TO_FXOS_FROM_SERVERS
+ description List of servers with access to FXOS for ssh and https
+ network-object object FXOS_UPDATE_HOST
+object-group service SERVICE_icmp_tcp_22_443
+ service-object icmp
+ service-object tcp destination eq ssh
+ service-object tcp destination eq https
+object-group service AD_Services_Citrix
+ description CHG0050008
+ service-object tcp destination eq domain
+ service-object tcp destination eq 88
+ service-object tcp destination eq 135
+ service-object tcp destination eq netbios-ssn
+ service-object tcp destination eq ldap
+ service-object tcp destination eq 445
+ service-object tcp destination eq 464
+ service-object tcp destination eq 3268
+ service-object tcp destination range 49152 65535
+ service-object udp destination eq domain
+ service-object udp destination eq ntp
+ service-object udp destination eq 389
+ service-object udp destination eq 445
+ service-object udp destination eq 464
+ service-object icmp
+object-group network AD_CITRIX
+ description CHG0050008 - bane.dk AD for Citrix
+ network-object object ABANECTXDC1_172.21.247.10
+ network-object object ABANECTXDC2_172.21.247.11
+object-group network GSMR-Nokia-Servers
+ description *** CHG0050632 and CHG0050640 - Nokia Servers in GSMR-CORE ***
+ network-object host 10.150.199.4
+ network-object host 10.150.199.5
+ network-object host 10.150.199.6
+ network-object host 10.150.199.7
+ network-object host 10.150.199.8
+ network-object host 10.150.199.9
+ network-object host 10.150.199.10
+ network-object host 10.150.199.11
+ network-object host 10.150.199.12
+ network-object host 10.150.199.13
+ network-object host 10.150.199.14
+ network-object host 10.150.199.19
+ network-object host 10.150.199.20
+ network-object host 10.150.199.21
+ network-object host 10.150.199.22
+ network-object host 10.150.199.23
+ network-object host 10.150.199.24
+ network-object host 10.150.199.25
+ network-object host 10.150.199.26
+ network-object host 10.150.199.27
+ network-object host 10.150.199.28
+ network-object host 10.150.199.29
+ network-object host 10.150.199.30
+object-group network VPN-NokiaRAS
+ description *** CHG0050632 and CHG0050640 - Nokia protected IP addresses for Dallas and Finland Nokia Site2Site VPN tunnel ***
+ network-object 93.183.9.224 255.255.255.224
+ network-object 93.183.6.224 255.255.255.224
+object-group service GSMR-Nokia-Servers-SERVICES
+ description *** CHG0050632 and CHG0050640 - Nokia Site2Site VPN tunnel necessary services for remote access ***
+ service-object tcp destination eq www
+ service-object tcp destination eq https
+ service-object tcp destination eq 3389
+ service-object tcp destination eq ssh
+ service-object tcp destination eq 5001
+ service-object tcp destination eq 1080
+ service-object tcp destination range 900 903
+ service-object tcp destination eq 9443
+ service-object tcp destination eq 5900
+ service-object tcp destination eq 5480
+ service-object icmp
+object-group network Eltel-NOC
+ network-object 100.64.15.0 255.255.255.0
+object-group network GSMR-Nokia-WaitingRoom-Servers
+ description *** CHG0050633 - Nokia WaitingRoom Servers in GSMR-CORE ***
+ network-object host 10.150.199.21
+ network-object host 10.150.199.22
+object-group service GSMR-Nokia-WaitingRoom-SERVICES
+ description *** CHG0050633 - necessary services for waiting room access ***
+ service-object tcp destination eq https
+ service-object icmp
+object-group service PBASE2022_AD
+ service-object tcp-udp destination eq 636
+ service-object tcp-udp destination eq 3268
+ service-object tcp-udp destination eq 88
+ service-object tcp-udp destination eq 464
+ service-object tcp-udp destination eq domain
+ service-object udp destination eq ntp
+ service-object icmp echo-reply
+object-group network DiaMonT-IPMI
+ network-object object ADIADTSOB1_IPMI_172.21.249.25
+ network-object object ADIARESPOB1_IPMI_172.21.249.31
+ network-object object ADIANUCOB1_IPMI_172.21.249.32
+ network-object object ADIADTSFA1_IPMI_172.21.241.25
+object-group network DiaMonT-NUH
+ network-object host 172.21.139.5
+ network-object host 172.21.139.6
+object-group network openstreetmap.org
+ network-object host 151.101.1.91
+ network-object host 151.101.65.91
+ network-object host 151.101.129.91
+ network-object host 151.101.193.91
+access-list bane1-acess-in extended permit tcp object-group SSH-access object Obj-100.126.255.0-24 eq telnet
+access-list bane1-acess-in extended permit tcp object-group SSH-access object Obj-100.126.255.0-24 eq ssh
+access-list bane1-acess-in extended permit tcp 100.64.15.0 255.255.255.0 100.126.255.0 255.255.255.0 eq https
+access-list bane1-acess-in extended permit tcp 100.64.15.0 255.255.255.0 100.126.255.0 255.255.255.0 eq www
+access-list bane1-acess-in extended permit ip object Obj-10.185.50.0-24 object Obj-100.126.255.0-24
+access-list bane1-acess-in extended permit icmp any any
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net object-group WingconServers_OBV_ARC_FA object-group VRS_Services
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 10.150.71.22 eq ssh
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 10.150.71.22 eq www
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 10.150.71.22 eq https
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 10.150.71.38 eq ssh
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 10.150.71.38 eq www
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 10.150.71.38 eq https
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 10.150.71.4 eq ssh
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 10.150.71.4 eq www
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 10.150.71.4 eq https
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 10.150.87.22 eq ssh
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 10.150.87.22 eq www
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 10.150.87.22 eq https
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 10.150.87.38 eq ssh
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 10.150.87.38 eq www
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 10.150.87.38 eq https
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 10.150.87.4 eq ssh
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 10.150.87.4 eq www
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 10.150.87.4 eq https
+access-list bane1-acess-in extended permit tcp object Eitzen_office_Network object STTN-MGMT-RED-Net eq ssh
+access-list bane1-acess-in extended permit tcp object Eitzen_office_Network object STTN-MGMT-BLUE-Net eq ssh
+access-list bane1-acess-in extended permit tcp host 172.27.189.10 host 10.150.91.13 range 8290 8299
+access-list bane1-acess-in extended permit tcp host 172.27.189.11 host 10.150.91.13 range 8290 8299
+access-list bane1-acess-in extended permit tcp object-group CapMonServers object-group NetActServers eq ssh
+access-list bane1-acess-in extended permit tcp object-group CapMonServers object-group NetActServers_OBV_FA eq 3389
+access-list bane1-acess-in extended permit tcp object-group CapMonServers object-group CTTSServers_OBV_FA object-group CTTS_OAM_FMS_Service_TCP
+access-list bane1-acess-in extended permit udp object-group CapMonServers object-group WingconServers_OBV_ARC_FA eq snmp
+access-list bane1-acess-in extended permit tcp object-group CapMonServers object-group WingconServers_OBV_ARC_FA eq www
+access-list bane1-acess-in extended permit tcp object-group CapMonServers host 10.150.91.13 eq 65000
+access-list bane1-acess-in extended permit tcp object-group CapMonServers host 10.150.91.14 range 65000 65049
+access-list bane1-acess-in extended permit udp any any eq ntp
+access-list bane1-acess-in remark *** Allow ping from Eltel Jump Host to SAM Server Networks ***
+access-list bane1-acess-in extended permit icmp object-group NEW_ELTEL_BDK_JUMPHOSTS object-group SAM_NETWORKS
+access-list bane1-acess-in remark *** Allow IP from Eltel Jump Host to SAM Server Networks ***
+access-list bane1-acess-in extended permit ip object-group NEW_ELTEL_BDK_JUMPHOSTS object-group SAM_NETWORKS
+access-list bane1-acess-in remark *** Allow Eltel Prime Host to SAM Server Network ***
+access-list bane1-acess-in extended permit ip object-group ELTEL_PRIME_HOST object-group SAM_NETWORKS
+access-list bane1-acess-in extended permit object-group SERVICE_tcp_49151-65535 object appgpo1.bane.dk_10.110.2.82 object-group TS_CAL_LICENSE_GROUP
+access-list bane1-acess-in remark CTASK0025506 08-07-2020
+access-list bane1-acess-in extended permit tcp host 172.27.200.40 object CTX_Servers range 49151 65535
+access-list bane1-acess-in extended permit tcp host 172.27.200.40 host 172.21.248.23 range 49151 65535
+access-list bane1-acess-in extended permit tcp host 172.27.200.40 host 172.21.248.24 range 49151 65535
+access-list bane1-acess-in remark .
+access-list bane1-acess-in remark CTASK0029833 30-09-2021
+access-list bane1-acess-in remark .
+access-list bane1-acess-in remark CHG0048823
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net object Voice_Recorder_VRS1FA eq 8000
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net object Voice_Recorder_VRS1OBV eq 8000
+access-list bane1-acess-in remark CTASK0031858 2022-03-21
+access-list bane1-acess-in extended permit tcp host 172.27.200.17 host 172.21.247.25 eq 7074
+access-list bane1-acess-in extended permit tcp host 172.27.200.17 host 172.21.247.25 eq 7076
+access-list bane1-acess-in extended permit tcp host 172.27.200.17 host 172.21.247.25 eq 7081
+access-list bane1-acess-in extended permit tcp host 172.27.200.17 host 172.21.247.25 eq 7083
+access-list bane1-acess-in extended permit tcp host 172.27.200.17 host 172.21.247.25 eq 8080
+access-list bane1-acess-in extended permit tcp host 172.27.200.17 host 172.21.247.25 eq 8443
+access-list bane1-acess-in extended permit tcp host 172.27.200.17 host 172.21.247.25 eq https
+access-list bane1-acess-in extended permit tcp host 172.27.200.34 host 172.21.247.25 range 8530 8531
+access-list bane1-acess-in remark .
+access-list bane1-acess-in remark CTASK0032104 2022-04-13
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 172.21.247.41 eq www
+access-list bane1-acess-in extended permit tcp object-group BDK_Bruger_Net host 172.21.247.41 eq https
+access-list bane1-acess-in remark .
+access-list bane1-acess-in remark .
+access-list fbane-access-in remark CTASK0021795 CConradseltel ---BEGIN---
+access-list fbane-access-in extended permit tcp object AELTCTXMON1_172.21.2.61 object CTX_Servers eq https
+access-list fbane-access-in extended permit tcp object AELTCTXMON1_172.21.2.61 object CTX_Servers eq www
+access-list fbane-access-in extended permit icmp object AELTCTXMON1_172.21.2.61 object CTX_Servers
+access-list fbane-access-in extended permit udp object AELTCTXMON1_172.21.2.61 object CTX_Servers eq snmp
+access-list fbane-access-in extended deny ip object STTN_WTS_172.21.2.62 object TCC_EAST_GREEN_MGMT_10.14.31.0_25
+access-list fbane-access-in extended permit object-group STTN_EAST_MGMT_ports object STTN_WTS_172.21.2.62 object TCC_EAST_GREEN_MGMT_10.14.31.0_25
+access-list fbane-access-in remark CTASK0021795 CConradseltel ---END---
+access-list fbane-access-in extended permit icmp any any
+access-list fbane-access-in extended permit tcp object-group BDK_User_VPN_172.21.100.0_24 object-group WingconServers_OBV_ARC_FA object-group VRS_Services
+access-list fbane-access-in extended permit tcp object-group BDK_User_VPN_172.21.100.0_24 host 10.150.71.22 eq ssh
+access-list fbane-access-in extended permit tcp object-group BDK_User_VPN_172.21.100.0_24 host 10.150.71.22 eq www
+access-list fbane-access-in extended permit tcp object-group BDK_User_VPN_172.21.100.0_24 host 10.150.71.22 eq https
+access-list fbane-access-in extended permit tcp object-group BDK_User_VPN_172.21.100.0_24 host 10.150.71.38 eq ssh
+access-list fbane-access-in extended permit tcp object-group BDK_User_VPN_172.21.100.0_24 host 10.150.71.38 eq www
+access-list fbane-access-in extended permit tcp object-group BDK_User_VPN_172.21.100.0_24 host 10.150.71.38 eq https
+access-list fbane-access-in extended permit tcp object-group BDK_User_VPN_172.21.100.0_24 host 10.150.71.4 eq ssh
+access-list fbane-access-in extended permit tcp object-group BDK_User_VPN_172.21.100.0_24 host 10.150.71.4 eq www
+access-list fbane-access-in extended permit tcp object-group BDK_User_VPN_172.21.100.0_24 host 10.150.71.4 eq https
+access-list fbane-access-in extended permit tcp object-group BDK_User_VPN_172.21.100.0_24 host 10.150.87.22 eq ssh
+access-list fbane-access-in extended permit tcp object-group BDK_User_VPN_172.21.100.0_24 host 10.150.87.22 eq www
+access-list fbane-access-in extended permit tcp object-group BDK_User_VPN_172.21.100.0_24 host 10.150.87.22 eq https
+access-list fbane-access-in extended permit tcp object-group BDK_User_VPN_172.21.100.0_24 host 10.150.87.38 eq ssh
+access-list fbane-access-in extended permit tcp object-group BDK_User_VPN_172.21.100.0_24 host 10.150.87.38 eq www
+access-list fbane-access-in extended permit tcp object-group BDK_User_VPN_172.21.100.0_24 host 10.150.87.38 eq https
+access-list fbane-access-in extended permit tcp object-group BDK_User_VPN_172.21.100.0_24 host 10.150.87.4 eq ssh
+access-list fbane-access-in extended permit tcp object-group BDK_User_VPN_172.21.100.0_24 host 10.150.87.4 eq www
+access-list fbane-access-in extended permit tcp object-group BDK_User_VPN_172.21.100.0_24 host 10.150.87.4 eq https
+access-list fbane-access-in extended permit ip object-group GSMR-Devices object-group FTSVOIP-Devices
+access-list fbane-access-in extended permit ip 10.150.144.0 255.255.255.0 any
+access-list fbane-access-in extended permit ip 10.150.145.0 255.255.255.0 any
+access-list fbane-access-in extended permit ip 10.150.195.0 255.255.255.0 any
+access-list fbane-access-in extended permit tcp object-group GSMR-Voice-Prod host 80.243.122.4 eq https
+access-list fbane-access-in extended permit tcp object-group GSMR-Voice-Prod host 80.243.122.3 eq https
+access-list fbane-access-in extended permit icmp object-group Eltel-NOC-Devices any
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices object Netact_(FA-DR) object-group GSMR-OAM_Netact_FA_DR_Service_Grp_TCP
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices object Netact_SB object-group GSMR-OAM_Netact_SB_Service_Grp_TCP
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices object NEBR_FA object-group GSMR-OAM_NEBR_FA_Service_Grp_TCP
+access-list fbane-access-in extended permit udp object-group Eltel-NOC-Devices object NEBR_FA object-group GSMR-OAM_NEBR_FA_Service_Grp_UDP
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices object Netact_(FA-Mgmt) object-group GSMR-OAM_Netact_FA_Mgmt_Service_Grp_TCP
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices object Netact_(OBV-DR) object-group GSMR-OAM_Netact_FA_DR_Service_Grp_TCP
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices object NEBR_OBV object-group GSMR-OAM_NEBR_FA_Service_Grp_TCP
+access-list fbane-access-in extended permit udp object-group Eltel-NOC-Devices object NEBR_OBV object-group GSMR-OAM_NEBR_FA_Service_Grp_UDP
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.21 eq ssh
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.21 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.21 eq 10000
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.23 eq ssh
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.23 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.23 eq 10000
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.22 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.22 eq https
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.22 eq 17990
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.24 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.24 eq https
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.24 eq 17990
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.26 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.26 eq https
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.26 eq 17990
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.25 eq ssh
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.25 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.25 eq https
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.25 eq 3389
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.79.25 eq 10000
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.21 eq ssh
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.21 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.21 eq 10000
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.23 eq ssh
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.23 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.23 eq 10000
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.22 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.22 eq https
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.22 eq 17990
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.24 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.24 eq https
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.24 eq 17990
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.26 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.26 eq https
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.26 eq 17990
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.25 eq ssh
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.25 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.25 eq https
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.25 eq 3389
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.95.25 eq 10000
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.148.10 eq ssh
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.148.10 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.148.10 eq 10000
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.148.11 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.148.11 eq https
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.148.11 eq 17990
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices object-group WingconServers_OBV_ARC_FA object-group VRS_Services
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.71.22 eq ssh
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.71.22 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.71.22 eq https
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.71.38 eq ssh
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.71.38 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.71.38 eq https
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.71.4 eq ssh
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.71.4 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.71.4 eq https
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.87.22 eq ssh
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.87.22 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.87.22 eq https
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.87.38 eq ssh
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.87.38 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.87.38 eq https
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.87.4 eq ssh
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.87.4 eq www
+access-list fbane-access-in extended permit tcp object-group Eltel-NOC-Devices host 10.150.87.4 eq https
+access-list fbane-access-in extended permit ip object-group Eltel-NOC-Devices host 10.150.76.69
+access-list fbane-access-in extended permit ip object-group Eltel-NOC-Devices host 10.150.76.132
+access-list fbane-access-in extended permit ip object-group Eltel-NOC-Devices host 10.150.92.69
+access-list fbane-access-in extended permit ip object-group Eltel-NOC-Devices host 10.150.92.132
+access-list fbane-access-in extended permit ip object-group Eltel-NOC-Devices host 10.150.76.68
+access-list fbane-access-in extended permit ip object-group Eltel-NOC-Devices host 10.150.76.136
+access-list fbane-access-in extended permit ip object-group Eltel-NOC-Devices host 10.150.92.68
+access-list fbane-access-in extended permit ip object-group Eltel-NOC-Devices host 10.150.92.136
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group Frequentis_CTSS_ssh_http_https eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group Frequentis_CTSS_ssh_http_https eq www
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group Frequentis_CTSS_ssh_http_https eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group Frequentis_CTSS_ssh_http_rdp eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group Frequentis_CTSS_ssh_http_rdp eq www
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group Frequentis_CTSS_ssh_http_rdp eq 3389
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group Frequentis_CTSS_ssh_10000 eq 10000
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group Frequentis_CTSS_ssh_10000 eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group OBV_CS_CORE_SSH eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group FA_CS_CORE_SSH eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group IN_OBV_SSH eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group IN_FA_SSH eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group SMSC_SSH_HTTP_HTTPS eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group SMSC_SSH_HTTP_HTTPS eq www
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group SMSC_SSH_HTTP_HTTPS eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group CDR_SSH_HTTP_HTTPS_8080_3306 eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group CDR_SSH_HTTP_HTTPS_8080_3306 eq www
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group CDR_SSH_HTTP_HTTPS_8080_3306 eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group CDR_SSH_HTTP_HTTPS_8080_3306 eq 8080
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group CDR_SSH_HTTP_HTTPS_8080_3306 eq 3306
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group OneNDS_OBV_SSH eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group OneNDS_OBV_HTTP eq www
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group OneNDS_OBV_HTTPS eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group OneNDS_FA_SSH eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group OneNDS_FA_HTTP eq www
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group OneNDS_FA_HTTPS eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group HLR_OBV_SSH eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group HLR_OBV_HTTP eq www
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group HLR_OBV_HTTPS eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group HLR_OBV_8080_9099_9880 eq 8080
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group HLR_OBV_8080_9099_9880 eq 9099
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group HLR_OBV_8080_9099_9880 eq 9880
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group HLR_FA_SSH eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group HLR_FA_HTTP eq www
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group HLR_FA_HTTPS eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group HLR_FA_8080_9099_9880 eq 8080
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group HLR_FA_8080_9099_9880 eq 9099
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group HLR_FA_8080_9099_9880 eq 9880
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group CE_ROUTER_TELNET_SSH eq telnet
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group CE_ROUTER_TELNET_SSH eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group BSC_SSH eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group PS_CORE_SSH_HTTP_HTTPS eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group PS_CORE_SSH_HTTP_HTTPS eq www
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group PS_CORE_SSH_HTTP_HTTPS eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group VOICE_SSH_HTTP_HTTPS eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group VOICE_SSH_HTTP_HTTPS eq www
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group VOICE_SSH_HTTP_HTTPS eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group SIM_SSH_HTTP_HTTPS eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group SIM_SSH_HTTP_HTTPS eq www
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group SIM_SSH_HTTP_HTTPS eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group NETACT_OBV_SSH_HTTP_HTTPS eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group NETACT_OBV_SSH_HTTP_HTTPS eq www
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group NETACT_OBV_SSH_HTTP_HTTPS eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group NETACT_OBV_1521 eq sqlnet
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group NETACT_OBV_9000 eq 9000
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group NETACT_FA_SSH_HTTP_HTTPS eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group NETACT_FA_SSH_HTTP_HTTPS eq www
+access-list fbane-access-in extended permit tcp object GSMR_jump object-group NETACT_FA_SSH_HTTP_HTTPS eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump object IN_OBV_Farm_Nodes_1 eq 10509
+access-list fbane-access-in extended permit tcp object GSMR_jump object IN_OBV_Server_1 eq 10509
+access-list fbane-access-in extended permit tcp object GSMR_jump object IN_OBV_EMS_over_NetAct eq 11080
+access-list fbane-access-in extended permit tcp object GSMR_jump object IN_FA_EMS_over_NetAct_ems1fa eq 10509
+access-list fbane-access-in extended permit tcp object GSMR_jump object IN_FA_EMS_over_NetAct_ems1fa eq 11080
+access-list fbane-access-in extended permit tcp object GSMR_jump object DNS1OBV eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object DNS1OBV eq https
+access-list fbane-access-in extended permit tcp object STTN_WTS_172.21.2.62 object NokiaSAMIPSubnet_1
+access-list fbane-access-in extended permit tcp object STTN_WTS_172.21.2.62 object NokiaSAMIPSubnet_2
+access-list fbane-access-in extended permit tcp object GSMR_jump object OBV_CS_CORE_MGW1OBV eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump object FA_CS_CORE_MGW1FA eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump object IN_OBV_EMS_over_NetAct eq 2061
+access-list fbane-access-in extended permit tcp object GSMR_jump object IN_FA_EMS_over_NetAct_ems1fa eq 2061
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.91.42 eq 9810
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.91.42 eq https
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.91.42 eq 9100
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.91.21 eq 9043
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.91.12 eq 50000
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.77.28 eq 11080
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.77.28 eq 2061
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.93.24 eq 11080
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.93.24 eq 2061
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.91.22 eq 9402
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.91.21 eq 9402
+access-list fbane-access-in remark CTASK0020429 CConrads 2018-10-17
+access-list fbane-access-in extended permit tcp host 10.255.255.113 object-group CitrixNetscGW eq https
+access-list fbane-access-in remark .
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.77.28 eq 11261
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.79.25 eq https
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.79.25 eq 10000
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.91.22 eq 9100
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.91.21 eq 9100
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.91.22 eq 9110
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.93.8 eq 10509
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.93.24 eq 11261
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.95.25 eq https
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.95.25 eq 10000
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.77.28 eq 11205
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.77.28 eq 11289
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.93.24 eq 11205
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.93.24 eq 11289
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.77.28 eq 11201
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.93.24 eq 11201
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.91.42 eq 10443
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.77.28 eq 11251
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.93.24 eq 11251
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.197.132 eq www
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.197.148 eq www
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.197.164 eq www
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.197.180 eq www
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.93.44 eq https
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.77.42 eq https
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.74.24 eq https
+access-list fbane-access-in remark *** Permit RDP access from ABUHAUG hosts to ACTXJUMP01 (citrix) ***
+access-list fbane-access-in remark *** Permit Access from ANSCTXBH01 to Citrix range 250.75..118 for a list of ports ***
+access-list fbane-access-in extended permit object-group SERVICE_tcp_1494_2598_udp_1494_2598_3224..3324_16500..16509 object ANSCTXBH01_ANSCTXBH02_172.27.2.213 object AAPPCTXTPX_172.21.250.75_.118
+access-list fbane-access-in remark *** Permit ANSCTXBH01_ANSCTXBH02 access to 443 and 80,443 on FTs and DCs ***
+access-list fbane-access-in extended permit object-group SERVICE_tcp_80_443 object ANSCTXBH01_ANSCTXBH02_172.27.2.213 object-group AAPPCTXXDCs
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.74.169 eq 2598
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.74.169 eq citrix-ica
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.90.169 eq 2598
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.90.169 eq citrix-ica
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.74.169 eq 3389
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.74.168 eq 3389
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.74.175 eq 3389
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.90.169 eq 3389
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.79.25 eq 3389
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.199.21 eq 3389
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.199.21 eq www
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.199.21 eq https
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.87.5 eq 1935
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.71.5 eq 1935
+access-list fbane-access-in extended permit tcp object STTN_WTS_172.21.2.62 object Obj_172.19.208.0_24 eq https
+access-list fbane-access-in extended permit tcp object STTN_WTS_172.21.2.62 object Obj_172.19.144.0_24 eq https
+access-list fbane-access-in remark *** Permit AFILSYNC1.BANE.DK_172.27.2.23 fildeling mod AFILCTX1.BANE.DK_172.21.250.119 ***
+access-list fbane-access-in extended permit object-group SERVICE_tcp_88_135_389_445_464_3268_3269_5985_udp_389_5985 object AFILSYNC1.BANE.DK_172.27.2.23 object AFILCTX1.BANE.DK_172.21.250.119
+access-list fbane-access-in extended permit object-group SERVICE_tcp_80_443 object AFILSYNC1.BANE.DK_172.27.2.23 object AFILCTX1.BANE.DK_172.21.250.119
+access-list fbane-access-in extended permit tcp object AFILSYNC1.BANE.DK_172.27.2.23 object AFILCTX1.BANE.DK_172.21.250.119 eq 5800
+access-list fbane-access-in extended permit tcp host 10.255.255.113 object ACTXJUMP01_172.21.248.24 eq 3389
+access-list fbane-access-in remark *** Permit STTN-WTS mod DiaMonT WTS servers CTASK0021611 ***
+access-list fbane-access-in extended permit object-group SERVICE_RDP object STTN_WTS_172.21.2.62 object-group DiaMont-Servers_172.21.252.1x
+access-list fbane-access-in extended permit tcp object STTN_WTS_172.21.2.62 object-group DiaMont-Servers_172.21.252.1x eq ssh
+access-list fbane-access-in extended permit object TCP-808 object STTN_WTS_172.21.2.62 object-group DiaMont-Servers_172.21.252.1x
+access-list fbane-access-in extended permit icmp object STTN_WTS_172.21.2.62 object-group DiaMont-Servers_172.21.252.1x
+access-list fbane-access-in extended permit object TCP_623 object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.249.1x
+access-list fbane-access-in extended permit object UDP-623 object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.249.1x
+access-list fbane-access-in extended permit tcp object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.249.1x eq www
+access-list fbane-access-in extended permit tcp object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.249.1x eq https
+access-list fbane-access-in extended permit object VNC_5900 object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.249.1x
+access-list fbane-access-in extended permit object TCP-8889 object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.249.1x
+access-list fbane-access-in extended permit icmp object STTN_WTS_172.21.2.62 object-group DiaMont-servers_172.21.249.1x
+access-list fbane-access-in extended permit object-group SERVICE_RDP object STTN_WTS_172.21.2.62 object ADIATSOB1_172.21.252.16
+access-list fbane-access-in extended permit tcp object STTN_WTS_172.21.2.62 object ADIATSOB1_172.21.252.16 eq ssh
+access-list fbane-access-in extended permit object TCP-808 object STTN_WTS_172.21.2.62 object ADIATSOB1_172.21.252.16
+access-list fbane-access-in extended permit icmp object STTN_WTS_172.21.2.62 object ADIATSOB1_172.21.252.16
+access-list fbane-access-in extended permit tcp object STTN_WTS_172.21.2.62 host 100.65.2.33 eq ssh
+access-list fbane-access-in extended permit tcp object STTN_WTS_172.21.2.62 host 100.65.2.33 eq telnet
+access-list fbane-access-in extended permit tcp object STTN_WTS_172.21.2.62 host 100.65.2.41 eq telnet
+access-list fbane-access-in extended permit tcp object STTN_WTS_172.21.2.62 host 100.65.2.57 eq telnet
+access-list fbane-access-in extended permit tcp object-group BDK_Bruger_Net host 10.150.87.5 eq www
+access-list fbane-access-in extended permit tcp object-group BDK_Bruger_Net host 10.150.87.5 eq https
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.91.21 eq 9416
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.91.22 eq 9416
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.64.60 eq ftp
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.64.60 eq telnet
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.80.60 eq ftp
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.80.60 eq telnet
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.93.44 eq www
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.91.21 eq https
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.91.16 eq 1080
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.91.31 eq citrix-ica
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.91.31 eq 2598
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.91.31 eq 3389
+access-list fbane-access-in extended permit tcp object GSMR_jump object Netact_SB eq 9108
+access-list fbane-access-in extended permit tcp object GSMR_jump object Netact_SB eq 9202
+access-list fbane-access-in extended permit tcp object GSMR_jump object Netact_SB eq 9413
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.91.31 eq citrix-ica
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.91.31 eq 2598
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.91.31 eq https
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.91.31 eq https
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.91.21 eq 9418
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.91.22 eq 9418
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.91.21 eq 9416
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.91.22 eq 9416
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.64.60 eq ftp
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.64.60 eq telnet
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.80.60 eq ftp
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.80.60 eq telnet
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.93.44 eq www
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.91.21 eq https
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.91.16 eq 1080
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.91.31 eq 3389
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.91.21 eq 9108
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.91.22 eq 9108
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.91.21 eq 9413
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.91.22 eq 9413
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.91.21 eq 9202
+access-list fbane-access-in extended permit tcp host 188.180.65.67 host 10.150.91.22 eq 9202
+access-list fbane-access-in extended permit tcp object GSMR_jump host 10.150.91.31 eq 3389
+access-list fbane-access-in extended permit tcp object GSMR_jump host 10.150.199.21 eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump host 10.150.93.44 eq www
+access-list fbane-access-in extended permit tcp object GSMR_jump host 10.150.64.60 eq ftp
+access-list fbane-access-in extended permit tcp object GSMR_jump host 10.150.80.60 eq ftp
+access-list fbane-access-in extended permit tcp object GSMR_jump host 10.150.91.16 eq 1080
+access-list fbane-access-in extended permit tcp object GSMR_jump host 10.150.74.25 eq www
+access-list fbane-access-in extended permit tcp object GSMR_jump host 10.150.93.24 eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump host 10.150.93.24 eq 11080
+access-list fbane-access-in extended permit tcp host 172.27.210.5 host 172.21.252.13 eq 2019
+access-list fbane-access-in extended permit tcp host 172.27.210.5 host 172.16.244.13 eq 2019
+access-list fbane-access-in extended permit tcp host 172.27.210.21 host 172.21.252.13 eq 2019
+access-list fbane-access-in extended permit tcp host 172.27.210.21 host 172.16.244.13 eq 2019
+access-list fbane-access-in extended permit object-group RDP object STTN_WTS_172.21.2.62 object-group DiaMont-Servers_172.21.244.1x
+access-list fbane-access-in extended permit tcp object STTN_WTS_172.21.2.62 object-group DiaMont-Servers_172.21.244.1x eq ssh
+access-list fbane-access-in extended permit object TCP-808 object STTN_WTS_172.21.2.62 object-group DiaMont-Servers_172.21.244.1x
+access-list fbane-access-in extended permit icmp object STTN_WTS_172.21.2.62 object-group DiaMont-Servers_172.21.244.1x
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.148.10 eq 10000
+access-list fbane-access-in extended permit tcp object-group BDK_Bruger_Net host 10.150.87.5 eq 1935
+access-list fbane-access-in extended permit tcp object-group BDK_Bruger_Net host 10.150.71.5 eq 1935
+access-list fbane-access-in extended permit tcp object GSMR_jump host 10.150.91.165 eq 9001
+access-list fbane-access-in extended permit tcp object GSMR_jump host 10.150.91.133 eq 9001
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.77.28 eq 11265
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.77.28 eq 11002
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.93.24 eq 11265
+access-list fbane-access-in extended permit tcp host 10.185.50.85 host 10.150.93.24 eq 11002
+access-list fbane-access-in remark CTASK0023402 23-01-2020
+access-list fbane-access-in extended permit tcp 172.31.100.0 255.255.252.0 host 172.21.248.24 eq 3389
+access-list fbane-access-in remark .
+access-list fbane-access-in extended permit tcp object aapptogstapri1m_172.27.210.5 object-group DiaMont-Servers_172.21.244.1x eq 2019
+access-list fbane-access-in extended permit tcp object aapptogstasec1m_172.27.210.21 object-group DiaMont-Servers_172.21.244.1x eq 2019
+access-list fbane-access-in extended permit tcp object aapptogstapri1m_172.27.210.5 object-group DiaMont-Servers_172.21.252.1x eq 2019
+access-list fbane-access-in extended permit tcp object aapptogstasec1m_172.27.210.21 object-group DiaMont-Servers_172.21.252.1x eq 2019
+access-list fbane-access-in extended permit object-group SERVICE_RDP object AELTJUMPBANE1_172.27.200.37 object ACTXJUMP01_172.21.248.24
+access-list fbane-access-in remark *** CHG0050633 Eltel-NOC to Nokia-WaitingRoom-Servers ***
+access-list fbane-access-in extended permit object-group GSMR-Nokia-WaitingRoom-SERVICES object-group Eltel-NOC object-group GSMR-Nokia-WaitingRoom-Servers
+access-list fbane-access-in extended permit ip 100.64.15.0 255.255.255.0 object-group GSMR_HOSTS
+access-list fbane-access-in extended permit tcp host 172.21.2.62 172.21.252.0 255.255.255.240
+access-list fbane-access-in extended permit icmp host 172.27.210.5 object-group DiaMont-Servers_172.21.252.1x
+access-list fbane-access-in extended permit icmp host 172.27.210.21 object-group DiaMont-Servers_172.21.252.1x
+access-list fbane-access-in remark CTASK0026672 ---BEGIN---
+access-list fbane-access-in extended permit tcp object STTN_WTS_172.21.2.62 object NokiaNSPIPSubnet_1
+access-list fbane-access-in extended permit tcp object STTN_WTS_172.21.2.62 object NokiaNSPIPSubnet_2
+access-list fbane-access-in remark CTASK0026672 ---END---
+access-list fbane-access-in extended permit tcp object STTN_WTS_172.21.2.62 object AAPPLOGPOINT1 eq ssh
+access-list fbane-access-in extended permit tcp object STTN_WTS_172.21.2.62 object AAPPLOGPOINT1 eq www
+access-list fbane-access-in extended permit tcp object STTN_WTS_172.21.2.62 object AAPPLOGPOINT1 eq https
+access-list fbane-access-in remark CTASK0027102 02-12-2020
+access-list fbane-access-in extended permit tcp object STTN_WTS_172.21.2.62 object aapplogpoint_100.72.35.50 eq 5900
+access-list fbane-access-in remark .
+access-list fbane-access-in extended permit tcp object AELTCTXMON1_172.21.2.61 object CTX_Servers range 5985 5986
+access-list fbane-access-in remark CTASK0028512 2021-05-03
+access-list fbane-access-in extended permit tcp object AALSTOMJUMP1_172.21.2.164 object AALSTOMJUMP2_172.21.248.50 eq 3389
+access-list fbane-access-in remark .
+access-list fbane-access-in remark .
+access-list fbane-access-in remark CTASK0028688 17-05-2021
+access-list fbane-access-in remark .
+access-list fbane-access-in remark CTASK0028168 10-06-2021 ---BEGIN---
+access-list fbane-access-in extended permit tcp object GSMR_jump object NetAct_ave eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object NetAct_ave eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump object NetAct_avecp eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object NetAct_avecp eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump object NetAct_OBV_ave eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object NetAct_OBV_ave eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump object NetAct_OBV_avecp eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object NetAct_OBV_avecp eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump object NetAct_FA_ave eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object NetAct_FA_ave eq https
+access-list fbane-access-in extended permit tcp object GSMR_jump object NetAct_FA_avecp eq ssh
+access-list fbane-access-in extended permit tcp object GSMR_jump object NetAct_FA_avecp eq https
+access-list fbane-access-in remark CTASK0028168 10-06-2021 ---END
+access-list fbane-access-in extended permit tcp object AJUMPTSS1BANE1_172.27.200.36 object ACTXJUMP01_172.21.248.24 eq 3389
+access-list fbane-access-in remark CTASK0030726 CConrads 7-12-2021
+access-list fbane-access-in remark .
+access-list fbane-access-in remark CHG0050132 - bane.dk access to Citrix AD
+access-list fbane-access-in extended permit object-group AD_Services_Citrix object-group BDK_DCs object-group AD_CITRIX
+access-list fbane-access-in remark *** CHG0050632 and CHG0050640 - VPN Nokia RAS To GSMR Nokia Servers ***
+access-list fbane-access-in extended permit object-group GSMR-Nokia-Servers-SERVICES object-group VPN-NokiaRAS object-group GSMR-Nokia-Servers
+access-list fbane-access-in remark CTASK0032350 2022-05-03
+access-list fbane-access-in extended permit tcp host 172.27.2.23 host 172.21.247.26 eq www
+access-list fbane-access-in extended permit tcp host 172.27.2.23 host 172.21.247.26 eq https
+access-list fbane-access-in remark .
+access-list fbane-access-in remark CTASK0032354 2022-05-04
+access-list fbane-access-in extended permit tcp host 172.27.200.40 object CTX_DHCP_172_21_247_100_199 eq 135
+access-list fbane-access-in extended permit tcp host 172.27.200.40 object CTX_DHCP_172_21_247_100_199 eq 445
+access-list fbane-access-in extended permit tcp host 172.27.200.40 object CTX_DHCP_172_21_247_100_199 range 49152 65535
+access-list fbane-access-in remark .
+access-list fbane-access-in extended permit tcp host 10.255.255.113 host 172.21.247.41 eq https
+access-list fbane-access-in extended permit tcp host 10.255.255.113 host 172.21.247.41 eq www
+access-list fbane-access-in remark CTASK0032860 2022-06-30
+access-list fbane-access-in extended permit tcp object f.esbbane.dk_80.243.122.4 host 10.14.0.70 eq 31000
+access-list fbane-access-in extended permit tcp object f.esbbane.dk_80.243.122.4 host 10.14.0.70 eq 32000
+access-list fbane-access-in extended permit tcp object f.esbbane.dk_80.243.122.4 host 10.14.0.70 eq 8088
+access-list fbane-access-in extended permit tcp object f.esbbane.dk_80.243.122.4 host 10.14.0.70 eq 8086
+access-list fbane-access-in remark .
+access-list fbane-access-in remark CTASK0033634 2022-09-29
+access-list fbane-access-in extended permit tcp object AWTSDIAM1_172.21.65.38 object ADIATSFA1_172.21.244.16 eq 3389
+access-list fbane-access-in extended permit tcp object AWTSDIAM1_172.21.65.38 object ADIATSOB1_172.21.252.16 eq 3389
+access-list fbane-access-in remark .
+access-list fbane-access-in remark CTASK00334082 2023-02-21
+access-list fbane-access-in extended permit tcp host 172.27.2.108 host 172.21.254.4 eq ssh
+access-list fbane-access-in extended permit tcp host 172.27.2.108 host 172.21.254.5 eq ssh
+access-list fbane-access-in extended permit tcp host 172.27.2.108 host 172.21.254.6 eq ssh
+access-list fbane-access-in extended permit tcp host 172.27.2.108 host 172.21.254.7 eq ssh
+access-list fbane-access-in extended permit tcp host 172.27.2.108 host 172.21.254.8 eq ssh
+access-list fbane-access-in extended permit tcp host 172.27.2.108 host 172.21.254.20 eq ssh
+access-list fbane-access-in extended permit tcp host 172.27.2.111 host 172.21.254.4 eq ssh
+access-list fbane-access-in extended permit tcp host 172.27.2.111 host 172.21.254.5 eq ssh
+access-list fbane-access-in extended permit tcp host 172.27.2.111 host 172.21.254.6 eq ssh
+access-list fbane-access-in extended permit tcp host 172.27.2.111 host 172.21.254.7 eq ssh
+access-list fbane-access-in extended permit tcp host 172.27.2.111 host 172.21.254.8 eq ssh
+access-list fbane-access-in extended permit tcp host 172.27.2.111 host 172.21.254.20 eq ssh
+access-list fbane-access-in extended permit tcp host 172.27.2.117 host 172.21.254.4 eq ssh
+access-list fbane-access-in extended permit tcp host 172.27.2.117 host 172.21.254.5 eq ssh
+access-list fbane-access-in extended permit tcp host 172.27.2.117 host 172.21.254.6 eq ssh
+access-list fbane-access-in extended permit tcp host 172.27.2.117 host 172.21.254.7 eq ssh
+access-list fbane-access-in extended permit tcp host 172.27.2.117 host 172.21.254.8 eq ssh
+access-list fbane-access-in extended permit tcp host 172.27.2.117 host 172.21.254.20 eq ssh
+access-list fbane-access-in remark .
+access-list fbane-access-in remark CTASK0034507 2023-03-06
+access-list fbane-access-in extended permit icmp host 172.27.2.108 host 172.21.254.4
+access-list fbane-access-in extended permit tcp host 172.27.2.108 host 172.21.254.4 eq https
+access-list fbane-access-in extended permit icmp host 172.27.2.108 host 172.21.254.5
+access-list fbane-access-in extended permit tcp host 172.27.2.108 host 172.21.254.5 eq https
+access-list fbane-access-in extended permit icmp host 172.27.2.108 host 172.21.254.6
+access-list fbane-access-in extended permit tcp host 172.27.2.108 host 172.21.254.6 eq 5432
+access-list fbane-access-in extended permit tcp host 172.27.2.108 host 172.21.254.6 eq 6432
+access-list fbane-access-in extended permit icmp host 172.27.2.108 host 172.21.254.7
+access-list fbane-access-in extended permit tcp host 172.27.2.108 host 172.21.254.7 eq 5432
+access-list fbane-access-in extended permit tcp host 172.27.2.108 host 172.21.254.7 eq 6432
+access-list fbane-access-in extended permit icmp host 172.27.2.108 host 172.21.254.8
+access-list fbane-access-in extended permit tcp host 172.27.2.108 host 172.21.254.8 eq 5432
+access-list fbane-access-in extended permit tcp host 172.27.2.108 host 172.21.254.8 eq 6432
+access-list fbane-access-in extended permit icmp host 172.27.2.108 host 172.21.254.9
+access-list fbane-access-in extended permit tcp host 172.27.2.108 host 172.21.254.9 eq 6432
+access-list fbane-access-in extended permit icmp host 172.27.2.111 host 172.21.254.4
+access-list fbane-access-in extended permit tcp host 172.27.2.111 host 172.21.254.4 eq https
+access-list fbane-access-in extended permit icmp host 172.27.2.111 host 172.21.254.5
+access-list fbane-access-in extended permit tcp host 172.27.2.111 host 172.21.254.5 eq https
+access-list fbane-access-in extended permit icmp host 172.27.2.111 host 172.21.254.6
+access-list fbane-access-in extended permit tcp host 172.27.2.111 host 172.21.254.6 eq 5432
+access-list fbane-access-in extended permit tcp host 172.27.2.111 host 172.21.254.6 eq 6432
+access-list fbane-access-in extended permit icmp host 172.27.2.111 host 172.21.254.7
+access-list fbane-access-in extended permit tcp host 172.27.2.111 host 172.21.254.7 eq 5432
+access-list fbane-access-in extended permit tcp host 172.27.2.111 host 172.21.254.7 eq 6432
+access-list fbane-access-in extended permit icmp host 172.27.2.111 host 172.21.254.8
+access-list fbane-access-in extended permit tcp host 172.27.2.111 host 172.21.254.8 eq 5432
+access-list fbane-access-in extended permit tcp host 172.27.2.111 host 172.21.254.8 eq 6432
+access-list fbane-access-in extended permit icmp host 172.27.2.111 host 172.21.254.9
+access-list fbane-access-in extended permit tcp host 172.27.2.111 host 172.21.254.9 eq 5432
+access-list fbane-access-in extended permit tcp host 172.27.2.111 host 172.21.254.9 eq 6432
+access-list fbane-access-in extended permit icmp host 172.27.2.117 host 172.21.254.4
+access-list fbane-access-in extended permit tcp host 172.27.2.117 host 172.21.254.4 eq https
+access-list fbane-access-in extended permit icmp host 172.27.2.117 host 172.21.254.5
+access-list fbane-access-in extended permit tcp host 172.27.2.117 host 172.21.254.5 eq https
+access-list fbane-access-in extended permit icmp host 172.27.2.117 host 172.21.254.6
+access-list fbane-access-in extended permit tcp host 172.27.2.117 host 172.21.254.6 eq 5432
+access-list fbane-access-in extended permit tcp host 172.27.2.117 host 172.21.254.6 eq 6432
+access-list fbane-access-in extended permit icmp host 172.27.2.117 host 172.21.254.7
+access-list fbane-access-in extended permit tcp host 172.27.2.117 host 172.21.254.7 eq 5432
+access-list fbane-access-in extended permit tcp host 172.27.2.117 host 172.21.254.7 eq 6432
+access-list fbane-access-in extended permit icmp host 172.27.2.117 host 172.21.254.8
+access-list fbane-access-in extended permit tcp host 172.27.2.117 host 172.21.254.8 eq 5432
+access-list fbane-access-in extended permit tcp host 172.27.2.117 host 172.21.254.8 eq 6432
+access-list fbane-access-in extended permit icmp host 172.27.2.117 host 172.21.254.9
+access-list fbane-access-in extended permit tcp host 172.27.2.117 host 172.21.254.9 eq 5432
+access-list fbane-access-in extended permit tcp host 172.27.2.117 host 172.21.254.9 eq 6432
+access-list fbane-access-in remark .
+access-list fbane-access-in remark CTASK0034654 2023-03-24
+access-list fbane-access-in extended permit tcp host 172.21.2.62 host 172.21.244.11 eq 623
+access-list fbane-access-in extended permit tcp host 172.21.2.62 host 172.21.244.12 eq 623
+access-list fbane-access-in extended permit tcp host 172.21.2.62 host 172.21.244.13 eq 623
+access-list fbane-access-in extended permit tcp host 172.21.2.62 host 172.21.244.14 eq 623
+access-list fbane-access-in extended permit tcp host 172.21.2.62 host 172.21.244.15 eq 623
+access-list fbane-access-in extended permit tcp host 172.21.2.62 host 172.21.244.16 eq 623
+access-list fbane-access-in extended permit tcp host 172.21.2.62 host 172.21.244.25 eq 623
+access-list fbane-access-in extended permit tcp host 172.21.2.62 host 172.21.252.25 eq 623
+access-list fbane-access-in extended permit udp host 172.21.2.62 host 172.21.244.11 eq 623
+access-list fbane-access-in extended permit udp host 172.21.2.62 host 172.21.244.12 eq 623
+access-list fbane-access-in extended permit udp host 172.21.2.62 host 172.21.244.13 eq 623
+access-list fbane-access-in extended permit udp host 172.21.2.62 host 172.21.244.14 eq 623
+access-list fbane-access-in extended permit udp host 172.21.2.62 host 172.21.244.15 eq 623
+access-list fbane-access-in extended permit udp host 172.21.2.62 host 172.21.244.16 eq 623
+access-list fbane-access-in extended permit udp host 172.21.2.62 host 172.21.244.25 eq 623
+access-list fbane-access-in extended permit udp host 172.21.2.62 host 172.21.252.25 eq 623
+access-list fbane-access-in remark .
+access-list ertms-dmz-access-in remark *** NetAct ***
+access-list ertms-dmz-access-in extended permit tcp object Netact_SB object-group CapMonServers eq 34468
+access-list ertms-dmz-access-in extended permit ip object Obj-100.126.255.0-24 object Obj-10.185.50.55
+access-list ertms-dmz-access-in remark *** Pentest 22-05-2018 ***
+access-list ertms-dmz-access-in extended permit ip object Obj-100.65.2.136-29 any
+access-list ertms-dmz-access-in extended permit icmp any any
+access-list ertms-dmz-access-in extended permit tcp host 10.150.91.18 host 172.27.189.10 eq 7627
+access-list ertms-dmz-access-in extended permit tcp host 10.150.91.18 host 172.27.189.11 eq 7628
+access-list ertms-dmz-access-in extended permit tcp object Netact_(FA-DR) object-group Eltel-NOC-Devices object-group GSMR-OAM_Netact_FA_DR_Service_Grp_TCP
+access-list ertms-dmz-access-in extended permit tcp object Netact_(FA-Mgmt) object-group Eltel-NOC-Devices object-group GSMR-OAM_Netact_FA_Mgmt_Service_Grp_TCP
+access-list ertms-dmz-access-in extended permit tcp object Netact_SB object-group Eltel-NOC-Devices object-group GSMR-OAM_Netact_SB_Service_Grp_TCP
+access-list ertms-dmz-access-in extended permit tcp object NEBR_FA object-group Eltel-NOC-Devices object-group GSMR-OAM_NEBR_FA_Service_Grp_TCP
+access-list ertms-dmz-access-in extended permit udp object NEBR_FA object-group Eltel-NOC-Devices object-group GSMR-OAM_NEBR_FA_Service_Grp_UDP
+access-list ertms-dmz-access-in extended permit tcp object Netact_(OBV-DR) object-group Eltel-NOC-Devices object-group GSMR-OAM_Netact_FA_DR_Service_Grp_TCP
+access-list ertms-dmz-access-in extended permit tcp object Netact_(OBV-Mgmt) object-group Eltel-NOC-Devices object-group GSMR-OAM_Netact_FA_Mgmt_Service_Grp_TCP
+access-list ertms-dmz-access-in extended permit tcp object NEBR_OBV object-group Eltel-NOC-Devices object-group GSMR-OAM_NEBR_FA_Service_Grp_TCP
+access-list ertms-dmz-access-in extended permit udp object NEBR_OBV object-group Eltel-NOC-Devices object-group GSMR-OAM_NEBR_FA_Service_Grp_UDP
+access-list ertms-dmz-access-in extended permit tcp host 10.150.91.13 object-group CapMonServers range 7627 7628
+access-list ertms-dmz-access-in extended permit tcp object-group COBRA_Servers object-group CapMonServers eq 7627
+access-list ertms-dmz-access-in extended permit udp object-group WingconServers_OBV_ARC_FA object-group CapMonServers eq snmptrap
+access-list ertms-dmz-access-in extended permit tcp host 10.150.91.13 object-group CapMonServers eq 11013
+access-list ertms-dmz-access-in extended permit tcp host 10.150.91.14 object-group CapMonServers eq 11014
+access-list ertms-dmz-access-in extended permit object-group SERVICE_tcp_49151-65535 object-group Citrix_NTP_Clients object-group BDK_DCs
+access-list ertms-dmz-access-in extended permit tcp host 80.243.122.6 host 10.150.78.15 eq 8000
+access-list ertms-dmz-access-in extended permit tcp host 80.243.122.6 host 10.150.94.15 eq 8000
+access-list ertms-dmz-access-in extended permit tcp host 80.243.122.5 host 10.150.78.15 eq 8000
+access-list ertms-dmz-access-in extended permit tcp host 80.243.122.5 host 10.150.94.15 eq 8000
+access-list ertms-dmz-access-in extended permit ip object-group Thales-ESB 10.48.0.0 255.248.0.0
+access-list ertms-dmz-access-in extended permit ip object-group GSMR-Devices object-group FTSVOIP-Devices
+access-list ertms-dmz-access-in extended permit ip 10.150.146.0 255.255.255.0 10.150.144.0 255.255.255.0
+access-list ertms-dmz-access-in extended permit ip 10.150.146.0 255.255.255.0 10.150.145.0 255.255.255.0
+access-list ertms-dmz-access-in remark *** FROM SAM SERVER NETWORK towards ELTEL/BDK Jumphost ***
+access-list ertms-dmz-access-in extended permit icmp object-group SAM_NETWORKS object-group NEW_ELTEL_BDK_JUMPHOSTS
+access-list ertms-dmz-access-in remark *** Pentest for 04-07-2018
+access-list ertms-dmz-access-in extended permit ip object-group PentestMachines object-group NEW_ELTEL_BDK_JUMPHOSTS
+access-list ertms-dmz-access-in extended permit icmp object-group PentestMachines object-group NEW_ELTEL_BDK_JUMPHOSTS
+access-list ertms-dmz-access-in remark CTASK0020429 CConrads 2018-10-17
+access-list ertms-dmz-access-in remark CTASK0020429 CConrads 2018-10-17
+access-list ertms-dmz-access-in extended permit tcp object-group CitrixSFTs object-group BDK_DCs range 49151 65535
+access-list ertms-dmz-access-in extended permit tcp host 172.21.250.13 host 172.27.2.22 eq domain
+access-list ertms-dmz-access-in extended permit udp host 172.21.250.13 host 172.27.2.22 eq domain
+access-list ertms-dmz-access-in extended permit tcp object AAPPCTXTPX_172.21.250.75_.118 object PBASE_172.27.3.140 eq www
+access-list ertms-dmz-access-in extended permit udp object AAPPCTXTPX_172.21.250.75_.118 object TPS_DB_SRV_10.14.0.71 eq 1521
+access-list ertms-dmz-access-in remark *** NEW STARTING POINT - THIS LINE IS TEMPORARY ***
+access-list ertms-dmz-access-in remark *** Permit DHCP Request from Citrix clients to BDK DHCP Servers ***
+access-list ertms-dmz-access-in extended permit object-group SERVICE_dhcp object-group Citrix_DHCP_Clients object-group DHCP_Servers
+access-list ertms-dmz-access-in remark *** Permit NTP Request from Citrix clients to BDK NTP Servers ***
+access-list ertms-dmz-access-in extended permit object-group SERVICE_ntp object-group Citrix_NTP_Clients object-group BDK_DCs
+access-list ertms-dmz-access-in remark *** Permit DNS Request from Citrix clients to BDK DNS ***
+access-list ertms-dmz-access-in extended permit object-group DNS-Resolving object-group Citrix_DNS_Clients object-group DNS_Servers
+access-list ertms-dmz-access-in extended permit object SQLNET-1521 object AAPPCTXTPX_172.21.250.75_.118 object ADBSLA1_10.110.2.48
+access-list ertms-dmz-access-in extended permit object-group SERVICE_tcp_135_445_49151..65535 object-group TS_CAL_LICENSE_GROUP object appgpo1.bane.dk_10.110.2.82
+access-list ertms-dmz-access-in remark *** Permit tcp port 49151-65535 to DCs for selected Citrix hosts ***
+access-list ertms-dmz-access-in extended permit object-group SERVICE_tcp_49151-65535 object-group AAPPCTXXFTs object-group BDK_DCs
+access-list ertms-dmz-access-in remark *** Permit itrix AAPPCTXTPX 97..118 to ANSCTXBH01_ANSCTXBH02 port 1494 and 2598 ***
+access-list ertms-dmz-access-in extended permit object-group SERVICE_tcp_1494_2598_udp_1494_2598 object AAPPCTXTPX_172.21.250.97_.118 object ANSCTXBH01_ANSCTXBH02_172.27.2.213
+access-list ertms-dmz-access-in remark *** Permit tcp 88,135,389,445,464,3268,3269,5985 udp 389,5985 on DCs for selected Citrix Hosts ***
+access-list ertms-dmz-access-in extended permit object-group SERVICE_tcp_88_135_389_445_464_3268_3269_5985_udp_389_5985 object-group Citrix_TCP_to_DCs object-group BDK_DCs
+access-list ertms-dmz-access-in remark *** Permit tcp 53,389,445,464,636 udp 53,123,389 from ANSCTXOBV01 to BDK DCs ***
+access-list ertms-dmz-access-in extended permit object-group SERVICE_tcp_53_389_445_464_636_udp_53_123_389_icmp object ANSCTXOBV01_172.21.250.13 object-group BDK_DCs
+access-list ertms-dmz-access-in extended permit tcp object AAPPCTXTPX_172.21.250.75_.118 object proxy_wsa1_bane_dk_172.27.2.120 eq 9001
+access-list ertms-dmz-access-in extended permit tcp object AAPPCTXTPX_172.21.250.75_.118 object proxy_wsa1_bane_dk_172.27.2.120 eq www
+access-list ertms-dmz-access-in remark *** Permit AFILCTX1.BANE.DK_172.21.250.119 fildeling mod AFILSYNC1.BANE.DK_172.27.2.23 ***
+access-list ertms-dmz-access-in extended permit object-group SERVICE_tcp_88_135_389_445_464_3268_3269_5985_udp_389_5985 object AFILCTX1.BANE.DK_172.21.250.119 object AFILSYNC1.BANE.DK_172.27.2.23
+access-list ertms-dmz-access-in extended permit object-group SERVICE_tcp_80_443 object AFILCTX1.BANE.DK_172.21.250.119 object AFILSYNC1.BANE.DK_172.27.2.23
+access-list ertms-dmz-access-in extended permit tcp object AFILCTX1.BANE.DK_172.21.250.119 object AFILSYNC1.BANE.DK_172.27.2.23 eq 5800
+access-list ertms-dmz-access-in extended permit object-group DNS-Resolving object AFILCTX1.BANE.DK_172.21.250.119 object-group DNS_Servers
+access-list ertms-dmz-access-in extended permit object-group SERVICE_ntp object AFILCTX1.BANE.DK_172.21.250.119 object-group DNS_Servers
+access-list ertms-dmz-access-in extended permit object-group SERVICE_tcp_88_135_389_445_464_3268_3269_5985_udp_389_5985 object AFILCTX1.BANE.DK_172.21.250.119 object-group BDK_DCs
+access-list ertms-dmz-access-in extended permit object-group SERVICE_tcp_49151-65535 object AFILCTX1.BANE.DK_172.21.250.119 object-group DNS_Servers
+access-list ertms-dmz-access-in extended permit tcp object OBV_NetAct_Server7 host 172.27.189.10 range 65050 65099
+access-list ertms-dmz-access-in extended permit tcp host 172.21.8.135 host 10.150.91.21 eq 9416
+access-list ertms-dmz-access-in extended permit tcp host 172.21.8.135 host 10.150.91.22 eq 9416
+access-list ertms-dmz-access-in extended permit tcp host 172.21.8.135 host 10.150.91.31 eq 2598
+access-list ertms-dmz-access-in extended permit tcp host 172.21.8.135 host 10.150.91.31 eq citrix-ica
+access-list ertms-dmz-access-in extended permit tcp host 172.21.8.135 host 10.150.91.21 eq 9202
+access-list ertms-dmz-access-in extended permit tcp host 172.21.8.135 host 10.150.91.22 eq 9202
+access-list ertms-dmz-access-in extended permit tcp host 172.21.8.135 host 10.150.91.21 eq 9418
+access-list ertms-dmz-access-in extended permit tcp host 172.21.8.135 host 10.150.91.22 eq 9418
+access-list ertms-dmz-access-in remark *** Permit access from APSFIL01 to BDK DCs on a list of ports ***
+access-list ertms-dmz-access-in extended permit object-group SERVICE_icmp_tcp_53_88_389_484_636_3268_udp_53_88_123_389_484_636_3268 object ASPFIL01_172.21.251.18 object-group BDK_DCs
+access-list ertms-dmz-access-in remark CTASK0022208 CConrads 17-7-2019
+access-list ertms-dmz-access-in extended permit tcp object ASPFIL01_172.21.251.18 object APBASEFTP_172.21.1.76 eq ftp
+access-list ertms-dmz-access-in extended permit tcp object ASPFIL01_172.21.251.18 object APBASEFTP_172.21.1.76 range 50000 50005
+access-list ertms-dmz-access-in extended permit object-group TPS_AD_ports object ASPFIL01_172.21.251.18 object-group Domain_group
+access-list ertms-dmz-access-in extended permit tcp object ADIACENTSOB1_172.21.252.11 object aexchcas4_10.110.2.138 eq smtp
+access-list ertms-dmz-access-in extended permit udp object-group DiaMont-Servers_172.21.252.1x object ABANE16.bane.dk_172.27.2.22 eq ntp
+access-list ertms-dmz-access-in extended permit udp object-group DiaMont-Servers_172.21.252.1x object ABANE16.bane.dk_172.27.2.22 eq domain
+access-list ertms-dmz-access-in extended permit tcp object AAPPCTXTPX_172.21.250.75_.118 object APRINTSAFE1_10.110.2.75 eq netbios-ssn
+access-list ertms-dmz-access-in extended permit tcp object AAPPCTXTPX_172.21.250.75_.118 object APRINTSAFE1_10.110.2.75 eq 445
+access-list ertms-dmz-access-in extended permit udp object AAPPCTXTPX_172.21.250.75_.118 object APRINTSAFE1_10.110.2.75 eq netbios-ns
+access-list ertms-dmz-access-in extended permit udp object AAPPCTXTPX_172.21.250.75_.118 object APRINTSAFE1_10.110.2.75 eq netbios-dgm
+access-list ertms-dmz-access-in remark CTASK0023502 27-01-2020
+access-list ertms-dmz-access-in extended permit object-group TPS_AD_ports object asmtprelay01_172.21.251.19 object ABANE16.bane.dk_172.27.2.22
+access-list ertms-dmz-access-in extended permit object-group TPS_AD_ports object asmtprelay01_172.21.251.19 object abane17.bane.dk_172.27.3.22
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in extended permit tcp object-group DiaMont-Servers_172.21.252.1x object aapptogstapri1m_172.27.210.5 eq 2019
+access-list ertms-dmz-access-in extended permit tcp object-group DiaMont-Servers_172.21.252.1x object aapptogstasec1m_172.27.210.21 eq 2019
+access-list ertms-dmz-access-in extended permit tcp object-group DiaMont-Servers_172.21.252.1x object proxy_wsa1_bane_dk_172.27.2.120 eq www
+access-list ertms-dmz-access-in extended permit tcp object-group DiaMont-Servers_172.21.252.1x object proxy_wsa1_bane_dk_172.27.2.120 eq https
+access-list ertms-dmz-access-in remark *** Permit Alstom HHT over PPPN and VPN to access BDK AD Servers for icmp, dns and ldaps ***
+access-list ertms-dmz-access-in extended permit object-group SERVICE_icmp_dns_ldaps object HHT_VPN_POOL_INSIDE object-group BDK_DCs
+access-list ertms-dmz-access-in remark CTASK0024848 20-05-2020
+access-list ertms-dmz-access-in extended permit tcp object asmtprelay01_172.21.251.19 object mailrelay_10.110.9.21 eq 587
+access-list ertms-dmz-access-in extended permit tcp object asmtprelay01_172.21.251.19 object mailrelay_10.110.9.22 eq 587
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark CTASK025109 2020-05-25
+access-list ertms-dmz-access-in extended permit tcp object Thales_ARAMIS_D_10.48.0.163 object-group BDK_DCs eq ldaps inactive
+access-list ertms-dmz-access-in extended permit udp object Thales_ARAMIS_D_10.48.0.163 object-group BDK_DCs eq 636 inactive
+access-list ertms-dmz-access-in extended permit tcp object-group Thales_HIS_ixl object-group BDK_DCs eq ldaps inactive
+access-list ertms-dmz-access-in extended permit udp object-group Thales_HIS_ixl object-group BDK_DCs eq 636 inactive
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark CTASK0025506 08-07-2020
+access-list ertms-dmz-access-in extended permit tcp object CTX_Servers host 172.27.200.40 eq 135
+access-list ertms-dmz-access-in extended permit tcp object CTX_Servers host 172.27.200.40 eq 445
+access-list ertms-dmz-access-in extended permit tcp object CTX_Servers host 172.27.200.40 range 49151 65535
+access-list ertms-dmz-access-in extended permit tcp host 172.21.248.23 host 172.27.200.40 eq 135
+access-list ertms-dmz-access-in extended permit tcp host 172.21.248.23 host 172.27.200.40 eq 445
+access-list ertms-dmz-access-in extended permit tcp host 172.21.248.23 host 172.27.200.40 range 49151 65535
+access-list ertms-dmz-access-in extended permit tcp host 172.21.248.24 host 172.27.200.40 eq 135
+access-list ertms-dmz-access-in extended permit tcp host 172.21.248.24 host 172.27.200.40 eq 445
+access-list ertms-dmz-access-in extended permit tcp host 172.21.248.24 host 172.27.200.40 range 49151 65535
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark CTASK0023502 10-08-2020
+access-list ertms-dmz-access-in extended permit tcp object TPS_DB_SRV_10.14.0.70 object asmtprelay01_172.21.251.19 eq 587
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark CTASK0025815 12-08-2020
+access-list ertms-dmz-access-in extended permit tcp object CTX_Servers object AWSUS01_172.27.200.34 range 8530 8531
+access-list ertms-dmz-access-in extended permit tcp object AFILCTX1.BANE.DK_172.21.250.119 object AWSUS01_172.27.200.34 range 8530 8531
+access-list ertms-dmz-access-in extended permit tcp host 172.21.248.23 object AWSUS01_172.27.200.34 range 8530 8531
+access-list ertms-dmz-access-in extended permit tcp host 172.21.248.24 object AWSUS01_172.27.200.34 range 8530 8531
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in extended permit icmp object-group DiaMont-Servers_172.21.252.1x host 172.27.210.5
+access-list ertms-dmz-access-in extended permit icmp object-group DiaMont-Servers_172.21.252.1x host 172.27.210.21
+access-list ertms-dmz-access-in extended permit object-group UDP_53_123_389_636 object ACTXVCENT01_172.21.248.22 object BHADOBVAD_10.185.50.11
+access-list ertms-dmz-access-in extended permit object-group UDP_53_123_389_636 object ACTXVCENT01_172.21.248.22 object BHADOBVAD_10.185.50.12
+access-list ertms-dmz-access-in extended permit tcp object ACTXVCENT01_172.21.248.22 object BHADOBVAD_10.185.50.11 eq ldap
+access-list ertms-dmz-access-in extended permit tcp object ACTXVCENT01_172.21.248.22 object BHADOBVAD_10.185.50.11 eq ldaps
+access-list ertms-dmz-access-in extended permit tcp object ACTXVCENT01_172.21.248.22 object BHADOBVAD_10.185.50.12 eq ldap
+access-list ertms-dmz-access-in extended permit tcp object ACTXVCENT01_172.21.248.22 object BHADOBVAD_10.185.50.12 eq ldaps
+access-list ertms-dmz-access-in remark *** Permit Citrix App Servers access to Web ENK server for icmp and www ***
+access-list ertms-dmz-access-in extended permit object-group SERVICE_icmp_www object AAPPCTXTPX_172.21.250.75_.118 object AAPPWEBENKS202.bane.dk
+access-list ertms-dmz-access-in extended permit tcp object AALSTOMJUMP2_172.21.248.50 object AWSUS01_172.27.200.34 range 8530 8531
+access-list ertms-dmz-access-in extended permit object-group Alstom_AD_ports object AALSTOMJUMP2_172.21.248.50 object abane17.bane.dk_172.27.3.22
+access-list ertms-dmz-access-in extended permit object-group SERVICE_tcp_49152_65535 object AALSTOMJUMP2_172.21.248.50 object abane17.bane.dk_172.27.3.22
+access-list ertms-dmz-access-in extended permit object-group Alstom_AD_ports object AALSTOMJUMP2_172.21.248.50 object ABANE16.bane.dk_172.27.2.22
+access-list ertms-dmz-access-in extended permit object-group SERVICE_tcp_49152_65535 object AALSTOMJUMP2_172.21.248.50 object ABANE16.bane.dk_172.27.2.22
+access-list ertms-dmz-access-in extended permit object-group SERVICE_tcp_7074_7075_7081_8443 object AALSTOMJUMP2_172.21.248.50 object ABITDEFEND1_172.27.200.17
+access-list ertms-dmz-access-in remark CTASK0029076 24-06-2021
+access-list ertms-dmz-access-in extended permit tcp object AAPPCTXTPX_172.21.250.75_.118 object sts.bane.dk_10.110.3.41 eq https
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in extended permit tcp host 100.73.35.40 host 172.27.2.120 eq https
+access-list ertms-dmz-access-in extended permit tcp host 100.73.35.40 host 172.27.2.120 eq 3128
+access-list ertms-dmz-access-in extended permit tcp host 100.73.35.40 host 172.27.2.121 eq https
+access-list ertms-dmz-access-in extended permit tcp host 100.73.35.40 host 172.27.2.121 eq 3128
+access-list ertms-dmz-access-in extended permit tcp host 100.73.35.40 host 172.27.2.121 eq www
+access-list ertms-dmz-access-in remark CHG0048856
+access-list ertms-dmz-access-in extended permit tcp object-group Thales_HHT object-group BDK-LDAP eq ldaps
+access-list ertms-dmz-access-in extended permit udp object-group Thales_HHT object-group BDK-LDAP eq 636
+access-list ertms-dmz-access-in remark CTASK0030710 CConrads 6-12-2021
+access-list ertms-dmz-access-in extended permit udp object-group CTX_Servers_2 host 10.185.50.11 eq domain
+access-list ertms-dmz-access-in extended permit udp object-group CTX_Servers_2 host 10.185.50.12 eq domain
+access-list ertms-dmz-access-in extended permit tcp object-group CTX_Servers_2 host 10.185.50.11 eq domain
+access-list ertms-dmz-access-in extended permit tcp object-group CTX_Servers_2 host 10.185.50.12 eq domain
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark *** Permit group of servers access to masterclock.bane.dk for NTP ***
+access-list ertms-dmz-access-in extended permit object-group SERVICE_ntp object-group Servers_Access_MasterClock_For_NTP object masterclock.bane.dk_172.17.138.38
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark CTASK0030728 CConrads 7-12-2021
+access-list ertms-dmz-access-in extended permit tcp host 172.21.248.70 host 10.185.50.11 eq ldap
+access-list ertms-dmz-access-in extended permit tcp host 172.21.248.70 host 10.185.50.12 eq ldap
+access-list ertms-dmz-access-in extended permit tcp host 172.21.248.70 host 10.185.50.11 eq ldaps
+access-list ertms-dmz-access-in extended permit tcp host 172.21.248.70 host 10.185.50.12 eq ldaps
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark *** Permit group of servers access to ASMTP1.BANE.DK for SMTP ***
+access-list ertms-dmz-access-in extended permit tcp object-group Servers_Access_ASMTP1_for_SMTP object ASMTP1.BANE.DK_172.27.200.24 eq smtp
+access-list ertms-dmz-access-in remark CTASK0031236 21-01-2022
+access-list ertms-dmz-access-in extended permit object-group AD_SERVICES_CTX_VXRAIL_DELL host 172.21.248.70 host 10.185.50.11
+access-list ertms-dmz-access-in extended permit object-group AD_SERVICES_CTX_VXRAIL_DELL host 172.21.248.71 host 10.185.50.11
+access-list ertms-dmz-access-in extended permit object-group AD_SERVICES_CTX_VXRAIL_DELL host 172.21.248.70 host 10.185.50.12
+access-list ertms-dmz-access-in extended permit object-group AD_SERVICES_CTX_VXRAIL_DELL host 172.21.248.71 host 10.185.50.12
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark *** Permit List of host access to TCCWPE1/2 for NTP ***
+access-list ertms-dmz-access-in extended permit object-group SERVICE_icmp_ntp object-group HOSTS_ALLOWED_FOR_NTP_FROM_TCCWPE_1_2 object IF_JTTN_VRF_SIGNAL_PROGRAM_TCCWPE_1_2
+access-list ertms-dmz-access-in remark *** Permit List of host access to TCCWFW1 Mgmt interfaces ***
+access-list ertms-dmz-access-in extended permit object-group SERVICE_icmp_tcp_22_443 object-group ACCESS_TO_FXOS_FROM_SERVERS object-group TCCWFW1-MGMT
+access-list ertms-dmz-access-in remark CHG0050008 - Citrix AD access to bane.dk
+access-list ertms-dmz-access-in extended permit object-group AD_Services_Citrix object-group AD_CITRIX object-group BDK_DCs
+access-list ertms-dmz-access-in remark CTASK0031858 2022-03-21
+access-list ertms-dmz-access-in extended permit tcp host 172.21.247.25 host 172.27.200.17 eq 7074
+access-list ertms-dmz-access-in extended permit tcp host 172.21.247.25 host 172.27.200.17 eq 7076
+access-list ertms-dmz-access-in extended permit tcp host 172.21.247.25 host 172.27.200.17 eq 7081
+access-list ertms-dmz-access-in extended permit tcp host 172.21.247.25 host 172.27.200.17 eq 7083
+access-list ertms-dmz-access-in extended permit tcp host 172.21.247.25 host 172.27.200.17 eq 8080
+access-list ertms-dmz-access-in extended permit tcp host 172.21.247.25 host 172.27.200.17 eq 8443
+access-list ertms-dmz-access-in extended permit tcp host 172.21.247.25 host 172.27.200.17 eq https
+access-list ertms-dmz-access-in extended permit tcp host 172.21.247.25 host 172.27.200.34 range 8530 8531
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark CTASK0032112 2022-04-13
+access-list ertms-dmz-access-in extended permit tcp object CTX_DHCP_172_21_247_100_199 host 172.27.200.40 eq 135
+access-list ertms-dmz-access-in extended permit tcp object CTX_DHCP_172_21_247_100_199 host 172.27.200.40 range 49152 65535
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in extended permit udp host 100.72.35.34 object masterclock.bane.dk_172.17.138.38 eq ntp
+access-list ertms-dmz-access-in remark CTASK0032350 2022-05-03
+access-list ertms-dmz-access-in extended permit tcp host 172.21.247.26 host 172.27.2.23 eq www
+access-list ertms-dmz-access-in extended permit tcp host 172.21.247.26 host 172.27.2.23 eq https
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark CTASK0032353 2022-05-04
+access-list ertms-dmz-access-in extended permit tcp object CTX_DHCP_172_21_247_100_199 host 10.110.3.41 eq https
+access-list ertms-dmz-access-in extended permit tcp object CTX_DHCP_172_21_247_100_199 host 10.110.3.41 eq www
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark CTASK0032354 2022-05-04
+access-list ertms-dmz-access-in extended permit tcp object CTX_DHCP_172_21_247_100_199 host 172.27.200.40 eq 445
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark CTASK0032860 2022-06-30
+access-list ertms-dmz-access-in extended permit tcp host 10.14.0.70 object f.esbbane.dk_80.243.122.4 eq 31000
+access-list ertms-dmz-access-in extended permit tcp host 10.14.0.70 object f.esbbane.dk_80.243.122.4 eq 32000
+access-list ertms-dmz-access-in extended permit tcp host 10.14.0.70 object f.esbbane.dk_80.243.122.4 eq 8088
+access-list ertms-dmz-access-in extended permit tcp host 10.14.0.70 object f.esbbane.dk_80.243.122.4 eq 8086
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark CTASK0032860 2022-07-05
+access-list ertms-dmz-access-in extended permit object-group PBASE2022_AD object ADWHREPPBR01.BANE.DK_172.21.254.4 object ABANE16.bane.dk_172.27.2.22
+access-list ertms-dmz-access-in extended permit object-group PBASE2022_AD object ADWHREPPBR01.BANE.DK_172.21.254.4 object abane17.bane.dk_172.27.3.22
+access-list ertms-dmz-access-in extended permit object-group PBASE2022_AD object ADWHSTGPBR01.BANE.DK_172.21.254.5 object ABANE16.bane.dk_172.27.2.22
+access-list ertms-dmz-access-in extended permit object-group PBASE2022_AD object ADWHSTGPBR01.BANE.DK_172.21.254.5 object abane17.bane.dk_172.27.3.22
+access-list ertms-dmz-access-in extended permit tcp object ADWHREPPBR01.BANE.DK_172.21.254.4 object ADBDWHPBR00_172.27.2.103 eq 9999
+access-list ertms-dmz-access-in extended permit tcp object ADWHSTGPBR01.BANE.DK_172.21.254.5 object ADBDWHPBR00_172.27.2.103 eq 9999
+access-list ertms-dmz-access-in extended permit icmp object ADWHREPPBR01.BANE.DK_172.21.254.4 object ADBDWHPBR00_172.27.2.103
+access-list ertms-dmz-access-in extended permit icmp object ADWHSTGPBR01.BANE.DK_172.21.254.5 object ADBDWHPBR00_172.27.2.103
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark CTASK0033029 2022-7-7
+access-list ertms-dmz-access-in extended permit tcp object AAPPCTXTPX_172.21.250.75_.118 host 10.14.0.81 eq sqlnet
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark *** Permit TCP/UDP 3389 for ADIATSOB1 traffic to ADIADTSFA1 (CHG0051089)
+access-list ertms-dmz-access-in extended permit tcp object ADIATSOB1_172.21.252.16 object ADIADTSFA1_172.21.244.25 eq 3389
+access-list ertms-dmz-access-in extended permit udp object ADIATSOB1_172.21.252.16 object ADIADTSFA1_172.21.244.25 eq 3389
+access-list ertms-dmz-access-in remark *** Permit TCP 26400 for NUC traffic to DTSServers (CHG0051089)
+access-list ertms-dmz-access-in extended permit tcp object ADIANUCOB1_DATADMZ_172.21.253.22 object ADIADTSFA1_172.21.244.25 eq 26400
+access-list ertms-dmz-access-in remark *** Permit UDP/123 for NTP from NUH to Masterclock (CHG0051089)
+access-list ertms-dmz-access-in extended permit udp object-group DiaMonT-NUH object masterclock.bane.dk_172.17.138.38 eq ntp
+access-list ertms-dmz-access-in remark *** Permit UDP/123 for NUC traffic to Masterclock (CHG0051089)
+access-list ertms-dmz-access-in extended permit udp object ADIANUCOB1_DATADMZ_172.21.253.22 object masterclock.bane.dk_172.17.138.38 eq ntp
+access-list ertms-dmz-access-in remark *** Permit UDP/123 for Responder traffic to Masterclock (CHG0051089)
+access-list ertms-dmz-access-in extended permit udp object ADIARESPOB1_DATADMZ_172.21.253.14 object masterclock.bane.dk_172.17.138.38 eq ntp
+access-list ertms-dmz-access-in remark *** Permit smtp traffic from ADIANUCOB1_DATADMZ to SMTP1.bane.dk ***
+access-list ertms-dmz-access-in extended permit tcp object ADIANUCOB1_DATADMZ_172.21.253.22 object ASMTP1.BANE.DK_172.27.200.24 eq smtp
+access-list ertms-dmz-access-in remark CTASK0033364 2022-08-23
+access-list ertms-dmz-access-in extended permit tcp object ADWHREPPBR01.BANE.DK_172.21.254.4 object AREPOPBR01.BANE.DK_172.27.2.206 eq www
+access-list ertms-dmz-access-in extended permit tcp object ADWHREPPBR01.BANE.DK_172.21.254.4 object AREPOPBR01.BANE.DK_172.27.2.206 eq https
+access-list ertms-dmz-access-in extended permit tcp object ADWHSTGPBR01.BANE.DK_172.21.254.5 object AREPOPBR01.BANE.DK_172.27.2.206 eq www
+access-list ertms-dmz-access-in extended permit tcp object ADWHSTGPBR01.BANE.DK_172.21.254.5 object AREPOPBR01.BANE.DK_172.27.2.206 eq https
+access-list ertms-dmz-access-in extended permit tcp host 172.21.254.6 object AREPOPBR01.BANE.DK_172.27.2.206 eq www
+access-list ertms-dmz-access-in extended permit tcp host 172.21.254.6 object AREPOPBR01.BANE.DK_172.27.2.206 eq https
+access-list ertms-dmz-access-in extended permit tcp host 172.21.254.7 object AREPOPBR01.BANE.DK_172.27.2.206 eq www
+access-list ertms-dmz-access-in extended permit tcp host 172.21.254.7 object AREPOPBR01.BANE.DK_172.27.2.206 eq https
+access-list ertms-dmz-access-in extended permit tcp host 172.21.254.8 object AREPOPBR01.BANE.DK_172.27.2.206 eq www
+access-list ertms-dmz-access-in extended permit tcp host 172.21.254.8 object AREPOPBR01.BANE.DK_172.27.2.206 eq https
+access-list ertms-dmz-access-in extended permit tcp host 172.21.254.20 object AREPOPBR01.BANE.DK_172.27.2.206 eq www
+access-list ertms-dmz-access-in extended permit tcp host 172.21.254.20 object AREPOPBR01.BANE.DK_172.27.2.206 eq https
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark CTASK0034203 2023-1-20
+access-list ertms-dmz-access-in extended permit tcp object CTX_DHCP_172_21_247_100_199 host 10.14.0.81 eq sqlnet
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark CTASK0034412 2023-02-16
+access-list ertms-dmz-access-in extended permit tcp host 172.21.247.10 host 172.27.3.148 eq https
+access-list ertms-dmz-access-in extended permit tcp host 172.21.247.11 host 172.27.3.148 eq https
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark CTASK0034533 2023-03-08
+access-list ertms-dmz-access-in extended permit tcp host 172.21.247.25 host 172.27.200.24 eq smtp
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark CTASK0034574 2023-03-16
+access-list ertms-dmz-access-in extended permit icmp host 172.21.254.5 host 172.27.2.103
+access-list ertms-dmz-access-in extended permit tcp host 172.21.254.5 host 172.27.2.103 eq 6432
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark CTASK0034654 2023-03-24
+access-list ertms-dmz-access-in extended permit udp host 172.21.252.25 host 172.17.138.38 eq ntp
+access-list ertms-dmz-access-in extended permit tcp host 172.21.252.16 object-group openstreetmap.org eq https
+access-list ertms-dmz-access-in extended permit tcp host 172.21.253.22 host 172.21.244.25 eq 26401
+access-list ertms-dmz-access-in extended permit tcp host 172.21.253.22 host 172.21.244.25 eq 26402
+access-list ertms-dmz-access-in extended permit tcp host 172.21.253.22 host 172.21.244.25 eq 26403
+access-list ertms-dmz-access-in extended permit tcp host 172.21.253.22 host 172.21.244.25 eq 26404
+access-list ertms-dmz-access-in extended permit tcp host 172.21.253.22 host 172.21.244.25 eq 26405
+access-list ertms-dmz-access-in extended permit tcp host 172.21.252.11 host 172.27.200.24 eq smtp
+access-list ertms-dmz-access-in extended permit tcp host 172.21.252.12 host 172.27.200.24 eq smtp
+access-list ertms-dmz-access-in extended permit tcp host 172.21.252.13 host 172.27.200.24 eq smtp
+access-list ertms-dmz-access-in extended permit tcp host 172.21.252.14 host 172.27.200.24 eq smtp
+access-list ertms-dmz-access-in extended permit tcp host 172.21.252.15 host 172.27.200.24 eq smtp
+access-list ertms-dmz-access-in extended permit tcp host 172.21.252.25 host 172.27.200.24 eq smtp
+access-list ertms-dmz-access-in extended permit tcp host 172.21.253.22 host 172.27.200.24 eq smtp
+access-list ertms-dmz-access-in remark .
+access-list ertms-dmz-access-in remark CTASK0034371 2023-03-17
+access-list ertms-dmz-access-in extended permit object SQLNET-1521 object adwhreppbr01.bane.dk_172.21.254.4 object TPS_DB_SRV_10.14.0.71
+access-list ertms-dmz-access-in extended permit icmp object adwhreppbr01.bane.dk_172.21.254.4 object TPS_DB_SRV_10.14.0.71
+access-list ertms-dmz-access-in remark .
+access-list SPNS-SRV-NET-ZONE0-in extended permit tcp object ADIACENTSFA1_172.21.244.11 object aexchcas4_10.110.2.138 eq smtp
+access-list SPNS-SRV-NET-ZONE0-in extended permit tcp object ADIACENTSOB1_172.21.252.11 object aexchcas4_10.110.2.138 eq smtp
+access-list SPNS-SRV-NET-ZONE0-in extended permit udp object-group DiaMont-Servers_172.21.244.1x object ABANE16.bane.dk_172.27.2.22 eq ntp
+access-list SPNS-SRV-NET-ZONE0-in extended permit udp object-group DiaMont-Servers_172.21.244.1x object ABANE16.bane.dk_172.27.2.22 eq domain
+access-list SPNS-SRV-NET-ZONE0-in extended permit udp object-group DiaMont-Servers_172.21.252.1x object ABANE16.bane.dk_172.27.2.22 eq ntp
+access-list SPNS-SRV-NET-ZONE0-in extended permit udp object-group DiaMont-Servers_172.21.252.1x object ABANE16.bane.dk_172.27.2.22 eq domain
+access-list SPNS-SRV-NET-ZONE0-in extended permit udp object-group DiaMont-Servers_172.21.244.1x object masterclock.bane.dk_172.17.138.38 eq ntp
+access-list SPNS-SRV-NET-ZONE0-in extended permit udp object-group DiaMont-Servers_172.21.252.1x object masterclock.bane.dk_172.17.138.38 eq ntp
+access-list SPNS-SRV-NET-ZONE0-in extended permit udp object-group DiaMont-Servers_172.21.244.1x host 172.18.138.38 eq ntp
+access-list SPNS-SRV-NET-ZONE0-in extended permit tcp object-group DiaMont-Servers_172.21.244.1x object proxy_wsa1_bane_dk_172.27.2.120 eq www
+access-list SPNS-SRV-NET-ZONE0-in extended permit tcp object-group DiaMont-Servers_172.21.244.1x object proxy_wsa1_bane_dk_172.27.2.120 eq https
+access-list SPNS-SRV-NET-ZONE0-in extended permit tcp object-group DiaMont-Servers_172.21.244.1x host 172.27.210.5 eq 2019
+access-list SPNS-SRV-NET-ZONE0-in extended permit tcp object-group DiaMont-Servers_172.21.244.1x host 172.27.210.21 eq 2019
+access-list SPNS-SRV-NET-ZONE0-in extended permit icmp object-group DiaMont-Servers_172.21.252.1x host 172.27.210.5
+access-list SPNS-SRV-NET-ZONE0-in extended permit icmp object-group DiaMont-Servers_172.21.252.1x host 172.27.210.21
+access-list SPNS-SRV-NET-ZONE0-in remark *** Permit TCP/UDP 623 for IPMI traffic to DiaMonT (CHG0051089)
+access-list SPNS-SRV-NET-ZONE0-in extended permit tcp object ADIATSFA1_172.21.244.16 object-group DiaMonT-IPMI eq 623
+access-list SPNS-SRV-NET-ZONE0-in extended permit udp object ADIATSFA1_172.21.244.16 object-group DiaMonT-IPMI eq 623
+access-list SPNS-SRV-NET-ZONE0-in remark *** Permit TCP 26300 for ADIATSFA1 traffic to NUC (CHG0051089)
+access-list SPNS-SRV-NET-ZONE0-in extended permit tcp object ADIATSFA1_172.21.244.16 object ADIANUCOB1_DATADMZ_172.21.253.22 eq 26300
+access-list SPNS-SRV-NET-ZONE0-in remark *** Permit TCP/UDP 22 for ADIATSFA1 traffic to NUC (CHG0051089)
+access-list SPNS-SRV-NET-ZONE0-in extended permit tcp object ADIATSFA1_172.21.244.16 object ADIANUCOB1_DATADMZ_172.21.253.22 eq ssh
+access-list SPNS-SRV-NET-ZONE0-in extended permit udp object ADIATSFA1_172.21.244.16 object ADIANUCOB1_DATADMZ_172.21.253.22 eq 22
+access-list SPNS-SRV-NET-ZONE0-in remark *** Permit TCP/UDP 3389 for ADIATSFA1 traffic to Responder (CHG0051089)
+access-list SPNS-SRV-NET-ZONE0-in extended permit tcp object ADIATSFA1_172.21.244.16 object ADIARESPOB1_DATADMZ_172.21.253.14 eq 3389
+access-list SPNS-SRV-NET-ZONE0-in extended permit udp object ADIATSFA1_172.21.244.16 object ADIARESPOB1_DATADMZ_172.21.253.14 eq 3389
+access-list SPNS-SRV-NET-ZONE0-in remark *** Permit TCP/UDP 3389 for ADIATSFA1 traffic to ADIADTSOB1 (CHG0051089)
+access-list SPNS-SRV-NET-ZONE0-in extended permit tcp object ADIATSFA1_172.21.244.16 object ADIADTSOB1_172.21.252.25 eq 3389
+access-list SPNS-SRV-NET-ZONE0-in extended permit udp object ADIATSFA1_172.21.244.16 object ADIADTSOB1_172.21.252.25 eq 3389
+access-list SPNS-SRV-NET-ZONE0-in remark CTASK0034654 2023-03-24
+access-list SPNS-SRV-NET-ZONE0-in extended permit udp host 172.21.244.25 host 172.17.138.38 eq ntp
+access-list SPNS-SRV-NET-ZONE0-in extended permit tcp host 172.21.244.16 object-group openstreetmap.org eq https
+access-list SPNS-SRV-NET-ZONE0-in extended permit tcp host 172.21.244.11 host 172.27.200.24 eq smtp
+access-list SPNS-SRV-NET-ZONE0-in extended permit tcp host 172.21.244.12 host 172.27.200.24 eq smtp
+access-list SPNS-SRV-NET-ZONE0-in extended permit tcp host 172.21.244.13 host 172.27.200.24 eq smtp
+access-list SPNS-SRV-NET-ZONE0-in extended permit tcp host 172.21.244.14 host 172.27.200.24 eq smtp
+access-list SPNS-SRV-NET-ZONE0-in extended permit tcp host 172.21.244.15 host 172.27.200.24 eq smtp
+access-list SPNS-SRV-NET-ZONE0-in extended permit tcp host 172.21.244.25 host 172.27.200.24 eq smtp
+access-list SPNS-SRV-NET-ZONE0-in remark .
+access-list fbane-acess-in extended permit udp any any eq ntp
+pager lines 24
+logging enable
+logging buffer-size 1048576
+logging monitor informational
+logging buffered informational
+logging trap informational
+logging host ertms-dmz 100.72.35.34
+mtu mgmt 1500
+mtu ertms-dmz 1500
+mtu SPNS-MGMT-ILO-ZONE0 1500
+mtu SPNS-SRV-NET-ZONE0 1500
+mtu gsmr 1500
+mtu fbane 1500
+mtu bane1 1500
+mtu ToMgmt 1500
+no monitor-interface mgmt
+monitor-interface ertms-dmz
+no monitor-interface SPNS-MGMT-ILO-ZONE0
+no monitor-interface SPNS-SRV-NET-ZONE0
+monitor-interface gsmr
+monitor-interface fbane
+monitor-interface bane1
+no monitor-interface ToMgmt
+icmp unreachable rate-limit 1 burst-size 1
+icmp permit any fbane
+icmp permit any bane1
+no asdm history enable
+arp timeout 14400
+access-group ertms-dmz-access-in in interface ertms-dmz
+access-group SPNS-SRV-NET-ZONE0-in in interface SPNS-SRV-NET-ZONE0
+access-group fbane-access-in in interface fbane
+access-group bane1-acess-in in interface bane1
+route ertms-dmz 0.0.0.0 0.0.0.0 100.65.2.54 1
+route fbane 10.3.0.0 255.255.128.0 10.150.195.68 1
+route fbane 10.3.128.0 255.255.128.0 10.150.195.68 1
+route ertms-dmz 10.8.0.0 255.248.0.0 100.65.2.54 1
+route bane1 10.9.241.0 255.255.255.0 10.138.63.1 1
+route bane1 10.9.249.0 255.255.255.0 10.138.63.1 1
+route bane1 10.9.250.0 255.255.255.0 10.138.63.1 1
+route bane1 10.9.255.0 255.255.255.0 10.138.63.1 1
+route ertms-dmz 10.23.240.131 255.255.255.255 100.65.2.54 1
+route ertms-dmz 10.49.255.0 255.255.255.0 100.65.2.54 1
+route fbane 10.110.2.0 255.255.254.0 10.150.195.68 1
+route fbane 10.110.3.0 255.255.255.0 10.150.195.68 1
+route fbane 10.110.9.0 255.255.255.0 10.150.195.68 1
+route bane1 10.138.57.0 255.255.255.0 10.138.63.1 1
+route bane1 10.138.59.0 255.255.255.0 10.138.63.1 1
+route fbane 10.139.0.0 255.255.0.0 10.150.195.68 1
+route bane1 10.147.57.0 255.255.255.0 10.138.63.1 1
+route bane1 10.147.63.0 255.255.255.0 10.138.63.1 1
+route fbane 10.150.144.0 255.255.255.0 10.150.195.68 1
+route fbane 10.150.145.0 255.255.255.0 10.150.195.68 1
+route fbane 10.157.137.0 255.255.255.0 10.150.195.68 1
+route bane1 10.185.50.0 255.255.255.0 10.138.63.1 1
+route fbane 10.185.50.11 255.255.255.255 10.150.195.68 1
+route fbane 10.185.50.12 255.255.255.255 10.150.195.68 1
+route fbane 10.185.50.85 255.255.255.255 10.150.195.68 1
+route bane1 10.255.255.0 255.255.255.0 10.138.63.1 1
+route fbane 10.255.255.113 255.255.255.255 10.150.195.68 1
+route fbane 80.243.122.4 255.255.255.255 10.150.195.68 1
+route fbane 93.183.6.224 255.255.255.224 10.150.195.68 1
+route fbane 93.183.9.224 255.255.255.224 10.150.195.68 1
+route fbane 100.64.15.0 255.255.255.0 10.150.195.68 1
+route bane1 100.64.15.49 255.255.255.255 10.138.63.1 1
+route bane1 100.64.15.60 255.255.255.255 10.138.63.1 1
+route bane1 100.64.15.61 255.255.255.255 10.138.63.1 1
+route ertms-dmz 100.65.2.136 255.255.255.248 100.65.2.54 1
+route ertms-dmz 100.65.2.144 255.255.255.248 100.65.2.54 1
+route ertms-dmz 100.72.35.32 255.255.255.224 100.65.2.54 1
+route ertms-dmz 100.126.255.0 255.255.255.248 100.65.2.54 1
+route ertms-dmz 100.126.255.64 255.255.255.248 100.65.2.54 1
+route fbane 151.101.1.91 255.255.255.255 10.150.195.68 1
+route fbane 151.101.65.91 255.255.255.255 10.150.195.68 1
+route fbane 151.101.129.91 255.255.255.255 10.150.195.68 1
+route fbane 151.101.193.91 255.255.255.255 10.150.195.68 1
+route fbane 172.17.138.0 255.255.255.0 10.150.195.68 1
+route bane1 172.18.0.0 255.255.248.0 10.138.63.1 1
+route bane1 172.18.0.0 255.255.255.0 10.138.63.1 1
+route bane1 172.18.2.0 255.255.255.0 10.138.63.1 1
+route ertms-dmz 172.19.144.0 255.255.255.0 100.65.2.54 1
+route ertms-dmz 172.19.208.0 255.255.255.0 100.65.2.54 1
+route ertms-dmz 172.19.255.8 255.255.255.248 100.65.2.54 1
+route ertms-dmz 172.19.255.16 255.255.255.248 100.65.2.54 1
+route ertms-dmz 172.19.255.128 255.255.255.248 100.65.2.54 1
+route ertms-dmz 172.19.255.136 255.255.255.248 100.65.2.54 1
+route bane1 172.20.37.0 255.255.255.0 10.138.63.1 1
+route bane1 172.20.38.0 255.255.255.0 10.138.63.1 1
+route bane1 172.20.39.0 255.255.255.0 10.138.63.1 1
+route bane1 172.20.89.0 255.255.255.0 10.138.63.1 1
+route bane1 172.20.91.0 255.255.255.0 10.138.63.1 1
+route bane1 172.20.93.0 255.255.255.0 10.138.63.1 1
+route bane1 172.20.95.0 255.255.255.0 10.138.63.1 1
+route bane1 172.20.132.0 255.255.255.0 10.138.63.1 1
+route bane1 172.20.133.0 255.255.255.0 10.138.63.1 1
+route bane1 172.20.136.0 255.255.255.0 10.138.63.1 1
+route bane1 172.20.137.0 255.255.255.0 10.138.63.1 1
+route bane1 172.20.140.0 255.255.255.0 10.138.63.1 1
+route bane1 172.20.141.0 255.255.255.0 10.138.63.1 1
+route bane1 172.20.225.0 255.255.255.0 10.138.63.1 1
+route bane1 172.20.226.0 255.255.255.0 10.138.63.1 1
+route fbane 172.21.1.72 255.255.255.248 10.150.195.68 1
+route fbane 172.21.2.61 255.255.255.255 10.150.195.68 1
+route fbane 172.21.2.62 255.255.255.255 10.150.195.68 1
+route fbane 172.21.2.160 255.255.255.240 10.150.195.68 1
+route fbane 172.21.65.32 255.255.255.240 10.150.195.68 1
+route bane1 172.21.100.0 255.255.255.0 10.138.63.1 1
+route ertms-dmz 172.21.139.0 255.255.255.240 100.65.2.54 1
+route SPNS-MGMT-ILO-ZONE0 172.21.241.0 255.255.255.0 100.65.5.78 1
+route SPNS-SRV-NET-ZONE0 172.21.244.0 255.255.255.0 100.65.8.78 1
+route ertms-dmz 172.21.247.0 255.255.255.0 100.65.2.54 1
+route ertms-dmz 172.21.248.24 255.255.255.255 100.65.2.54 1
+route ertms-dmz 172.21.249.0 255.255.255.0 100.65.2.54 1
+route ertms-dmz 172.21.250.0 255.255.255.0 100.65.2.54 1
+route ertms-dmz 172.21.251.0 255.255.255.0 100.65.2.54 1
+route ertms-dmz 172.21.252.0 255.255.255.0 100.65.2.54 1
+route ertms-dmz 172.21.253.8 255.255.255.248 100.65.2.54 1
+route ertms-dmz 172.21.253.16 255.255.255.248 100.65.2.54 1
+route bane1 172.23.0.0 255.255.240.0 10.138.63.1 1
+route bane1 172.23.226.0 255.255.255.0 10.138.63.1 1
+route bane1 172.25.150.0 255.255.255.0 10.138.63.1 1
+route bane1 172.25.169.0 255.255.255.0 10.138.63.1 1
+route bane1 172.25.181.0 255.255.255.0 10.138.63.1 1
+route bane1 172.25.182.0 255.255.255.0 10.138.63.1 1
+route bane1 172.27.0.0 255.255.192.0 10.138.63.1 1
+route fbane 172.27.2.0 255.255.255.0 10.150.195.68 1
+route fbane 172.27.2.22 255.255.255.255 10.150.195.68 1
+route fbane 172.27.2.23 255.255.255.255 10.150.195.68 1
+route fbane 172.27.2.120 255.255.255.255 10.150.195.68 1
+route fbane 172.27.2.206 255.255.255.255 10.150.195.68 1
+route bane1 172.27.3.0 255.255.255.0 10.138.63.1 1
+route fbane 172.27.3.22 255.255.255.255 10.150.195.68 1
+route fbane 172.27.3.140 255.255.255.255 10.150.195.68 1
+route fbane 172.27.3.148 255.255.255.255 10.150.195.68 1
+route fbane 172.27.3.242 255.255.255.255 10.150.195.68 1
+route fbane 172.27.147.0 255.255.255.0 10.150.195.68 1
+route bane1 CapMon_Prod_172.27.189.10 255.255.255.255 10.138.63.1 1
+route bane1 CapMon_Prod_172.27.189.11 255.255.255.255 10.138.63.1 1
+route bane1 172.27.200.0 255.255.255.0 10.138.63.1 1
+route fbane 172.27.200.17 255.255.255.255 10.150.195.68 1
+route fbane 172.27.200.24 255.255.255.255 10.150.195.68 1
+route fbane 172.27.200.34 255.255.255.255 10.150.195.68 1
+route fbane 172.27.200.36 255.255.255.255 10.150.195.68 1
+route fbane 172.27.200.37 255.255.255.255 10.150.195.68 1
+route fbane 172.27.200.40 255.255.255.255 10.150.195.68 1
+route fbane 172.27.210.0 255.255.255.224 10.150.195.68 1
+route fbane 172.31.100.0 255.255.252.0 10.150.195.68 1
+route fbane 188.180.65.67 255.255.255.255 10.150.195.68 1
+timeout xlate 3:00:00
+timeout pat-xlate 0:00:30
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 sctp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00 mgcp-pat 0:05:00
+timeout sip 0:30:00 sip_media 0:02:00 sip-invite 0:03:00 sip-disconnect 0:02:00
+timeout sip-provisional-media 0:02:00 uauth 0:05:00 absolute
+timeout tcp-proxy-reassembly 0:01:00
+timeout floating-conn 0:00:00
+timeout conn-holddown 0:00:15
+timeout igp stale-route 0:01:10
+user-identity default-domain LOCAL
+aaa authentication ssh console LOCAL
+aaa authentication telnet console LOCAL
+aaa authentication http console LOCAL
+aaa authorization command LOCAL
+aaa authorization exec LOCAL auto-enable
+aaa authentication login-history
+http server enable
+snmp-server host ertms-dmz 100.72.35.34 community *****
+no snmp-server location
+no snmp-server contact
+snmp-server community *****
+crypto ipsec security-association pmtu-aging infinite
+telnet 172.21.2.62 255.255.255.255 fbane
+telnet timeout 10
+ssh stricthostkeycheck
+ssh timeout 30
+ssh version 2
+ssh 172.21.2.62 255.255.255.255 fbane
+no threat-detection statistics tcp-intercept
+ssl cipher default low
+ssl cipher tlsv1 low
+ssl cipher tlsv1.1 low
+ssl cipher tlsv1.2 low
+ssl cipher dtlsv1 low
+ssl cipher dtlsv1.2 low
+dynamic-access-policy-record DfltAccessPolicy
+username mifr password ***** pbkdf2 privilege 5
+username jbal password ***** pbkdf2 privilege 5
+username lars password ***** pbkdf2 privilege 5
+username andaeltel password ***** pbkdf2 privilege 5
+!
+class-map inspection_default
+ match default-inspection-traffic
+!
+!
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+  no tcp-inspection
+policy-map global_policy
+ class inspection_default
+  inspect dns preset_dns_map
+  inspect ftp
+  inspect h323 h225
+  inspect h323 ras
+  inspect ip-options
+  inspect netbios
+  inspect rsh
+  inspect rtsp
+  inspect skinny
+  inspect esmtp
+  inspect sqlnet
+  inspect sunrpc
+  inspect tftp
+  inspect sip
+  inspect xdmcp
+  inspect icmp
+!
+service-policy global_policy global
+privilege cmd level 5 mode exec command changeto
+privilege show level 5 mode exec command running-config
+app-agent heartbeat interval 1000 retry-count 3
+Cryptochecksum:d1749fc98698d247e475e8a4785f416f
+: end
+TCCWFw1/pri/act/SP-LAN-FW-W#

@@ -1,0 +1,909 @@
+!
+! Last configuration change at 05:54:24 UTC Thu Jun 8 2023 by maageltel
+! NVRAM config last updated at 05:54:25 UTC Thu Jun 8 2023 by maageltel
+!
+version 16.6
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no platform punt-keepalive disable-kernel-core
+!
+hostname OBVCORE01
+!
+!
+vrf definition BROKER-DMZ
+rd 65000:400
+route-target export 65000:400
+route-target import 65000:400
+!
+address-family ipv4
+exit-address-family
+!
+vrf definition CAT2-SRV-NET
+rd 65000:800
+route-target export 65000:800
+route-target import 65000:800
+!
+address-family ipv4
+exit-address-family
+!
+vrf definition ERTMS-DMZ
+rd 65000:200
+route-target export 65000:200
+route-target import 65000:200
+!
+address-family ipv4
+exit-address-family
+!
+vrf definition ERTMS-DMZ-JTL
+rd 65000:999
+route-target export 65000:999
+route-target import 65000:999
+!
+address-family ipv4
+exit-address-family
+!
+vrf definition IXP
+rd 65000:100
+route-target export 65000:100
+route-target import 65000:100
+!
+address-family ipv4
+exit-address-family
+!
+vrf definition IXP-JTL
+rd 65000:998
+route-target export 65000:998
+route-target import 65000:998
+!
+address-family ipv4
+exit-address-family
+!
+vrf definition Mgmt-vrf
+!
+address-family ipv4
+exit-address-family
+!
+address-family ipv6
+exit-address-family
+!
+vrf definition REMOTE-VPN
+rd 65000:326
+route-target export 65000:326
+route-target import 65000:326
+!
+address-family ipv4
+exit-address-family
+!
+vrf definition SERVER-MGMT
+rd 65000:500
+route-target export 65000:500
+route-target import 65000:500
+!
+address-family ipv4
+exit-address-family
+!
+enable secret 5 ********
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authorization exec default local
+aaa authorization commands 5 default local
+!
+!
+!
+!
+!
+!
+aaa session-id common
+switch 1 provision ws-c3850-12xs
+!
+!
+!
+!
+ip routing
+!
+!
+!
+!
+no login on-success log
+!
+!
+!
+!
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-286891315
+enrollment selfsigned
+subject-name cn=IOS-Self-Signed-Certificate-286891315
+revocation-check none
+rsakeypair TP-self-signed-286891315
+!
+!
+crypto pki certificate chain TP-self-signed-286891315
+certificate self-signed 01
+3082032E 30820216 A0030201 02020101 300D0609 2A864886 F70D0101 05050030
+30312E30 2C060355 04031325 494F532D 53656C66 2D536967 6E65642D 43657274
+69666963 6174652D 32383638 39313331 35301E17 0D313830 32323731 32343731
+335A170D 32303031 30313030 30303030 5A303031 2E302C06 03550403 1325494F
+532D5365 6C662D53 69676E65 642D4365 72746966 69636174 652D3238 36383931
+33313530 82012230 0D06092A 864886F7 0D010101 05000382 010F0030 82010A02
+82010100 9C0E82A9 714993D6 9EC834A1 CF426D06 30EA62B3 45E84F4A F0C709AA
+7ED9417F 53861A12 C37E17E6 78052E7A 9D2E5C17 F6C3078C A33E0518 6D8C33E2
+D97C46FA 813A52B0 F9618E9B A0B923C6 BEE1FA52 0DC001B6 560D6D52 94DA5884
+3BC8CA3E 6C72689E 9AB1F44E 34C39186 BF929A0E 4E1BB3BE 4DE61103 4D1CB65E
+59C82331 83A62096 B9CB3FE1 D0530E26 DA2E8F13 25D65175 F91E928E 273A18A8
+572B7312 2DF4F7F4 1F73C6A2 0DCDDD12 89E2554E 944E889D 56EBCB00 04959E11
+DD6555AC EF1E40DB 651AAA02 EC6737C3 D0FB4170 97CBF942 BDBB8F6E 6370F3C2
+E899130E 551E03FD B11C9F2C 27943AB5 36A5E9AA 019250C4 8E788F33 77738E91
+399E48F9 02030100 01A35330 51300F06 03551D13 0101FF04 05300301 01FF301F
+0603551D 23041830 16801449 E9D47FDE C750AC25 D977BF0A B1C14313 572E2E30
+1D060355 1D0E0416 041449E9 D47FDEC7 50AC25D9 77BF0AB1 C1431357 2E2E300D
+06092A86 4886F70D 01010505 00038201 01007D8B 64C11B6A CA8D1037 D790DECB
+C8D2D7E9 E0FC8324 7A10FB96 A4BD5FDE A8781A9B C0A45F4D 11D0C317 3944273F
+70A9638C EEF09CB9 2F21643B C88D50A8 386B4F1D D4721E0F 8F95E76F 4079C8B6
+44CEC0F9 C9F9DCDE EB623B54 45E36236 15108FBE 7DFE52B4 6DE0FA6F 9E7FC5B5
+AAB8750E 0F8582C3 26BE88BB 544225A1 5EA9AE42 CCB8B4EE 5290DE60 31661080
+1E1705B1 D7008D7B 2C9A02E2 EFD4FDE7 F2723A38 0C505D61 F6A20EAF 259C331A
+042E4CF4 9DBBA1DD 3704B4EC 063C4460 427ED030 93636214 A8D20691 D645F124
+BFDC721F 4F849F17 C3A96A3E 51871FEF 05BAB9D9 0B1F0F09 9455C974 C4583EA9
+F2DCE560 CCC71A63 77886267 BF135739 78FE
+quit
+!
+system mtu 9000
+!
+!
+diagnostic bootup level minimal
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+archive
+log config
+logging enable
+file privilege 5
+!
+username pemmeltel privilege 15 secret 5 ********
+username msjo privilege 15 secret 5 ********
+username fleeltel privilege 15 secret 5 ********
+username cconradseltel privilege 15 secret 5 ********
+username joleseneltel privilege 15 secret 5 ********
+username mpederseeltel privilege 15 secret 5 ********
+username shjortheltel privilege 15 secret 5 ********
+username tkristeneltel privilege 15 secret 5 ********
+username mifr privilege 5 secret 5 ********
+username jbal privilege 5 secret 5 ********
+username andaeltel privilege 5 secret 5 ********
+username clorenzeltel privilege 15 secret 5 ********
+username jepeeltel privilege 15 secret 5 ********
+username ftoldaleltel privilege 15 secret 5 ********
+username elt-backup privilege 15 secret 5 ********
+username nolandereltel privilege 15 secret 5 ********
+username jobmeltel privilege 15 secret 5 ********
+username maageltel privilege 15 secret 5 ********
+username BaneDK privilege 15 secret 5 ********
+!
+redundancy
+mode sso
+!
+!
+transceiver type all
+monitoring
+lldp run
+!
+track 100 ip sla 100 reachability
+!
+track 101 ip sla 101 reachability
+!
+track 102 ip sla 102 reachability
+!
+track 103 ip sla 103 reachability
+!
+track 104 ip sla 104 reachability
+!
+track 105 ip sla 105 reachability
+!
+track 106 ip sla 106 reachability
+!
+track 200 interface TenGigabitEthernet1/0/4 line-protocol
+!
+track 201 interface TenGigabitEthernet1/0/5 line-protocol
+!
+track 203 interface TenGigabitEthernet1/0/7 line-protocol
+!
+track 500 list boolean and
+object 100
+object 200
+object 201
+!
+track 501 list boolean and
+object 101
+object 203
+!
+track 502 list boolean and
+object 100
+object 104
+object 105
+object 106
+object 200
+object 201
+!
+track 503 list boolean and
+object 100
+object 102
+object 200
+object 201
+!
+track 504 list boolean and
+object 103
+object 200
+object 201
+!
+!
+class-map match-any system-cpp-police-topology-control
+description Topology control
+class-map match-any system-cpp-police-sw-forward
+description Sw forwarding, L2 LVX data, LOGGING
+class-map match-any system-cpp-default
+description DHCP Snooping, EWLC control, EWCL data
+class-map match-any system-cpp-police-sys-data
+description Learning cache ovfl, Crypto Control, Exception, EGR Exception, NFL SAMPLED DATA, RPF Failed
+class-map match-any system-cpp-police-punt-webauth
+description Punt Webauth
+class-map match-any system-cpp-police-l2lvx-control
+description L2 LVX control packets
+class-map match-any system-cpp-police-forus
+description Forus Address resolution and Forus traffic
+class-map match-any system-cpp-police-multicast-end-station
+description MCAST END STATION
+class-map match-any system-cpp-police-multicast
+description Transit Traffic and MCAST Data
+class-map match-any system-cpp-police-l2-control
+description L2 control
+class-map match-any system-cpp-police-dot1x-auth
+description DOT1X Auth
+class-map match-any system-cpp-police-data
+description ICMP redirect, ICMP_GEN and BROADCAST
+class-map match-any system-cpp-police-stackwise-virt-control
+description Stackwise Virtual
+class-map match-any system-cpp-police-control-low-priority
+description ICMP redirect and general punt
+class-map match-any system-cpp-police-wireless-priority1
+description Wireless priority 1
+class-map match-any system-cpp-police-wireless-priority2
+description Wireless priority 2
+class-map match-any system-cpp-police-wireless-priority3-4-5
+description Wireless priority 3,4 and 5
+class-map match-any non-client-nrt-class
+class-map match-any system-cpp-police-routing-control
+description Routing control
+class-map match-any system-cpp-police-protocol-snooping
+description Protocol snooping
+class-map match-any system-cpp-police-system-critical
+description System Critical and Gold
+!
+policy-map system-cpp-policy
+class system-cpp-police-data
+police rate 200 pps
+class system-cpp-police-routing-control
+police rate 1800 pps
+class system-cpp-police-control-low-priority
+class system-cpp-police-wireless-priority1
+class system-cpp-police-wireless-priority2
+class system-cpp-police-wireless-priority3-4-5
+policy-map port_child_policy
+class non-client-nrt-class
+bandwidth remaining ratio 10
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ip address 100.127.255.3 255.255.255.255
+ip router isis 10
+!
+interface Loopback100
+description MGMT
+vrf forwarding ERTMS-DMZ
+ip address 100.126.255.65 255.255.255.255
+!
+interface GigabitEthernet0/0
+vrf forwarding Mgmt-vrf
+no ip address
+negotiation auto
+!
+interface TenGigabitEthernet1/0/1
+description TO PEN-TEST-IXP
+no switchport
+vrf forwarding IXP
+no ip address
+!
+interface TenGigabitEthernet1/0/2
+description TO PEN-TEST-IXP-JTL (was PEN-TEST-IXP-JTL)
+no switchport
+vrf forwarding IXP
+ip address 100.65.2.145 255.255.255.248
+!
+interface TenGigabitEthernet1/0/3
+description OBVCORE01--OBV2KMDSw1 -Te FO- Bane 9180540
+switchport trunk allowed vlan 732
+switchport mode trunk
+shutdown
+!
+interface TenGigabitEthernet1/0/4
+description OBVCORE01--OBVFw1-PRI -Te FO- Bane 9180379
+switchport access vlan 102
+switchport mode access
+spanning-tree portfast
+!
+interface TenGigabitEthernet1/0/5
+description OBVCORE01--OBVFw1-PRI -Te FO- Bane 9180378
+switchport trunk allowed vlan 303,305,307,310,312,314,323,324,400,500,800,902
+switchport mode trunk
+!
+interface TenGigabitEthernet1/0/6
+description OBVCORE01--OBVBROKERSw1-1 -Te FO- Bane 9180380
+no switchport
+ip address 100.64.0.33 255.255.255.252
+ip router isis 10
+mpls ip
+!
+interface TenGigabitEthernet1/0/7
+description OBVCORE01--OBVFw2-PRI -Te FO- Bane 9180385
+switchport trunk allowed vlan 301,310,903
+switchport mode trunk
+!
+interface TenGigabitEthernet1/0/8
+description OBVCORE01--OBVBROKERMGMTSw1-1 -Gi UTP- Bane 9180412
+no switchport
+ip address 100.64.0.45 255.255.255.252
+ip router isis 10
+mpls ip
+!
+interface TenGigabitEthernet1/0/9
+description OBVCORE01--TCCWCORE01 -Te FO- Bane 9180375
+switchport trunk allowed vlan 10,100
+switchport mode trunk
+spanning-tree bpdufilter enable
+!
+interface TenGigabitEthernet1/0/10
+description OBVCORE01--TCCECORE01 -Te FO- Bane 9180373
+no switchport
+ip address 100.64.0.1 255.255.255.252
+ip router isis 10
+mpls ip
+!
+interface TenGigabitEthernet1/0/11
+description OBVCORE01--OBVCORE02 -Te FO- Bane 9180376
+no switchport
+ip address 100.64.0.21 255.255.255.252
+ip router isis 10
+mpls ip
+!
+interface TenGigabitEthernet1/0/12
+description OBVCORE01--OBVCORE02 -Te FO- Bane 9180377
+switchport trunk allowed vlan 102,301,303,305,307,310,312,314,323,324,400,500,732,800,902,903
+switchport mode trunk
+!
+interface TenGigabitEthernet1/1/1
+!
+interface TenGigabitEthernet1/1/2
+!
+interface TenGigabitEthernet1/1/3
+!
+interface TenGigabitEthernet1/1/4
+!
+interface Vlan1
+no ip address
+shutdown
+!
+interface Vlan100
+description CORE_ROUTING_VLAN
+ip address 100.64.0.10 255.255.255.252
+ip router isis 10
+mpls ip
+!
+interface Vlan301
+description TO OBVFw02_GSMR
+vrf forwarding IXP
+ip address 100.65.2.12 255.255.255.248
+standby 1 ip 100.65.2.14
+standby 1 priority 110
+standby 1 preempt
+shutdown
+!
+interface Vlan303
+description OBVFw01_IXP
+vrf forwarding IXP
+ip address 100.65.2.28 255.255.255.248
+standby 3 ip 100.65.2.30
+standby 3 priority 110
+standby 3 preempt
+standby 3 track 503 decrement 25
+!
+interface Vlan305
+description OBVFw01_ERTMS_DMZ
+vrf forwarding ERTMS-DMZ
+ip address 100.65.2.44 255.255.255.248
+standby 5 ip 100.65.2.46
+standby 5 priority 110
+standby 5 preempt
+standby 5 track 500 decrement 25
+!
+interface Vlan307
+description ERTMS_SP_LAN
+vrf forwarding ERTMS-DMZ
+ip address 100.65.2.60 255.255.255.248
+standby 7 ip 100.65.2.62
+standby 7 priority 110
+standby 7 preempt
+standby 7 track 500 decrement 25
+standby 7 track 502 decrement 25
+!
+interface Vlan310
+vrf forwarding IXP-JTL
+ip address 100.65.2.84 255.255.255.248
+standby 10 ip 100.65.2.86
+standby 10 priority 110
+standby 10 preempt
+!
+interface Vlan312
+description TO OBVFw01_IXP-JTL
+vrf forwarding IXP-JTL
+ip address 100.65.2.100 255.255.255.248
+standby 12 ip 100.65.2.102
+standby 12 priority 110
+standby 12 preempt
+!
+interface Vlan314
+description TO OBVFw01_ERTMS-DMZ-JTL
+vrf forwarding ERTMS-DMZ-JTL
+ip address 100.65.2.116 255.255.255.248
+standby 14 ip 100.65.2.118
+standby 14 priority 110
+standby 14 preempt
+!
+interface Vlan323
+description TO OBVFw01_REMOTE-VPN
+vrf forwarding REMOTE-VPN
+ip address 100.65.2.188 255.255.255.248
+standby 223 ip 100.65.2.190
+standby 223 priority 110
+standby 223 preempt
+!
+interface Vlan324
+description TO OBVFw01_ERTMS-DMZ
+vrf forwarding ERTMS-DMZ
+ip address 100.65.2.196 255.255.255.248
+standby 224 ip 100.65.2.198
+standby 224 priority 110
+standby 224 preempt
+!
+interface Vlan400
+description OBVFw01_BROKER-DMZ
+vrf forwarding BROKER-DMZ
+ip address 100.65.4.4 255.255.255.248
+standby 240 ip 100.65.4.6
+standby 240 priority 110
+standby 240 preempt
+!
+interface Vlan500
+description OBVFw01_SERVER-MGMT
+vrf forwarding SERVER-MGMT
+ip address 100.65.5.4 255.255.255.248
+standby 250 ip 100.65.5.6
+standby 250 priority 110
+standby 250 preempt
+!
+interface Vlan732
+description TO OBVKMDSw1_REMOTE-VPN
+vrf forwarding REMOTE-VPN
+ip address 172.21.228.18 255.255.255.248
+standby 232 ip 172.21.228.17
+standby 232 priority 110
+standby 232 preempt
+shutdown
+!
+interface Vlan800
+description OBVFw01_CAT2-SRV-NET
+vrf forwarding CAT2-SRV-NET
+ip address 100.65.8.4 255.255.255.248
+standby 250 ip 100.65.8.6
+standby 250 priority 110
+standby 250 preempt
+!
+interface Vlan902
+description MGMT OBVFW1
+vrf forwarding ERTMS-DMZ
+ip address 100.126.255.116 255.255.255.248
+standby 202 ip 100.126.255.113
+standby 202 priority 110
+standby 202 preempt
+standby 202 track 504 decrement 25
+!
+interface Vlan903
+description MGMT OBVFW2
+vrf forwarding ERTMS-DMZ
+ip address 100.126.255.124 255.255.255.248
+standby 203 ip 100.126.255.126
+standby 203 priority 110
+standby 203 preempt
+standby 203 track 504 decrement 25
+!
+interface Vlan3112
+no ip address
+!
+router isis 10
+net 49.6500.0000.0003.00
+is-type level-2-only
+metric-style narrow
+!
+router bgp 65000
+bgp router-id interface Loopback0
+bgp log-neighbor-changes
+neighbor BDK peer-group
+neighbor BDK remote-as 65000
+neighbor BDK update-source Loopback0
+neighbor BDK send-community extended
+neighbor BDK soft-reconfiguration inbound
+neighbor 100.127.255.1 peer-group BDK
+neighbor 100.127.255.2 peer-group BDK
+neighbor 100.127.255.4 peer-group BDK
+neighbor 100.127.255.5 peer-group BDK
+neighbor 100.127.255.6 peer-group BDK
+neighbor 100.127.255.7 peer-group BDK
+neighbor 100.127.255.8 peer-group BDK
+neighbor 100.127.255.9 peer-group BDK
+neighbor 100.127.255.10 peer-group BDK
+!
+address-family vpnv4
+neighbor BDK send-community extended
+neighbor 100.127.255.1 activate
+neighbor 100.127.255.1 route-map SET_LOCALPREF_40 in
+neighbor 100.127.255.2 activate
+neighbor 100.127.255.2 route-map SET_LOCALPREF_30 in
+neighbor 100.127.255.4 activate
+neighbor 100.127.255.5 activate
+neighbor 100.127.255.5 route-map SET_LOCALPREF_60 in
+neighbor 100.127.255.6 activate
+neighbor 100.127.255.6 route-map SET_LOCALPREF_50 in
+neighbor 100.127.255.7 activate
+neighbor 100.127.255.8 activate
+neighbor 100.127.255.9 activate
+neighbor 100.127.255.10 activate
+exit-address-family
+!
+address-family ipv4 vrf BROKER-DMZ
+redistribute connected
+redistribute static
+exit-address-family
+!
+address-family ipv4 vrf CAT2-SRV-NET
+redistribute connected
+redistribute static
+exit-address-family
+!
+address-family ipv4 vrf ERTMS-DMZ
+redistribute connected
+redistribute static
+default-information originate
+exit-address-family
+!
+address-family ipv4 vrf ERTMS-DMZ-JTL
+redistribute connected
+redistribute static
+exit-address-family
+!
+address-family ipv4 vrf IXP
+redistribute connected
+redistribute static
+default-information originate
+exit-address-family
+!
+address-family ipv4 vrf IXP-JTL
+redistribute connected
+redistribute static
+exit-address-family
+!
+address-family ipv4 vrf REMOTE-VPN
+redistribute connected
+redistribute static
+exit-address-family
+!
+address-family ipv4 vrf SERVER-MGMT
+redistribute connected
+redistribute static
+exit-address-family
+!
+ip forward-protocol nd
+ip telnet source-interface Loopback100
+ip http server
+ip http authentication local
+ip http secure-server
+ip route vrf BROKER-DMZ 10.8.0.0 255.255.255.0 Vlan400 100.65.4.1 track 107
+ip route vrf IXP 10.150.0.0 255.255.0.0 Vlan301 100.65.2.9 track 501
+ip route vrf IXP 80.243.122.0 255.255.255.0 Vlan303 100.65.2.25 track 503
+ip route vrf IXP 172.21.251.0 255.255.255.0 Vlan303 100.65.2.25 track 503
+ip route vrf IXP 172.21.2.48 255.255.255.240 Vlan303 100.65.2.25 track 503
+ip route vrf ERTMS-DMZ 10.56.59.0 255.255.255.0 Vlan305 100.65.2.41 track 504
+ip route vrf ERTMS-DMZ 10.23.243.131 255.255.255.255 Vlan305 100.65.2.41 track 504
+ip route vrf ERTMS-DMZ 10.23.243.132 255.255.255.255 Vlan305 100.65.2.41 track 504
+ip route vrf ERTMS-DMZ 10.138.63.32 255.255.255.248 Vlan305 100.65.2.41 track 504
+ip route vrf ERTMS-DMZ 10.8.0.0 255.248.0.0 Vlan305 100.65.2.41 track 504
+ip route vrf BROKER-DMZ 10.14.0.70 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 10.14.0.71 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 10.14.0.81 255.255.255.255 Vlan400 100.65.4.1 name TPS-TCC-DB
+ip route vrf BROKER-DMZ 10.14.0.152 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 10.110.2.0 255.255.254.0 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 10.110.3.0 255.255.255.0 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 10.110.9.21 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 10.110.9.22 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 10.185.50.0 255.255.255.0 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 10.255.255.113 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 100.126.255.58 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 100.126.255.59 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.17.138.0 255.255.255.0 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.20.3.19 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.21.1.72 255.255.255.248 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.21.2.61 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.21.2.160 255.255.255.240 Vlan400 100.65.4.1 name ALSTOMJUMPBANE1
+ip route vrf BROKER-DMZ 172.21.249.178 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.21.249.180 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.27.2.0 255.255.255.0 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.27.2.22 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.27.2.23 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.27.2.120 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.27.3.22 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.27.3.140 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.27.3.148 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.27.3.242 255.255.255.255 Vlan400 100.65.4.1 name AAPPWEBENKS202.bane.dk
+ip route vrf BROKER-DMZ 172.27.200.0 255.255.255.0 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.27.200.17 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.27.200.34 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.27.200.36 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.27.200.37 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.27.200.40 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.31.100.0 255.255.252.0 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.31.255.5 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf BROKER-DMZ 172.31.255.6 255.255.255.255 Vlan400 100.65.4.1
+ip route vrf CAT2-SRV-NET 10.110.2.138 255.255.255.255 100.65.8.1
+ip route vrf CAT2-SRV-NET 172.17.138.38 255.255.255.255 100.65.8.1
+ip route vrf CAT2-SRV-NET 172.21.2.48 255.255.255.240 Vlan800 100.65.8.1
+ip route vrf CAT2-SRV-NET 172.21.65.32 255.255.255.240 Vlan800 100.65.8.1 name DIAMONT_MGMT
+ip route vrf CAT2-SRV-NET 172.21.249.0 255.255.255.0 Vlan800 100.65.8.1
+ip route vrf CAT2-SRV-NET 172.21.253.8 255.255.255.248 Vlan800 100.65.8.1 name DIAMONT-RESPDATA-DMZ
+ip route vrf CAT2-SRV-NET 172.21.253.16 255.255.255.248 Vlan800 100.65.8.1 name DIAMONT-NUCDATA-DMZ
+ip route vrf CAT2-SRV-NET 172.27.2.22 255.255.255.255 100.65.8.1
+ip route vrf CAT2-SRV-NET 172.27.2.120 255.255.255.255 100.65.8.1
+ip route vrf CAT2-SRV-NET 172.27.200.24 255.255.255.255 100.65.8.1
+ip route vrf CAT2-SRV-NET 172.27.210.5 255.255.255.255 100.65.8.1
+ip route vrf CAT2-SRV-NET 172.27.210.21 255.255.255.255 100.65.8.1
+ip route vrf ERTMS-DMZ 10.23.240.131 255.255.255.255 Vlan307 100.65.2.57 name FXOS_UPDATE_SERVER
+ip route vrf ERTMS-DMZ 10.150.249.10 255.255.255.254 Vlan307 100.65.2.57 name OBVFW1_FXOS_MGMT
+ip route vrf ERTMS-DMZ 100.72.35.32 255.255.255.224 Vlan307 100.65.2.57 name AAPPLOGPOINT1
+ip route vrf ERTMS-DMZ 172.21.139.0 255.255.255.240 Vlan324 100.65.2.193 name DiaMonT_NUH
+ip route vrf ERTMS-DMZ 172.21.140.0 255.255.252.0 Vlan324 100.65.2.193 name HHT_Public_Network
+ip route vrf ERTMS-DMZ 172.21.144.0 255.255.252.0 Vlan324 100.65.2.193 name HHT_VPN_Public_Network
+ip route vrf ERTMS-DMZ 172.21.247.0 255.255.255.0 Vlan307 100.65.2.57
+ip route vrf ERTMS-DMZ 172.21.248.0 255.255.255.0 Vlan307 100.65.2.57
+ip route vrf ERTMS-DMZ 172.21.249.0 255.255.255.0 Vlan307 100.65.2.57
+ip route vrf ERTMS-DMZ 172.21.250.0 255.255.255.0 Vlan307 100.65.2.57
+ip route vrf ERTMS-DMZ 172.21.251.0 255.255.255.0 Vlan307 100.65.2.57
+ip route vrf ERTMS-DMZ 172.21.252.0 255.255.255.0 Vlan307 100.65.2.57
+ip route vrf ERTMS-DMZ 172.21.253.8 255.255.255.248 Vlan307 100.65.2.57 name DIAMONT-RESPDATA-DMZ
+ip route vrf ERTMS-DMZ 172.21.253.16 255.255.255.248 Vlan307 100.65.2.57 name DIAMONT-NUCDATA-DMZ
+ip route vrf ERTMS-DMZ 172.21.253.24 255.255.255.248 Vlan307 100.65.2.57 name DiaMonT_Responder
+ip route vrf ERTMS-DMZ 172.21.254.0 255.255.255.224 Vlan307 100.65.2.57
+ip route vrf ERTMS-DMZ-JTL 10.150.132.0 255.255.252.0 Vlan314 100.65.2.113
+ip route vrf ERTMS-DMZ-JTL 10.150.140.0 255.255.252.0 Vlan314 100.65.2.113
+ip route vrf ERTMS-DMZ-JTL 10.150.146.0 255.255.255.128 Vlan314 100.65.2.113 name DICORA_EAST_NETWORK
+ip route vrf ERTMS-DMZ-JTL 10.150.146.128 255.255.255.128 Vlan314 100.65.2.113 name DICORA_WEST_NETWORK
+ip route vrf ERTMS-DMZ-JTL 100.65.2.144 255.255.255.248 Vlan314 100.65.2.113
+ip route vrf IXP 100.65.2.192 255.255.255.248 Vlan303 100.65.2.25 name REMOTE-VPN-E-Inside-LinkNet
+ip route vrf IXP 172.21.140.0 255.255.252.0 Vlan303 100.65.2.25 name HHT_Public_Network
+ip route vrf IXP 172.21.144.0 255.255.252.0 Vlan303 100.65.2.25 name HHT_VPN_Public_Network
+ip route vrf IXP 172.21.247.0 255.255.255.0 Vlan303 100.65.2.25
+ip route vrf IXP 172.21.248.0 255.255.255.0 Vlan303 100.65.2.25
+ip route vrf IXP 172.21.250.0 255.255.255.0 Vlan303 100.65.2.25
+ip route vrf IXP-JTL 10.150.147.0 255.255.255.224 Vlan312 100.65.2.97 name JTL_DISPATCHERS
+ip route vrf IXP-JTL 172.21.251.0 255.255.255.240 Vlan312 100.65.2.97
+ip route vrf REMOTE-VPN 172.21.140.0 255.255.252.0 Vlan732 172.21.228.22 name HHT_Public_Network
+ip route vrf SERVER-MGMT 10.14.0.71 255.255.255.255 Vlan500 100.65.5.1
+ip route vrf SERVER-MGMT 10.110.2.48 255.255.255.255 Vlan500 100.65.5.1
+ip route vrf SERVER-MGMT 10.255.255.113 255.255.255.255 Vlan500 100.65.5.1
+ip route vrf SERVER-MGMT 172.17.138.38 255.255.255.255 Vlan500 100.65.5.1
+ip route vrf SERVER-MGMT 172.20.3.19 255.255.255.255 Vlan500 100.65.5.1
+ip route vrf SERVER-MGMT 172.21.2.48 255.255.255.240 Vlan500 100.65.5.1
+ip route vrf SERVER-MGMT 172.21.248.24 255.255.255.255 Vlan500 100.65.5.1
+ip route vrf SERVER-MGMT 172.21.252.0 255.255.255.0 Vlan500 100.65.5.1
+ip route vrf SERVER-MGMT 172.27.2.22 255.255.255.255 Vlan500 100.65.5.1
+ip route vrf SERVER-MGMT 172.27.2.120 255.255.255.255 Vlan500 100.65.5.1
+ip route vrf SERVER-MGMT 172.27.3.22 255.255.255.255 Vlan500 100.65.5.1
+ip route vrf SERVER-MGMT 172.27.3.140 255.255.255.255 Vlan500 100.65.5.1
+ip route vrf SERVER-MGMT 172.27.200.24 255.255.255.255 Vlan500 100.65.5.1
+ip route vrf SERVER-MGMT 172.31.255.5 255.255.255.255 Vlan500 100.65.5.1
+ip route vrf SERVER-MGMT 172.31.255.6 255.255.255.255 Vlan500 100.65.5.1
+ip scp server enable
+!
+!
+ip access-list standard ELTEL
+permit 10.185.50.0 0.0.0.255
+ip access-list standard LOCALPREF
+permit 100.127.255.6
+permit 100.127.255.3
+permit any
+!
+ip access-list extended AutoQos-4.0-wlan-Acl-Bulk-Data
+permit tcp any any eq 22
+permit tcp any any eq 465
+permit tcp any any eq 143
+permit tcp any any eq 993
+permit tcp any any eq 995
+permit tcp any any eq 1914
+permit tcp any any eq ftp
+permit tcp any any eq ftp-data
+permit tcp any any eq smtp
+permit tcp any any eq pop3
+ip access-list extended AutoQos-4.0-wlan-Acl-MultiEnhanced-Conf
+permit udp any any range 16384 32767
+permit tcp any any range 50000 59999
+ip access-list extended AutoQos-4.0-wlan-Acl-Scavanger
+permit tcp any any range 2300 2400
+permit udp any any range 2300 2400
+permit tcp any any range 6881 6999
+permit tcp any any range 28800 29100
+permit tcp any any eq 1214
+permit udp any any eq 1214
+permit tcp any any eq 3689
+permit udp any any eq 3689
+permit tcp any any eq 11999
+ip access-list extended AutoQos-4.0-wlan-Acl-Signaling
+permit tcp any any range 2000 2002
+permit tcp any any range 5060 5061
+permit udp any any range 5060 5061
+ip access-list extended AutoQos-4.0-wlan-Acl-Transactional-Data
+permit tcp any any eq 443
+permit tcp any any eq 1521
+permit udp any any eq 1521
+permit tcp any any eq 1526
+permit udp any any eq 1526
+permit tcp any any eq 1575
+permit udp any any eq 1575
+permit tcp any any eq 1630
+permit udp any any eq 1630
+permit tcp any any eq 1527
+permit tcp any any eq 6200
+permit tcp any any eq 3389
+permit tcp any any eq 5985
+permit tcp any any eq 8080
+!
+ip radius source-interface Loopback0
+ip sla 100
+icmp-echo 100.127.255.4 source-interface Loopback0
+ip sla schedule 100 life forever start-time now
+ip sla 101
+icmp-echo 100.65.2.9 source-interface Vlan301
+vrf IXP
+ip sla schedule 101 life forever start-time now
+ip sla 102
+icmp-echo 100.65.2.25 source-interface Vlan303
+vrf IXP
+ip sla schedule 102 life forever start-time now
+ip sla 103
+icmp-echo 100.65.2.41 source-interface Vlan305
+vrf ERTMS-DMZ
+ip sla schedule 103 life forever start-time now
+ip sla 104
+icmp-echo 100.65.2.57 source-interface Vlan307
+vrf ERTMS-DMZ
+ip sla schedule 104 life forever start-time now
+ip sla 105
+icmp-echo 10.150.194.68 source-interface Vlan307
+vrf ERTMS-DMZ
+ip sla schedule 105 life forever start-time now
+ip sla 106
+icmp-echo 172.20.127.1 source-interface Vlan307
+vrf ERTMS-DMZ
+ip sla schedule 106 life forever start-time now
+ip sla 107
+icmp-echo 100.65.4.1 source-interface Vlan400
+vrf BROKER-DMZ
+logging source-interface Loopback100 vrf ERTMS-DMZ
+logging host 10.185.50.51 vrf ERTMS-DMZ
+logging host 100.72.35.34 vrf SERVER-MGMT
+logging host 100.72.35.34 vrf ERTMS-DMZ
+!
+route-map SET_LOCALPREF_60 permit 10
+match ip address LOCALPREF
+set local-preference 60
+!
+route-map SET_LOCALPREF_60 permit 20
+!
+route-map SET_LOCALPREF_40 permit 10
+match ip address LOCALPREF
+set local-preference 40
+!
+route-map SET_LOCALPREF_40 permit 20
+!
+route-map SET_LOCALPREF_50 permit 10
+match ip address LOCALPREF
+set local-preference 50
+!
+route-map SET_LOCALPREF_50 permit 20
+!
+route-map SET_LOCALPREF_30 permit 10
+match ip address LOCALPREF
+set local-preference 30
+!
+route-map SET_LOCALPREF_30 permit 20
+!
+route-map SET_LOCALPREF permit 10
+match ip address LOCALPREF
+match ip route-source LOCALPREF
+set metric 50
+!
+route-map SET_LOCALPREF permit 20
+!
+mpls ldp router-id Loopback0
+!
+snmp-server community ******** RO ELTEL
+snmp-server community ******** RW ELTEL
+snmp-server community ******** RO
+snmp-server trap-source Loopback100
+snmp-server source-interface informs Loopback100
+snmp-server location TCCECORE01
+snmp-server contact NOC 16666
+snmp-server host 10.185.50.51 vrf ERTMS-DMZ ********
+snmp-server host 100.72.35.34 vrf SERVER-MGMT ********
+snmp-server host 10.185.50.51 vrf ERTMS-DMZ ********
+snmp ifmib ifindex persist
+!
+!
+!
+control-plane
+service-policy input system-cpp-policy
+!
+privilege exec all level 5 show running-config view full
+privilege exec level 5 show running-config view
+privilege exec level 5 show running-config
+privilege exec level 5 show
+!
+line con 0
+exec-timeout 60 0
+stopbits 1
+line aux 0
+exec-timeout 0 12
+no exec
+stopbits 1
+line vty 0 4
+exec-timeout 60 0
+privilege level 15
+logging synchronous
+transport input telnet ssh
+line vty 5 15
+exec-timeout 60 0
+privilege level 15
+logging synchronous
+transport input telnet ssh
+!
+ntp source Loopback100
+ntp server vrf ERTMS-DMZ 10.150.195.68
+!
+!
+!
+!
+!
+!
+end

@@ -1,0 +1,108 @@
+: Hardware:   ASA5585-SSP-10
+:
+ASA Version 9.8(2)28 <context>
+!
+hostname gsmr-e
+enable password $sha512$5000$vcukPVafn3NArnE4SIAL0Q==$65dQaZt7VuzzifSpraY4yg== pbkdf2
+names
+
+!
+interface GigabitEthernet0/1.1710
+ nameif GSMR-OAM
+ security-level 90
+ ip address 10.150.194.6 255.255.255.248 standby 10.150.194.5
+!
+interface GigabitEthernet0/1.1730
+ nameif GSMR-DATA
+ security-level 90
+ ip address 10.150.194.14 255.255.255.248 standby 10.150.194.13
+!
+interface GigabitEthernet0/1.1770
+ nameif GI-VRF-HHT
+ security-level 90
+ ip address 10.150.194.54 255.255.255.248 standby 10.150.194.53
+!
+interface GigabitEthernet0/1.1780
+ nameif FTSVOIP
+ security-level 90
+ ip address 10.150.194.22 255.255.255.248 standby 10.150.194.21
+!
+interface GigabitEthernet0/1.3000
+ no nameif
+ security-level 90
+ ip address 172.19.255.110 255.255.255.248 standby 172.19.255.109
+!
+interface GigabitEthernet0/1.3322
+ nameif ESBFTN
+ security-level 90
+ ip address 10.138.63.105 255.255.255.248
+!
+interface TenGigabitEthernet0/8.301
+ nameif IXP
+ security-level 100
+ ip address 100.65.2.9 255.255.255.248 standby 100.65.2.10
+!
+pager lines 24
+mtu IXP 1500
+mtu GSMR-OAM 1500
+mtu GSMR-DATA 1500
+mtu GI-VRF-HHT 1500
+mtu FTSVOIP 1500
+mtu ESBFTN 1500
+no monitor-interface service-module
+icmp unreachable rate-limit 1 burst-size 1
+no asdm history enable
+arp timeout 14400
+timeout xlate 3:00:00
+timeout pat-xlate 0:00:30
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 sctp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00 mgcp-pat 0:05:00
+timeout sip 0:30:00 sip_media 0:02:00 sip-invite 0:03:00 sip-disconnect 0:02:00
+timeout sip-provisional-media 0:02:00 uauth 0:05:00 absolute
+timeout tcp-proxy-reassembly 0:01:00
+timeout floating-conn 0:00:00
+timeout conn-holddown 0:00:15
+timeout igp stale-route 0:01:10
+user-identity default-domain LOCAL
+aaa authentication login-history
+no snmp-server location
+no snmp-server contact
+crypto ipsec security-association pmtu-aging infinite
+telnet timeout 5
+ssh stricthostkeycheck
+ssh timeout 5
+ssh key-exchange group dh-group14-sha1
+no threat-detection statistics tcp-intercept
+dynamic-access-policy-record DfltAccessPolicy
+!
+class-map inspection_default
+ match default-inspection-traffic
+!
+!
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+  no tcp-inspection
+policy-map global_policy
+ class inspection_default
+  inspect dns preset_dns_map
+  inspect ftp
+  inspect h323 h225
+  inspect h323 ras
+  inspect ip-options
+  inspect netbios
+  inspect rsh
+  inspect rtsp
+  inspect skinny
+  inspect esmtp
+  inspect sqlnet
+  inspect sunrpc
+  inspect tftp
+  inspect sip
+  inspect xdmcp
+!
+service-policy global_policy global
+Cryptochecksum:eb79034688d3bfe55cddfc7d7c389538
+: end
+OBVFw2/pri/act/gsmr-e#

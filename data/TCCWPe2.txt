@@ -1,0 +1,642 @@
+Last configuration change at 08:50:06 CET Wed Feb 22 2023 by cconradseltel
+! NVRAM config last updated at 08:50:07 CET Wed Feb 22 2023 by cconradseltel
+!
+version 15.3
+service nagle
+no service pad
+service tcp-keepalives-in
+service tcp-keepalives-out
+service timestamps debug datetime msec localtime show-timezone year
+service timestamps log datetime msec localtime show-timezone year
+service password-encryption
+no platform punt-keepalive disable-kernel-core
+!
+hostname TCCWPe2
+!
+boot-start-marker
+boot system flash bootflash:asr1002x-universalk9.03.10.02.S.153-3.S2-ext.SPA.bin
+boot-end-marker
+!
+aqm-register-fnf
+!
+vrf definition Mgmt-intf
+!
+address-family ipv4
+exit-address-family
+!
+address-family ipv6
+exit-address-family
+!
+logging buffered 128000 informational
+no logging console
+enable secret 5 ********
+!
+aaa new-model
+!
+!
+aaa group server tacacs+ TACACSGROUP
+server name TACACSSRV1
+server name TACACSSRV2
+!
+aaa authentication login onlyvty group TACACSGROUP local
+aaa authorization exec default group TACACSGROUP none
+!
+!
+!
+!
+!
+aaa session-id common
+clock timezone CET 1 0
+clock summer-time CEST recurring last Sun Mar 2:00 last Sun Oct 3:00
+no ip source-route
+!
+ip vrf DWDM
+rd 65020:4001
+route-target export 65020:4001
+route-target import 65020:4001
+!
+ip vrf Internet
+rd 172.17.75.247:555
+route-target export 65020:555
+route-target import 65020:555
+!
+ip vrf SIP-DMZ
+rd 172.17.75.247:4011
+route-target export 65020:4011
+route-target import 65020:4011
+!
+ip vrf Wireless
+rd 172.16.0.0:16
+route-target export 172.16.0.0:16
+route-target import 172.16.0.0:16
+!
+ip vrf bane1
+rd 65020:1001
+route-target export 65020:1000
+route-target import 65020:1000
+route-target import 65020:100
+!
+ip vrf signal-program
+rd 172.17.75.247:2001
+route-target export 65020:2001
+route-target import 65020:2001
+!
+!
+!
+!
+!
+
+
+no ip bootp server
+ip domain name baneisp.dk
+ip name-server 10.185.50.11
+ip name-server 10.185.50.12
+!
+!
+!
+login block-for 5 attempts 3 within 10
+login quiet-mode access-class MGMT-ACCESS
+ipv6 multicast rpf use-bgp
+ipv6 multicast vrf Mgmt-intf rpf use-bgp
+!
+!
+!
+!
+!
+!
+!
+!
+mpls label protocol ldp
+mpls ldp graceful-restart
+mpls ldp session protection
+mpls ldp igp sync holddown 5000
+multilink bundle-name authenticated
+!
+key ******** ISIS-key
+key ********
+key-string 7 ********
+!
+!
+!
+!
+!
+!
+!
+!
+!
+license boot level adventerprise
+archive
+log config
+logging enable
+spanning-tree extend system-id
+!
+username bane secret 5 ********
+!
+redundancy
+mode none
+!
+!
+!
+!
+!
+cdp run
+!
+ip tcp selective-ack
+ip tcp timestamp
+ip tcp window-size 100000
+ip tcp path-mtu-discovery
+ip telnet source-interface Loopback1
+ip ftp source-interface Loopback1
+ip tftp source-interface Loopback1
+!
+class-map match-any realtime
+match ip precedence 5
+match mpls experimental topmost 5
+class-map match-any criticaldata
+match ip precedence 3
+match mpls experimental topmost 3
+match ip precedence 6
+match mpls experimental topmost 6
+class-map match-any video
+match ip precedence 4
+match mpls experimental topmost 4
+!
+policy-map highspeed
+class realtime
+priority level 1 percent 25
+class video
+priority level 2 percent 10
+class criticaldata
+bandwidth percent 10
+random-detect
+class class-default
+fair-queue
+random-detect
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback1
+ip address 172.17.75.247 255.255.255.255
+no ip redirects
+no ip proxy-arp
+!
+interface Port-channel2
+description TCCWPe2--TCCWSw1
+no ip address
+load-interval 60
+negotiation auto
+!
+interface Port-channel2.1960
+description SP-firewall
+encapsulation dot1Q 1960
+ip vrf forwarding signal-program
+ip address 10.150.195.70 255.255.255.248
+standby 210 ip 10.150.195.68
+standby 210 priority 190
+standby 210 preempt delay minimum 300
+!
+interface Port-channel2.1961
+description To TCCW-OOB-Console
+encapsulation dot1Q 1961
+ip vrf forwarding signal-program
+ip address 192.168.254.35 255.255.255.240
+standby 211 ip 192.168.254.33
+standby 211 priority 190
+standby 211 preempt delay minimum 300
+!
+interface Port-channel2.2002
+description L3-OSPF-Routing
+encapsulation dot1Q 2002
+ip address 172.17.74.53 255.255.255.252
+ip router isis
+service-policy output highspeed
+!
+interface Port-channel2.2004
+description L3-OSPF-Routing-VRF-bane1
+encapsulation dot1Q 2004
+ip vrf forwarding bane1
+ip address 172.17.74.53 255.255.255.252
+!
+interface Port-channel2.2005
+description STTN-bane1
+encapsulation dot1Q 2005
+ip vrf forwarding bane1
+ip address 10.138.63.3 255.255.255.248
+standby 205 ip 10.138.63.1
+standby 205 priority 190
+standby 205 preempt delay minimum 300
+!
+interface Port-channel2.2008
+description L3-OSPF-Routing-VRF-Internet
+encapsulation dot1Q 2008
+ip vrf forwarding Internet
+ip address 172.17.74.225 255.255.255.252
+!
+interface Port-channel2.2010
+description L3-OSPF-Routing-VRF-DWDM
+encapsulation dot1Q 2010
+ip vrf forwarding DWDM
+ip address 172.23.240.217 255.255.255.252
+!
+interface Port-channel2.2012
+description L3-OSPF-Routing-VRF-SIP-DMZ
+encapsulation dot1Q 2012
+ip vrf forwarding SIP-DMZ
+ip address 172.17.74.109 255.255.255.252
+!
+interface GigabitEthernet0/0/0
+description TCCWPe2--VejleP -GE FO DWDM-1590- bane 9380531
+dampening
+mtu 1548
+ip address 172.17.74.42 255.255.255.252
+no ip redirects
+no ip proxy-arp
+ip router isis
+logging event link-status
+load-interval 60
+carrier-delay up 10
+carrier-delay down msec 0
+no negotiation auto
+mpls ip
+synchronous mode
+bfd interval 100 min_rx 100 multiplier 3
+no bfd echo
+cdp enable
+no mop enabled
+isis network point-to-point
+isis metric 3000
+isis authentication mode md5
+isis authentication key-chain ISIS-key
+isis bfd
+service-policy output highspeed
+hold-queue 4096 in
+hold-queue 4096 out
+!
+interface GigabitEthernet0/0/1
+description TCCWPe2--TCCWPe1 -GE FO- bane 9380478
+dampening
+mtu 1548
+ip address 172.17.74.62 255.255.255.252
+no ip redirects
+no ip proxy-arp
+ip router isis
+logging event link-status
+load-interval 60
+carrier-delay up 10
+carrier-delay down msec 0
+no negotiation auto
+mpls ip
+bfd interval 100 min_rx 100 multiplier 3
+no bfd echo
+cdp enable
+no mop enabled
+isis network point-to-point
+isis metric 1000
+isis authentication mode md5
+isis authentication key-chain ISIS-key
+isis bfd
+service-policy output highspeed
+hold-queue 4096 in
+hold-queue 4096 out
+!
+interface GigabitEthernet0/0/1.2000
+description L3-OSPF-Routing-VRF-bane1
+encapsulation dot1Q 2000
+ip vrf forwarding bane1
+ip address 172.17.74.62 255.255.255.252
+!
+interface GigabitEthernet0/0/2
+description TCCWPe2--TCCWSw1.1 -GE FO- bane 9380480
+no ip address
+load-interval 60
+negotiation auto
+cdp enable
+service-policy output highspeed
+channel-group 2 mode active
+!
+interface GigabitEthernet0/0/3
+description TCCWPe2--TCCWSw1.2 -GE FO- bane 9380479
+no ip address
+load-interval 60
+negotiation auto
+cdp enable
+service-policy output highspeed
+channel-group 2 mode active
+!
+interface GigabitEthernet0/0/4
+no ip address
+shutdown
+negotiation auto
+!
+interface GigabitEthernet0/0/5
+no ip address
+shutdown
+negotiation auto
+!
+interface GigabitEthernet0
+vrf forwarding Mgmt-intf
+no ip address
+shutdown
+negotiation auto
+!
+router ospf 2 vrf bane1
+router-id 1.17.75.247
+network 172.17.74.53 0.0.0.0 area 0
+network 172.17.74.62 0.0.0.0 area 0
+default-information originate always
+!
+router ospf 3 vrf Internet
+router-id 17.17.75.247
+network 172.17.74.225 0.0.0.0 area 0
+default-information originate always
+!
+router ospf 4 vrf DWDM
+router-id 4.17.75.247
+network 172.23.240.217 0.0.0.0 area 0.0.0.1
+default-information originate always
+!
+router ospf 5 vrf SIP-DMZ
+router-id 117.17.75.247
+network 172.17.74.109 0.0.0.0 area 0
+default-information originate always
+!
+router ospf 1
+router-id 172.17.75.247
+redistribute static subnets
+network 172.17.74.53 0.0.0.0 area 0
+network 172.17.74.62 0.0.0.0 area 0
+network 172.17.75.247 0.0.0.0 area 0
+default-information originate
+!
+router isis
+net 49.0000.0001.1720.1707.5247.00
+is-type level-2-only
+metric-style wide
+max-lsp-lifetime 65535
+lsp-refresh-interval 65000
+spf-interval 5 1 200
+prc-interval 5 1 200
+lsp-gen-interval 5 1 200
+log-adjacency-changes all
+nsf cisco
+redistribute connected
+redistribute ospf 1
+passive-interface Loopback1
+mpls ldp sync
+!
+router bgp 65020
+bgp router-id 172.17.75.247
+bgp log-neighbor-changes
+bgp graceful-restart restart-time 120
+bgp graceful-restart stalepath-time 360
+bgp graceful-restart
+redistribute ospf 1
+neighbor Bane-I-BGP-RR peer-group
+neighbor Bane-I-BGP-RR remote-as 65020
+neighbor Bane-I-BGP-RR update-source Loopback1
+neighbor 172.17.3.254 peer-group Bane-I-BGP-RR
+neighbor 172.17.3.255 peer-group Bane-I-BGP-RR
+!
+address-family vpnv4
+neighbor Bane-I-BGP-RR send-community extended
+neighbor 172.17.3.254 activate
+neighbor 172.17.3.255 activate
+exit-address-family
+!
+address-family ipv4 vrf DWDM
+redistribute connected
+redistribute ospf 4
+exit-address-family
+!
+address-family ipv4 vrf Internet
+redistribute connected
+redistribute ospf 3
+exit-address-family
+!
+address-family ipv4 vrf SIP-DMZ
+redistribute connected
+redistribute ospf 5
+exit-address-family
+!
+address-family ipv4 vrf Wireless
+redistribute connected
+exit-address-family
+!
+address-family ipv4 vrf bane1
+redistribute connected
+redistribute static
+redistribute ospf 2
+maximum-paths eibgp 2
+exit-address-family
+!
+address-family ipv4 vrf signal-program
+redistribute connected route-map signal-program-connected
+redistribute static route-map signal-program-static
+maximum-paths eibgp 2
+default-information originate
+exit-address-family
+!
+no ip forward-protocol nd
+no ip forward-protocol udp tftp
+no ip forward-protocol udp nameserver
+no ip forward-protocol udp domain
+no ip forward-protocol udp time
+no ip forward-protocol udp netbios-ns
+no ip forward-protocol udp netbios-dgm
+no ip forward-protocol udp tacacs
+!
+no ip http server
+no ip http secure-server
+ip route vrf bane1 10.150.71.0 255.255.255.0 10.138.63.5
+ip route vrf bane1 10.150.74.0 255.255.255.0 10.138.63.5
+ip route vrf bane1 10.150.79.0 255.255.255.0 10.138.63.5
+ip route vrf bane1 10.150.87.0 255.255.255.0 10.138.63.5
+ip route vrf bane1 10.150.90.0 255.255.255.0 10.138.63.5
+ip route vrf bane1 10.150.91.0 255.255.255.128 10.138.63.5
+ip route vrf bane1 10.150.95.0 255.255.255.0 10.138.63.5
+ip route vrf bane1 100.65.2.48 255.255.255.248 10.138.63.5 2
+ip route vrf bane1 100.65.2.136 255.255.255.248 10.138.63.5 name Pentest_04_07_2018
+ip route vrf bane1 100.65.2.144 255.255.255.248 10.138.63.5 name Pentest_04_07_2018
+ip route vrf bane1 100.126.255.0 255.255.255.0 10.138.63.5 2
+ip route vrf bane1 172.19.255.8 255.255.255.248 10.138.63.5 name SAM_MGMT
+ip route vrf bane1 172.19.255.16 255.255.255.248 10.138.63.5 name SAM_MGMT
+ip route vrf signal-program 0.0.0.0 0.0.0.0 10.150.195.65 200 tag 247
+ip route vrf signal-program 10.14.0.0 255.255.128.0 10.150.195.65 200 tag 247
+ip route vrf signal-program 10.49.255.0 255.255.255.0 10.150.195.65 200
+ip route vrf signal-program 10.150.0.0 255.255.0.0 10.150.195.65 200 tag 247
+ip route vrf signal-program 10.150.64.0 255.255.240.0 10.150.195.65 200 tag 247
+ip route vrf signal-program 10.150.80.0 255.255.240.0 10.150.195.65 200 tag 247
+ip route vrf signal-program 10.150.90.0 255.255.255.128 10.150.195.65 200 tag 247
+ip route vrf signal-program 10.150.91.0 255.255.255.128 10.150.195.65 200 tag 247
+ip route vrf signal-program 10.150.91.160 255.255.255.224 10.150.195.65 200 tag 247
+ip route vrf signal-program 10.150.146.0 255.255.255.0 10.150.195.65 200 tag 247
+ip route vrf signal-program 10.150.146.128 255.255.255.128 10.150.195.65 200 tag 247
+ip route vrf signal-program 100.65.2.48 255.255.255.248 10.150.195.65 2
+ip route vrf signal-program 100.65.2.136 255.255.255.248 10.150.195.65 2
+ip route vrf signal-program 100.126.255.0 255.255.255.128 10.150.195.65 200 name SPNS1.0-CORE-LOOPBACK
+ip route vrf signal-program 172.19.128.0 255.255.240.0 10.150.195.65 200 tag 247
+ip route vrf signal-program 172.19.144.0 255.255.255.0 10.150.195.65 200 tag 247
+ip route vrf signal-program 172.19.192.0 255.255.240.0 10.150.195.65 200 tag 247
+ip route vrf signal-program 172.19.208.0 255.255.255.0 10.150.195.65 200 tag 247
+ip route vrf signal-program 172.19.255.0 255.255.255.0 10.150.195.65 200 tag 247
+ip route vrf signal-program 172.21.139.0 255.255.255.240 10.150.195.65 200
+ip route vrf signal-program 172.21.144.0 255.255.252.0 10.150.195.65 200 name HHT_VPN_PPPN
+ip route vrf signal-program 172.21.241.0 255.255.255.0 10.150.195.65 200
+ip route vrf signal-program 172.21.244.0 255.255.255.0 10.150.195.65 200
+ip route vrf signal-program 172.21.247.0 255.255.255.0 10.150.195.65 200
+ip route vrf signal-program 172.21.248.0 255.255.255.0 10.150.195.65 200
+ip route vrf signal-program 172.21.249.0 255.255.255.0 10.150.195.65 200
+ip route vrf signal-program 172.21.250.0 255.255.255.0 10.150.195.65 200
+ip route vrf signal-program 172.21.251.0 255.255.255.0 10.150.195.65 200
+ip route vrf signal-program 172.21.252.0 255.255.255.0 10.150.195.65 200
+ip route vrf signal-program 172.21.253.8 255.255.255.248 10.150.195.65 200
+ip route vrf signal-program 172.21.253.16 255.255.255.248 10.150.195.65 200
+ip route vrf signal-program 172.21.254.0 255.255.255.224 10.150.195.65 100
+ip tacacs source-interface Loopback1
+!
+ip access-list extended MGMT-ACCESS
+permit ip host 10.185.50.51 any
+ip access-list extended VTY_ACCESS
+permit tcp any any eq 22
+permit tcp host 10.185.50.51 any eq telnet
+permit tcp host 10.185.50.71 any eq telnet
+permit tcp host 10.185.50.72 any eq telnet
+ip access-list extended signal-connected
+permit ip 10.150.195.64 0.0.0.7 any
+permit ip 192.168.254.32 0.0.0.15 any
+ip access-list extended signal-static
+permit ip 10.150.80.0 0.0.15.255 any
+permit ip 10.150.146.128 0.0.0.127 any
+permit ip 10.150.146.0 0.0.0.255 any
+permit ip 172.19.128.0 0.0.15.255 any
+permit ip 172.19.192.0 0.0.15.255 any
+permit ip 172.19.255.0 0.0.0.255 any
+permit ip 10.150.90.0 0.0.0.127 any
+permit ip 10.150.91.0 0.0.0.127 any
+permit ip 10.150.91.160 0.0.0.31 any
+permit ip 10.150.64.0 0.0.15.255 any
+permit ip 10.150.0.0 0.0.255.255 any
+permit ip 172.21.241.0 0.0.0.255 any
+permit ip 172.21.244.0 0.0.0.255 any
+permit ip 172.21.248.0 0.0.0.255 any
+permit ip 172.21.249.0 0.0.0.255 any
+permit ip 172.21.250.0 0.0.0.255 any
+permit ip 172.21.251.0 0.0.0.255 any
+permit ip 172.21.252.0 0.0.0.255 any
+permit ip 100.72.35.32 0.0.0.31 any
+permit ip host 0.0.0.0 any
+permit ip 172.19.144.0 0.0.0.255 any
+permit ip 172.19.208.0 0.0.0.255 any
+permit ip 172.21.144.0 0.0.3.255 any
+permit ip 10.49.255.0 0.0.0.255 any
+permit ip 172.21.247.0 0.0.0.255 any
+permit ip 172.21.139.0 0.0.0.15 any
+permit ip 172.21.253.8 0.0.0.7 any
+permit ip 172.21.253.16 0.0.0.7 any
+!
+!
+ip prefix-list ipv4-match-default seq 5 permit 0.0.0.0/0
+logging trap debugging
+logging source-interface Loopback1
+logging host 10.185.50.51
+access-list 1 permit 0.0.0.0
+access-list 20 permit 10.185.50.0 0.0.0.255
+!
+route-map signal-program-connected permit 10
+match ip address signal-connected
+set metric 40000
+!
+route-map check-default permit 10
+match ip address prefix-list ipv4-match-default
+set tag 100
+set level level-1
+!
+route-map signal-program-static permit 10
+match ip address signal-static
+set metric 40000
+!
+route-map L1routes deny 5
+match tag 100
+!
+route-map L1routes permit 10
+match route-type level-1
+!
+snmp-server community ******** RO 20
+snmp-server community ******** RW 20
+snmp-server trap-source Loopback1
+snmp-server location TCCW.103, TCCW - Trafiktaarn Vest, Banegaardsvej 1, 7000 Fredericia, 1. Sal rum 1.03
+snmp-server contact NOC 16666
+snmp-server enable traps snmp linkdown linkup coldstart warmstart
+snmp-server enable traps bgp
+snmp-server host 10.185.50.51 ********
+snmp ifmib ifindex persist
+mpls ldp router-id Loopback1
+!
+tacacs server TACACSSRV1
+address ipv4 100.73.35.15
+key 7 ********
+tacacs server TACACSSRV2
+address ipv4 100.73.3.15
+key 7 ********
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+banner exec "
+*******************************************************************
+**+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+**
+** This is a private Device!! **
+** If you have no legitimate purpose for accessing this device **
+** - then please exit immediately !! **
+**+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+**
+*******************************************************************
+"
+banner login "
+*******************************************************************
+**+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+**
+** This is a private Device!! **
+** If you have no legitimate purpose for accessing this device **
+** - then please exit immediately !! **
+**+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+**
+*******************************************************************
+"
+!
+line con 0
+exec-timeout 30 0
+logging synchronous
+login authentication onlyvty
+stopbits 1
+line aux 0
+login authentication onlyvty
+no exec
+transport input all
+stopbits 1
+line vty 0 4
+access-class VTY_ACCESS in
+exec-timeout 30 0
+logging synchronous
+login authentication onlyvty
+!
+ntp source Loopback1
+ntp server 172.17.3.245
+ntp server 172.17.3.229
+!
+end

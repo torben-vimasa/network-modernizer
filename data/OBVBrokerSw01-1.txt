@@ -1,0 +1,1239 @@
+! Last configuration change at 15:48:31 GMT+2 Wed Jun 7 2023 by nolandereltel
+! NVRAM config last updated at 15:48:13 GMT+2 Wed Jun 7 2023 by nolandereltel
+!
+version 16.3
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no platform punt-keepalive disable-kernel-core
+!
+hostname OBVBROKERSw01
+!
+!
+vrf definition BROKER-DMZ
+rd 65000:400
+route-target export 65000:400
+route-target import 65000:400
+!
+address-family ipv4
+exit-address-family
+!
+vrf definition ERTMS-DMZ
+rd 65000:200
+route-target export 65000:200
+route-target import 65000:200
+!
+address-family ipv4
+exit-address-family
+!
+vrf definition ERTMS-DMZ-JTL
+rd 65000:999
+route-target export 65000:999
+route-target import 65000:999
+!
+address-family ipv4
+exit-address-family
+!
+vrf definition Mgmt-vrf
+!
+address-family ipv4
+exit-address-family
+!
+address-family ipv6
+exit-address-family
+!
+vrf definition SPNS-SRV-NET-Zone0
+rd 65000:800
+route-target export 65000:800
+route-target import 65000:800
+!
+address-family ipv4
+exit-address-family
+!
+logging buffered 20000
+enable secret 5 ********
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authorization exec default local
+!
+!
+!
+!
+!
+!
+aaa session-id common
+clock summer-time GMT+2 recurring last Sun Mar 2:00 last Sun Oct 3:00
+switch 1 provision ws-c3650-48td
+switch 2 provision ws-c3650-48td
+!
+!
+!
+!
+ip routing
+!
+!
+!
+no ip domain lookup
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+password ******** aes
+!
+crypto pki trustpoint TP-self-signed-1445282690
+enrollment selfsigned
+subject-name cn=IOS-Self-Signed-Certificate-1445282690
+revocation-check none
+rsakeypair TP-self-signed-1445282690
+!
+!
+crypto pki certificate chain TP-self-signed-1445282690
+certificate self-signed 01
+30820330 30820218 A0030201 02020101 300D0609 2A864886 F70D0101 05050030
+31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274
+69666963 6174652D 31343435 32383236 3930301E 170D3138 30323237 31313339
+31365A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649
+4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D31 34343532
+38323639 30308201 22300D06 092A8648 86F70D01 01010500 0382010F 00308201
+0A028201 0100C5E6 DA5011AE 1362DC57 B394CC51 BF1366DC 5D6C4C77 1ED90200
+356F8B49 E26AF814 AE5DEF9D 7CC54A8B 0062AB10 4D82C85B D21816E3 4C87970C
+F7245356 B460B45A A0154C65 22B22709 1C6FAD8B A5E7CDD3 530ACF88 2CDB4EA0
+836AD416 CBB6E83C 5D144CE8 261B5B2F FA314FA7 C20E7BE0 9EB71340 0179B429
+7147B1F8 715751DB A324A8A7 4C734BCD 6114542B 4104EF45 C48A7014 670DBF19
+DD5AE962 77FBD489 5EA6EDF7 7CBC72A2 4DC3EB98 0533A71D A316FAB0 69097B95
+3FD270B6 41347DB7 1488F7DA 1F502C12 737AD767 78EB9632 5BF6D23C 7427364E
+21A35825 1B6F842F 2975849D 075FA9B5 7DE510EB BE10B829 87828622 037D518B
+69BEC35C 89270203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF
+301F0603 551D2304 18301680 1499B062 32063652 C3953838 8FF57FC1 85266DC7
+40301D06 03551D0E 04160414 99B06232 063652C3 9538388F F57FC185 266DC740
+300D0609 2A864886 F70D0101 05050003 82010100 79BC1325 FF9F1284 9FD7C3DE
+E164B9F2 C96E9152 7190CAE7 A72551BA 9246372E 19FC0EED 579C3804 450E4D97
+277AF2BC E87DA092 C98F982C 8844FC49 F05819E2 37B85EE4 4BFB0FBE C3732F31
+E6E2FF19 61446B38 44311344 C28DC7E1 1B5D8D6E C843DDD6 24A93D22 F1AA9EE1
+D9511F1B F422E7C3 8CA042BE 5CBFEE4B F7F20437 851252A6 842D223C D11BAD18
+74B6FA15 B4BFFE76 041C7DDC E7C6866B 9BACDB15 D19BBC06 85C9AC95 49B24D51
+A2E78547 249B502B BA798586 08E16AD0 43FCD06A C63D5BCD A8825762 EC470D6A
+A02FD850 426FDDDD D8D9AB60 97D41737 27FC5AF6 AE8F3C72 180AEF85 E4CDAAAC
+1A9A11B4 8CD2A505 3D0F4015 D174C581 1C3D1939
+quit
+!
+system mtu 9198
+license boot level ipservicesk9
+diagnostic bootup level minimal
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+spanning-tree vlan 250 priority 8192
+archive
+log config
+logging enable
+!
+username fleeltel privilege 15 secret 5 ********
+username joleseneltel privilege 15 secret 5 ********
+username pemmeltel privilege 15 secret 5 ********
+username mpederseeltel privilege 15 secret 5 ********
+username msjo privilege 5 secret 5 ********
+username shjortheltel privilege 15 secret 5 ********
+username cconradseltel privilege 15 secret 5 ********
+username tkristeneltel privilege 15 secret 5 ********
+username mifr privilege 5 secret 5 ********
+username jbal privilege 5 secret 5 ********
+username andaeltel privilege 5 secret 5 ********
+username clorenzeltel privilege 15 secret 5 ********
+username jepeeltel privilege 15 secret 5 ********
+username ftoldaleltel privilege 15 secret 5 ********
+username jhseltel privilege 15 secret 5 ********
+username elt-backup privilege 15 secret 5 ********
+username nolandereltel privilege 15 secret 5 ********
+username maageltel privilege 15 secret 5 ********
+username jobmeltel privilege 15 secret 5 ********
+username BaneDK privilege 15 secret 5 ********
+!
+redundancy
+mode sso
+!
+!
+transceiver type all
+monitoring
+!
+vlan 2541
+name P-base_replacement
+!
+vlan 2542
+name P-base_replace_DWH
+!
+vlan 3310
+name ESB
+!
+!
+class-map match-any system-cpp-police-topology-control
+description Topology control
+class-map match-any system-cpp-police-sw-forward
+description Sw forwarding, SGT Cache Full, LOGGING
+class-map match-any system-cpp-default
+description DHCP snooping, show forward and rest of traffic
+class-map match-any system-cpp-police-sys-data
+description Learning cache ovfl, Crypto Control, Exception, EGR Exception, NFL SAMPLED DATA, Gold Pkt, RPF Failed
+class-map match-any system-cpp-police-punt-webauth
+description Punt Webauth
+class-map match-any system-cpp-police-forus
+description Forus Address resolution and Forus traffic
+class-map match-any system-cpp-police-multicast-end-station
+description MCAST END STATION
+class-map match-any system-cpp-police-multicast
+description Transit Traffic and MCAST Data
+class-map match-any system-cpp-police-l2-control
+description L2 control
+class-map match-any system-cpp-police-dot1x-auth
+description DOT1X Auth
+class-map match-any system-cpp-police-data
+description ICMP_GEN and BROADCAST
+class-map match-any system-cpp-police-control-low-priority
+description ICMP redirect and general punt
+class-map match-any system-cpp-police-wireless-priority1
+description Wireless priority 1
+class-map match-any system-cpp-police-wireless-priority2
+description Wireless priority 2
+class-map match-any system-cpp-police-wireless-priority3-4-5
+description Wireless priority 3,4 and 5
+class-map match-any non-client-nrt-class
+class-map match-any system-cpp-police-routing-control
+description Routing control
+class-map match-any system-cpp-police-protocol-snooping
+description Protocol snooping
+!
+policy-map port_child_policy
+class non-client-nrt-class
+bandwidth remaining ratio 10
+policy-map system-cpp-policy
+class system-cpp-police-data
+police rate 200 pps
+class system-cpp-police-sys-data
+police rate 100 pps
+class system-cpp-police-sw-forward
+police rate 1000 pps
+class system-cpp-police-multicast
+police rate 500 pps
+class system-cpp-police-multicast-end-station
+police rate 2000 pps
+class system-cpp-police-punt-webauth
+class system-cpp-police-l2-control
+class system-cpp-police-routing-control
+police rate 1800 pps
+class system-cpp-police-control-low-priority
+class system-cpp-police-wireless-priority1
+class system-cpp-police-wireless-priority2
+class system-cpp-police-wireless-priority3-4-5
+class system-cpp-police-topology-control
+class system-cpp-police-dot1x-auth
+class system-cpp-police-protocol-snooping
+class system-cpp-police-forus
+class system-cpp-default
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ip address 100.127.255.7 255.255.255.255
+ip router isis 10
+!
+interface Loopback100
+description MGMT
+vrf forwarding ERTMS-DMZ
+ip address 100.126.255.67 255.255.255.255
+!
+interface Port-channel4
+description ANSCTXOBV01
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface Port-channel5
+description ANSCTXOBV01
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface Port-channel6
+description ANSCTXOBV01
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface Port-channel7
+description ANSCTXOBV02
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface Port-channel8
+description ANSCTXOBV02
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface Port-channel9
+description ANSCTXOBV02
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface Port-channel10
+description Server 1
+switchport trunk allowed vlan 114,249
+switchport mode trunk
+shutdown
+!
+interface Port-channel11
+description AFX2CTXOBV01
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface Port-channel12
+description AFX2CTXOBV01
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface Port-channel13
+description AFX2CTXOBV01
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface Port-channel14
+description AFX2CTXOBV01
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface Port-channel15
+description AFX2CTXOBV01
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface Port-channel16
+description AFX2CTXOBV01
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface Port-channel17
+description AFX2CTXOBV01
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface Port-channel18
+description AFX2CTXOBV03
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface Port-channel19
+description AFX2CTXOBV03
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface Port-channel20
+description Server 1
+switchport trunk allowed vlan 252
+switchport mode trunk
+!
+interface Port-channel21
+description AFX2CTXOBV03
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface Port-channel22
+description AFX2CTXOBV03
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface Port-channel23
+description AFX2CTXOBV03
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface Port-channel24
+description AFX2CTXOBV03
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface Port-channel25
+description AFX2CTXOBV03
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface Port-channel26
+description AFX2CTXOBV05
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface Port-channel27
+description AFX2CTXOBV05
+switchport access vlan 251
+switchport mode access
+shutdown
+!
+interface Port-channel28
+description AFX2CTXOBV05
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface Port-channel29
+description AFX2CTXOBV05
+switchport access vlan 251
+switchport mode access
+shutdown
+!
+interface Port-channel30
+description AESXCTXOBV11
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface Port-channel31
+description AESXCTXOBV11
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface Port-channel32
+description AESXCTXOBV12
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface Port-channel33
+description AESXCTXOBV12
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface Port-channel34
+description OBVBROKERSw01--OBvSTTNCitrixSw1&2
+switchport trunk allowed vlan 247,248,250,251,2541,2542
+switchport mode trunk
+!
+interface GigabitEthernet0/0
+vrf forwarding Mgmt-vrf
+no ip address
+negotiation auto
+!
+interface GigabitEthernet1/0/1
+description OBVBROKERSw01-1 OBVBROKERSw02-1- -Gi1/1/1 UTP- Bane8180828
+switchport trunk allowed vlan 252
+switchport mode trunk
+channel-group 20 mode on
+!
+interface GigabitEthernet1/0/2
+shutdown
+!
+interface GigabitEthernet1/0/3
+shutdown
+!
+interface GigabitEthernet1/0/4
+shutdown
+!
+interface GigabitEthernet1/0/5
+shutdown
+!
+interface GigabitEthernet1/0/6
+shutdown
+!
+interface GigabitEthernet1/0/7
+shutdown
+!
+interface GigabitEthernet1/0/8
+shutdown
+!
+interface GigabitEthernet1/0/9
+shutdown
+!
+interface GigabitEthernet1/0/10
+shutdown
+!
+interface GigabitEthernet1/0/11
+shutdown
+!
+interface GigabitEthernet1/0/12
+shutdown
+!
+interface GigabitEthernet1/0/13
+shutdown
+!
+interface GigabitEthernet1/0/14
+shutdown
+!
+interface GigabitEthernet1/0/15
+shutdown
+!
+interface GigabitEthernet1/0/16
+shutdown
+!
+interface GigabitEthernet1/0/17
+shutdown
+!
+interface GigabitEthernet1/0/18
+shutdown
+!
+interface GigabitEthernet1/0/19
+description AESXCTXOBV11_A1_Net3
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet1/0/20
+description AESXCTXOBV11_A1_Net1
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet1/0/21
+description AESXCTXOBV12_A1_Net1
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet1/0/22
+description AESXCTXOBV12_A1_Net3
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet1/0/23
+description ANSCTXOBV01_A1_Port1_1
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface GigabitEthernet1/0/24
+description ANSCTXOBV01_A1_Port1_3
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface GigabitEthernet1/0/25
+description ANSCTXOBV01_A1_Port1_5
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface GigabitEthernet1/0/26
+description ANSCTXOBV02_A1_Port1_1
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface GigabitEthernet1/0/27
+description ANSCTXOBV02_A1_Port1_3
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface GigabitEthernet1/0/28
+description ANSCTXOBV02_A1_Port1_5
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface GigabitEthernet1/0/29
+description AFX2CTXOBV01_A1_Port5
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet1/0/30
+description AFX2CTXOBV01_A1_Port1
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet1/0/31
+description AFX2CTXOBV01_A1_Port6
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet1/0/32
+description AFX2CTXOBV01_A1_Port2
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet1/0/33
+description AFX2CTXOBV02_A1_Port5
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet1/0/34
+description AFX2CTXOBV02_A1_Port1
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet1/0/35
+description AFX2CTXOBV02_A1_Port2
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet1/0/36
+description AFX2CTXOBV02_A1_Port6
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet1/0/37
+description AFX2CTXOBV03_A1_Port5
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet1/0/38
+description AFX2CTXOBV03_A1_Port1
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet1/0/39
+description AFX2CTXOBV03_A1_Port6
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet1/0/40
+description AFX2CTXOBV03_A1_Port2
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet1/0/41
+description AFX2CTXOBV04_A1_Port5
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet1/0/42
+description AFX2CTXOBV04_A1_Port1
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet1/0/43
+description AFX2CTXOBV04_A1_Port2
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet1/0/44
+description AFX2CTXOBV04_A1_Port6
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet1/0/45
+description AFX2CTXOBV05_A1_Port5
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet1/0/46
+description AFX2CTXOBV05_A1_Port1
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet1/0/47
+description AFX2CTXOBV05_A1_Port6
+switchport trunk allowed vlan 251
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet1/0/48
+description AFX2CTXOBV05_A1_Port2
+switchport trunk allowed vlan 251
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet1/1/1
+description OBVBROKERSw1-1--RDKOBVBADK01 -Gi FO- Bane 9180387
+switchport trunk allowed vlan 3310
+switchport mode trunk
+!
+interface GigabitEthernet1/1/2
+description OBVBROKERSw1-1--JTL-GPRS-OBV -Gi FO- Bane 9180388
+switchport trunk allowed vlan 317,319
+switchport mode trunk
+!
+interface TenGigabitEthernet1/1/3
+description OBVBROKERSw1-1--OBVCORE01 -Te FO- Bane 9180380
+no switchport
+ip address 100.64.0.34 255.255.255.252
+ip router isis 10
+mpls ip
+!
+interface TenGigabitEthernet1/1/4
+description OBVBROKERSw01.1--OBvSTTNCitrixSw1 -10GE FO- Bane 9180696
+switchport trunk allowed vlan 247,248,250,251,2541,2542
+switchport mode trunk
+channel-group 34 mode on
+!
+interface GigabitEthernet2/0/1
+description OBVBROKERSw01-2 OBVBROKERSw02-2- -Gi2/1/1 UTP- Bane8180827
+switchport trunk allowed vlan 252
+switchport mode trunk
+channel-group 20 mode on
+!
+interface GigabitEthernet2/0/2
+shutdown
+!
+interface GigabitEthernet2/0/3
+shutdown
+!
+interface GigabitEthernet2/0/4
+shutdown
+!
+interface GigabitEthernet2/0/5
+shutdown
+!
+interface GigabitEthernet2/0/6
+shutdown
+!
+interface GigabitEthernet2/0/7
+shutdown
+!
+interface GigabitEthernet2/0/8
+shutdown
+!
+interface GigabitEthernet2/0/9
+shutdown
+!
+interface GigabitEthernet2/0/10
+shutdown
+!
+interface GigabitEthernet2/0/11
+shutdown
+!
+interface GigabitEthernet2/0/12
+shutdown
+!
+interface GigabitEthernet2/0/13
+shutdown
+!
+interface GigabitEthernet2/0/14
+shutdown
+!
+interface GigabitEthernet2/0/15
+shutdown
+!
+interface GigabitEthernet2/0/16
+shutdown
+!
+interface GigabitEthernet2/0/17
+shutdown
+!
+interface GigabitEthernet2/0/18
+shutdown
+!
+interface GigabitEthernet2/0/19
+description AESXCTXOBV11_A2_Net4
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet2/0/20
+description AESXCTXOBV11_A2_Net2
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet2/0/21
+description AESXCTXOBV12_A2_Net2
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet2/0/22
+description AESXCTXOBV12_A2_Net4
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet2/0/23
+description ANSCTXOBV01_A2_Port1_2
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface GigabitEthernet2/0/24
+description ANSCTXOBV01_A2_Port1_4
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface GigabitEthernet2/0/25
+description ANSCTXOBV01_A2_Port1_6
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface GigabitEthernet2/0/26
+description ANSCTXOBV02_A2_Port1_2
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface GigabitEthernet2/0/27
+description ANSCTXOBV02_A2_Port1_4
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface GigabitEthernet2/0/28
+description ANSCTXOBV02_A2_Port1_6
+switchport access vlan 250
+switchport mode access
+shutdown
+!
+interface GigabitEthernet2/0/29
+description AFX2CTXOBV01_A2_Port7
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet2/0/30
+description AFX2CTXOBV01_A2_Port3
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet2/0/31
+description AFX2CTXOBV01_A2_Port8
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet2/0/32
+description AFX2CTXOBV01_A2_Port4
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet2/0/33
+description AFX2CTXOBV02_A2_Port7
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet2/0/34
+description AFX2CTXOBV02_A2_Port3
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet2/0/35
+description AFX2CTXOBV02_A2_Port4
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet2/0/36
+description AFX2CTXOBV02_A2_Port8
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet2/0/37
+description AFX2CTXOBV03_A2_Port7
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet2/0/38
+description AFX2CTXOBV03_A2_Port3
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet2/0/39
+description AFX2CTXOBV03_A2_Port8
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet2/0/40
+description AFX2CTXOBV03_A2_Port4
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet2/0/41
+description AFX2CTXOBV04_A2_Port7
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet2/0/42
+description AFX2CTXOBV04_A2_Port3
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet2/0/43
+description AFX2CTXOBV04_A2_Port4
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet2/0/44
+description AFX2CTXOBV04_A2_Port8
+switchport trunk allowed vlan 250
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet2/0/45
+description AFX2CTXOBV05_A2_Port7
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet2/0/46
+description AFX2CTXOBV05_A2_Port3
+switchport access vlan 248
+switchport mode access
+shutdown
+!
+interface GigabitEthernet2/0/47
+description AFX2CTXOBV05_A1_Port8
+switchport trunk allowed vlan 251
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet2/0/48
+description AFX2CTXOBV05_A1_Port4
+switchport trunk allowed vlan 251
+switchport mode trunk
+shutdown
+!
+interface GigabitEthernet2/1/1
+!
+interface GigabitEthernet2/1/2
+!
+interface TenGigabitEthernet2/1/3
+description OBVBROKERSw1-2--OBVCORE02 -Te FO- Bane 9180384
+no switchport
+ip address 100.64.0.30 255.255.255.252
+ip router isis 10
+mpls ip
+!
+interface TenGigabitEthernet2/1/4
+description OBVBROKERSw01.2--OBvSTTNCitrixSw2 -10GE FO- Bane 9180697
+switchport trunk allowed vlan 247,248,250,251,2541,2542
+switchport mode trunk
+channel-group 34 mode on
+!
+interface Vlan1
+no ip address
+shutdown
+!
+interface Vlan247
+description CHG0050008 New-CITRIX-Data
+vrf forwarding BROKER-DMZ
+ip address 172.21.247.1 255.255.255.0
+!
+interface Vlan248
+description to Management IP VM-Ware
+vrf forwarding BROKER-DMZ
+ip address 172.21.248.1 255.255.255.0
+!
+interface Vlan250
+description to PROD1
+vrf forwarding BROKER-DMZ
+ip address 172.21.250.1 255.255.255.0
+ip helper-address 172.27.2.22
+ip helper-address 172.20.3.19
+!
+interface Vlan251
+description to PROD2
+vrf forwarding BROKER-DMZ
+ip address 172.21.251.1 255.255.255.0
+!
+interface Vlan252
+description SPNS-SRV-NET-Zone0
+vrf forwarding SPNS-SRV-NET-Zone0
+ip address 172.21.252.1 255.255.255.0
+!
+interface Vlan317
+description to JTL-GPRS-OBV Gi0/0/2.317
+vrf forwarding ERTMS-DMZ-JTL
+ip address 100.65.2.137 255.255.255.248
+!
+interface Vlan319
+description to JTL-GPRS-OBV Gi0/0/2.319
+vrf forwarding ERTMS-DMZ-JTL
+ip address 100.65.2.153 255.255.255.248
+!
+interface Vlan2541
+description P-base_replacement
+vrf forwarding BROKER-DMZ
+ip address 172.21.254.1 255.255.255.224
+!
+interface Vlan2542
+description P-base_replace_DWH
+vrf forwarding BROKER-DMZ
+ip address 172.21.254.33 255.255.255.224
+!
+interface Vlan3310
+description TO RDKOBVBADK01 Te1/10.3310
+vrf forwarding ERTMS-DMZ
+ip address 10.138.63.97 255.255.255.248
+!
+router isis 10
+net 49.6500.0000.0007.00
+is-type level-2-only
+!
+router bgp 65000
+bgp router-id interface Loopback0
+bgp log-neighbor-changes
+redistribute connected
+redistribute static
+neighbor BDK peer-group
+neighbor BDK remote-as 65000
+neighbor BDK update-source Loopback0
+neighbor BDK send-community extended
+neighbor BDK soft-reconfiguration inbound
+neighbor 100.127.255.1 peer-group BDK
+neighbor 100.127.255.2 peer-group BDK
+neighbor 100.127.255.3 peer-group BDK
+neighbor 100.127.255.3 route-map SET_LOCALPREF_60 in
+neighbor 100.127.255.4 peer-group BDK
+neighbor 100.127.255.4 route-map SET_LOCALPREF_50 in
+neighbor 100.127.255.5 peer-group BDK
+neighbor 100.127.255.6 peer-group BDK
+neighbor 100.127.255.8 peer-group BDK
+neighbor 100.127.255.9 peer-group BDK
+neighbor 100.127.255.10 peer-group BDK
+!
+address-family vpnv4
+neighbor BDK send-community extended
+neighbor 100.127.255.1 activate
+neighbor 100.127.255.2 activate
+neighbor 100.127.255.3 activate
+neighbor 100.127.255.4 activate
+neighbor 100.127.255.5 activate
+neighbor 100.127.255.6 activate
+neighbor 100.127.255.8 activate
+neighbor 100.127.255.9 activate
+neighbor 100.127.255.10 activate
+exit-address-family
+!
+address-family ipv4 vrf BROKER-DMZ
+redistribute connected
+redistribute static
+exit-address-family
+!
+address-family ipv4 vrf ERTMS-DMZ
+redistribute connected
+redistribute static
+exit-address-family
+!
+address-family ipv4 vrf ERTMS-DMZ-JTL
+redistribute connected
+redistribute static
+exit-address-family
+!
+address-family ipv4 vrf SPNS-SRV-NET-Zone0
+redistribute connected
+redistribute static
+exit-address-family
+!
+ip forward-protocol nd
+ip http server
+ip http authentication local
+ip http secure-server
+ip route vrf ERTMS-DMZ 80.243.122.0 255.255.255.0 10.138.63.102
+ip route vrf ERTMS-DMZ-JTL 10.14.0.0 255.255.255.0 Vlan317 100.65.2.142
+ip route vrf ERTMS-DMZ-JTL 10.14.10.0 255.255.255.0 Vlan317 100.65.2.142
+ip route vrf ERTMS-DMZ-JTL 10.56.59.0 255.255.255.0 Vlan317 100.65.2.142
+ip route vrf ERTMS-DMZ-JTL 10.138.63.32 255.255.255.248 Vlan317 100.65.2.142
+ip route vrf ERTMS-DMZ-JTL 10.150.147.0 255.255.255.224 Vlan317 100.65.2.142
+ip route vrf ERTMS-DMZ-JTL 172.21.251.0 255.255.255.240 Vlan319 100.65.2.158
+ip scp server enable
+!
+!
+ip access-list standard ELTEL
+permit 10.185.50.0 0.0.0.255
+ip access-list standard LOCALPREF
+permit any
+!
+ip access-list extended AutoQos-4.0-wlan-Acl-Bulk-Data
+permit tcp any any eq 22
+permit tcp any any eq 465
+permit tcp any any eq 143
+permit tcp any any eq 993
+permit tcp any any eq 995
+permit tcp any any eq 1914
+permit tcp any any eq ftp
+permit tcp any any eq ftp-data
+permit tcp any any eq smtp
+permit tcp any any eq pop3
+ip access-list extended AutoQos-4.0-wlan-Acl-MultiEnhanced-Conf
+permit udp any any range 16384 32767
+permit tcp any any range 50000 59999
+ip access-list extended AutoQos-4.0-wlan-Acl-Scavanger
+permit tcp any any range 2300 2400
+permit udp any any range 2300 2400
+permit tcp any any range 6881 6999
+permit tcp any any range 28800 29100
+permit tcp any any eq 1214
+permit udp any any eq 1214
+permit tcp any any eq 3689
+permit udp any any eq 3689
+permit tcp any any eq 11999
+ip access-list extended AutoQos-4.0-wlan-Acl-Signaling
+permit tcp any any range 2000 2002
+permit tcp any any range 5060 5061
+permit udp any any range 5060 5061
+ip access-list extended AutoQos-4.0-wlan-Acl-Transactional-Data
+permit tcp any any eq 443
+permit tcp any any eq 1521
+permit udp any any eq 1521
+permit tcp any any eq 1526
+permit udp any any eq 1526
+permit tcp any any eq 1575
+permit udp any any eq 1575
+permit tcp any any eq 1630
+permit udp any any eq 1630
+permit tcp any any eq 1527
+permit tcp any any eq 6200
+permit tcp any any eq 3389
+permit tcp any any eq 5985
+permit tcp any any eq 8080
+!
+ip radius source-interface Loopback0
+logging source-interface Loopback100 vrf ERTMS-DMZ
+logging host 10.185.50.51 vrf ERTMS-DMZ
+logging host 100.72.35.34 vrf ERTMS-DMZ
+!
+route-map SET_LOCALPREF_60 permit 10
+match ip address LOCALPREF
+set local-preference 60
+!
+route-map SET_LOCALPREF_60 permit 20
+!
+route-map SET_LOCALPREF_40 permit 10
+match ip address LOCALPREF
+set local-preference 40
+!
+route-map SET_LOCALPREF_40 permit 20
+!
+route-map SET_LOCALPREF_50 permit 10
+match ip address LOCALPREF
+set local-preference 50
+!
+route-map SET_LOCALPREF_50 permit 20
+!
+route-map SET_LOCALPREF_20 permit 10
+match ip address LOCALPREF
+set local-preference 20
+!
+route-map SET_LOCALPREF_30 permit 10
+match ip address LOCALPREF
+set local-preference 30
+!
+route-map SET_LOCALPREF_30 permit 20
+!
+route-map SET_LOCALPREF_10 permit 10
+match ip address LOCALPREF
+set local-preference 10
+!
+mpls ldp router-id Loopback0
+snmp-server community ******** RO ELTEL
+snmp-server community ******** RW ELTEL
+snmp-server community ******** RO
+snmp-server trap-source Loopback100
+snmp-server location TCCECORE01
+snmp-server host 10.185.50.51 vrf ERTMS-DMZ ********
+snmp-server host 100.72.35.34 vrf ERTMS-DMZ ********
+snmp-server host 10.185.50.51 vrf ERTMS-DMZ ********
+snmp ifmib ifindex persist
+!
+!
+!
+!
+control-plane
+service-policy input system-cpp-policy
+!
+privilege exec all level 5 show running-config view full
+privilege exec level 5 show running-config view
+privilege exec level 5 show running-config
+privilege exec level 5 show
+!
+line con 0
+exec-timeout 60 0
+stopbits 1
+line aux 0
+exec-timeout 0 12
+no exec
+stopbits 1
+line vty 0 4
+exec-timeout 60 0
+privilege level 15
+logging synchronous
+transport input telnet ssh
+line vty 5 15
+exec-timeout 60 0
+privilege level 15
+logging synchronous
+transport input telnet ssh
+!
+ntp source Loopback0
+ntp master
+!
+!
+!
+!
+!
+!
+ap dot11 airtime-fairness policy-name Default 0
+ap group default-group
+ap hyperlocation ble-beacon 0
+ap hyperlocation ble-beacon 1
+ap hyperlocation ble-beacon 2
+ap hyperlocation ble-beacon 3
+ap hyperlocation ble-beacon 4
+end
+Configuration Archive Collection Time: June 8, 2023 7:02:17 AM CEST
+Note:

@@ -5,35 +5,27 @@ from engines.resolver_engine import ResolverEngine
 graph = GraphBuilder().build_from_vrf_inventory()
 resolver = ResolverEngine(graph)
 
-tests = [
+for ip in [
     "10.255.255.17",
     "172.27.133.2",
-]
-
-print()
-print("Resolver Engine Test")
-print("=" * 50)
-
-for ip in tests:
+]:
     result = resolver.resolve_ip(ip)
 
     print()
     print(ip)
     print("-" * 50)
-    print("Resolved   :", result["resolved"])
-    print("Confidence :", result["confidence"])
-    print("Method     :", result["method"])
-    print("Reason     :", result["reason"])
+    print("Resolved  :", result["resolved"])
+    print("Confidence:", result["confidence"])
+    print("Method    :", result["method"])
+    print("Reason    :", result["reason"])
 
-    if result.get("router"):
-        print("Router     :", result["router"])
-        print("VRF        :", result["vrf"])
-        print("Interface  :", result["interface"])
+    if result["method"] == "asa_interface":
+        print("Firewall  :", result["firewall"])
+        print("Context   :", result["context"])
+        print("Interface :", result["interface"])
+        print("Subnet    :", result["subnet"])
 
-    if result["references"]:
-        print("References :")
-        for ref in result["references"][:5]:
-            print(
-                f'  {ref["router"]} VRF={ref["vrf"]} '
-                f'{ref["prefix"]} via {ip}'
-            )
+    if result["method"] == "router_inventory":
+        print("Router    :", result["router"])
+        print("VRF       :", result["vrf"])
+        print("Interface :", result["interface"])
