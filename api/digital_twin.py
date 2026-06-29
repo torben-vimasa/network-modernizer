@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from builders.graph_builder import GraphBuilder
 from builders.import_builder import ImportBuilder
 
@@ -7,6 +9,7 @@ from engines.route_engine import RouteEngine
 from engines.security_engine import SecurityEngine
 
 from importers.asa_importer import ASAImporter
+from importers.import_dispatcher import ImportDispatcher
 from importers.router_importer import RouterImporter
 
 from models.application_trace_result import ApplicationTraceResult
@@ -30,6 +33,7 @@ class DigitalTwin:
 
         self.asa_importer = ASAImporter()
         self.router_importer = RouterImporter()
+        self.dispatcher = ImportDispatcher()
         self.import_builder = ImportBuilder(self.graph)
 
         self.imported_config = self.asa_importer.import_config(asa_config_file)
@@ -47,6 +51,31 @@ class DigitalTwin:
         self.import_builder.build(result)
 
         return result
+
+    def load_file(self, filename):
+
+        result = self.dispatcher.import_file(filename)
+
+        if result:
+            self.import_builder.build(result)
+
+        return result
+
+    def load_directory(self, directory):
+
+        directory = Path(directory)
+
+        imported = 0
+
+        for file in directory.rglob("*.txt"):
+
+            result = self.load_file(file)
+
+            if result:
+                imported += 1
+
+        print()
+        print(f"Imported {imported} files.")
 
     def trace_application(
         self,
