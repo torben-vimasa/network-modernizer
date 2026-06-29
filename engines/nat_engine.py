@@ -8,7 +8,7 @@ from models.nat_result import NATResult
 class NATEngine:
 
     def __init__(self, rules=None):
-        self.rules = rules or []
+        self.rules = self._sort_rules(rules or [])
 
     def translate(self, packet):
 
@@ -34,7 +34,7 @@ class NATEngine:
 
                 result.explanation = NATExplanation(
                     matched=True,
-                    reason="Matched static source NAT",
+                    reason=rule.reason or "Matched NAT rule",
                     source_before=result.source_before,
                     source_after=result.source_after,
                     destination_before=result.destination_before,
@@ -83,6 +83,20 @@ class NATEngine:
         )
 
         return translated, result
+
+    def _sort_rules(self, rules):
+
+        section_order = {
+            "before-auto": 1,
+            "manual": 1,
+            "auto": 2,
+            "after-auto": 3
+        }
+
+        return sorted(
+            rules,
+            key=lambda rule: section_order.get(rule.section, 99)
+        )
 
     def _matches_source(self, rule, source):
 
