@@ -30,4 +30,19 @@ class ASANATParser:
                 rule.source_translated = parts[source_index + 3]
                 rule.reason = "Static source NAT"
 
+        if "destination" in parts:
+            destination_index = parts.index("destination")
+
+            if (
+                len(parts) > destination_index + 3
+                and parts[destination_index + 1] == "static"
+            ):
+                rule.destination_original = parts[destination_index + 2]
+                rule.destination_translated = parts[destination_index + 3]
+
+                if rule.reason:
+                    rule.reason = "Static source and destination NAT"
+                else:
+                    rule.reason = "Static destination NAT"
+
         return rule
