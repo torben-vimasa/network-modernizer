@@ -12,10 +12,8 @@ class ASANATParser:
 
         parts = line.split()
 
-        direction = parts[1].strip("()")
-
         rule = NATRule(
-            direction=direction,
+            direction=parts[1].strip("()"),
             raw=line
         )
 
@@ -23,10 +21,10 @@ class ASANATParser:
         # Section
         #
 
-        if "after-auto" in parts:
-            rule.section = "after-auto"
-        elif "before-auto" in parts:
+        if "before-auto" in parts:
             rule.section = "before-auto"
+        elif "after-auto" in parts:
+            rule.section = "after-auto"
         else:
             rule.section = "manual"
 
@@ -38,21 +36,15 @@ class ASANATParser:
 
             i = parts.index("source")
 
-            if len(parts) > i + 3:
+            nat_type = parts[i + 1]
 
-                if parts[i + 1] == "static":
+            rule.source_original = parts[i + 2]
+            rule.source_translated = parts[i + 3]
 
-                    rule.source_original = parts[i + 2]
-                    rule.source_translated = parts[i + 3]
-
-                    rule.reason = "Static source NAT"
-
-                elif parts[i + 1] == "dynamic":
-
-                    rule.source_original = parts[i + 2]
-                    rule.source_translated = parts[i + 3]
-
-                    rule.reason = "Dynamic source NAT"
+            if nat_type == "static":
+                rule.reason = "Static source NAT"
+            else:
+                rule.reason = "Dynamic source NAT"
 
         #
         # Destination
@@ -62,18 +54,19 @@ class ASANATParser:
 
             i = parts.index("destination")
 
-            if len(parts) > i + 3:
+            nat_type = parts[i + 1]
 
-                if parts[i + 1] == "static":
+            rule.destination_original = parts[i + 2]
+            rule.destination_translated = parts[i + 3]
 
-                    rule.destination_original = parts[i + 2]
-                    rule.destination_translated = parts[i + 3]
+            if rule.reason:
+                rule.reason += " + destination"
 
-                    if rule.reason:
-                        rule.reason += " + destination"
-
-                    else:
-                        rule.reason = "Static destination NAT"
+            else:
+                if nat_type == "static":
+                    rule.reason = "Static destination NAT"
+                else:
+                    rule.reason = "Dynamic destination NAT"
 
         #
         # Service
@@ -83,9 +76,18 @@ class ASANATParser:
 
             i = parts.index("service")
 
-            if len(parts) > i + 2:
+            rule.service_original = parts[i + 1]
+            rule.service_translated = parts[i + 2]
 
-                rule.service_original = parts[i + 1]
-                rule.service_translated = parts[i + 2]
+        #
+        # Detect Twice NAT
+        #
+
+        if (
+            rule.source_original
+            and
+            rule.destination_original
+        ):
+            rule.reason = "Twice NAT"
 
         return rule
