@@ -25,10 +25,8 @@ class ASANATParser:
 
         if "after-auto" in parts:
             rule.section = "after-auto"
-
         elif "before-auto" in parts:
             rule.section = "before-auto"
-
         else:
             rule.section = "manual"
 
@@ -40,12 +38,21 @@ class ASANATParser:
 
             i = parts.index("source")
 
-            if len(parts) > i + 3 and parts[i + 1] == "static":
+            if len(parts) > i + 3:
 
-                rule.source_original = parts[i + 2]
-                rule.source_translated = parts[i + 3]
+                if parts[i + 1] == "static":
 
-                rule.reason = "Static source NAT"
+                    rule.source_original = parts[i + 2]
+                    rule.source_translated = parts[i + 3]
+
+                    rule.reason = "Static source NAT"
+
+                elif parts[i + 1] == "dynamic":
+
+                    rule.source_original = parts[i + 2]
+                    rule.source_translated = parts[i + 3]
+
+                    rule.reason = "Dynamic source NAT"
 
         #
         # Destination
@@ -55,15 +62,18 @@ class ASANATParser:
 
             i = parts.index("destination")
 
-            if len(parts) > i + 3 and parts[i + 1] == "static":
+            if len(parts) > i + 3:
 
-                rule.destination_original = parts[i + 2]
-                rule.destination_translated = parts[i + 3]
+                if parts[i + 1] == "static":
 
-                if rule.reason:
-                    rule.reason = "Static source and destination NAT"
-                else:
-                    rule.reason = "Static destination NAT"
+                    rule.destination_original = parts[i + 2]
+                    rule.destination_translated = parts[i + 3]
+
+                    if rule.reason:
+                        rule.reason += " + destination"
+
+                    else:
+                        rule.reason = "Static destination NAT"
 
         #
         # Service
