@@ -1,4 +1,5 @@
 from builders.graph_builder import GraphBuilder
+from builders.import_builder import ImportBuilder
 
 from engines.application_engine import ApplicationEngine
 from engines.nat_engine import NATEngine
@@ -6,6 +7,7 @@ from engines.route_engine import RouteEngine
 from engines.security_engine import SecurityEngine
 
 from importers.asa_importer import ASAImporter
+from importers.router_importer import RouterImporter
 
 from models.application_trace_result import ApplicationTraceResult
 
@@ -26,14 +28,25 @@ class DigitalTwin:
         self.route = RouteEngine()
         self.application = ApplicationEngine(self.graph)
 
-        self.importer = ASAImporter()
-        self.imported_config = self.importer.import_config(asa_config_file)
+        self.asa_importer = ASAImporter()
+        self.router_importer = RouterImporter()
+        self.import_builder = ImportBuilder(self.graph)
+
+        self.imported_config = self.asa_importer.import_config(asa_config_file)
 
         self.nat = NATEngine(
             self.imported_config.nat_rules
         )
 
         self.trace = TraceWorkflow(self)
+
+    def load_router(self, filename):
+
+        result = self.router_importer.import_router(filename)
+
+        self.import_builder.build(result)
+
+        return result
 
     def trace_application(
         self,
@@ -94,5 +107,3 @@ class DigitalTwin:
             result.traces.append(trace)
 
         return result
-
-      
