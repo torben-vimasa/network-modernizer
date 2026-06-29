@@ -1,16 +1,16 @@
 from builders.graph_builder import GraphBuilder
 
 from engines.application_engine import ApplicationEngine
+from engines.nat_engine import NATEngine
 from engines.route_engine import RouteEngine
 from engines.security_engine import SecurityEngine
 
 from models.application_trace_result import ApplicationTraceResult
+from models.nat_rule import NATRule
+
+from parsers.asa_nat_parser import ASANATParser
 
 from workflows.trace_workflow import TraceWorkflow
-
-from engines.nat_engine import NATEngine
-
-from models.nat_rule import NATRule
 
 
 class DigitalTwin:
@@ -27,17 +27,19 @@ class DigitalTwin:
         self.route = RouteEngine()
         self.application = ApplicationEngine(self.graph)
 
+        self.nat = self._load_nat_engine()
+
         self.trace = TraceWorkflow(self)
 
-        self.nat = NATEngine(
-            rules=[
-                NATRule(
-                    name="TEST_SNAT",
-                    source_original="172.27.210.20",
-                    source_translated="10.255.255.17"
-                )
-            ]
-        )
+    def _load_nat_engine(self):
+
+        nat_file = "data/asa_nat_sample.txt"
+
+        parser = ASANATParser()
+
+        rules = parser.parse_file(nat_file)
+
+        return NATEngine(rules)
 
     def trace_application(
         self,
