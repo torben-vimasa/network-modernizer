@@ -5,17 +5,16 @@ from engines.nat_engine import NATEngine
 from engines.route_engine import RouteEngine
 from engines.security_engine import SecurityEngine
 
-from models.application_trace_result import ApplicationTraceResult
-from models.nat_rule import NATRule
+from importers.asa_importer import ASAImporter
 
-from parsers.asa_nat_parser import ASANATParser
+from models.application_trace_result import ApplicationTraceResult
 
 from workflows.trace_workflow import TraceWorkflow
 
 
 class DigitalTwin:
 
-    def __init__(self):
+    def __init__(self, asa_config_file="data/asa_nat_sample.txt"):
 
         print("Loading Knowledge Graph...")
 
@@ -27,19 +26,14 @@ class DigitalTwin:
         self.route = RouteEngine()
         self.application = ApplicationEngine(self.graph)
 
-        self.nat = self._load_nat_engine()
+        self.importer = ASAImporter()
+        self.imported_config = self.importer.import_config(asa_config_file)
+
+        self.nat = NATEngine(
+            self.imported_config["nat_rules"]
+        )
 
         self.trace = TraceWorkflow(self)
-
-    def _load_nat_engine(self):
-
-        nat_file = "data/asa_nat_sample.txt"
-
-        parser = ASANATParser()
-
-        rules = parser.parse_file(nat_file)
-
-        return NATEngine(rules)
 
     def trace_application(
         self,
