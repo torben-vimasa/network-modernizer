@@ -4,13 +4,13 @@ from api.digital_twin import DigitalTwin
 dt = DigitalTwin()
 
 result = dt.trace.trace(
-    source="172.27.210.20",
-    destination="SPNS2_Logpoint_100.72.36.70",
-    protocol="object-group",
-    service="Windows_Logging",
-    router="RGDCPe1",
-    vrf="CS",
-    route_destination="100.72.36.70"
+source="172.27.210.20",
+destination="SPNS2_Logpoint_100.72.36.70",
+protocol="object-group",
+service="Windows_Logging",
+router="RGDCPe1",
+vrf="CS",
+route_destination="100.72.36.70"
 )
 
 print()
@@ -61,7 +61,27 @@ else:
     print("No firewall hops")
     print()
 
+print("NETWORK HOPS")
+print("------------------------")
 
+if result.network_hops:
+    for hop in result.network_hops:
+        print("Hop      :", hop.hop_number)
+        print("Type     :", hop.hop_type)
+        print("Device   :", hop.device)
+        print("Context  :", hop.context)
+        print("VRF      :", hop.vrf)
+        print("Ingress  :", hop.ingress_interface)
+        print("Egress   :", hop.egress_interface)
+        print("IP       :", hop.ip)
+        print("Subnet   :", hop.subnet)
+        print("Route    :", hop.route)
+        print("Next Hop :", hop.next_hop)
+        print("Reason   :", hop.reason)
+        print()
+else:
+    print("No network hops")
+    print()
 
 print("EXPLANATION")
 print("------------------------")

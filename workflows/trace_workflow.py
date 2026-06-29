@@ -4,6 +4,7 @@ from engines.topology_engine import TopologyEngine
 from models.explanation import Explanation
 from models.firewall_hop import FirewallHop
 from models.hop import Hop
+from models.network_hop import NetworkHop
 from models.packet import Packet
 from models.route_result import RouteResult
 from models.trace_result import TraceResult
@@ -52,6 +53,7 @@ class TraceWorkflow:
 
         hops = []
         firewall_hops = []
+        network_hops = []
 
         security = self.twin.security.is_permitted(
             source,
@@ -69,6 +71,7 @@ class TraceWorkflow:
                 route=None,
                 hops=hops,
                 firewall_hops=firewall_hops,
+                network_hops=network_hops,
                 explanation=explanation
             )
 
@@ -82,13 +85,6 @@ class TraceWorkflow:
                 f"NAT source: {nat_result.source_before} -> {nat_result.source_after}"
             )
             explanation.add(
-                f"NAT destination: {nat_result.destination_before} -> {nat_result.destination_after}"
-            )
-
-            packet.add_history(
-                f"NAT source: {nat_result.source_before} -> {nat_result.source_after}"
-            )
-            packet.add_history(
                 f"NAT destination: {nat_result.destination_before} -> {nat_result.destination_after}"
             )
 
@@ -132,20 +128,11 @@ class TraceWorkflow:
                 f"Hop {hop_number}: {current_router} VRF {current_vrf} matched route {route['prefix']}"
             )
 
-            packet.add_history(
-                f"Hop {hop_number}: {current_router} VRF {current_vrf} matched route {route['prefix']}"
-            )
-
             explanation.add(
                 f"Hop {hop_number}: next hop {route['next_hop']}"
             )
 
             packet.next_hop = route["next_hop"]
-            packet.add_history(f"Hop {hop_number}: next hop {route['next_hop']}")
-
-            next_device = self.topology.resolve_router(
-                route["next_hop"]
-            )
 
             hop = Hop(
                 router=current_router,
@@ -156,9 +143,25 @@ class TraceWorkflow:
 
             hops.append(hop)
 
+            network_hops.append(
+                NetworkHop(
+                    hop_number=len(network_hops) + 1,
+                    hop_type="router",
+                    device=current_router,
+                    vrf=current_vrf,
+                    route=route["prefix"],
+                    next_hop=route["next_hop"],
+                    reason="Matched route"
+                )
+            )
+
             last_route_result = RouteResult(
                 matched=True,
                 hop=hop
+            )
+
+            next_device = self.topology.resolve_router(
+                route["next_hop"]
             )
 
             if not next_device:
@@ -176,6 +179,19 @@ class TraceWorkflow:
                     )
 
                     firewall_hops.append(fw_hop)
+
+                    network_hops.append(
+                        NetworkHop(
+                            hop_number=len(network_hops) + 1,
+                            hop_type="firewall",
+                            device=resolution.get("firewall"),
+                            context=resolution.get("context"),
+                            ingress_interface=resolution.get("interface"),
+                            ip=resolution.get("ip"),
+                            subnet=resolution.get("subnet"),
+                            reason="Next-hop resolved to ASA interface"
+                        )
+                    )
 
                     explanation.add(
                         f"Trace reached ASA interface {resolution['context']}:{resolution['interface']}"
@@ -213,5 +229,6 @@ class TraceWorkflow:
             route=last_route_result,
             hops=hops,
             firewall_hops=firewall_hops,
+            network_hops=network_hops,
             explanation=explanation
         )
