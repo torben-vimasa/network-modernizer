@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 
+from models.bgp_route import BGPRoute
 from models.nat_rule import NATRule
 
 
@@ -7,6 +8,8 @@ from models.nat_rule import NATRule
 class ASAImportResult:
 
     nat_rules: list[NATRule] = field(default_factory=list)
+
+    bgp_routes: list[BGPRoute] = field(default_factory=list)
 
     interfaces: list = field(default_factory=list)
 
