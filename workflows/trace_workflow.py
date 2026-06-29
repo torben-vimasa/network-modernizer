@@ -2,6 +2,7 @@ from engines.resolver_engine import ResolverEngine
 from engines.topology_engine import TopologyEngine
 
 from models.explanation import Explanation
+from models.firewall_hop import FirewallHop
 from models.hop import Hop
 from models.packet import Packet
 from models.route_result import RouteResult
@@ -48,7 +49,9 @@ class TraceWorkflow:
 
         explanation = Explanation()
         packet.add_history("Trace started")
+
         hops = []
+        firewall_hops = []
 
         security = self.twin.security.is_permitted(
             source,
@@ -65,6 +68,7 @@ class TraceWorkflow:
                 security=security,
                 route=None,
                 hops=hops,
+                firewall_hops=firewall_hops,
                 explanation=explanation
             )
 
@@ -161,6 +165,18 @@ class TraceWorkflow:
                 resolution = self.resolver.resolve_ip(route["next_hop"])
 
                 if resolution.get("resolved") and resolution.get("method") == "asa_interface":
+
+                    fw_hop = FirewallHop(
+                        firewall=resolution.get("firewall"),
+                        context=resolution.get("context"),
+                        ingress_interface=resolution.get("interface"),
+                        ip=resolution.get("ip"),
+                        subnet=resolution.get("subnet"),
+                        reason="Next-hop resolved to ASA interface"
+                    )
+
+                    firewall_hops.append(fw_hop)
+
                     explanation.add(
                         f"Trace reached ASA interface {resolution['context']}:{resolution['interface']}"
                     )
@@ -196,5 +212,6 @@ class TraceWorkflow:
             security=security,
             route=last_route_result,
             hops=hops,
+            firewall_hops=firewall_hops,
             explanation=explanation
         )

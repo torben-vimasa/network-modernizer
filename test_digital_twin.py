@@ -46,8 +46,27 @@ if result.hops:
 else:
     print("No hops")
 
+print("FIREWALL HOPS")
+print("------------------------")
+
+if result.firewall_hops:
+    for fw_hop in result.firewall_hops:
+        print("Firewall :", fw_hop.firewall)
+        print("Context  :", fw_hop.context)
+        print("Ingress  :", fw_hop.ingress_interface)
+        print("IP       :", fw_hop.ip)
+        print("Subnet   :", fw_hop.subnet)
+        print()
+else:
+    print("No firewall hops")
+    print()
+
+
+
 print("EXPLANATION")
 print("------------------------")
+
+
 
 if result.explanation:
     for step in result.explanation.steps:
