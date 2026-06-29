@@ -1,12 +1,9 @@
 from parsers.asa_nat_parser import ASANATParser
-
 from engines.nat_engine import NATEngine
-
 from models.packet import Packet
 
 
 parser = ASANATParser()
-
 rules = parser.parse_file("data/asa_nat_sample.txt")
 
 engine = NATEngine(rules)
@@ -22,21 +19,14 @@ print()
 print("NAT File Pipeline")
 print("=" * 60)
 
-print()
-
 print("Loaded rules :", len(rules))
+print("Match        :", result.matched)
+print("Reason       :", result.reason)
 
 print()
-
-print("Match :", result.matched)
-print("Reason:", result.reason)
-
-print()
-
 print("Original")
 print(packet)
 
 print()
-
 print("Translated")
 print(translated)
