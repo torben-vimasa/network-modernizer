@@ -18,4 +18,5 @@ class NATRule:
     direction: str | None = None
     section: str | None = None
 
+    reason: str | None = None
     raw: str | None = None
