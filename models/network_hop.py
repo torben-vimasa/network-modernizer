@@ -24,4 +24,12 @@ class NetworkHop:
 
     reason: str | None = None
 
+    acl_rule: str | None = None
+
+    nat_rule: str | None = None
+
+    route_lookup: str | None = None
+
+    policy: str | None = None
+
     details: dict = field(default_factory=dict)
