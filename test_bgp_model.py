@@ -23,5 +23,4 @@ result = BGPResult(
 print()
 print("BGP Model Test")
 print("=" * 50)
-
 print(result)
