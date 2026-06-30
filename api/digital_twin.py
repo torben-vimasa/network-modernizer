@@ -7,6 +7,7 @@ from engines.application_engine import ApplicationEngine
 from engines.nat_engine import NATEngine
 from engines.route_engine import RouteEngine
 from engines.security_engine import SecurityEngine
+from engines.source_locator_engine import SourceLocatorEngine
 
 from importers.asa_importer import ASAImporter
 from importers.import_dispatcher import ImportDispatcher
@@ -76,6 +77,47 @@ class DigitalTwin:
 
         print()
         print(f"Imported {imported} files.")
+
+    def trace_packet(
+        self,
+        source,
+        destination,
+        protocol=None,
+        service=None,
+        router=None,
+        vrf=None,
+        route_destination=None
+    ):
+
+        locator = SourceLocatorEngine(self.graph)
+
+        location = locator.locate(source)
+
+        if location.get("found"):
+
+            router = router or location.get("device")
+            vrf = vrf or location.get("vrf")
+
+        if not router or not vrf:
+
+            print()
+            print("Source location")
+            print("=" * 60)
+            print(location)
+            print()
+            print("Trace requires router and VRF until source inventory is complete.")
+
+            return None
+
+        return self.trace.trace(
+            source=source,
+            destination=destination,
+            protocol=protocol,
+            service=service,
+            router=router,
+            vrf=vrf,
+            route_destination=route_destination or destination
+        )
 
     def trace_application(
         self,
