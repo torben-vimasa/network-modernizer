@@ -1,10 +1,13 @@
 from datetime import datetime
 
+from inventory.inventory_validator import InventoryValidator
+
 
 class InventoryReporter:
 
     def __init__(self, firewalls):
         self.firewalls = firewalls
+        self.findings = InventoryValidator(firewalls).validate_firewalls()
 
     def print_firewall_report(self):
 
@@ -15,6 +18,9 @@ class InventoryReporter:
         print("Firewalls :", len(self.firewalls))
         print("Contexts  :", self._count_contexts())
         print("Warnings  :", self._count_warnings())
+        print("Findings  :", len(self.findings))
+
+        self._print_findings()
 
         print()
         print("FIREWALLS")
@@ -22,6 +28,22 @@ class InventoryReporter:
 
         for firewall in self.firewalls:
             self._print_firewall(firewall)
+
+    def _print_findings(self):
+
+        if not self.findings:
+            return
+
+        print()
+        print("INVENTORY FINDINGS")
+        print("-" * 60)
+
+        for finding in self.findings:
+            print(
+                f"{finding['severity'].upper():8} "
+                f"{finding['item']}: "
+                f"{finding['message']}"
+            )
 
     def _print_firewall(self, firewall):
 
