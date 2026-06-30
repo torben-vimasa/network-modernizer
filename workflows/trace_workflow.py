@@ -225,6 +225,22 @@ class TraceWorkflow:
                         f"Firewall next-hop: {traversal.next_hop}"
                     )
 
+                    if traversal.next_device and traversal.next_device.get("resolved"):
+                        method = traversal.next_device.get("method")
+
+                        if method == "router_inventory":
+                            current_router = traversal.next_device.get("router")
+                            current_vrf = traversal.next_device.get("vrf")
+
+                            packet = traversal.output_packet
+
+                            explanation.add(
+                                f"Trace continues to router {current_router} VRF {current_vrf}"
+                            )
+
+                            continue
+
+                    explanation.add("Trace stopped after firewall traversal: next device not resolvable as router")
                     break
 
                 explanation.add(
