@@ -2,6 +2,8 @@ import json
 from pathlib import Path
 
 from graph.graph import KnowledgeGraph
+from inventory.firewall_inventory import FirewallInventory
+from inventory.inventory_loader import InventoryLoader
 from parsers.acl_rule_parser import ACLRuleParser
 from parsers.router_inventory_parser import RouterInventoryParser
 
@@ -11,6 +13,9 @@ class GraphBuilder:
         self.output_dir = Path("output")
         self.knowledge_dir = Path("knowledge")
         self.router_parser = RouterInventoryParser()
+
+        firewalls = InventoryLoader().load_firewalls()
+        self.firewall_inventory = FirewallInventory(firewalls)
 
     def build_from_vrf_inventory(self):
         graph = KnowledgeGraph()
@@ -35,6 +40,14 @@ class GraphBuilder:
         with open(self.knowledge_dir / filename, "r", encoding="utf-8") as f:
             return json.load(f)
 
+    def _resolve_firewall_name(self, context_name, fallback=None):
+        firewall = self.firewall_inventory.find_by_context(context_name)
+
+        if firewall:
+            return firewall.name
+
+        return fallback or "UnknownFirewall"
+
     def _add_vrf_nodes(self, graph, vrf_inventory):
         for vrf_name, vrf in vrf_inventory.items():
             graph.add_node(
@@ -51,11 +64,21 @@ class GraphBuilder:
             vrf_node = graph.add_node("VRF", vrf_name)
 
             for link in links:
-                context_node = graph.add_node("Context", link["asa_context"])
+                context_name = link["asa_context"]
+
+                context_node = graph.add_node(
+                    "Context",
+                    context_name
+                )
+
+                firewall_name = self._resolve_firewall_name(
+                    context_name,
+                    fallback=link.get("asa_firewall")
+                )
 
                 firewall_node = graph.add_node(
                     "Firewall",
-                    link.get("asa_firewall", "UnknownFirewall")
+                    firewall_name
                 )
 
                 graph.add_relationship(
