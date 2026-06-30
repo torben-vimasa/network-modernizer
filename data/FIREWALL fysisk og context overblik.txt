@@ -1,0 +1,77 @@
+IT miljøer
+JTTN
+SPNS1
+SPNS2
+
+
+
+JTTN
+Fysiske firewalls
+BHASA2, ha-setup
+BHASA1, HA-setup
+
+
+BHASA2
+context
+System
+BHASA2
+
+
+BHASA1
+context
+
+System
+	BDK-mgmt
+	BDK-teknik
+	BDK-Enterprise
+	BDK-DSB
+	Site2Site-vpn
+	
+	
+SPNS2
+Firewalls
+2 x FTD cluster, et i RGDC og et i OBV
+OBV-CAT3-FW1-1
+RGDC-CAT3-FW1-1
+
+2 x ASA cluster, et i TCCW, og et i TCCE
+CONF TILGÅR
+
+
+
+SPNS1
+
+fysiske firewalls
+TCCWFw1, ha-setup
+
+context
+SPLAN-W
+CAT-2-3-FW-W
+JTL-CAT-2-3-FW-W
+
+
+fysiske firewalls
+TCCWFw2, ha-setup
+GSMR-W
+JTL-GSMR-W
+
+
+
+Fysisk firewalls OBVFw1, ha-setup
+ 
+context
+CAT-2-3-FW-E
+JTL-CAT-2-3-FW-E
+SPLAN-E
+REMOTE-VPN-E
+
+
+Fysisk firewalls OBVFw2, ha-setup
+ 
+context
+GSMR-E
+JTL-GSMR-E
+
+
+
+
