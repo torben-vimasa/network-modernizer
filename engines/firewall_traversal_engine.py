@@ -1,5 +1,6 @@
 from engines.firewall_route_engine import FirewallRouteEngine
 from engines.interface_resolution_engine import InterfaceResolutionEngine
+from engines.resolver_engine import ResolverEngine
 
 from models.firewall_traversal_result import FirewallTraversalResult
 
@@ -10,6 +11,7 @@ class FirewallTraversalEngine:
         self.twin = twin
         self.routes = routes or []
         self.interfaces = interfaces or []
+        self.resolver = ResolverEngine(twin.graph)
 
     def traverse(
         self,
@@ -67,8 +69,12 @@ class FirewallTraversalEngine:
             if interface:
                 result.egress_interface = interface["name"]
 
+            result.next_device = self.resolver.resolve_ip(
+                route_result.next_hop
+            )
+
         result.output_packet = translated_packet
         result.permitted = True
-        result.reason = "ACL + NAT + firewall route + egress completed"
+        result.reason = "ACL + NAT + firewall route + egress + next-device completed"
 
         return result

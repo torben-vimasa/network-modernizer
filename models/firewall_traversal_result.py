@@ -21,6 +21,8 @@ class FirewallTraversalResult:
     destination_after: str | None = None
 
     next_hop: str | None = None
+    next_device: dict | None = None
+
     route: str | None = None
 
     output_packet: Packet | None = None
