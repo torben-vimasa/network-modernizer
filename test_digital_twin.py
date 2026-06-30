@@ -3,6 +3,29 @@ from api.digital_twin import DigitalTwin
 
 dt = DigitalTwin()
 
+from models.route_entry import RouteEntry
+
+dt.firewall_routes = [
+    RouteEntry(
+        router="BHASA1",
+        vrf="BDK-Mgmt",
+        prefix="100.72.36.64/27",
+        next_hop="172.21.2.26",
+        protocol="static"
+    )
+]
+
+dt.firewall_interfaces = [
+    {
+        "name": "CS",
+        "subnet": "10.255.255.16/28"
+    },
+    {
+        "name": "Transit",
+        "subnet": "172.21.2.16/28"
+    }
+]
+
 result = dt.trace.trace(
 source="172.27.210.20",
 destination="SPNS2_Logpoint_100.72.36.70",

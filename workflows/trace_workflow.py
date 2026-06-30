@@ -1,3 +1,4 @@
+from engines.firewall_traversal_engine import FirewallTraversalEngine
 from engines.resolver_engine import ResolverEngine
 from engines.topology_engine import TopologyEngine
 
@@ -63,7 +64,6 @@ class TraceWorkflow:
         )
 
         explanation.add(f"ACL decision: {security.reason}")
-        packet.add_history(f"ACL decision: {security.reason}")
 
         if not security.permitted:
             return TraceResult(
@@ -78,7 +78,6 @@ class TraceWorkflow:
         translated_packet, nat_result = self.twin.nat.translate(packet)
 
         explanation.add(f"NAT decision: {nat_result.reason}")
-        packet.add_history(f"NAT decision: {nat_result.reason}")
 
         if nat_result.matched:
             explanation.add(
@@ -127,7 +126,6 @@ class TraceWorkflow:
             explanation.add(
                 f"Hop {hop_number}: {current_router} VRF {current_vrf} matched route {route['prefix']}"
             )
-
             explanation.add(
                 f"Hop {hop_number}: next hop {route['next_hop']}"
             )
@@ -180,16 +178,37 @@ class TraceWorkflow:
 
                     firewall_hops.append(fw_hop)
 
+                    traversal = FirewallTraversalEngine(
+                        twin=self.twin,
+                        routes=getattr(self.twin, "firewall_routes", []),
+                        interfaces=getattr(self.twin, "firewall_interfaces", [])
+                    ).traverse(
+                        fw_hop,
+                        Packet(
+                            source=source,
+                            destination=route_destination,
+                            protocol=protocol,
+                            service=service
+                        )
+                    )
+
                     network_hops.append(
                         NetworkHop(
                             hop_number=len(network_hops) + 1,
                             hop_type="firewall",
-                            device=resolution.get("firewall"),
-                            context=resolution.get("context"),
-                            ingress_interface=resolution.get("interface"),
+                            device=traversal.firewall,
+                            context=traversal.context,
+                            ingress_interface=traversal.ingress_interface,
+                            egress_interface=traversal.egress_interface,
                             ip=resolution.get("ip"),
                             subnet=resolution.get("subnet"),
-                            reason="Next-hop resolved to ASA interface"
+                            route=traversal.route,
+                            next_hop=traversal.next_hop,
+                            reason=traversal.reason,
+                            acl_rule=str(traversal.security.rule_id) if traversal.security and getattr(traversal.security, "rule_id", None) else None,
+                            nat_rule=traversal.nat.rule.name if traversal.nat and traversal.nat.rule else None,
+                            route_lookup=traversal.route,
+                            policy="permit" if traversal.permitted else "deny"
                         )
                     )
 
@@ -197,8 +216,15 @@ class TraceWorkflow:
                         f"Trace reached ASA interface {resolution['context']}:{resolution['interface']}"
                     )
                     explanation.add(
-                        f"Resolver: {resolution['reason']} ({resolution['confidence']} confidence)"
+                        f"Firewall traversal: {traversal.reason}"
                     )
+                    explanation.add(
+                        f"Firewall egress: {traversal.egress_interface}"
+                    )
+                    explanation.add(
+                        f"Firewall next-hop: {traversal.next_hop}"
+                    )
+
                     break
 
                 explanation.add(
