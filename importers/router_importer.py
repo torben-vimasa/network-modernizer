@@ -4,8 +4,9 @@ from loaders.asa_config_loader import ASAConfigLoader
 
 from models.asa_import_result import ASAImportResult
 
-from parsers.route_parser import RouteParser
 from parsers.bgp_parser import BGPParser
+from parsers.interface_parser import InterfaceParser
+from parsers.route_parser import RouteParser
 
 
 class RouterImporter:
@@ -16,6 +17,7 @@ class RouterImporter:
 
         self.route_parser = RouteParser()
         self.bgp_parser = BGPParser()
+        self.interface_parser = InterfaceParser()
 
     def import_router(self, filename):
 
@@ -34,6 +36,11 @@ class RouterImporter:
             lines,
             source_router=filename.stem,
             vrf="unknown"
+        )
+
+        result.interfaces = self.interface_parser.parse(
+            lines,
+            device=filename.stem
         )
 
         return result

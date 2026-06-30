@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 
 from models.bgp_route import BGPRoute
 from models.nat_rule import NATRule
+from models.network_interface import NetworkInterface
 
 
 @dataclass
@@ -11,7 +12,7 @@ class ASAImportResult:
 
     bgp_routes: list[BGPRoute] = field(default_factory=list)
 
-    interfaces: list = field(default_factory=list)
+    interfaces: list[NetworkInterface] = field(default_factory=list)
 
     objects: list = field(default_factory=list)
 
