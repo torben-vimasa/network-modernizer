@@ -11,6 +11,7 @@ class TraceReporter:
 
         self._print_network_path()
         self._print_decisions()
+        self._print_stop_reason()
         self._print_trace_log()
 
     def _print_network_path(self):
@@ -86,6 +87,28 @@ class TraceReporter:
 
                 if hop.egress_interface:
                     print(f"✓ Firewall egress: {hop.egress_interface}")
+
+    def _print_stop_reason(self):
+
+        steps = self._get_steps()
+
+        stop_lines = [
+            step for step in steps
+            if step.startswith("Trace stopped")
+            or step.startswith("Firewall next-hop resolution:")
+            or step.startswith("Firewall next-hop resolution method:")
+            or step.startswith("Firewall next-hop resolution confidence:")
+        ]
+
+        if not stop_lines:
+            return
+
+        print()
+        print("STOP REASON")
+        print("-" * 60)
+
+        for line in stop_lines:
+            print(line)
 
     def _print_security_decision(self):
 
