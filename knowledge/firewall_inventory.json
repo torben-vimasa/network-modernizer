@@ -1,0 +1,40 @@
+[
+    {
+        "name": "BHASA1",
+        "item_type": "firewall",
+        "vendor": "Cisco",
+        "platform": "ASA",
+        "site": "JTTN",
+        "environment": "IT",
+        "role": "multi-context firewall",
+        "status": "partial",
+        "confidence": "high",
+        "contexts": [
+            "BDK-Mgmt",
+            "BDK-Teknik",
+            "BDK-Enterprise",
+            "BDK-DSB",
+            "Site2Site-VPN"
+        ],
+        "warnings": [
+            "System context not yet mapped"
+        ]
+    },
+    {
+        "name": "BHASA2",
+        "item_type": "firewall",
+        "vendor": "Cisco",
+        "platform": "ASA",
+        "site": "JTTN",
+        "environment": "IT",
+        "role": "multi-context firewall",
+        "status": "partial",
+        "confidence": "medium",
+        "contexts": [
+            "System"
+        ],
+        "warnings": [
+            "Only system context known"
+        ]
+    }
+]
