@@ -19,9 +19,21 @@ routes = [
     )
 ]
 
+interfaces = [
+    {
+        "name": "CS",
+        "subnet": "10.255.255.16/28"
+    },
+    {
+        "name": "Transit",
+        "subnet": "172.21.2.16/28"
+    }
+]
+
 engine = FirewallTraversalEngine(
     twin=dt,
-    routes=routes
+    routes=routes,
+    interfaces=interfaces
 )
 
 packet = Packet(

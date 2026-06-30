@@ -1,13 +1,15 @@
 from engines.firewall_route_engine import FirewallRouteEngine
+from engines.interface_resolution_engine import InterfaceResolutionEngine
 
 from models.firewall_traversal_result import FirewallTraversalResult
 
 
 class FirewallTraversalEngine:
 
-    def __init__(self, twin, routes=None):
+    def __init__(self, twin, routes=None, interfaces=None):
         self.twin = twin
         self.routes = routes or []
+        self.interfaces = interfaces or []
 
     def traverse(
         self,
@@ -43,16 +45,26 @@ class FirewallTraversalEngine:
         result.source_after = translated_packet.source
         result.destination_after = translated_packet.destination
 
-        route_result = FirewallRouteEngine(self.routes).lookup(
+        route_result = FirewallRouteEngine(
+            self.routes
+        ).lookup(
             translated_packet.destination
         )
 
         if route_result.matched:
             result.route = route_result.route.prefix
             result.next_hop = route_result.next_hop
-            result.egress_interface = route_result.egress_interface
+
+            interface = InterfaceResolutionEngine(
+                self.interfaces
+            ).resolve_egress(
+                route_result.next_hop
+            )
+
+            if interface:
+                result.egress_interface = interface["name"]
 
         result.permitted = True
-        result.reason = "ACL + NAT + firewall route completed"
+        result.reason = "ACL + NAT + firewall route + egress completed"
 
         return result
