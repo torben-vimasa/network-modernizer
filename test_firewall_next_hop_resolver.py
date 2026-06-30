@@ -1,25 +1,13 @@
 from api.digital_twin import DigitalTwin
-from engines.resolver_engine import ResolverEngine
 
 
 dt = DigitalTwin()
 
-neighbor_map = {
-    "172.21.2.26": {
-        "router": "OBvDCPe1",
-        "vrf": "CS",
-        "interface": "Transit",
-        "confidence": "manual",
-        "reason": "Known firewall transit next-hop toward OBV"
-    }
-}
-
-resolver = ResolverEngine(
-    dt.graph,
-    neighbor_map=neighbor_map
+dt.load_router(
+    "data/router_raw/OBvDCPe1-20260424.txt"
 )
 
-result = resolver.resolve_ip("172.21.2.26")
+result = dt.trace.resolver.resolve_ip("172.21.2.26")
 
 print()
 print("Firewall Next-Hop Resolver")
@@ -30,6 +18,7 @@ print("Method    :", result.get("method"))
 print("Router    :", result.get("router"))
 print("VRF       :", result.get("vrf"))
 print("Interface :", result.get("interface"))
+print("Subnet    :", result.get("subnet"))
 print("Reason    :", result.get("reason"))
 print("Confidence:", result.get("confidence"))
 

@@ -18,15 +18,15 @@ class ResolverEngine:
 
     def resolve_ip(self, ip):
 
-        mapped = self._resolve_from_neighbor_map(ip)
-
-        if mapped:
-            return mapped
-
         direct = self._resolve_from_router_inventory(ip)
 
         if direct:
             return direct
+
+        mapped = self._resolve_from_neighbor_map(ip)
+
+        if mapped:
+            return mapped
 
         asa = self._resolve_from_asa_interface(ip)
 
@@ -54,6 +54,39 @@ class ResolverEngine:
             "references": [],
         }
 
+    def _resolve_from_router_inventory(self, ip):
+        ip_node = self.graph.find("IPAddress", ip)
+
+        if not ip_node:
+            return None
+
+        for relation, interface in self.graph.neighbors(ip_node.id):
+
+            if relation != "HAS_IP":
+                continue
+
+            if interface.type != "Interface":
+                continue
+
+            for rel2, router in self.graph.neighbors(interface.id):
+
+                if rel2 == "HAS_INTERFACE" and router.type == "Router":
+
+                    return {
+                        "resolved": True,
+                        "ip": ip,
+                        "confidence": "high",
+                        "method": "router_inventory",
+                        "router": router.name,
+                        "vrf": interface.properties.get("vrf"),
+                        "interface": interface.properties.get("name") or interface.name,
+                        "subnet": interface.properties.get("subnet"),
+                        "reason": f"IP found on interface {interface.name} on router {router.name}",
+                        "references": [],
+                    }
+
+        return None
+
     def _resolve_from_neighbor_map(self, ip):
 
         entry = self.neighbor_map.get(ip)
@@ -76,33 +109,8 @@ class ResolverEngine:
             "references": [],
         }
 
-    def _resolve_from_router_inventory(self, ip):
-        ip_node = self.graph.find("IPAddress", ip)
-
-        if not ip_node:
-            return None
-
-        for relation, interface in self.graph.neighbors(ip_node.id):
-            if relation != "HAS_IP":
-                continue
-
-            for rel2, router in self.graph.neighbors(interface.id):
-                if rel2 == "HAS_INTERFACE" and router.type == "Router":
-                    return {
-                        "resolved": True,
-                        "ip": ip,
-                        "confidence": "high",
-                        "method": "router_inventory",
-                        "router": router.name,
-                        "vrf": interface.properties.get("vrf"),
-                        "interface": interface.name,
-                        "reason": f"IP found on interface {interface.name} on router {router.name}",
-                        "references": [],
-                    }
-
-        return None
-
     def _resolve_from_asa_interface(self, ip):
+
         for node in self.graph.nodes.values():
 
             if node.type != "ASAInterface":
