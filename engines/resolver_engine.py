@@ -4,13 +4,25 @@ from pathlib import Path
 
 class ResolverEngine:
 
-    def __init__(self, graph, routes_file=Path("output/routes.json")):
+    def __init__(
+        self,
+        graph,
+        routes_file=Path("output/routes.json"),
+        neighbor_map=None
+    ):
         self.graph = graph
+        self.neighbor_map = neighbor_map or {}
 
         with open(routes_file, "r") as f:
             self.routes = json.load(f)
 
     def resolve_ip(self, ip):
+
+        mapped = self._resolve_from_neighbor_map(ip)
+
+        if mapped:
+            return mapped
+
         direct = self._resolve_from_router_inventory(ip)
 
         if direct:
@@ -39,6 +51,28 @@ class ResolverEngine:
             "confidence": "low",
             "method": "unknown",
             "reason": "IP was not found in graph or route references",
+            "references": [],
+        }
+
+    def _resolve_from_neighbor_map(self, ip):
+
+        entry = self.neighbor_map.get(ip)
+
+        if not entry:
+            return None
+
+        return {
+            "resolved": True,
+            "ip": ip,
+            "confidence": entry.get("confidence", "medium"),
+            "method": "neighbor_map",
+            "router": entry.get("router"),
+            "vrf": entry.get("vrf"),
+            "interface": entry.get("interface"),
+            "reason": entry.get(
+                "reason",
+                f"IP resolved from static neighbor map to {entry.get('router')}"
+            ),
             "references": [],
         }
 
