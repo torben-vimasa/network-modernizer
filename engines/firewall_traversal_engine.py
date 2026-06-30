@@ -36,6 +36,7 @@ class FirewallTraversalEngine:
         result.security = security
 
         if not security.permitted:
+            result.output_packet = packet
             result.reason = security.reason
             return result
 
@@ -55,6 +56,8 @@ class FirewallTraversalEngine:
             result.route = route_result.route.prefix
             result.next_hop = route_result.next_hop
 
+            translated_packet.next_hop = route_result.next_hop
+
             interface = InterfaceResolutionEngine(
                 self.interfaces
             ).resolve_egress(
@@ -64,6 +67,7 @@ class FirewallTraversalEngine:
             if interface:
                 result.egress_interface = interface["name"]
 
+        result.output_packet = translated_packet
         result.permitted = True
         result.reason = "ACL + NAT + firewall route + egress completed"
 

@@ -64,3 +64,7 @@ print("Reason   :", result.reason)
 print("Route    :", result.route)
 print("NextHop  :", result.next_hop)
 print("Egress   :", result.egress_interface)
+
+print()
+print("Output Packet")
+print(result.output_packet)

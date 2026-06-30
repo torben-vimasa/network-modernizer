@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from models.nat_result import NATResult
+from models.packet import Packet
 from models.security_result import SecurityResult
 
 
@@ -21,6 +22,8 @@ class FirewallTraversalResult:
 
     next_hop: str | None = None
     route: str | None = None
+
+    output_packet: Packet | None = None
 
     security: SecurityResult | None = None
     nat: NATResult | None = None
