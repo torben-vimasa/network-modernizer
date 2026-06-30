@@ -6,23 +6,23 @@ dt = DigitalTwin()
 from models.route_entry import RouteEntry
 
 dt.firewall_routes = [
-    RouteEntry(
-        router="BHASA1",
-        vrf="BDK-Mgmt",
-        prefix="100.72.36.64/27",
-        next_hop="172.21.2.26",
-        protocol="static"
-    )
+RouteEntry(
+    router="BHASA1",
+    vrf="BDK-Mgmt",
+    prefix="100.72.36.64/27",
+    next_hop="10.255.255.163",
+    protocol="static"
+)
 ]
 
 dt.firewall_interfaces = [
-    {
-        "name": "CS",
-        "subnet": "10.255.255.16/28"
+   {
+    "name": "CS",
+    "subnet": "10.255.255.16/28"
     },
     {
-        "name": "Transit",
-        "subnet": "172.21.2.16/28"
+    "name": "spns2-transit-jttn",
+    "subnet": "10.255.255.160/28"
     }
 ]
 

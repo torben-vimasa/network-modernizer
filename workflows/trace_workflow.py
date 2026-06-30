@@ -240,7 +240,18 @@ class TraceWorkflow:
 
                             continue
 
-                    explanation.add("Trace stopped after firewall traversal: next device not resolvable as router")
+                    if traversal.next_device:
+                        explanation.add(
+                            f"Firewall next-hop resolution: {traversal.next_device.get('reason')}"
+                        )
+                        explanation.add(
+                            f"Firewall next-hop resolution method: {traversal.next_device.get('method')}"
+                        )
+                        explanation.add(
+                            f"Firewall next-hop resolution confidence: {traversal.next_device.get('confidence')}"
+                        )
+
+                    explanation.add("Trace stopped after firewall traversal: missing next-router inventory")
                     break
 
                 explanation.add(
