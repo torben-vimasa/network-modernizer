@@ -1,4 +1,6 @@
-from models.route_result import RouteResult
+import ipaddress
+
+from models.firewall_route_result import FirewallRouteResult
 
 
 class FirewallRouteEngine:
@@ -9,23 +11,33 @@ class FirewallRouteEngine:
 
     def lookup(self, destination):
 
-        #
-        # Midlertidig version.
-        #
-        # I næste sprint bruger vi graph +
-        # longest prefix ligesom RouteEngine.
-        #
+        ip = ipaddress.ip_address(destination)
+
+        matches = []
 
         for route in self.routes:
 
-            if route.prefix == "0.0.0.0/0":
+            network = ipaddress.ip_network(route.prefix, strict=False)
 
-                return RouteResult(
-                    matched=True,
-                    hop=None
-                )
+            if ip in network:
+                matches.append((network.prefixlen, route))
 
-        return RouteResult(
-            matched=False,
-            hop=None
+        if not matches:
+            return FirewallRouteResult(
+                matched=False,
+                reason="No firewall route matched"
+            )
+
+        route = sorted(
+            matches,
+            key=lambda item: item[0],
+            reverse=True
+        )[0][1]
+
+        return FirewallRouteResult(
+            matched=True,
+            route=route,
+            next_hop=route.next_hop,
+            egress_interface=None,
+            reason="Firewall route selected by longest prefix match"
         )
