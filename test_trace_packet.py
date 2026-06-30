@@ -1,5 +1,6 @@
 from api.digital_twin import DigitalTwin
 from models.route_entry import RouteEntry
+from reporters.trace_reporter import TraceReporter
 
 
 dt = DigitalTwin()
@@ -35,39 +36,4 @@ result = dt.trace_packet(
     route_destination="100.72.36.70"
 )
 
-print()
-print("Trace Packet")
-print("=" * 60)
-
-if not result:
-    print("No result")
-else:
-    print("Network hops:", len(result.network_hops))
-
-    for hop in result.network_hops:
-        print()
-        print("Hop      :", hop.hop_number)
-        print("Type     :", hop.hop_type)
-        print("Device   :", hop.device)
-        print("Context  :", hop.context)
-        print("VRF      :", hop.vrf)
-        print("Ingress  :", hop.ingress_interface)
-        print("Egress   :", hop.egress_interface)
-        print("Route    :", hop.route)
-        print("NextHop  :", hop.next_hop)
-        print("Reason   :", hop.reason)
-
-    print()
-print("Explanation")
-print("-" * 60)
-
-explanation = result.explanation
-
-if hasattr(explanation, "messages"):
-    for line in explanation.messages:
-        print(line)
-elif hasattr(explanation, "lines"):
-    for line in explanation.lines:
-        print(line)
-else:
-    print(explanation)
+TraceReporter(result).print_console()
