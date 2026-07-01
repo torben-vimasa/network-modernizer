@@ -12,6 +12,7 @@ class TraceReporter:
         self._print_network_path()
         self._print_decisions()
         self._print_stop_reason()
+        self._print_result()
         self._print_trace_log()
 
     def _print_network_path(self):
@@ -172,3 +173,22 @@ class TraceReporter:
             return []
 
         return getattr(explanation, "steps", []) or []
+
+    def _print_result(self):
+
+        steps = self._get_steps()
+
+        reached = [
+            step for step in steps
+            if step.startswith("Destination reached")
+        ]
+
+        if not reached:
+            return
+
+        print()
+        print("RESULT")
+        print("-" * 60)
+
+        for line in reached:
+            print(f"✓ {line}")
