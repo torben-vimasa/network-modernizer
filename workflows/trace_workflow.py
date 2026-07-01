@@ -9,6 +9,7 @@ from models.network_hop import NetworkHop
 from models.packet import Packet
 from models.route_result import RouteResult
 from models.trace_result import TraceResult
+from models.traversal_state import TraversalState
 
 
 class TraceWorkflow:
@@ -100,7 +101,15 @@ class TraceWorkflow:
                 explanation.add("Trace stopped: missing router, VRF or route destination")
                 break
 
-            visit_key = f"{current_router}:{current_vrf}:{route_destination}"
+            state = TraversalState(
+                router=current_router,
+                vrf=current_vrf,
+                ingress_interface=getattr(packet, "ingress_interface", None),
+                destination=route_destination,
+                phase="routing"
+            )
+
+            visit_key = state.key()
 
             if visit_key in visited:
                 explanation.add(f"Trace stopped: loop detected at {current_router} VRF {current_vrf}")
@@ -235,6 +244,7 @@ class TraceWorkflow:
                                 current_vrf = vrf
 
                             packet = traversal.output_packet
+                            packet.ingress_interface = traversal.next_device.get("interface")
 
                             explanation.add(
                                 f"Trace continues to router {current_router} VRF {current_vrf}"
