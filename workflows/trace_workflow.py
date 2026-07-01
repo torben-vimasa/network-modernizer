@@ -10,6 +10,7 @@ from models.packet import Packet
 from models.route_result import RouteResult
 from models.trace_result import TraceResult
 from models.traversal_state import TraversalState
+from engines.traversal_engine_factory import TraversalEngineFactory
 
 
 class TraceWorkflow:
@@ -18,6 +19,7 @@ class TraceWorkflow:
         self.twin = twin
         self.topology = TopologyEngine(twin.graph)
         self.resolver = ResolverEngine(twin.graph)
+        self.factory = TraversalEngineFactory(twin)
 
     def trace(
         self,
@@ -187,11 +189,9 @@ class TraceWorkflow:
 
                     firewall_hops.append(fw_hop)
 
-                    traversal = FirewallTraversalEngine(
-                        twin=self.twin,
-                        routes=getattr(self.twin, "firewall_routes", []),
-                        interfaces=getattr(self.twin, "firewall_interfaces", [])
-                    ).traverse(
+                    engine = self.factory.get_engine("Firewall")
+
+                    traversal = engine.traverse(
                         fw_hop,
                         Packet(
                             source=source,

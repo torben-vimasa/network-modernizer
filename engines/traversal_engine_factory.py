@@ -15,6 +15,10 @@ class TraversalEngineFactory:
             return RouterTraversalEngine(self.twin)
 
         if normalized == "firewall":
-            return FirewallTraversalEngine(self.twin)
+            return FirewallTraversalEngine(
+                twin=self.twin,
+                routes=getattr(self.twin, "firewall_routes", []),
+                interfaces=getattr(self.twin, "firewall_interfaces", [])
+            )
 
         return None
