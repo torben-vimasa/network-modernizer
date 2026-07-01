@@ -30,7 +30,8 @@ class TraceWorkflow:
         router=None,
         vrf=None,
         route_destination=None,
-        max_hops=5,
+        max_hops=20,
+        stop_on_destination=True
     ):
 
         if isinstance(source, Packet):
@@ -234,11 +235,14 @@ class TraceWorkflow:
                         f"Firewall next-hop: {traversal.next_hop}"
                     )
 
-                    if getattr(traversal, "destination_reached", False):
+                    if (
+                        stop_on_destination
+                        and getattr(traversal, "destination_reached", False)
+                    ):
                         explanation.add(
                             f"Destination reached via firewall route {traversal.route}"
                         )
-                        break
+                        break   
 
                 target = getattr(traversal, "target", None)
 
