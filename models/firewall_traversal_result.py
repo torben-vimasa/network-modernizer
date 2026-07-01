@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from models.nat_result import NATResult
 from models.packet import Packet
 from models.security_result import SecurityResult
+from models.traversal_target import TraversalTarget
 
 
 @dataclass
@@ -21,7 +22,12 @@ class FirewallTraversalResult:
     destination_after: str | None = None
 
     next_hop: str | None = None
+
+    # Legacy interface (to be removed after M12)
     next_device: dict | None = None
+
+    # New generic traversal model
+    target: TraversalTarget | None = None
 
     route: str | None = None
 
@@ -32,6 +38,6 @@ class FirewallTraversalResult:
 
     permitted: bool = False
 
-    reason: str | None = None
-
     destination_reached: bool = False
+
+    reason: str | None = None
