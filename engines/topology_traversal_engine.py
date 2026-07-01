@@ -26,12 +26,15 @@ class TopologyTraversalEngine:
             if not router:
                 continue
 
+            vrf = self._find_interface_vrf(neighbor)
+
             return {
                 "found": True,
                 "method": "connected_to",
                 "context": context,
                 "interface": asa_interface.properties.get("interface") or interface_name,
                 "connected_interface": neighbor.name,
+                "connected_vrf": vrf,
                 "router": router.name,
                 "reason": f"{asa_interface.name} is connected to {router.name}:{neighbor.name}"
             }
@@ -69,5 +72,19 @@ class TopologyTraversalEngine:
 
             if relation == "HAS_INTERFACE" and neighbor.type == "Router":
                 return neighbor
+
+        return None
+
+    def _find_interface_vrf(self, interface_node):
+
+        vrf = interface_node.properties.get("vrf")
+
+        if vrf:
+            return vrf
+
+        for relation, neighbor in self.graph.neighbors(interface_node.id):
+
+            if relation == "BELONGS_TO_VRF" and neighbor.type == "VRF":
+                return neighbor.name
 
         return None

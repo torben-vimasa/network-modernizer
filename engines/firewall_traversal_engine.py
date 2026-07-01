@@ -81,7 +81,7 @@ class FirewallTraversalEngine:
                     "resolved": True,
                     "method": "topology_connected_to",
                     "router": topology_result.get("router"),
-                    "vrf": None,
+                    "vrf": topology_result.get("connected_vrf"),
                     "interface": topology_result.get("connected_interface"),
                     "reason": topology_result.get("reason"),
                     "confidence": "high",
