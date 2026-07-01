@@ -15,11 +15,7 @@ class FirewallTraversalEngine:
         self.resolver = ResolverEngine(twin.graph)
         self.topology = TopologyTraversalEngine(twin.graph)
 
-    def traverse(
-        self,
-        firewall_hop,
-        packet
-    ):
+    def traverse(self, firewall_hop, packet):
 
         result = FirewallTraversalResult()
 
@@ -61,19 +57,11 @@ class FirewallTraversalEngine:
         if route_result.matched:
             result.route = route_result.route.prefix
             result.next_hop = route_result.next_hop
-
             translated_packet.next_hop = route_result.next_hop
 
         if route_result.egress_interface:
-
             result.egress_interface = route_result.egress_interface
-            explanation = (
-                f"Using egress interface from route: "
-                f"{result.egress_interface}"
-            )
-
         else:
-
             interface = InterfaceResolutionEngine(
                 self.interfaces
             ).resolve_egress(
@@ -83,45 +71,49 @@ class FirewallTraversalEngine:
             if interface:
                 result.egress_interface = interface["name"]
 
-                topology_result = self.topology.find_connected_device(
-                    context=result.context,
-                    interface_name=result.egress_interface
-                )
+        topology_result = None
 
-            if topology_result.get("found"):
-                result.next_device = {
-                    "resolved": True,
-                    "method": "topology_connected_to",
-                    "router": topology_result.get("router"),
-                    "vrf": topology_result.get("connected_vrf"),
-                    "interface": topology_result.get("connected_interface"),
-                    "reason": topology_result.get("reason"),
-                    "confidence": "high",
-                    "references": []
-                    
-                    
-                }
-                result.output_packet = translated_packet
-                result.permitted = True
-                result.reason = "ACL + NAT + firewall route + egress + next-device completed"
-                return result
-
-            result.next_device = self.resolver.resolve_ip(
-                route_result.next_hop
+        if result.egress_interface:
+            topology_result = self.topology.find_connected_device(
+                context=result.context,
+                interface_name=result.egress_interface
             )
 
-            if (
-                result.next_device
-                and not result.next_device.get("resolved")
-                and result.egress_interface
-            ):
-                result.next_device["method"] = "unresolved_neighbor_on_egress_subnet"
-                result.next_device["reason"] = (
-                    f"Next-hop {route_result.next_hop} is reachable via firewall "
-                    f"egress interface {result.egress_interface}, but no router "
-                    f"interface owning that IP was found in the current graph"
-                )
-                result.next_device["confidence"] = "medium"
+        if topology_result and topology_result.get("found"):
+            result.next_device = {
+                "resolved": True,
+                "method": "topology_connected_to",
+                "router": topology_result.get("router"),
+                "vrf": topology_result.get("connected_vrf"),
+                "interface": topology_result.get("connected_interface"),
+                "reason": topology_result.get("reason"),
+                "confidence": "high",
+                "references": []
+            }
+
+            result.target = topology_result.get("target")
+
+            result.output_packet = translated_packet
+            result.permitted = True
+            result.reason = "ACL + NAT + firewall route + egress + next-device completed"
+            return result
+
+        result.next_device = self.resolver.resolve_ip(
+            route_result.next_hop
+        )
+
+        if (
+            result.next_device
+            and not result.next_device.get("resolved")
+            and result.egress_interface
+        ):
+            result.next_device["method"] = "unresolved_neighbor_on_egress_subnet"
+            result.next_device["reason"] = (
+                f"Next-hop {route_result.next_hop} is reachable via firewall "
+                f"egress interface {result.egress_interface}, but no router "
+                f"interface owning that IP was found in the current graph"
+            )
+            result.next_device["confidence"] = "medium"
 
         result.output_packet = translated_packet
         result.permitted = True

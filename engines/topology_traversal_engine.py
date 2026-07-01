@@ -1,3 +1,6 @@
+from models.traversal_target import TraversalTarget
+
+
 class TopologyTraversalEngine:
 
     def __init__(self, graph):
@@ -28,6 +31,21 @@ class TopologyTraversalEngine:
 
             vrf = self._find_interface_vrf(neighbor)
 
+            reason = (
+                f"{asa_interface.name} is connected to "
+                f"{router.name}:{neighbor.name}"
+            )
+
+            target = TraversalTarget(
+                device_name=router.name,
+                device_type="Router",
+                interface=neighbor.name,
+                vrf=vrf,
+                method="topology_connected_to",
+                confidence="high",
+                reason=reason
+            )
+
             return {
                 "found": True,
                 "method": "connected_to",
@@ -36,7 +54,8 @@ class TopologyTraversalEngine:
                 "connected_interface": neighbor.name,
                 "connected_vrf": vrf,
                 "router": router.name,
-                "reason": f"{asa_interface.name} is connected to {router.name}:{neighbor.name}"
+                "target": target,
+                "reason": reason
             }
 
         return {
