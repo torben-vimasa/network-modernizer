@@ -240,23 +240,36 @@ class TraceWorkflow:
                         )
                         break
 
-                    if traversal.next_device and traversal.next_device.get("resolved"):
-                        method = traversal.next_device.get("method")
+                target = getattr(traversal, "target", None)
 
-                        if method in ["router_inventory", "topology_connected_to"]:
-                            current_router = traversal.next_device.get("router")
-                            current_vrf = traversal.next_device.get("vrf")
-                            if not current_vrf:
-                                current_vrf = vrf
+                if target and target.resolved:
+                    current_router = target.device_name
+                    current_vrf = target.vrf or vrf
 
-                            packet = traversal.output_packet
-                            packet.ingress_interface = traversal.next_device.get("interface")
+                    packet = traversal.output_packet
+                    packet.ingress_interface = target.interface
 
-                            explanation.add(
-                                f"Trace continues to router {current_router} VRF {current_vrf}"
-                            )
+                    explanation.add(
+                        f"Trace continues to {target.device_type} {current_router} VRF {current_vrf}"
+                    )
 
-                            continue
+                    continue
+
+                if traversal.next_device and traversal.next_device.get("resolved"):
+                    method = traversal.next_device.get("method")
+
+                    if method in ["router_inventory", "topology_connected_to"]:
+                        current_router = traversal.next_device.get("router")
+                        current_vrf = traversal.next_device.get("vrf") or vrf
+
+                        packet = traversal.output_packet
+                        packet.ingress_interface = traversal.next_device.get("interface")
+
+                        explanation.add(
+                            f"Trace continues to router {current_router} VRF {current_vrf}"
+                        )
+
+                        continue
 
                     if traversal.next_device:
                         explanation.add(
