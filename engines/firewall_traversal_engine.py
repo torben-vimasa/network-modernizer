@@ -64,6 +64,16 @@ class FirewallTraversalEngine:
 
             translated_packet.next_hop = route_result.next_hop
 
+        if route_result.egress_interface:
+
+            result.egress_interface = route_result.egress_interface
+            explanation = (
+                f"Using egress interface from route: "
+                f"{result.egress_interface}"
+            )
+
+        else:
+
             interface = InterfaceResolutionEngine(
                 self.interfaces
             ).resolve_egress(
