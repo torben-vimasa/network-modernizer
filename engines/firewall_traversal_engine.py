@@ -53,7 +53,9 @@ class FirewallTraversalEngine:
         route_result = FirewallRouteEngine(
             self.routes
         ).lookup(
-            translated_packet.destination
+            translated_packet.destination,
+            context=result.context,
+            ingress_interface=result.ingress_interface
         )
 
         if route_result.matched:
@@ -86,6 +88,8 @@ class FirewallTraversalEngine:
                     "reason": topology_result.get("reason"),
                     "confidence": "high",
                     "references": []
+                    
+                    
                 }
                 result.output_packet = translated_packet
                 result.permitted = True

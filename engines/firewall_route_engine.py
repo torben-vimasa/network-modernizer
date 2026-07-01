@@ -6,16 +6,28 @@ from models.firewall_route_result import FirewallRouteResult
 class FirewallRouteEngine:
 
     def __init__(self, routes):
+        self.routes = routes or []
 
-        self.routes = routes
-
-    def lookup(self, destination):
+    def lookup(
+        self,
+        destination,
+        context=None,
+        ingress_interface=None
+    ):
 
         ip = ipaddress.ip_address(destination)
 
         matches = []
 
         for route in self.routes:
+
+            if context and getattr(route, "vrf", None) not in [None, context]:
+                continue
+
+            route_ingress = getattr(route, "ingress_interface", None)
+
+            if ingress_interface and route_ingress and route_ingress != ingress_interface:
+                continue
 
             network = ipaddress.ip_network(route.prefix, strict=False)
 
