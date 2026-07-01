@@ -228,9 +228,11 @@ class TraceWorkflow:
                     if traversal.next_device and traversal.next_device.get("resolved"):
                         method = traversal.next_device.get("method")
 
-                        if method == "router_inventory":
+                        if method in ["router_inventory", "topology_connected_to"]:
                             current_router = traversal.next_device.get("router")
                             current_vrf = traversal.next_device.get("vrf")
+                            if not current_vrf:
+                                current_vrf = vrf
 
                             packet = traversal.output_packet
 
