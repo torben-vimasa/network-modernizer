@@ -28,6 +28,8 @@ routes = [
 
 routes[0].ingress_interface = "CS"
 routes[1].ingress_interface = "SPNS2-TRANSIT-JTTN"
+routes[0].exit_interface = "SPNS2-TRANSIT-JTTN"
+routes[1].exit_interface = "SPNS2-TRANSIT-JTTN"
 
 interfaces = [
     {

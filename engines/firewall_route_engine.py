@@ -50,6 +50,6 @@ class FirewallRouteEngine:
             matched=True,
             route=route,
             next_hop=route.next_hop,
-            egress_interface=None,
+            egress_interface=route.exit_interface,
             reason="Firewall route selected by longest prefix match"
         )

@@ -24,6 +24,8 @@ dt.firewall_routes = [
 
 dt.firewall_routes[0].ingress_interface = "CS"
 dt.firewall_routes[1].ingress_interface = "SPNS2-TRANSIT-JTTN"
+dt.firewall_routes[0].exit_interface = "SPNS2-TRANSIT-JTTN"
+dt.firewall_routes[1].exit_interface = "SPNS2-TRANSIT-JTTN"
 
 dt.firewall_interfaces = [
     {
