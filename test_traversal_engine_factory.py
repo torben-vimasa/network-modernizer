@@ -16,6 +16,8 @@ for device_type in [
     "Switch",
     None
 ]:
+    engine = factory.get_engine(device_type)
+
     print()
     print("Device type:", device_type)
-    print("Engine     :", factory.get_engine(device_type))
+    print("Engine     :", type(engine).__name__ if engine else None)
