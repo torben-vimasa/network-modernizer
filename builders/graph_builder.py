@@ -26,6 +26,7 @@ class GraphBuilder:
         self._add_objects_and_groups(graph)
         self._add_acl_rules(graph)
         self._add_router_inventory(graph)
+        self._add_firewall_interfaces(graph)
         self._add_applications(graph)
 
         return graph
@@ -380,3 +381,70 @@ class GraphBuilder:
                     flow_node,
                     "HAS_FLOW"
                 )
+
+    def _add_firewall_interfaces(self, graph):
+        interfaces_file = self.output_dir / "firewall_interfaces.json"
+
+        if not interfaces_file.exists():
+            return
+
+        interfaces = self._load_json("firewall_interfaces.json")
+
+        for interface in interfaces:
+            firewall_node = graph.add_node(
+                "Firewall",
+                interface["device"]
+            )
+
+            interface_name = interface.get("nameif") or interface["interface"]
+
+            interface_node = graph.add_node(
+                "ASAInterface",
+                f'{interface["device"]}:{interface_name}',
+                {
+                    "device": interface["device"],
+                    "interface": interface["interface"],
+                    "nameif": interface.get("nameif"),
+                    "vlan": interface.get("vlan"),
+                    "ip": interface.get("ip"),
+                    "mask": interface.get("mask"),
+                    "description": interface.get("description"),
+                    "security_level": interface.get("security_level")
+                }
+            )
+
+            graph.add_relationship(
+                firewall_node,
+                interface_node,
+                "HAS_INTERFACE"
+            )
+
+            if interface.get("ip") and interface.get("mask"):
+                subnet = self._to_prefix(
+                    interface["ip"],
+                    interface["mask"]
+                )
+
+                subnet_node = graph.add_node(
+                    "Subnet",
+                    subnet,
+                    {
+                        "prefix": subnet
+                    }
+                )
+
+                graph.add_relationship(
+                    interface_node,
+                    subnet_node,
+                    "IN_SUBNET"
+                )
+
+    def _to_prefix(self, ip, mask):
+        import ipaddress
+
+        return str(
+            ipaddress.ip_network(
+                f"{ip}/{mask}",
+                strict=False
+        )
+    )
