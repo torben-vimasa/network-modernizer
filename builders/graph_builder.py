@@ -2,8 +2,7 @@ import json
 from pathlib import Path
 
 from graph.graph import KnowledgeGraph
-from inventory.firewall_inventory import FirewallInventory
-from inventory.inventory_loader import InventoryLoader
+from inventory.inventory import Inventory
 from parsers.acl_rule_parser import ACLRuleParser
 from parsers.router_inventory_parser import RouterInventoryParser
 
@@ -14,8 +13,7 @@ class GraphBuilder:
         self.knowledge_dir = Path("knowledge")
         self.router_parser = RouterInventoryParser()
 
-        firewalls = InventoryLoader().load_firewalls()
-        self.firewall_inventory = FirewallInventory(firewalls)
+        self.inventory = Inventory()
 
     def build_from_vrf_inventory(self):
         graph = KnowledgeGraph()
@@ -41,7 +39,7 @@ class GraphBuilder:
             return json.load(f)
 
     def _resolve_firewall_name(self, context_name, fallback=None):
-        firewall = self.firewall_inventory.find_by_context(context_name)
+        firewall = self.inventory.context(context_name)
 
         if firewall:
             return firewall.name

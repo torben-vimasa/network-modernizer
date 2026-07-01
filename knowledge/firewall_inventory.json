@@ -9,6 +9,8 @@
         "role": "multi-context firewall",
         "status": "partial",
         "confidence": "high",
+        "config_file": "data/contexts/BDK-Mgmt.txt",
+        "config_date": "2026-06-30",
         "contexts": [
             "BDK-Mgmt",
             "BDK-Teknik",
@@ -30,6 +32,8 @@
         "role": "multi-context firewall",
         "status": "partial",
         "confidence": "medium",
+        "config_file": null,
+        "config_date": null,
         "contexts": [
             "System"
         ],
