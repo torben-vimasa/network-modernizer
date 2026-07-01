@@ -9,9 +9,9 @@ class TopologyTraversalEngine:
         interface_name
     ):
 
-        asa_interface = self.graph.find(
-            "ASAInterface",
-            f"{context}:{interface_name}"
+        asa_interface = self._find_asa_interface(
+            context,
+            interface_name
         )
 
         if not asa_interface:
@@ -37,16 +37,41 @@ class TopologyTraversalEngine:
                 "found": True,
                 "method": "connected_to",
                 "context": context,
-                "interface": interface_name,
+                "interface": asa_interface.properties.get("interface") or interface_name,
                 "connected_interface": neighbor.name,
                 "router": router.name,
-                "reason": f"{context}:{interface_name} is connected to {router.name}:{neighbor.name}"
+                "reason": (
+                    f"{asa_interface.name} is connected to "
+                    f"{router.name}:{neighbor.name}"
+                )
             }
 
         return {
             "found": False,
-            "reason": f"No connected router found for {context}:{interface_name}"
+            "reason": f"No connected router found for {asa_interface.name}"
         }
+
+    def _find_asa_interface(self, context, interface_name):
+
+        exact = self.graph.find(
+            "ASAInterface",
+            f"{context}:{interface_name}"
+        )
+
+        if exact:
+            return exact
+
+        wanted = f"{context}:{interface_name}".lower()
+
+        for node in self.graph.nodes.values():
+
+            if node.type != "ASAInterface":
+                continue
+
+            if node.name.lower() == wanted:
+                return node
+
+        return None
 
     def _find_parent_router(self, interface_node):
 
