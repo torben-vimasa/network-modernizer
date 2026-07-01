@@ -234,6 +234,12 @@ class TraceWorkflow:
                         f"Firewall next-hop: {traversal.next_hop}"
                     )
 
+                    if getattr(traversal, "destination_reached", False):
+                        explanation.add(
+                            f"Destination reached via firewall route {traversal.route}"
+                        )
+                        break
+
                     if traversal.next_device and traversal.next_device.get("resolved"):
                         method = traversal.next_device.get("method")
 
@@ -297,3 +303,5 @@ class TraceWorkflow:
             network_hops=network_hops,
             explanation=explanation
         )
+
+        

@@ -57,6 +57,9 @@ class FirewallTraversalEngine:
         if route_result.matched:
             result.route = route_result.route.prefix
             result.next_hop = route_result.next_hop
+
+        if route_result.route.prefix != "0.0.0.0/0":
+            result.destination_reached = True
             translated_packet.next_hop = route_result.next_hop
 
         if route_result.egress_interface:

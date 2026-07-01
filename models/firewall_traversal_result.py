@@ -33,3 +33,5 @@ class FirewallTraversalResult:
     permitted: bool = False
 
     reason: str | None = None
+
+    destination_reached: bool = False
