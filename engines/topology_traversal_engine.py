@@ -3,16 +3,9 @@ class TopologyTraversalEngine:
     def __init__(self, graph):
         self.graph = graph
 
-    def find_connected_device(
-        self,
-        context,
-        interface_name
-    ):
+    def find_connected_device(self, context, interface_name):
 
-        asa_interface = self._find_asa_interface(
-            context,
-            interface_name
-        )
+        asa_interface = self._find_asa_interface(context, interface_name)
 
         if not asa_interface:
             return {
@@ -40,10 +33,7 @@ class TopologyTraversalEngine:
                 "interface": asa_interface.properties.get("interface") or interface_name,
                 "connected_interface": neighbor.name,
                 "router": router.name,
-                "reason": (
-                    f"{asa_interface.name} is connected to "
-                    f"{router.name}:{neighbor.name}"
-                )
+                "reason": f"{asa_interface.name} is connected to {router.name}:{neighbor.name}"
             }
 
         return {
