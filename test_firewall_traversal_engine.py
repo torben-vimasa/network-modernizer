@@ -11,13 +11,23 @@ dt = DigitalTwin()
 
 routes = [
     RouteEntry(
-    router="BHASA1",
-    vrf="BDK-Mgmt",
-    prefix="100.72.36.64/27",
-    next_hop="10.255.255.163",
-    protocol="static"
-)
+        router="BHASA1",
+        vrf="BDK-Mgmt",
+        prefix="100.72.36.64/27",
+        next_hop="10.255.255.163",
+        protocol="static"
+    ),
+    RouteEntry(
+        router="BHASA1",
+        vrf="BDK-Mgmt",
+        prefix="0.0.0.0/0",
+        next_hop="10.255.255.161",
+        protocol="static"
+    )
 ]
+
+routes[0].ingress_interface = "CS"
+routes[1].ingress_interface = "SPNS2-TRANSIT-JTTN"
 
 interfaces = [
     {

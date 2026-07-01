@@ -12,8 +12,18 @@ dt.firewall_routes = [
         prefix="100.72.36.64/27",
         next_hop="10.255.255.163",
         protocol="static"
+    ),
+    RouteEntry(
+        router="BHASA1",
+        vrf="BDK-Mgmt",
+        prefix="0.0.0.0/0",
+        next_hop="10.255.255.161",
+        protocol="static"
     )
 ]
+
+dt.firewall_routes[0].ingress_interface = "CS"
+dt.firewall_routes[1].ingress_interface = "SPNS2-TRANSIT-JTTN"
 
 dt.firewall_interfaces = [
     {
