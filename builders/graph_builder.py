@@ -27,6 +27,9 @@ class GraphBuilder:
         self._add_acl_rules(graph)
         self._add_router_inventory(graph)
         self._add_firewall_interfaces(graph)
+        self._add_router_interfaces(graph)
+        self._add_firewall_bgp(graph)
+        self._connect_bgp_neighbors(graph)
         self._connect_interfaces_by_subnet(graph)
         self._add_applications(graph)
 
@@ -486,3 +489,117 @@ class GraphBuilder:
                         a,
                         "CONNECTED_TO"
                     )
+
+
+    def _add_firewall_bgp(self, graph):
+
+        file = self.output_dir / "firewall_bgp_neighbors.json"
+
+        if not file.exists():
+            return
+
+        neighbors = self._load_json("firewall_bgp_neighbors.json")
+
+        for n in neighbors:
+
+            fw = graph.add_node(
+                "Firewall",
+                n["device"]
+            )
+
+            peer = graph.add_node(
+                "BGPNeighbor",
+                n["neighbor"],
+                {
+                    "remote_as": n["remote_as"],
+                    "description": n["description"],
+                    "local_as": n["local_as"],
+                    "route_map_in": n["route_map_in"],
+                    "route_map_out": n["route_map_out"],
+                    "prefix_list_in": n["prefix_list_in"],
+                    "prefix_list_out": n["prefix_list_out"],
+                    "activated": n["activated"]
+                }
+            )
+
+            graph.add_relationship(
+                fw,
+                peer,
+                "HAS_BGP_NEIGHBOR"
+            )
+
+    def _connect_bgp_neighbors(self, graph):
+
+        router_interfaces = []
+
+        for node in graph.nodes.values():
+
+            if node.type not in ["RouterInterface", "Interface"]:
+                continue
+
+            ip = node.properties.get("ip")
+            hsrp_ip = node.properties.get("hsrp_virtual_ip")
+
+            router_interfaces.append(
+                {
+                    "node": node,
+                    "ips": [value for value in [ip, hsrp_ip] if value]
+                }
+            )
+
+        for node in graph.nodes.values():
+
+            if node.type != "BGPNeighbor":
+                continue
+
+            peer = node.name
+
+            for entry in router_interfaces:
+
+                if peer not in entry["ips"]:
+                    continue
+
+                rif = entry["node"]
+
+                graph.add_relationship(
+                    node.id,
+                    rif.id,
+                    "PEERS_WITH"
+                )
+
+                graph.add_relationship(
+                    rif.id,
+                    node.id,
+                    "PEER_OF"
+                )
+
+    def _add_router_interfaces(self, graph):
+
+        file = self.output_dir / "router_interfaces.json"
+
+        if not file.exists():
+            return
+
+        interfaces = self._load_json("router_interfaces.json")
+
+        for i in interfaces:
+
+            router = graph.add_node(
+                "Router",
+                i["device"]
+            )
+
+            interface = graph.add_node(
+                "RouterInterface",
+                f'{i["device"]}:{i["interface"]}',
+                {
+                    "ip": i["ip"],
+                    "hsrp_virtual_ip": i["hsrp_virtual_ip"]
+                }
+            )
+
+            graph.add_relationship(
+                router,
+                interface,
+                "HAS_INTERFACE"
+            )
