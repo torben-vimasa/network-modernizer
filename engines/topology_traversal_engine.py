@@ -8,37 +8,37 @@ class TopologyTraversalEngine:
 
     def find_connected_device(self, context, interface_name):
 
-        asa_interface = self._find_asa_interface(context, interface_name)
+        interface = self._find_interface(
+            context,
+            interface_name
+        )
 
-        if not asa_interface:
+        if not interface:
             return {
                 "found": False,
-                "reason": f"ASA interface {context}:{interface_name} not found in graph"
+                "reason": f"Interface {context}:{interface_name} not found in graph"
             }
 
-        for relation, neighbor in self.graph.neighbors(asa_interface.id):
+        for relation, neighbor in self.graph.neighbors(interface.id):
 
             if relation != "CONNECTED_TO":
                 continue
 
-            if neighbor.type not in ["RouterInterface", "Interface"]:
-                continue
+            device = self._find_parent_device(neighbor)
 
-            router = self._find_parent_router(neighbor)
-
-            if not router:
+            if not device:
                 continue
 
             vrf = self._find_interface_vrf(neighbor)
 
             reason = (
-                f"{asa_interface.name} is connected to "
-                f"{router.name}:{neighbor.name}"
+                f"{interface.name} is connected to "
+                f"{device.name}:{neighbor.name}"
             )
 
             target = TraversalTarget(
-                device_name=router.name,
-                device_type="Router",
+                device_name=device.name,
+                device_type=device.type,
                 interface=neighbor.name,
                 vrf=vrf,
                 method="topology_connected_to",
@@ -50,34 +50,39 @@ class TopologyTraversalEngine:
                 "found": True,
                 "method": "connected_to",
                 "context": context,
-                "interface": asa_interface.properties.get("interface") or interface_name,
+                "interface": interface.properties.get("interface") or interface_name,
                 "connected_interface": neighbor.name,
                 "connected_vrf": vrf,
-                "router": router.name,
+                "device": device.name,
+                "device_type": device.type,
+                "router": device.name if device.type == "Router" else None,
                 "target": target,
                 "reason": reason
             }
 
         return {
             "found": False,
-            "reason": f"No connected router found for {asa_interface.name}"
+            "reason": f"No connected device found for {interface.name}"
         }
 
-    def _find_asa_interface(self, context, interface_name):
+    def _find_interface(self, context, interface_name):
 
-        exact = self.graph.find(
-            "ASAInterface",
-            f"{context}:{interface_name}"
-        )
+        candidates = [
+            ("ASAInterface", f"{context}:{interface_name}"),
+            ("RouterInterface", f"{context}:{interface_name}"),
+            ("Interface", f"{context}:{interface_name}"),
+        ]
 
-        if exact:
-            return exact
+        for node_type, name in candidates:
+            exact = self.graph.find(node_type, name)
+            if exact:
+                return exact
 
         wanted = f"{context}:{interface_name}".lower()
 
         for node in self.graph.nodes.values():
 
-            if node.type != "ASAInterface":
+            if node.type not in ["ASAInterface", "RouterInterface", "Interface"]:
                 continue
 
             if node.name.lower() == wanted:
@@ -85,11 +90,14 @@ class TopologyTraversalEngine:
 
         return None
 
-    def _find_parent_router(self, interface_node):
+    def _find_parent_device(self, interface_node):
 
         for relation, neighbor in self.graph.neighbors(interface_node.id):
 
-            if relation == "HAS_INTERFACE" and neighbor.type == "Router":
+            if relation != "HAS_INTERFACE":
+                continue
+
+            if neighbor.type in ["Router", "Firewall", "Switch"]:
                 return neighbor
 
         return None

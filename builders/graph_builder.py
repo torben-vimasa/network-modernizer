@@ -27,6 +27,7 @@ class GraphBuilder:
         self._add_acl_rules(graph)
         self._add_router_inventory(graph)
         self._add_firewall_interfaces(graph)
+        self._connect_interfaces_by_subnet(graph)
         self._add_applications(graph)
 
         return graph
@@ -448,3 +449,40 @@ class GraphBuilder:
                 strict=False
         )
     )
+
+    def _connect_interfaces_by_subnet(self, graph):
+
+        subnet_members = {}
+
+        for relationship in graph.relationships:
+
+            if relationship.type != "IN_SUBNET":
+                continue
+
+            subnet_members.setdefault(
+                relationship.target,
+                []
+            ).append(relationship.source)
+
+        for subnet, interfaces in subnet_members.items():
+
+            if len(interfaces) < 2:
+                continue
+
+            for i in range(len(interfaces)):
+                for j in range(i + 1, len(interfaces)):
+
+                    a = interfaces[i]
+                    b = interfaces[j]
+
+                    graph.add_relationship(
+                        a,
+                        b,
+                        "CONNECTED_TO"
+                    )
+
+                    graph.add_relationship(
+                        b,
+                        a,
+                        "CONNECTED_TO"
+                    )
