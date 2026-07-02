@@ -26,10 +26,13 @@ class GraphBuilder:
         self._add_objects_and_groups(graph)
         self._add_acl_rules(graph)
         self._add_router_inventory(graph)
+
         self._add_firewall_interfaces(graph)
         self._add_router_interfaces(graph)
         self._add_firewall_bgp(graph)
+        
         self._connect_bgp_neighbors(graph)
+        self._connect_bgp_to_firewall_interfaces(graph)
         self._connect_interfaces_by_subnet(graph)
         self._add_applications(graph)
 
@@ -611,3 +614,47 @@ class GraphBuilder:
                 interface,
                 "HAS_INTERFACE"
             )
+
+    def _connect_bgp_to_firewall_interfaces(self, graph):
+
+        for bgp in graph.nodes.values():
+
+            if bgp.type != "BGPNeighbor":
+                continue
+
+            peer = bgp.name
+
+            for rel in graph.relationships:
+
+                if rel.type != "IN_SUBNET":
+                    continue
+
+                source = graph.nodes.get(rel.source)
+                subnet = graph.nodes.get(rel.target)
+
+                if not source or not subnet:
+                    continue
+
+                if source.type != "ASAInterface":
+                    continue
+
+                prefix = subnet.properties.get("prefix") or subnet.name
+
+                import ipaddress
+
+                if ipaddress.ip_address(peer) not in ipaddress.ip_network(prefix):
+                    continue
+
+                graph.add_relationship(
+                    source.id,
+                    bgp.id,
+                    "HAS_BGP_NEIGHBOR",
+                    {"match_type": "same_subnet"}
+                )
+
+                graph.add_relationship(
+                    bgp.id,
+                    source.id,
+                    "BGP_ON_INTERFACE",
+                    {"match_type": "same_subnet"}
+                )
