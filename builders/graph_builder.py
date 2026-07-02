@@ -537,13 +537,11 @@ class GraphBuilder:
             if node.type not in ["RouterInterface", "Interface"]:
                 continue
 
-            ip = node.properties.get("ip")
-            hsrp_ip = node.properties.get("hsrp_virtual_ip")
-
             router_interfaces.append(
                 {
                     "node": node,
-                    "ips": [value for value in [ip, hsrp_ip] if value]
+                    "ip": node.properties.get("ip"),
+                    "hsrp_virtual_ip": node.properties.get("hsrp_virtual_ip")
                 }
             )
 
@@ -556,21 +554,31 @@ class GraphBuilder:
 
             for entry in router_interfaces:
 
-                if peer not in entry["ips"]:
-                    continue
-
                 rif = entry["node"]
+
+                match_type = None
+
+                if entry["ip"] == peer:
+                    match_type = "interface_ip"
+
+                elif entry["hsrp_virtual_ip"] == peer:
+                    match_type = "hsrp_virtual_ip"
+
+                if not match_type:
+                    continue
 
                 graph.add_relationship(
                     node.id,
                     rif.id,
-                    "PEERS_WITH"
+                    "PEERS_WITH",
+                    {"match_type": match_type}
                 )
 
                 graph.add_relationship(
                     rif.id,
                     node.id,
-                    "PEER_OF"
+                    "PEER_OF",
+                    {"match_type": match_type}
                 )
 
     def _add_router_interfaces(self, graph):

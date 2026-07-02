@@ -1,5 +1,6 @@
 from api.digital_twin import DigitalTwin
 
+
 dt = DigitalTwin()
 
 print()
@@ -21,6 +22,7 @@ for rel in dt.graph.relationships:
     print()
     print(bgp.name)
     print("   -->", rif.name)
+    print("   match:", rel.properties.get("match_type"))
 
 print()
 print("Peerings:", count)
