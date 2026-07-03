@@ -605,7 +605,9 @@ class GraphBuilder:
                 f'{i["device"]}:{i["interface"]}',
                 {
                     "ip": i["ip"],
-                    "hsrp_virtual_ip": i["hsrp_virtual_ip"]
+                    "mask": i.get("mask"),
+                    "hsrp_virtual_ip": i["hsrp_virtual_ip"],
+                    "vrf": i.get("vrf")
                 }
             )
 
@@ -614,6 +616,25 @@ class GraphBuilder:
                 interface,
                 "HAS_INTERFACE"
             )
+
+            if i["ip"] and i.get("mask"):
+                prefix = self._to_prefix_from_cidr_or_host(
+                    i["ip"],
+                    i.get("mask")
+                )
+
+                if prefix:
+                    subnet = graph.add_node(
+                        "Subnet",
+                        prefix,
+                        {"prefix": prefix}
+                    )
+
+                    graph.add_relationship(
+                        interface,
+                        subnet,
+                        "IN_SUBNET"
+                    )
 
     def _connect_bgp_to_firewall_interfaces(self, graph):
 
@@ -658,3 +679,17 @@ class GraphBuilder:
                     "BGP_ON_INTERFACE",
                     {"match_type": "same_subnet"}
                 )
+
+    def _to_prefix_from_cidr_or_host(self, ip, mask=None):
+        import ipaddress
+
+        if not ip:
+            return None
+
+        if "/" in str(ip):
+            return str(ipaddress.ip_network(ip, strict=False))
+
+        if mask:
+            return str(ipaddress.ip_network(f"{ip}/{mask}", strict=False))
+
+        return None

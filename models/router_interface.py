@@ -7,4 +7,5 @@ class RouterInterface:
     interface: str
     vrf: str | None = None
     ip: str | None = None
+    mask: str | None = None
     hsrp_virtual_ip: str | None = None
