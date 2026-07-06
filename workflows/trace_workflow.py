@@ -174,6 +174,24 @@ class TraceWorkflow:
                 route["next_hop"]
             )
 
+            transit = self.factory.get_engine("Transit")
+
+            if transit:
+                transit_result = transit.candidates_for_next_hop(
+                    route["next_hop"],
+                    exclude_device=current_router
+                )
+
+                if transit_result.get("found"):
+                    explanation.add(
+                        f"Transit subnet {transit_result['subnet']} candidates:"
+                    )
+
+                    for candidate in transit_result["candidates"]:
+                        explanation.add(
+                            f"- {candidate['device_type']} {candidate['device']} via {candidate['interface']}"
+                        )
+
             if not next_device:
                 resolution = self.resolver.resolve_ip(route["next_hop"])
 
