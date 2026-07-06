@@ -1,7 +1,7 @@
 import ipaddress
 
 
-class TransitResolutionEngine:
+class ForwardingEngine:
 
     def __init__(self, graph):
         self.graph = graph

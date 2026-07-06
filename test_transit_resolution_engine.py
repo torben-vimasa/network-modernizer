@@ -1,9 +1,9 @@
 from api.digital_twin import DigitalTwin
-from engines.transit_resolution_engine import TransitResolutionEngine
+from engines.forwarding_engine import ForwardingEngine
 
 
 dt = DigitalTwin()
-engine = TransitResolutionEngine(dt.graph)
+engine = ForwardingEngine(dt.graph)
 
 for next_hop in [
     "10.255.255.163",

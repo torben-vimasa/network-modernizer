@@ -1,6 +1,6 @@
 from engines.firewall_traversal_engine import FirewallTraversalEngine
 from engines.router_traversal_engine import RouterTraversalEngine
-from engines.transit_resolution_engine import TransitResolutionEngine
+from engines.forwarding_engine import ForwardingEngine
 
 
 class TraversalEngineFactory:
@@ -22,7 +22,7 @@ class TraversalEngineFactory:
                 interfaces=getattr(self.twin, "firewall_interfaces", [])
             )
 
-        if normalized == "transit":
-            return TransitResolutionEngine(self.twin.graph)
+        if normalized == "forwarding":
+            return ForwardingEngine(self.twin.graph)
 
         return None
