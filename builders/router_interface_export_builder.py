@@ -9,7 +9,7 @@ class RouterInterfaceExportBuilder:
 
     def __init__(
         self,
-        input_dir=Path("data/router_raw"),
+        input_dir=Path("data/router_raw_clean"),
         output_file=Path("output/router_interfaces.json")
     ):
         self.input_dir = Path(input_dir)
