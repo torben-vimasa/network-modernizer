@@ -47,6 +47,7 @@ class ForwardingEngine:
                     "interface_type": neighbor.type,
                     "subnet": subnet.name,
                     "ip": neighbor.properties.get("ip"),
+                    "hsrp_virtual_ip": neighbor.properties.get("hsrp_virtual_ip"),
                     "reason": f"{neighbor.name} is in subnet {subnet.name}"
                 }
             )
@@ -87,5 +88,84 @@ class ForwardingEngine:
 
             if neighbor.type in ["Router", "Firewall", "Switch"]:
                 return neighbor
+
+        return None
+
+    def resolve_next_hop(
+        self,
+        current_device,
+        next_hop
+    ):
+
+        result = self.candidates_for_next_hop(
+            next_hop,
+            exclude_device=current_device
+        )
+
+        if not result.get("found"):
+            return None
+
+        for candidate in result["candidates"]:
+
+            ip = candidate.get("ip")
+
+            if not ip:
+                continue
+
+            ip = ip.split("/")[0]
+
+            if ip == next_hop:
+
+                return {
+                    "resolved": True,
+                    "method": "interface_ip",
+                    "device": candidate["device"],
+                    "device_type": candidate["device_type"],
+                    "interface": candidate["interface"],
+                    "reason": (
+                        f"Next-hop {next_hop} matches interface "
+                        f"{candidate['interface']}"
+                    )
+                }
+
+        #
+        # HSRP candidates
+        #
+        hsrp_matches = []
+
+        for candidate in result["candidates"]:
+
+            hsrp = candidate.get("hsrp_virtual_ip")
+
+            if hsrp == next_hop:
+                hsrp_matches.append(candidate)
+
+        if len(hsrp_matches) == 1:
+
+            candidate = hsrp_matches[0]
+
+            return {
+                "resolved": True,
+                "method": "hsrp_virtual_ip",
+                "device": candidate["device"],
+                "device_type": candidate["device_type"],
+                "interface": candidate["interface"],
+                "reason": (
+                    f"Next-hop {next_hop} matches HSRP VIP "
+                    f"{candidate['interface']}"
+                )
+            }
+
+        if len(hsrp_matches) > 1:
+
+            return {
+                "resolved": False,
+                "method": "hsrp_virtual_ip",
+                "reason": (
+                    f"HSRP VIP {next_hop} exists on "
+                    f"{len(hsrp_matches)} routers"
+                ),
+                "candidates": hsrp_matches
+            }
 
         return None
