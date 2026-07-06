@@ -1,4 +1,6 @@
 from pathlib import Path
+import json
+from models.route_entry import RouteEntry
 
 from builders.graph_builder import GraphBuilder
 from builders.import_builder import ImportBuilder
@@ -30,6 +32,8 @@ class DigitalTwin:
 
         self.security = SecurityEngine(self.graph)
         self.route = RouteEngine()
+        self.firewall_routes = self._load_firewall_routes()
+        self.firewall_interfaces = self._load_firewall_interfaces()
         self.application = ApplicationEngine(self.graph)
 
         self.asa_importer = ASAImporter()
@@ -178,3 +182,42 @@ class DigitalTwin:
             result.traces.append(trace)
 
         return result
+
+    def _load_firewall_routes(self):
+        file = Path("output/firewall_routes.json")
+
+        if not file.exists():
+            return []
+
+        with open(file, encoding="utf-8") as f:
+            rows = json.load(f)
+
+        routes = []
+
+        for r in rows:
+            
+                route = RouteEntry(
+                    router=r.get("router") or r.get("device"),
+                    vrf=r.get("vrf") or r.get("context") or "global",
+                    prefix=r["prefix"],
+                    next_hop=r["next_hop"],
+                    protocol=r.get("protocol", "static")
+                )
+
+                route.interface = r.get("interface") or r.get("egress_interface")
+                route.egress_interface = r.get("egress_interface") or r.get("interface")
+                route.ingress_interface = r.get("ingress_interface")
+
+                routes.append(route)
+            
+
+        return routes
+
+    def _load_firewall_interfaces(self):
+        file = Path("output/firewall_interfaces.json")
+
+        if not file.exists():
+            return []
+
+        with open(file, encoding="utf-8") as f:
+            return json.load(f)

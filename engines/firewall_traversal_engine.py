@@ -54,13 +54,27 @@ class FirewallTraversalEngine:
             ingress_interface=result.ingress_interface
         )
 
-        if route_result.matched:
-            result.route = route_result.route.prefix
-            result.next_hop = route_result.next_hop
+        if (
+            not route_result
+            or not route_result.matched
+            or not route_result.route
+        ):
+            result.output_packet = translated_packet
+            result.permitted = False
+            result.reason = (
+                f"No firewall route found for "
+                f"{translated_packet.destination} "
+                f"in context {result.context}"
+            )
+            return result
+
+        result.route = route_result.route.prefix
+        result.next_hop = route_result.next_hop
+
+        translated_packet.next_hop = route_result.next_hop
 
         if route_result.route.prefix != "0.0.0.0/0":
             result.destination_reached = True
-            translated_packet.next_hop = route_result.next_hop
 
         if route_result.egress_interface:
             result.egress_interface = route_result.egress_interface
