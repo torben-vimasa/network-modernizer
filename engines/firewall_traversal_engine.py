@@ -73,9 +73,9 @@ class FirewallTraversalEngine:
 
         translated_packet.next_hop = route_result.next_hop
 
-        if route_result.route.prefix != "0.0.0.0/0":
-            result.destination_reached = True
-
+        #
+        # Resolve firewall egress interface
+        #
         if route_result.egress_interface:
             result.egress_interface = route_result.egress_interface
         else:
@@ -87,6 +87,13 @@ class FirewallTraversalEngine:
 
             if interface:
                 result.egress_interface = interface["name"]
+
+        #
+        # Destination is only reached when there is no
+        # further egress interface to traverse.
+        #
+        if route_result.route.prefix != "0.0.0.0/0":
+            result.destination_reached = not bool(result.egress_interface)
 
         topology_result = None
 
