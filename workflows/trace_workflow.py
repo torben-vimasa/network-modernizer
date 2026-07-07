@@ -185,7 +185,7 @@ class TraceWorkflow:
                     next_hop=route["next_hop"]
                 )
 
-                explanation.add(f"Forwarding debug: {forward}")
+                
 
                 if forward:
                     explanation.add(
