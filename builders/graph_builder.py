@@ -593,11 +593,30 @@ class GraphBuilder:
 
         interfaces = self._load_json("router_interfaces.json")
 
+        hsrp_states = self._load_json("hsrp_status.json")
+
+        hsrp_by_key = {
+            (
+                h.get("device"),
+                h.get("interface"),
+                h.get("virtual_ip")
+            ): h
+            for h in hsrp_states
+        }
+
         for i in interfaces:
 
             router = graph.add_node(
                 "Router",
                 i["device"]
+            )
+
+            hsrp = hsrp_by_key.get(
+                (
+                    i["device"],
+                    i["interface"],
+                    i.get("hsrp_virtual_ip")
+                )
             )
 
             interface = graph.add_node(
@@ -607,10 +626,10 @@ class GraphBuilder:
                     "ip": i["ip"],
                     "mask": i.get("mask"),
                     "hsrp_virtual_ip": i["hsrp_virtual_ip"],
+                    "hsrp_state": hsrp.get("state") if hsrp else i.get("hsrp_state"),
                     "vrf": i.get("vrf")
                 }
             )
-
             graph.add_relationship(
                 router,
                 interface,

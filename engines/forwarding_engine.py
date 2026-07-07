@@ -49,6 +49,26 @@ class ForwardingEngine:
             if candidate.get("hsrp_virtual_ip") == next_hop:
                 hsrp_matches.append(candidate)
 
+        active_matches = [
+            c for c in hsrp_matches
+            if c.get("hsrp_state") == "Active"
+        ]
+
+        if len(active_matches) == 1:
+            candidate = active_matches[0]
+
+            return ForwardingResult(
+                resolved=True,
+                method="hsrp_active",
+                device=candidate["device"],
+                device_type=candidate["device_type"],
+                interface=candidate["interface"],
+                reason=(
+                    f"Next-hop {next_hop} matches active HSRP VIP "
+                    f"{candidate['interface']}"
+                )
+            )
+
         if len(hsrp_matches) == 1:
 
             candidate = hsrp_matches[0]
@@ -129,6 +149,7 @@ class ForwardingEngine:
                     "subnet": subnet.name,
                     "ip": neighbor.properties.get("ip"),
                     "hsrp_virtual_ip": neighbor.properties.get("hsrp_virtual_ip"),
+                    "hsrp_state": neighbor.properties.get("hsrp_state"),
                     "reason": f"{neighbor.name} is in subnet {subnet.name}"
                 }
             )

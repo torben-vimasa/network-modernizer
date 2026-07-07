@@ -1,0 +1,15 @@
+
+#Router (IOS-EXS/NX-OS)
+
+show run
+show ip route vrf all
+show hsrp brief
+show cdp neighbors detail
+
+ASA
+show run
+show route
+show access-list
+show nat detail
+
+
