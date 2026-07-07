@@ -1,5 +1,6 @@
 from engines.firewall_traversal_engine import FirewallTraversalEngine
 from engines.resolver_engine import ResolverEngine
+from engines.forwarding_engine import ForwardingEngine
 from engines.topology_engine import TopologyEngine
 
 from models.explanation import Explanation
@@ -174,23 +175,52 @@ class TraceWorkflow:
                 route["next_hop"]
             )
 
-            transit = self.factory.get_engine("Transit")
+            forwarding = self.factory.get_engine("Forwarding")
 
-            if transit:
-                transit_result = transit.candidates_for_next_hop(
-                    route["next_hop"],
-                    exclude_device=current_router
+            forward = None
+
+            if forwarding:
+                forward = forwarding.resolve_next_hop(
+                    current_device=current_router,
+                    next_hop=route["next_hop"]
                 )
 
-                if transit_result.get("found"):
+                explanation.add(f"Forwarding debug: {forward}")
+
+                if forward:
                     explanation.add(
-                        f"Transit subnet {transit_result['subnet']} candidates:"
+                        f"Forwarding: {forward.reason}"
                     )
 
-                    for candidate in transit_result["candidates"]:
-                        explanation.add(
-                            f"- {candidate['device_type']} {candidate['device']} via {candidate['interface']}"
-                        )
+            if not next_device and forward and forward.resolved:
+                if forward.device_type == "Firewall":
+
+                    resolution = {
+                        "resolved": True,
+                        "method": "asa_interface",
+                        "firewall": forward.device,
+                        "context": "BDK-Mgmt",
+                        "interface": forward.interface.split(":", 1)[1],
+                        "ip": route["next_hop"],
+                        "subnet": None
+                    }
+                else:
+                    if forward.device_type == "Context":
+                        resolution = {
+                            "resolved": True,
+                            "method": "asa_interface",
+                            "firewall": forward.device,
+                            "context": forward.device,
+                            "interface": forward.interface.split(":", 1)[1],
+                            "ip": route["next_hop"],
+                            "subnet": None
+                        }
+                    else:
+                        next_device = {
+                            "router": forward.device,
+                            "vrf": current_vrf,
+                            "interface": forward.interface
+                        }
 
             if not next_device:
                 resolution = self.resolver.resolve_ip(route["next_hop"])

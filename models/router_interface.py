@@ -9,3 +9,4 @@ class RouterInterface:
     ip: str | None = None
     mask: str | None = None
     hsrp_virtual_ip: str | None = None
+    hsrp_state: str | None = None

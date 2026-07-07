@@ -45,6 +45,18 @@ class RouterInterfaceParser:
                 if len(parts) == 2 and parts[1].count(".") == 3:
                     current.hsrp_virtual_ip = parts[1]
 
+            elif "Active router is local" in stripped:
+                current.hsrp_state = "Active"
+
+            elif "Standby router is local" in stripped:
+                current.hsrp_state = "Standby"
+
+            elif "State is Active" in stripped:
+                current.hsrp_state = "Active"
+
+            elif "State is Standby" in stripped:
+                current.hsrp_state = "Standby"
+
             elif stripped.startswith("vrf member "):
                 current.vrf = stripped.split(maxsplit=2)[2]
 
