@@ -53,3 +53,56 @@ class RouteParser:
             next_hop=next_hop,
             protocol="static"
         )
+
+    def parse_route_table(self, router_name, lines):
+        routes = []
+        current_vrf = None
+        current_prefix = None
+
+        for raw_line in lines:
+            line = raw_line.strip()
+
+            if not line:
+                continue
+
+            vrf_match = re.match(
+                r'^IP Route Table for VRF "(.+)"',
+                line
+            )
+
+            if vrf_match:
+                current_vrf = vrf_match.group(1)
+                current_prefix = None
+                continue
+
+            prefix_match = re.match(
+                r"^(\d+\.\d+\.\d+\.\d+/\d+),",
+                line
+            )
+
+            if prefix_match:
+                current_prefix = prefix_match.group(1)
+                continue
+
+            via_match = re.match(
+                r"^\*?via\s+(\d+\.\d+\.\d+\.\d+).*(bgp|static|direct|local|isis|ospf)",
+                line
+            )
+
+            if current_vrf and current_prefix and via_match:
+                next_hop = via_match.group(1)
+                protocol = via_match.group(2)
+
+                routes.append(
+                    RouteEntry(
+                        router=router_name,
+                        vrf=current_vrf,
+                        prefix=current_prefix,
+                        next_hop=next_hop,
+                        protocol=protocol
+                    )
+                )
+
+                current_prefix = None
+
+        return routes

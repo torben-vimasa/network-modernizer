@@ -48,7 +48,7 @@ class FirewallRouteParser:
                     prefix=f"{network}/{mask}",
                     next_hop=next_hop,
                     protocol="static",
-                    interface=interface,
+                    exit_interface=interface,
                     metric=metric
                 )
             )

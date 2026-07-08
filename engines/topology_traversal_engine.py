@@ -100,6 +100,13 @@ class TopologyTraversalEngine:
             if neighbor.type in ["Router", "Firewall", "Switch"]:
                 return neighbor
 
+            if neighbor.type == "Context":
+
+                for rel2, fw in self.graph.neighbors(neighbor.id):
+
+                    if rel2 == "HAS_CONTEXT" and fw.type == "Firewall":
+                        return fw
+
         return None
 
     def _find_interface_vrf(self, interface_node):
