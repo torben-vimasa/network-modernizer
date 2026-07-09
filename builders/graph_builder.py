@@ -410,11 +410,13 @@ class GraphBuilder:
                 f'{interface["device"]}:{interface_name}',
                 {
                     "device": interface["device"],
+                    "context": interface.get("context") or interface["device"],
                     "interface": interface["interface"],
                     "nameif": interface.get("nameif"),
                     "vlan": interface.get("vlan"),
                     "ip": interface.get("ip"),
                     "mask": interface.get("mask"),
+                    "standby_ip": interface.get("standby_ip"),
                     "description": interface.get("description"),
                     "security_level": interface.get("security_level")
                 }

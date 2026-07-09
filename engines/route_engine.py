@@ -96,8 +96,13 @@ class RouteEngine:
         if not matches:
             return None
 
-        matches.sort(key=lambda item: item[0], reverse=True)
-        return matches[0][1]
+        matches.sort(
+            key=lambda item: (
+                -item[0],                          # længste prefix
+                item[1]["admin_distance"],         # laveste AD
+                item[1]["metric"]                  # laveste metric
+            )
+        )
 
     def explain(self, router, vrf, destination):
 
