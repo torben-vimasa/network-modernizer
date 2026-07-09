@@ -21,15 +21,12 @@ class RouterInterfaceExportBuilder:
         all_interfaces = []
 
         for file in sorted(self.input_dir.glob("*.txt")):
-
             device = file.stem.split("-")[0]
-            context = file.stem
 
             with open(file, encoding="utf-8", errors="ignore") as f:
                 interfaces = self.parser.parse(
                     f.readlines(),
-                    device=device,
-                    context=context
+                    device=device
                 )
 
             all_interfaces.extend(interfaces)
