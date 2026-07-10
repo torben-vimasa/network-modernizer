@@ -1,0 +1,30 @@
+[
+  {
+    "name": "TPS Logging",
+    "source": "172.27.210.20",
+    "destination": "100.72.36.70",
+    "protocol": "tcp",
+    "service": "Windows_Logging"
+  },
+  {
+    "name": "10.3.112.195 to 10.150.87.5 HTTPS",
+    "source": "10.3.112.195",
+    "destination": "10.150.87.5",
+    "protocol": "tcp",
+    "service": "HTTPS"
+  },
+  {
+    "name": "10.3.112.195 to Internet DNS",
+    "source": "10.3.112.195",
+    "destination": "8.8.8.8",
+    "protocol": "ip",
+    "service": "Any"
+  },
+  {
+    "name": "10.110.6.131 to 100.73.35.15 TACACS",
+    "source": "10.110.6.131",
+    "destination": "100.73.35.15",
+    "protocol": "tcp",
+    "service": "TACACS"
+  }
+]

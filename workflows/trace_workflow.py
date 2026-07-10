@@ -1,7 +1,6 @@
-from engines.firewall_traversal_engine import FirewallTraversalEngine
 from engines.resolver_engine import ResolverEngine
-from engines.forwarding_engine import ForwardingEngine
 from engines.topology_engine import TopologyEngine
+from engines.traversal_engine_factory import TraversalEngineFactory
 
 from models.explanation import Explanation
 from models.firewall_hop import FirewallHop
@@ -11,7 +10,6 @@ from models.packet import Packet
 from models.route_result import RouteResult
 from models.trace_result import TraceResult
 from models.traversal_state import TraversalState
-from engines.traversal_engine_factory import TraversalEngineFactory
 
 
 class TraceWorkflow:
@@ -35,32 +33,45 @@ class TraceWorkflow:
         stop_on_destination=True
     ):
 
-        if isinstance(source, Packet):
-            packet = source
-            source = packet.source
-            destination = packet.destination
-            protocol = packet.protocol
-            service = packet.service
-            router = packet.current_router or router
-            vrf = packet.current_vrf or vrf
-            route_destination = route_destination or packet.destination
-        else:
-            packet = Packet(
-                source=source,
-                destination=route_destination or destination,
-                protocol=protocol,
-                service=service,
-                current_router=router,
-                current_vrf=vrf
-            )
+        packet = self._build_packet(
+            source=source,
+            destination=destination,
+            protocol=protocol,
+            service=service,
+            router=router,
+            vrf=vrf,
+            route_destination=route_destination
+        )
+
+        source = packet.source
+        destination = packet.destination
+        protocol = packet.protocol
+        service = packet.service
+
+        router = packet.current_router or router
+        vrf = packet.current_vrf or vrf
+        route_destination = route_destination or packet.destination
 
         explanation = Explanation()
         packet.add_history("Trace started")
 
-        hops = []
-        firewall_hops = []
-        network_hops = []
+        state = TraversalState(
+            router=router,
+            vrf=vrf,
+            destination=route_destination,
+            ingress_interface=getattr(
+                packet,
+                "ingress_interface",
+                None
+            ),
+            phase="routing",
+            packet=packet
+        )
 
+        #
+        # Existing global security evaluation.
+        # This remains unchanged during the TraceState refactor.
+        #
         security = self.twin.security.is_permitted(
             source,
             destination,
@@ -68,298 +79,411 @@ class TraceWorkflow:
             service
         )
 
-        explanation.add(f"ACL decision: {security.reason}")
+        state.security = security
+
+        explanation.add(
+            f"ACL decision: {security.reason}"
+        )
 
         if not security.permitted:
-            return TraceResult(
-                security=security,
-                route=None,
-                hops=hops,
-                firewall_hops=firewall_hops,
-                network_hops=network_hops,
+            state.mark_finished(
+                reason=security.reason
+            )
+
+            return self._build_result(
+                state=state,
                 explanation=explanation
             )
 
-        translated_packet, nat_result = self.twin.nat.translate(packet)
+        #
+        # Existing global NAT evaluation.
+        # This also remains unchanged during this refactor.
+        #
+        translated_packet, nat_result = self.twin.nat.translate(
+            packet
+        )
 
-        explanation.add(f"NAT decision: {nat_result.reason}")
+        explanation.add(
+            f"NAT decision: {nat_result.reason}"
+        )
 
         if nat_result.matched:
             explanation.add(
-                f"NAT source: {nat_result.source_before} -> {nat_result.source_after}"
+                f"NAT source: "
+                f"{nat_result.source_before} -> "
+                f"{nat_result.source_after}"
             )
+
             explanation.add(
-                f"NAT destination: {nat_result.destination_before} -> {nat_result.destination_after}"
+                f"NAT destination: "
+                f"{nat_result.destination_before} -> "
+                f"{nat_result.destination_after}"
             )
 
-        packet = translated_packet
-
-        current_router = router
-        current_vrf = vrf
-        last_route_result = None
-        visited = set()
+        state.packet = translated_packet
 
         for hop_number in range(1, max_hops + 1):
 
-            if not current_router or not current_vrf or not route_destination:
-                explanation.add("Trace stopped: missing router, VRF or route destination")
+            if state.finished:
                 break
 
-            state = TraversalState(
-                router=current_router,
-                vrf=current_vrf,
-                ingress_interface=getattr(packet, "ingress_interface", None),
-                destination=route_destination,
-                phase="routing"
+            if not state.has_valid_routing_start():
+                reason = (
+                    "Trace stopped: missing router, "
+                    "VRF or route destination"
+                )
+
+                explanation.add(reason)
+                state.mark_finished(reason)
+                break
+
+            state.ingress_interface = getattr(
+                state.packet,
+                "ingress_interface",
+                None
             )
 
             visit_key = state.key()
 
-            if visit_key in visited:
-                explanation.add(f"Trace stopped: loop detected at {current_router} VRF {current_vrf}")
+            if visit_key in state.visited:
+                reason = (
+                    f"Trace stopped: loop detected at "
+                    f"{state.router} VRF {state.vrf}"
+                )
+
+                explanation.add(reason)
+                state.mark_finished(reason)
                 break
 
-            visited.add(visit_key)
+            state.visited.add(visit_key)
 
-            route = self.twin.route.lookup(
-                current_router,
-                current_vrf,
-                route_destination
+            route, route_result = self._trace_router(
+                current_router=state.router,
+                current_vrf=state.vrf,
+                route_destination=state.destination,
+                hops=state.hops,
+                network_hops=state.network_hops,
+                explanation=explanation
             )
+
+            state.last_route_result = route_result
 
             if not route:
-                explanation.add(f"No route matched on {current_router} VRF {current_vrf}")
-
-                last_route_result = RouteResult(
-                    matched=False,
-                    hop=None
+                state.mark_finished(
+                    reason=(
+                        f"No route matched on "
+                        f"{state.router} VRF {state.vrf}"
+                    )
                 )
                 break
 
-            explanation.add(
-                f"Hop {hop_number}: {current_router} VRF {current_vrf} matched route {route['prefix']}"
-            )
-            explanation.add(
-                f"Hop {hop_number}: next hop {route['next_hop']}"
-            )
+            state.packet.next_hop = route["next_hop"]
 
-            packet.next_hop = route["next_hop"]
-
-            hop = Hop(
-                router=current_router,
-                vrf=current_vrf,
-                route=route["prefix"],
-                next_hop=route["next_hop"]
+            next_device, resolution = self._resolve_router_next_hop(
+                current_router=state.router,
+                current_vrf=state.vrf,
+                next_hop=route["next_hop"],
+                explanation=explanation
             )
 
-            hops.append(hop)
+            if self._is_firewall_resolution(resolution):
 
-            network_hops.append(
-                NetworkHop(
-                    hop_number=len(network_hops) + 1,
-                    hop_type="router",
-                    device=current_router,
-                    vrf=current_vrf,
-                    route=route["prefix"],
-                    next_hop=route["next_hop"],
-                    reason="Matched route"
-                )
-            )
-
-            last_route_result = RouteResult(
-                matched=True,
-                hop=hop
-            )
-
-            next_device = self.topology.resolve_router(route["next_hop"])
-
-            forwarding = self.factory.get_engine("Forwarding")
-            forward = None
-            resolution = None
-
-            if forwarding:
-                forward = forwarding.resolve_next_hop(
-                    current_device=current_router,
-                    next_hop=route["next_hop"]
+                traversal = self._trace_firewall(
+                    resolution=resolution,
+                    source=source,
+                    route_destination=state.destination,
+                    protocol=protocol,
+                    service=service,
+                    firewall_hops=state.firewall_hops,
+                    network_hops=state.network_hops,
+                    explanation=explanation
                 )
 
-                if forward:
-                    explanation.add(f"Forwarding: {forward.reason}")
-
-            if not next_device and forward and forward.resolved:
-
-                if forward.device_type in ["Firewall", "Context"]:
-
-                    node = self.twin.graph.find(
-                        "ASAInterface",
-                        forward.interface
-                    )
-
-                    context = None
-
-                    if node:
-                        context = (
-                            node.properties.get("context")
-                            or node.properties.get("device")
-                        )
-
-                    resolution = {
-                        "resolved": True,
-                        "method": "asa_interface",
-                        "firewall": forward.device,
-                        "context": context,
-                        "interface": forward.interface.split(":", 1)[1],
-                        "ip": route["next_hop"],
-                        "subnet": None,
-                        "reason": forward.reason,
-                        "confidence": "high"
-                    }
-
-                else:
-                    next_device = {
-                        "router": forward.device,
-                        "vrf": current_vrf,
-                        "interface": forward.interface
-                    }
-
-            if not next_device and not resolution:
-                resolution = self.resolver.resolve_ip(route["next_hop"])
-
-            if resolution and resolution.get("resolved") and resolution.get("method") == "asa_interface":
-
-                fw_hop = FirewallHop(
-                    firewall=resolution.get("firewall"),
-                    context=resolution.get("context"),
-                    ingress_interface=resolution.get("interface"),
-                    ip=resolution.get("ip"),
-                    subnet=resolution.get("subnet"),
-                    reason="Next-hop resolved to ASA interface"
+                state.security = (
+                    traversal.security
+                    or state.security
                 )
 
-                firewall_hops.append(fw_hop)
-
-                engine = self.factory.get_engine("Firewall")
-
-                traversal = engine.traverse(
-                    fw_hop,
-                    Packet(
-                        source=source,
-                        destination=route_destination,
-                        protocol=protocol,
-                        service=service
-                    )
-                )
-
-                network_hops.append(
-                    NetworkHop(
-                        hop_number=len(network_hops) + 1,
-                        hop_type="firewall",
-                        device=traversal.firewall,
-                        context=traversal.context,
-                        ingress_interface=traversal.ingress_interface,
-                        egress_interface=traversal.egress_interface,
-                        ip=resolution.get("ip"),
-                        subnet=resolution.get("subnet"),
-                        route=traversal.route,
-                        next_hop=traversal.next_hop,
-                        reason=traversal.reason,
-                        acl_rule=str(traversal.security.rule_id) if traversal.security and getattr(traversal.security, "rule_id", None) else None,
-                        nat_rule=traversal.nat.rule.name if traversal.nat and traversal.nat.rule else None,
-                        route_lookup=traversal.route,
-                        policy="permit" if traversal.permitted else "deny"
-                    )
-                )
-
-                explanation.add(
-                    f"Trace reached ASA interface {resolution['context']}:{resolution['interface']}"
-                )
-                explanation.add(f"Firewall traversal: {traversal.reason}")
-                explanation.add(f"Firewall egress: {traversal.egress_interface}")
-                explanation.add(f"Firewall next-hop: {traversal.next_hop}")
+                if traversal.output_packet:
+                    state.packet = traversal.output_packet
 
                 if (
                     stop_on_destination
-                    and getattr(traversal, "destination_reached", False)
+                    and getattr(
+                        traversal,
+                        "destination_reached",
+                        False
+                    )
                 ):
-                    explanation.add(
-                        f"Destination reached via firewall route {traversal.route}"
+                    reason = (
+                        f"Destination reached via firewall "
+                        f"route {traversal.route}"
+                    )
+
+                    explanation.add(reason)
+
+                    state.mark_finished(
+                        reason=reason,
+                        destination_reached=True
                     )
                     break
 
-                target = getattr(traversal, "target", None)
-
-                if target and target.resolved:
-                    current_router = target.device_name
-                    current_vrf = target.vrf or vrf
-
-                    packet = traversal.output_packet
-                    packet.ingress_interface = target.interface
-
-                    explanation.add(
-                        f"Trace continues to {target.device_type} {current_router} VRF {current_vrf}"
-                    )
-
+                if self._continue_from_firewall_target(
+                    state=state,
+                    traversal=traversal,
+                    fallback_vrf=vrf,
+                    explanation=explanation
+                ):
                     continue
 
-                if traversal.next_device and traversal.next_device.get("resolved"):
-                    method = traversal.next_device.get("method")
-
-                    if method in ["router_inventory", "topology_connected_to"]:
-                        current_router = traversal.next_device.get("router")
-                        current_vrf = traversal.next_device.get("vrf") or vrf
-
-                        packet = traversal.output_packet
-                        packet.ingress_interface = traversal.next_device.get("interface")
-
-                        explanation.add(
-                            f"Trace continues to router {current_router} VRF {current_vrf}"
-                        )
-
-                        continue
-
-                    explanation.add(
-                        f"Firewall next-hop resolution: {traversal.next_device.get('reason')}"
-                    )
-                    explanation.add(
-                        f"Firewall next-hop resolution method: {traversal.next_device.get('method')}"
-                    )
-                    explanation.add(
-                        f"Firewall next-hop resolution confidence: {traversal.next_device.get('confidence')}"
-                    )
-
-                explanation.add(
-                    "Trace stopped after firewall traversal: missing next-router inventory"
+                reason = (
+                    "Trace stopped after firewall traversal: "
+                    "missing next-router inventory"
                 )
+
+                explanation.add(reason)
+                state.mark_finished(reason)
                 break
 
             if next_device:
-                explanation.add(
-                    f"Hop {hop_number}: next hop resolved to {next_device['router']} VRF {next_device['vrf']}"
+                self._continue_to_router(
+                    state=state,
+                    next_device=next_device,
+                    hop_number=hop_number,
+                    explanation=explanation
                 )
-
-                current_router = next_device["router"]
-                current_vrf = next_device["vrf"]
-
                 continue
 
-            explanation.add(
-                f"Trace stopped: next hop {route['next_hop']} could not be directly resolved"
+            reason = (
+                f"Trace stopped: next hop "
+                f"{route['next_hop']} could not be "
+                f"directly resolved"
             )
+
+            explanation.add(reason)
 
             if resolution:
                 explanation.add(
-                    f"Resolver: {resolution.get('reason')} ({resolution.get('confidence')} confidence)"
+                    f"Resolver: "
+                    f"{resolution.get('reason')} "
+                    f"({resolution.get('confidence')} confidence)"
                 )
 
+            state.mark_finished(reason)
             break
 
-        return TraceResult(
-            security=security,
-            route=last_route_result,
-            hops=hops,
-            firewall_hops=firewall_hops,
-            network_hops=network_hops,
+        return self._build_result(
+            state=state,
             explanation=explanation
+        )
+
+    def _build_packet(
+        self,
+        source,
+        destination,
+        protocol,
+        service,
+        router,
+        vrf,
+        route_destination
+    ):
+
+        if isinstance(source, Packet):
+            packet = source
+
+            if packet.current_router is None:
+                packet.current_router = router
+
+            if packet.current_vrf is None:
+                packet.current_vrf = vrf
+
+            return packet
+
+        return Packet(
+            source=source,
+            destination=route_destination or destination,
+            protocol=protocol,
+            service=service,
+            current_router=router,
+            current_vrf=vrf
+        )
+
+    def _trace_router(
+        self,
+        current_router,
+        current_vrf,
+        route_destination,
+        hops,
+        network_hops,
+        explanation
+    ):
+
+        route = self.twin.route.lookup(
+            current_router,
+            current_vrf,
+            route_destination
+        )
+
+        if not route:
+            explanation.add(
+                f"No route matched on "
+                f"{current_router} VRF {current_vrf}"
+            )
+
+            return None, RouteResult(
+                matched=False,
+                hop=None
+            )
+
+        hop_number = len(hops) + 1
+
+        explanation.add(
+            f"Hop {hop_number}: "
+            f"{current_router} VRF {current_vrf} "
+            f"matched route {route['prefix']}"
+        )
+
+        explanation.add(
+            f"Hop {hop_number}: "
+            f"next hop {route['next_hop']}"
+        )
+
+        hop = Hop(
+            router=current_router,
+            vrf=current_vrf,
+            route=route["prefix"],
+            next_hop=route["next_hop"]
+        )
+
+        hops.append(hop)
+
+        network_hops.append(
+            NetworkHop(
+                hop_number=len(network_hops) + 1,
+                hop_type="router",
+                device=current_router,
+                vrf=current_vrf,
+                route=route["prefix"],
+                next_hop=route["next_hop"],
+                reason="Matched route"
+            )
+        )
+
+        return route, RouteResult(
+            matched=True,
+            hop=hop
+        )
+
+    def _resolve_router_next_hop(
+        self,
+        current_router,
+        current_vrf,
+        next_hop,
+        explanation
+    ):
+
+        next_device = self.topology.resolve_router(
+            next_hop
+        )
+
+        forwarding = self.factory.get_engine(
+            "Forwarding"
+        )
+
+        forward = None
+        resolution = None
+
+        if forwarding:
+            forward = forwarding.resolve_next_hop(
+                current_device=current_router,
+                next_hop=next_hop
+            )
+
+            if forward:
+                explanation.add(
+                    f"Forwarding: {forward.reason}"
+                )
+
+        if (
+            not next_device
+            and forward
+            and forward.resolved
+        ):
+
+            if forward.device_type in [
+                "Firewall",
+                "Context"
+            ]:
+                resolution = (
+                    self._resolution_from_forwarding(
+                        forward=forward,
+                        next_hop=next_hop
+                    )
+                )
+
+            else:
+                next_device = {
+                    "router": forward.device,
+                    "vrf": current_vrf,
+                    "interface": forward.interface
+                }
+
+        if not next_device and not resolution:
+            resolution = self.resolver.resolve_ip(
+                next_hop
+            )
+
+        return next_device, resolution
+
+    def _resolution_from_forwarding(
+        self,
+        forward,
+        next_hop
+    ):
+
+        node = self.twin.graph.find(
+            "ASAInterface",
+            forward.interface
+        )
+
+        context = None
+
+        if node:
+            context = (
+                node.properties.get("context")
+                or node.properties.get("device")
+            )
+
+        interface_name = forward.interface
+
+        if ":" in interface_name:
+            interface_name = interface_name.split(
+                ":",
+                1
+            )[1]
+
+        return {
+            "resolved": True,
+            "method": "asa_interface",
+            "firewall": forward.device,
+            "context": context,
+            "interface": interface_name,
+            "ip": next_hop,
+            "subnet": None,
+            "reason": forward.reason,
+            "confidence": "high"
+        }
+
+    def _is_firewall_resolution(
+        self,
+        resolution
+    ):
+
+        return bool(
+            resolution
+            and resolution.get("resolved")
+            and resolution.get("method")
+            == "asa_interface"
         )
 
     def _trace_firewall(
@@ -385,7 +509,9 @@ class TraceWorkflow:
 
         firewall_hops.append(fw_hop)
 
-        engine = self.factory.get_engine("Firewall")
+        engine = self.factory.get_engine(
+            "Firewall"
+        )
 
         traversal = engine.traverse(
             fw_hop,
@@ -397,31 +523,191 @@ class TraceWorkflow:
             )
         )
 
+        security_rule_id = None
+
+        if (
+            traversal.security
+            and getattr(
+                traversal.security,
+                "rule_id",
+                None
+            )
+        ):
+            security_rule_id = str(
+                traversal.security.rule_id
+            )
+
+        nat_rule_name = None
+
+        if (
+            traversal.nat
+            and traversal.nat.rule
+        ):
+            nat_rule_name = (
+                traversal.nat.rule.name
+            )
+
         network_hops.append(
             NetworkHop(
                 hop_number=len(network_hops) + 1,
                 hop_type="firewall",
                 device=traversal.firewall,
                 context=traversal.context,
-                ingress_interface=traversal.ingress_interface,
-                egress_interface=traversal.egress_interface,
+                ingress_interface=(
+                    traversal.ingress_interface
+                ),
+                egress_interface=(
+                    traversal.egress_interface
+                ),
                 ip=resolution.get("ip"),
                 subnet=resolution.get("subnet"),
                 route=traversal.route,
                 next_hop=traversal.next_hop,
                 reason=traversal.reason,
-                acl_rule=str(traversal.security.rule_id) if traversal.security and getattr(traversal.security, "rule_id", None) else None,
-                nat_rule=traversal.nat.rule.name if traversal.nat and traversal.nat.rule else None,
+                acl_rule=security_rule_id,
+                nat_rule=nat_rule_name,
                 route_lookup=traversal.route,
-                policy="permit" if traversal.permitted else "deny"
+                policy=(
+                    "permit"
+                    if traversal.permitted
+                    else "deny"
+                )
             )
         )
 
         explanation.add(
-            f"Trace reached ASA interface {resolution['context']}:{resolution['interface']}"
+            f"Trace reached ASA interface "
+            f"{resolution.get('context')}:"
+            f"{resolution.get('interface')}"
         )
-        explanation.add(f"Firewall traversal: {traversal.reason}")
-        explanation.add(f"Firewall egress: {traversal.egress_interface}")
-        explanation.add(f"Firewall next-hop: {traversal.next_hop}")
+
+        explanation.add(
+            f"Firewall traversal: "
+            f"{traversal.reason}"
+        )
+
+        explanation.add(
+            f"Firewall egress: "
+            f"{traversal.egress_interface}"
+        )
+
+        explanation.add(
+            f"Firewall next-hop: "
+            f"{traversal.next_hop}"
+        )
 
         return traversal
+
+    def _continue_from_firewall_target(
+        self,
+        state,
+        traversal,
+        fallback_vrf,
+        explanation
+    ):
+
+        target = getattr(
+            traversal,
+            "target",
+            None
+        )
+
+        if target and target.resolved:
+            state.set_router_target(
+                router=target.device_name,
+                vrf=target.vrf or fallback_vrf,
+                ingress_interface=target.interface
+            )
+
+            explanation.add(
+                f"Trace continues to "
+                f"{target.device_type} "
+                f"{state.router} VRF {state.vrf}"
+            )
+
+            return True
+
+        next_device = traversal.next_device
+
+        if (
+            next_device
+            and next_device.get("resolved")
+        ):
+            method = next_device.get("method")
+
+            if method in [
+                "router_inventory",
+                "topology_connected_to"
+            ]:
+                state.set_router_target(
+                    router=next_device.get("router"),
+                    vrf=(
+                        next_device.get("vrf")
+                        or fallback_vrf
+                    ),
+                    ingress_interface=(
+                        next_device.get("interface")
+                    )
+                )
+
+                explanation.add(
+                    f"Trace continues to router "
+                    f"{state.router} VRF {state.vrf}"
+                )
+
+                return True
+
+            explanation.add(
+                f"Firewall next-hop resolution: "
+                f"{next_device.get('reason')}"
+            )
+
+            explanation.add(
+                f"Firewall next-hop resolution "
+                f"method: {method}"
+            )
+
+            explanation.add(
+                f"Firewall next-hop resolution "
+                f"confidence: "
+                f"{next_device.get('confidence')}"
+            )
+
+        return False
+
+    def _continue_to_router(
+        self,
+        state,
+        next_device,
+        hop_number,
+        explanation
+    ):
+
+        explanation.add(
+            f"Hop {hop_number}: next hop resolved "
+            f"to {next_device['router']} "
+            f"VRF {next_device['vrf']}"
+        )
+
+        state.set_router_target(
+            router=next_device["router"],
+            vrf=next_device["vrf"],
+            ingress_interface=(
+                next_device.get("interface")
+            )
+        )
+
+    def _build_result(
+        self,
+        state,
+        explanation
+    ):
+
+        return TraceResult(
+            security=state.security,
+            route=state.last_route_result,
+            hops=state.hops,
+            firewall_hops=state.firewall_hops,
+            network_hops=state.network_hops,
+            explanation=explanation
+        )
