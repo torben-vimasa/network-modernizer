@@ -1,3 +1,4 @@
+import ipaddress
 import json
 from pathlib import Path
 
@@ -13,8 +14,12 @@ class ResolverEngine:
         self.graph = graph
         self.neighbor_map = neighbor_map or {}
 
-        with open(routes_file, "r") as f:
+        with open(routes_file, "r", encoding="utf-8") as f:
             self.routes = json.load(f)
+
+    # ------------------------------------------------------------------
+    # Resolve a next-hop IP
+    # ------------------------------------------------------------------
 
     def resolve_ip(self, ip):
 
@@ -41,7 +46,10 @@ class ResolverEngine:
                 "ip": ip,
                 "confidence": "medium",
                 "method": "route_reference",
-                "reason": f"IP is used as next-hop by {len(references)} route entries",
+                "reason": (
+                    f"IP is used as next-hop by "
+                    f"{len(references)} route entries"
+                ),
                 "references": references[:10],
             }
 
@@ -54,36 +62,265 @@ class ResolverEngine:
             "references": [],
         }
 
+    # ------------------------------------------------------------------
+    # Resolve a packet source
+    # ------------------------------------------------------------------
+
+    def resolve_source(self, source_ip):
+
+        result = self.resolve_ip(source_ip)
+
+        if result.get("resolved"):
+            return result
+
+        router_matches = self._resolve_source_router(source_ip)
+        firewall_matches = self._resolve_source_firewalls(source_ip)
+
+        all_matches = router_matches + firewall_matches
+
+        if len(all_matches) == 1:
+            return all_matches[0]
+
+        if len(all_matches) > 1:
+            return {
+                "resolved": False,
+                "method": "source_subnet_ambiguous",
+                "reason": (
+                    f"Source {source_ip} matched "
+                    f"{len(all_matches)} interfaces"
+                ),
+                "candidates": all_matches,
+                "confidence": "low"
+            }
+
+        return {
+            "resolved": False,
+            "method": "source_unresolved",
+            "reason": f"Could not resolve source {source_ip}",
+            "confidence": "low",
+            "candidates": []
+        }
+
+    # ------------------------------------------------------------------
+    # Router source lookup
+    # ------------------------------------------------------------------
+
+    def _resolve_source_router(self, source_ip):
+
+        matches = []
+        address = ipaddress.ip_address(source_ip)
+
+        for node in self.graph.nodes.values():
+
+            if node.type not in ["RouterInterface", "Interface"]:
+                continue
+
+            ip = node.properties.get("ip")
+            mask = node.properties.get("mask")
+
+            if not ip or not mask:
+                continue
+
+            try:
+                network = ipaddress.ip_network(
+                    f"{ip}/{mask}",
+                    strict=False
+                )
+            except ValueError:
+                continue
+
+            if address not in network:
+                continue
+
+            router = self._find_parent_device(
+                node,
+                allowed_types={"Router"}
+            )
+
+            if not router:
+                continue
+
+            vrf = self._find_interface_vrf(node)
+
+            matches.append(
+                {
+                    "resolved": True,
+                    "method": "source_router_subnet",
+                    "router": router.name,
+                    "device": router.name,
+                    "device_type": "Router",
+                    "interface": node.name,
+                    "vrf": vrf,
+                    "reason": (
+                        f"Source {source_ip} is in subnet "
+                        f"{network} on {node.name}"
+                    ),
+                    "confidence": "medium"
+                }
+            )
+
+        return matches
+
+    # ------------------------------------------------------------------
+    # Firewall source lookup
+    # ------------------------------------------------------------------
+
+    def _resolve_source_firewalls(self, source_ip):
+
+        matches = []
+        address = ipaddress.ip_address(source_ip)
+
+        for node in self.graph.nodes.values():
+
+            if node.type != "ASAInterface":
+                continue
+
+            ip = node.properties.get("ip")
+            mask = node.properties.get("mask")
+
+            if not ip or not mask:
+                continue
+
+            try:
+                network = ipaddress.ip_network(
+                    f"{ip}/{mask}",
+                    strict=False
+                )
+            except ValueError:
+                continue
+
+            if address not in network:
+                continue
+
+            context = (
+                node.properties.get("context")
+                or node.properties.get("device")
+            )
+
+            firewall = self._find_parent_device(
+                node,
+                allowed_types={"Firewall", "Context"}
+            )
+
+            firewall_name = (
+                firewall.name
+                if firewall
+                else context
+            )
+
+            interface_name = (
+                node.properties.get("nameif")
+                or node.properties.get("interface")
+                or node.name
+            )
+
+            matches.append(
+                {
+                    "resolved": True,
+                    "method": "source_firewall_subnet",
+                    "device": firewall_name,
+                    "device_type": "Firewall",
+                    "firewall": firewall_name,
+                    "context": context,
+                    "interface": interface_name,
+                    "vrf": context,
+                    "reason": (
+                        f"Source {source_ip} is in subnet "
+                        f"{network} on ASA interface {node.name}"
+                    ),
+                    "confidence": "medium"
+                }
+            )
+
+        return matches
+
+    # ------------------------------------------------------------------
+    # Existing next-hop resolution methods
+    # ------------------------------------------------------------------
+
     def _resolve_from_router_inventory(self, ip):
+
         ip_node = self.graph.find("IPAddress", ip)
 
-        if not ip_node:
-            return None
+        if ip_node:
 
-        for relation, interface in self.graph.neighbors(ip_node.id):
+            for relation, interface in self.graph.neighbors(ip_node.id):
 
-            if relation != "HAS_IP":
+                if relation != "HAS_IP":
+                    continue
+
+                if interface.type not in [
+                    "Interface",
+                    "RouterInterface"
+                ]:
+                    continue
+
+                router = self._find_parent_device(
+                    interface,
+                    allowed_types={"Router"}
+                )
+
+                if not router:
+                    continue
+
+                return {
+                    "resolved": True,
+                    "ip": ip,
+                    "confidence": "high",
+                    "method": "router_inventory",
+                    "router": router.name,
+                    "vrf": self._find_interface_vrf(interface),
+                    "interface": (
+                        interface.properties.get("name")
+                        or interface.name
+                    ),
+                    "subnet": interface.properties.get("subnet"),
+                    "reason": (
+                        f"IP found on interface "
+                        f"{interface.name} on router {router.name}"
+                    ),
+                    "references": [],
+                }
+
+        for node in self.graph.nodes.values():
+
+            if node.type not in [
+                "Interface",
+                "RouterInterface"
+            ]:
                 continue
 
-            if interface.type != "Interface":
+            node_ip = node.properties.get("ip")
+
+            if not node_ip:
                 continue
 
-            for rel2, router in self.graph.neighbors(interface.id):
+            if str(node_ip).split("/")[0] != ip:
+                continue
 
-                if rel2 == "HAS_INTERFACE" and router.type == "Router":
+            router = self._find_parent_device(
+                node,
+                allowed_types={"Router"}
+            )
 
-                    return {
-                        "resolved": True,
-                        "ip": ip,
-                        "confidence": "high",
-                        "method": "router_inventory",
-                        "router": router.name,
-                        "vrf": interface.properties.get("vrf"),
-                        "interface": interface.properties.get("name") or interface.name,
-                        "subnet": interface.properties.get("subnet"),
-                        "reason": f"IP found on interface {interface.name} on router {router.name}",
-                        "references": [],
-                    }
+            if not router:
+                continue
+
+            return {
+                "resolved": True,
+                "ip": ip,
+                "confidence": "high",
+                "method": "router_inventory",
+                "router": router.name,
+                "vrf": self._find_interface_vrf(node),
+                "interface": node.name,
+                "subnet": node.properties.get("subnet"),
+                "reason": (
+                    f"IP found on interface "
+                    f"{node.name} on router {router.name}"
+                ),
+                "references": [],
+            }
 
         return None
 
@@ -97,14 +334,20 @@ class ResolverEngine:
         return {
             "resolved": True,
             "ip": ip,
-            "confidence": entry.get("confidence", "medium"),
+            "confidence": entry.get(
+                "confidence",
+                "medium"
+            ),
             "method": "neighbor_map",
             "router": entry.get("router"),
             "vrf": entry.get("vrf"),
             "interface": entry.get("interface"),
             "reason": entry.get(
                 "reason",
-                f"IP resolved from static neighbor map to {entry.get('router')}"
+                (
+                    f"IP resolved from static neighbor map "
+                    f"to {entry.get('router')}"
+                )
             ),
             "references": [],
         }
@@ -116,50 +359,113 @@ class ResolverEngine:
             if node.type != "ASAInterface":
                 continue
 
-            if node.properties.get("ip") != ip:
+            node_ip = node.properties.get("ip")
+
+            if not node_ip:
                 continue
 
-            context = node.properties.get("context")
-            nameif = node.properties.get("interface")
+            if str(node_ip).split("/")[0] != ip:
+                continue
+
+            context = (
+                node.properties.get("context")
+                or node.properties.get("device")
+            )
+
+            nameif = (
+                node.properties.get("nameif")
+                or node.properties.get("interface")
+                or node.name
+            )
+
             subnet = node.properties.get("subnet")
 
-            firewall = None
+            firewall = self._find_parent_device(
+                node,
+                allowed_types={"Firewall", "Context"}
+            )
 
-            context_node = self.graph.find("Context", context)
-
-            if context_node:
-                for relation, neighbor in self.graph.neighbors(context_node.id):
-                    if relation == "HAS_CONTEXT" and neighbor.type == "Firewall":
-                        firewall = neighbor.name
-                        break
+            firewall_name = (
+                firewall.name
+                if firewall
+                else context
+            )
 
             return {
                 "resolved": True,
                 "ip": ip,
                 "confidence": "high",
                 "method": "asa_interface",
-                "firewall": firewall,
+                "firewall": firewall_name,
                 "context": context,
                 "interface": nameif,
                 "subnet": subnet,
-                "reason": f"IP found on ASA interface {context}:{nameif}",
+                "reason": (
+                    f"IP found on ASA interface "
+                    f"{context}:{nameif}"
+                ),
                 "references": [],
             }
 
         return None
 
     def _find_route_references(self, ip):
+
         references = []
 
         for route in self.routes:
-            if route.get("next_hop") == ip:
-                references.append(
-                    {
-                        "router": route.get("router"),
-                        "vrf": route.get("vrf"),
-                        "prefix": route.get("prefix"),
-                        "protocol": route.get("protocol"),
-                    }
-                )
+
+            if route.get("next_hop") != ip:
+                continue
+
+            references.append(
+                {
+                    "router": route.get("router"),
+                    "vrf": route.get("vrf"),
+                    "prefix": route.get("prefix"),
+                    "protocol": route.get("protocol"),
+                }
+            )
 
         return references
+
+    # ------------------------------------------------------------------
+    # Graph helpers
+    # ------------------------------------------------------------------
+
+    def _find_parent_device(
+        self,
+        interface_node,
+        allowed_types
+    ):
+
+        for relation, neighbor in self.graph.neighbors(
+            interface_node.id
+        ):
+
+            if relation != "HAS_INTERFACE":
+                continue
+
+            if neighbor.type in allowed_types:
+                return neighbor
+
+        return None
+
+    def _find_interface_vrf(self, interface_node):
+
+        vrf = interface_node.properties.get("vrf")
+
+        if vrf:
+            return vrf
+
+        for relation, neighbor in self.graph.neighbors(
+            interface_node.id
+        ):
+
+            if (
+                relation == "BELONGS_TO_VRF"
+                and neighbor.type == "VRF"
+            ):
+                return neighbor.name
+
+        return None
