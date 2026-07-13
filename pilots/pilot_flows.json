@@ -3,28 +3,50 @@
     "name": "TPS Logging",
     "source": "172.27.210.20",
     "destination": "100.72.36.70",
-    "protocol": "tcp",
-    "service": "Windows_Logging"
+    "protocol": "udp",
+    "service": "Windows_Logging",
+    "expected": {
+      "devices": [
+        "RGDCPe1",
+        "BDK-Mgmt",
+        "OBvDCPe1",
+        "OBV-CAT3-FW1-1"
+      ],
+      "acl_rules": [
+        "access-in-bane1:467"
+      ]
+    }
   },
   {
     "name": "10.3.112.195 to 10.150.87.5 HTTPS",
     "source": "10.3.112.195",
     "destination": "10.150.87.5",
     "protocol": "tcp",
-    "service": "HTTPS"
+    "service": "HTTPS",
+    "expected": {
+      "status": "incomplete_data"
+    }
   },
   {
     "name": "10.3.112.195 to Internet DNS",
     "source": "10.3.112.195",
     "destination": "8.8.8.8",
-    "protocol": "ip",
-    "service": "Any"
+    "protocol": "udp",
+    "service": "DNS",
+    "expected": {
+      "status": "incomplete_data"
+    }
   },
   {
     "name": "10.110.6.131 to 100.73.35.15 TACACS",
     "source": "10.110.6.131",
     "destination": "100.73.35.15",
     "protocol": "tcp",
-    "service": "TACACS"
+    "service": "TACACS",
+    "expected": {
+      "devices": [
+        "Site2Site-VPN"
+      ]
+    }
   }
 ]
