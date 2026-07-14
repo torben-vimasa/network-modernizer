@@ -1,0 +1,660 @@
+[
+  {
+    "name": "TPS Logging baseline",
+    "domain": "bdk_mgmt",
+    "source": "172.27.210.20",
+    "destination": "100.72.36.70",
+    "protocol": "udp",
+    "service": "Windows_Logging",
+    "evidence": {
+      "firewall": "BDK-Mgmt",
+      "acl": "access-in-bane1",
+      "line": 467
+    },
+    "expected": {
+      "devices": [
+        "RGDCPe1",
+        "BDK-Mgmt",
+        "OBvDCPe1",
+        "OBV-CAT3-FW1-1"
+      ]
+    }
+  },
+  {
+    "name": "Site2Site KMD Mgmt to CAT3 ISE TACACS",
+    "domain": "site2site",
+    "source": "10.110.6.131",
+    "destination": "100.73.35.15",
+    "protocol": "tcp",
+    "service": "tacacs",
+    "expected": {
+      "devices": [
+        "Site2Site-VPN"
+      ]
+    }
+  },
+  {
+    "name": "Site2Site GSMR Phase3 SIP source 1",
+    "domain": "site2site",
+    "source": "10.150.146.34",
+    "destination": "157.250.163.241",
+    "protocol": "udp",
+    "service": "sip",
+    "evidence": {
+      "firewall": "Site2Site-VPN",
+      "acl": "CSM_FW_ACL_GSMR_Phase3",
+      "line": 31,
+      "hitcnt": 259,
+      "note": "Destination is a candidate host inside 157.250.163.240/29; validate active SIP peer."
+    },
+    "expected": {},
+    "start": {
+      "type": "firewall",
+      "context": "Site2Site-VPN",
+      "interface": "GSMR_Phase3"
+    }
+  },
+  {
+    "name": "Site2Site GSMR Phase3 SIP source 2",
+    "domain": "site2site",
+    "source": "10.150.146.134",
+    "destination": "157.250.163.241",
+    "protocol": "udp",
+    "service": "sip",
+    "evidence": {
+      "firewall": "Site2Site-VPN",
+      "acl": "CSM_FW_ACL_GSMR_Phase3",
+      "line": 31,
+      "hitcnt": 2220,
+      "note": "Destination is a candidate host inside 157.250.163.240/29; validate active SIP peer."
+    },
+    "expected": {},
+    "start": {
+      "type": "firewall",
+      "context": "Site2Site-VPN",
+      "interface": "GSMR_Phase3"
+    }
+  },
+  {
+    "name": "BHASA2 to SMS server 1 RADIUS",
+    "domain": "site2site",
+    "source": "172.31.255.25",
+    "destination": "172.21.64.36",
+    "protocol": "udp",
+    "service": "1812",
+    "evidence": {
+      "firewall": "Site2Site-VPN",
+      "acl": "BIX-to-TMG_access_in",
+      "line": 150,
+      "hitcnt": 518
+    },
+    "expected": {},
+    "start": {
+      "type": "firewall",
+      "context": "Site2Site-VPN",
+      "interface": "BIX-to-TMG"
+    }
+  },
+  {
+    "name": "BHASA2 to SMS server 2 RADIUS",
+    "domain": "site2site",
+    "source": "172.31.255.25",
+    "destination": "172.21.64.37",
+    "protocol": "udp",
+    "service": "1812",
+    "evidence": {
+      "firewall": "Site2Site-VPN",
+      "acl": "BIX-to-TMG_access_in",
+      "line": 150,
+      "hitcnt": 3297
+    },
+    "expected": {},
+    "start": {
+      "type": "firewall",
+      "context": "Site2Site-VPN",
+      "interface": "BIX-to-TMG"
+    }
+  },
+  {
+    "name": "BDK Teknik Nokia jump 69 to AbaneExtDC2 Kerberos",
+    "domain": "bdk_teknik",
+    "source": "172.21.64.69",
+    "destination": "172.21.2.103",
+    "protocol": "tcp",
+    "service": "88",
+    "evidence": {
+      "acl": "NokiaJumphosts_in",
+      "line": 6,
+      "hitcnt": 863
+    },
+    "expected": {},
+    "start": {
+      "type": "firewall",
+      "context": "BDK-Teknik",
+      "interface": "NokiaJumphosts"
+    }
+  },
+  {
+    "name": "BDK Teknik Nokia jump 68 to AbaneExtDC2 LDAP",
+    "domain": "bdk_teknik",
+    "source": "172.21.64.68",
+    "destination": "172.21.2.103",
+    "protocol": "tcp",
+    "service": "ldap",
+    "evidence": {
+      "acl": "NokiaJumphosts_in",
+      "line": 6,
+      "hitcnt": 3014
+    },
+    "expected": {},
+    "start": {
+      "type": "firewall",
+      "context": "BDK-Teknik",
+      "interface": "NokiaJumphosts"
+    }
+  },
+  {
+    "name": "BDK Teknik ESB to PBASE MADS TCP 8080",
+    "domain": "bdk_teknik",
+    "source": "80.243.122.6",
+    "destination": "172.27.3.43",
+    "protocol": "tcp",
+    "service": "8080",
+    "evidence": {
+      "acl": "acc_in_esb",
+      "line": 113,
+      "hitcnt": 421248
+    },
+    "expected": {},
+    "start": {
+      "type": "firewall",
+      "context": "BDK-Teknik",
+      "interface": "esb"
+    }
+  },
+  {
+    "name": "BDK Teknik SecureIoT DNS to AbaneExtDC1",
+    "domain": "bdk_teknik",
+    "source": "172.21.65.86",
+    "destination": "172.21.2.104",
+    "protocol": "udp",
+    "service": "domain",
+    "evidence": {
+      "acl": "acc_in_Priveledged_Remote_Access_PoC",
+      "line": 19,
+      "hitcnt": 23887
+    },
+    "expected": {},
+    "start": {
+      "type": "firewall",
+      "context": "BDK-Teknik",
+      "interface": "Priveledged_Remote_Access_PoC"
+    }
+  },
+  {
+    "name": "BDK Teknik PSI OC to monitoring SSH",
+    "domain": "bdk_teknik",
+    "source": "10.46.21.97",
+    "destination": "172.21.2.76",
+    "protocol": "tcp",
+    "service": "ssh",
+    "evidence": {
+      "acl": "acc_in_inside",
+      "line": 194,
+      "hitcnt": 17736
+    },
+    "expected": {},
+    "start": {
+      "type": "firewall",
+      "context": "BDK-Teknik",
+      "interface": "inside"
+    }
+  },
+  {
+    "name": "BDK Teknik Aeven jump DNS to AbaneExtDC1",
+    "domain": "bdk_teknik",
+    "source": "172.21.65.118",
+    "destination": "172.21.2.104",
+    "protocol": "udp",
+    "service": "domain",
+    "evidence": {
+      "acl": "Aevenjumphost_in",
+      "line": 261,
+      "hitcnt": 912271
+    },
+    "expected": {},
+    "start": {
+      "type": "firewall",
+      "context": "BDK-Teknik",
+      "interface": "Aevenjumphost"
+    }
+  },
+  {
+    "name": "BDK Teknik Aeven jump DNS to AbaneExtDC2",
+    "domain": "bdk_teknik",
+    "source": "172.21.65.118",
+    "destination": "172.21.2.103",
+    "protocol": "udp",
+    "service": "domain",
+    "evidence": {
+      "acl": "Aevenjumphost_in",
+      "line": 261,
+      "hitcnt": 58469
+    },
+    "expected": {},
+    "start": {
+      "type": "firewall",
+      "context": "BDK-Teknik",
+      "interface": "Aevenjumphost"
+    }
+  },
+  {
+    "name": "BDK Teknik outside to Ansas host 116 HTTPS",
+    "domain": "bdk_teknik",
+    "source": "8.8.8.8",
+    "destination": "172.21.2.116",
+    "protocol": "tcp",
+    "service": "https",
+    "evidence": {
+      "acl": "acc_in_outside",
+      "line": 57,
+      "hitcnt": 13587,
+      "note": "Representative external source used for any4; replace with a known real source if desired."
+    },
+    "expected": {},
+    "start": {
+      "type": "firewall",
+      "context": "BDK-Teknik",
+      "interface": "outside"
+    }
+  },
+  {
+    "name": "BDK Mgmt remote host to CAT2 PRTG HTTPS",
+    "domain": "bdk_mgmt",
+    "source": "10.233.40.200",
+    "destination": "100.72.35.37",
+    "protocol": "tcp",
+    "service": "https",
+    "evidence": {
+      "firewall": "BDK-Mgmt",
+      "acl": "access-in-bane1",
+      "line": 224,
+      "hitcnt": 1843680
+    },
+    "expected": {
+      "devices": [
+        "BDK-Mgmt"
+      ]
+    },
+    "start": {
+      "type": "firewall",
+      "context": "BDK-Mgmt",
+      "interface": "Bane1"
+    }
+  },
+  {
+    "name": "BDK Mgmt VXRAIL satellite UDP 902",
+    "domain": "bdk_mgmt",
+    "source": "10.138.62.20",
+    "destination": "100.73.66.5",
+    "protocol": "udp",
+    "service": "902",
+    "evidence": {
+      "firewall": "BDK-Mgmt",
+      "acl": "access-in-bane1",
+      "line": 356,
+      "hitcnt": 517402
+    },
+    "expected": {
+      "devices": [
+        "BDK-Mgmt"
+      ]
+    },
+    "start": {
+      "type": "firewall",
+      "context": "BDK-Mgmt",
+      "interface": "Bane1"
+    }
+  },
+  {
+    "name": "BDK Mgmt Oracle backup lower-range sample",
+    "domain": "bdk_mgmt",
+    "source": "10.185.250.81",
+    "destination": "172.27.210.73",
+    "protocol": "tcp",
+    "service": "7937",
+    "evidence": {
+      "firewall": "BDK-Mgmt",
+      "acl": "access-in-cs",
+      "line": 284,
+      "hitcnt": 1324,
+      "note": "ACL permits range 7937-9936; this pilot tests the lower bound."
+    },
+    "expected": {
+      "devices": [
+        "BDK-Mgmt"
+      ]
+    }
+  },
+  {
+    "name": "BDK Mgmt DWDM Kerberos to AbaneExtDC1",
+    "domain": "bdk_mgmt",
+    "source": "10.26.0.46",
+    "destination": "172.21.2.104",
+    "protocol": "tcp",
+    "service": "88",
+    "evidence": {
+      "firewall": "BDK-Mgmt",
+      "acl": "access-in-dwdm",
+      "line": 9,
+      "hitcnt": 8949
+    },
+    "expected": {
+      "devices": [
+        "BDK-Mgmt"
+      ]
+    }
+  },
+  {
+    "name": "BDK Mgmt Thales HHT LDAPS",
+    "domain": "bdk_mgmt",
+    "source": "10.49.255.2",
+    "destination": "172.27.3.22",
+    "protocol": "tcp",
+    "service": "ldaps",
+    "evidence": {
+      "firewall": "BDK-Mgmt",
+      "acl": "access-in-signal_program",
+      "line": 40,
+      "hitcnt": 10
+    },
+    "expected": {
+      "devices": [
+        "BDK-Mgmt"
+      ]
+    },
+    "start": {
+      "type": "firewall",
+      "context": "BDK-Mgmt",
+      "interface": "Signal-Program"
+    }
+  },
+  {
+    "name": "BDK Mgmt CAT3 Smallworld DNS candidate",
+    "domain": "bdk_mgmt",
+    "source": "100.73.67.97",
+    "destination": "10.185.50.11",
+    "protocol": "udp",
+    "service": "domain",
+    "evidence": {
+      "firewall": "BDK-Mgmt",
+      "acl": "access-in-SPNS2-TRANSIT-JTTN",
+      "line": 84,
+      "hitcnt": 82304,
+      "note": "Source is a candidate host inside 100.73.67.96/27; replace with a confirmed active host if available."
+    },
+    "expected": {
+      "devices": [
+        "BDK-Mgmt"
+      ]
+    },
+    "start": {
+      "type": "firewall",
+      "context": "BDK-Mgmt",
+      "interface": "SPNS2-TRANSIT-JTTN"
+    }
+  },
+  {
+    "name": "BDK DSB Bane DNS to DSB DNS",
+    "domain": "bdk_dsb",
+    "source": "172.27.2.22",
+    "destination": "10.35.21.11",
+    "protocol": "udp",
+    "service": "domain",
+    "evidence": {
+      "firewall": "BDK-DSB",
+      "acl": "ind-fra-inside",
+      "line": 14,
+      "hitcnt": 9002
+    },
+    "expected": {
+      "devices": [
+        "BDK-DSB"
+      ]
+    },
+    "start": {
+      "type": "firewall",
+      "context": "BDK-DSB",
+      "interface": "inside"
+    }
+  },
+  {
+    "name": "BDK DSB DSB DNS to Bane DNS",
+    "domain": "bdk_dsb",
+    "source": "10.35.21.11",
+    "destination": "172.27.2.22",
+    "protocol": "udp",
+    "service": "domain",
+    "evidence": {
+      "firewall": "BDK-DSB",
+      "acl": "ind-fra-DSB",
+      "line": 59,
+      "hitcnt": 70263
+    },
+    "expected": {
+      "devices": [
+        "BDK-DSB"
+      ]
+    },
+    "start": {
+      "type": "firewall",
+      "context": "BDK-DSB",
+      "interface": "DSB"
+    }
+  },
+  {
+    "name": "BDK DSB service 10 to PBASE TCP 9500",
+    "domain": "bdk_dsb",
+    "source": "10.35.38.10",
+    "destination": "172.27.3.43",
+    "protocol": "tcp",
+    "service": "9500",
+    "evidence": {
+      "firewall": "BDK-DSB",
+      "acl": "ind-fra-DSB",
+      "line": 6,
+      "hitcnt": 33082
+    },
+    "expected": {
+      "devices": [
+        "BDK-DSB"
+      ]
+    },
+    "start": {
+      "type": "firewall",
+      "context": "BDK-DSB",
+      "interface": "DSB"
+    }
+  },
+  {
+    "name": "BDK DSB player to train server TCP 81",
+    "domain": "bdk_dsb",
+    "source": "10.124.85.1",
+    "destination": "172.27.210.21",
+    "protocol": "tcp",
+    "service": "81",
+    "evidence": {
+      "firewall": "BDK-DSB",
+      "acl": "ind-fra-DSB",
+      "line": 18,
+      "hitcnt": 1673954
+    },
+    "expected": {
+      "devices": [
+        "BDK-DSB"
+      ]
+    }
+  },
+  {
+    "name": "BDK DSB player to KMD TCP 7777",
+    "domain": "bdk_dsb",
+    "source": "10.124.85.1",
+    "destination": "10.110.3.39",
+    "protocol": "tcp",
+    "service": "7777",
+    "evidence": {
+      "firewall": "BDK-DSB",
+      "acl": "ind-fra-DSB",
+      "line": 107,
+      "hitcnt": 4527993
+    },
+    "expected": {
+      "devices": [
+        "BDK-DSB"
+      ]
+    }
+  },
+  {
+    "name": "BDK DSB player to web service",
+    "domain": "bdk_dsb",
+    "source": "10.124.85.1",
+    "destination": "172.27.2.188",
+    "protocol": "tcp",
+    "service": "www",
+    "evidence": {
+      "firewall": "BDK-DSB",
+      "acl": "ind-fra-DSB",
+      "line": 124,
+      "hitcnt": 316124
+    },
+    "expected": {
+      "devices": [
+        "BDK-DSB"
+      ]
+    }
+  },
+  {
+    "name": "BDK Enterprise Trafikverket HTTPS",
+    "domain": "bdk_enterprise",
+    "source": "188.121.68.70",
+    "destination": "10.110.4.20",
+    "protocol": "tcp",
+    "service": "https",
+    "evidence": {
+      "firewall": "BDK-Enterprise",
+      "acl": "access-in-external",
+      "line": 16,
+      "hitcnt": 35774
+    },
+    "expected": {
+      "devices": [
+        "BDK-Enterprise"
+      ]
+    },
+    "start": {
+      "type": "firewall",
+      "context": "BDK-Enterprise",
+      "interface": "External"
+    }
+  },
+  {
+    "name": "BDK Enterprise external HTTP to Barracuda proxy",
+    "domain": "bdk_enterprise",
+    "source": "8.8.8.8",
+    "destination": "80.243.120.123",
+    "protocol": "tcp",
+    "service": "www",
+    "evidence": {
+      "firewall": "BDK-Enterprise",
+      "acl": "access-in-external",
+      "line": 9,
+      "hitcnt": 17024,
+      "note": "Representative external source used for any4; replace with known source if desired."
+    },
+    "expected": {
+      "devices": [
+        "BDK-Enterprise"
+      ]
+    },
+    "start": {
+      "type": "firewall",
+      "context": "BDK-Enterprise",
+      "interface": "External"
+    }
+  },
+  {
+    "name": "BDK Enterprise external OCS media range lower bound",
+    "domain": "bdk_enterprise",
+    "source": "8.8.8.8",
+    "destination": "80.243.120.156",
+    "protocol": "tcp",
+    "service": "50000",
+    "evidence": {
+      "firewall": "BDK-Enterprise",
+      "acl": "access-in-external",
+      "line": 42,
+      "hitcnt": 132449,
+      "note": "ACL permits range 50000-59999; this pilot tests the lower bound. Representative external source used for any4."
+    },
+    "expected": {
+      "devices": [
+        "BDK-Enterprise"
+      ]
+    },
+    "start": {
+      "type": "firewall",
+      "context": "BDK-Enterprise",
+      "interface": "External"
+    }
+  },
+  {
+    "name": "BDK Enterprise external HTTP to OCS edge",
+    "domain": "bdk_enterprise",
+    "source": "8.8.8.8",
+    "destination": "80.243.120.150",
+    "protocol": "tcp",
+    "service": "www",
+    "evidence": {
+      "firewall": "BDK-Enterprise",
+      "acl": "access-in-external",
+      "line": 58,
+      "hitcnt": 17385,
+      "note": "Representative external source used for any4."
+    },
+    "expected": {
+      "devices": [
+        "BDK-Enterprise"
+      ]
+    },
+    "start": {
+      "type": "firewall",
+      "context": "BDK-Enterprise",
+      "interface": "External"
+    }
+  },
+  {
+    "name": "BDK Enterprise external SIP TLS range lower bound",
+    "domain": "bdk_enterprise",
+    "source": "8.8.8.8",
+    "destination": "80.243.120.239",
+    "protocol": "tcp",
+    "service": "5061",
+    "evidence": {
+      "firewall": "BDK-Enterprise",
+      "acl": "access-in-external",
+      "line": 141,
+      "hitcnt": 797,
+      "note": "ACL permits range 5061-5065; this pilot tests the lower bound. Representative external source used for any4."
+    },
+    "expected": {
+      "devices": [
+        "BDK-Enterprise"
+      ]
+    },
+    "start": {
+      "type": "firewall",
+      "context": "BDK-Enterprise",
+      "interface": "External"
+    }
+  }
+]

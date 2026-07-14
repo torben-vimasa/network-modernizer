@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 
 
+
 class ResolverEngine:
 
     def __init__(
@@ -16,6 +17,212 @@ class ResolverEngine:
 
         with open(routes_file, "r", encoding="utf-8") as f:
             self.routes = json.load(f)
+
+    # ------------------------------------------------------------------
+    # Resolve an explicit or automatic trace start
+    # ------------------------------------------------------------------
+
+    def resolve_start(self, start=None, source_ip=None):
+
+        if not start:
+            if not source_ip:
+                return {
+                    "resolved": False,
+                    "method": "source_unresolved",
+                    "reason": "No source IP supplied for automatic resolution",
+                    "confidence": "low",
+                    "candidates": []
+                }
+
+            return self.resolve_source(source_ip)
+
+        if not isinstance(start, dict):
+            return {
+                "resolved": False,
+                "method": "invalid_explicit_start",
+                "reason": "Explicit start must be a JSON object",
+                "confidence": "low",
+                "candidates": []
+            }
+
+        start_type = str(start.get("type") or "").strip().lower()
+
+        if start_type == "router":
+            router = start.get("router") or start.get("device")
+            vrf = start.get("vrf")
+            interface = start.get("interface")
+
+            if not router or not vrf:
+                return {
+                    "resolved": False,
+                    "method": "invalid_explicit_router_start",
+                    "reason": "Explicit router start requires router and vrf",
+                    "confidence": "low",
+                    "candidates": []
+                }
+
+            if not self.graph.find("Router", router):
+                return {
+                    "resolved": False,
+                    "method": "explicit_router_not_found",
+                    "reason": f"Router {router} was not found in the graph",
+                    "confidence": "low",
+                    "candidates": []
+                }
+
+            return {
+                "resolved": True,
+                "method": "explicit_router_start",
+                "device_type": "Router",
+                "device": router,
+                "router": router,
+                "firewall": None,
+                "context": None,
+                "vrf": vrf,
+                "interface": interface,
+                "ip": source_ip,
+                "subnet": None,
+                "reason": (
+                    f"Trace start explicitly set to "
+                    f"router {router} VRF {vrf}"
+                ),
+                "confidence": "high",
+                "references": [],
+                "candidates": []
+            }
+
+        if start_type == "firewall":
+            context = start.get("context")
+            interface = (
+                start.get("interface")
+                or start.get("ingress_interface")
+            )
+
+            if not context or not interface:
+                return {
+                    "resolved": False,
+                    "method": "invalid_explicit_firewall_start",
+                    "reason": (
+                        "Explicit firewall start requires "
+                        "context and interface"
+                    ),
+                    "confidence": "low",
+                    "candidates": []
+                }
+
+            return self._resolve_explicit_firewall_start(
+                context=context,
+                interface=interface,
+                source_ip=source_ip
+            )
+
+        return {
+            "resolved": False,
+            "method": "unsupported_explicit_start",
+            "reason": f"Unsupported explicit start type {start.get('type')!r}",
+            "confidence": "low",
+            "candidates": []
+        }
+
+    def _resolve_explicit_firewall_start(
+        self,
+        context,
+        interface,
+        source_ip=None
+    ):
+
+        context_key = str(context).lower()
+        interface_key = str(interface).lower()
+        matches = []
+
+        for node in self.graph.nodes.values():
+
+            if node.type != "ASAInterface":
+                continue
+
+            node_context = (
+                node.properties.get("context")
+                or node.properties.get("device")
+            )
+
+            node_interface = (
+                node.properties.get("nameif")
+                or node.properties.get("interface")
+                or node.name
+            )
+
+            node_suffix = node.name.split(":", 1)[-1]
+
+            context_matches = (
+                str(node_context).lower() == context_key
+                or node.name.lower().startswith(f"{context_key}:")
+            )
+
+            interface_matches = (
+                str(node_interface).lower() == interface_key
+                or node_suffix.lower() == interface_key
+            )
+
+            if context_matches and interface_matches:
+                matches.append(node)
+
+        if not matches:
+            return {
+                "resolved": False,
+                "method": "explicit_firewall_interface_not_found",
+                "reason": (
+                    f"ASA interface {context}:{interface} "
+                    f"was not found in the graph"
+                ),
+                "confidence": "low",
+                "candidates": []
+            }
+
+        node = sorted(matches, key=lambda item: item.name)[0]
+
+        firewall = self._find_parent_device(
+            node,
+            allowed_types={"Firewall", "Context"}
+        )
+
+        firewall_name = (
+            firewall.name
+            if firewall
+            else node.properties.get("device") or context
+        )
+
+        interface_name = (
+            node.properties.get("nameif")
+            or node.properties.get("interface")
+            or interface
+        )
+
+        resolved_context = (
+            node.properties.get("context")
+            or node.properties.get("device")
+            or context
+        )
+
+        return {
+            "resolved": True,
+            "method": "asa_interface",
+            "device_type": "Firewall",
+            "device": firewall_name,
+            "router": None,
+            "firewall": firewall_name,
+            "context": resolved_context,
+            "vrf": None,
+            "interface": interface_name,
+            "ip": source_ip,
+            "subnet": node.properties.get("subnet"),
+            "reason": (
+                f"Trace start explicitly set to ASA interface "
+                f"{resolved_context}:{interface_name}"
+            ),
+            "confidence": "high",
+            "references": [],
+            "candidates": [item.name for item in matches]
+        }
 
     # ------------------------------------------------------------------
     # Resolve a next-hop IP
@@ -82,6 +289,46 @@ class ResolverEngine:
             return all_matches[0]
 
         if len(all_matches) > 1:
+
+            router_matches = [
+                match
+                for match in all_matches
+                if match.get("device_type") == "Router"
+            ]
+
+            firewall_matches = [
+                match
+                for match in all_matches
+                if match.get("device_type") == "Firewall"
+            ]
+
+            if router_matches and not firewall_matches:
+
+                vrfs = {
+                    match.get("vrf")
+                    for match in router_matches
+                }
+
+                if len(vrfs) == 1:
+
+                    selected = sorted(
+                        router_matches,
+                        key=lambda match: match.get("router") or ""
+                    )[0]
+
+                    selected = dict(selected)
+
+                    selected["method"] = "source_router_redundant"
+                    selected["confidence"] = "medium"
+                    selected["candidates"] = router_matches
+                    selected["reason"] = (
+                        f"Source {source_ip} matched "
+                        f"{len(router_matches)} redundant router interfaces; "
+                        f"selected {selected.get('router')} deterministically"
+                    )
+
+                    return selected
+
             return {
                 "resolved": False,
                 "method": "source_subnet_ambiguous",

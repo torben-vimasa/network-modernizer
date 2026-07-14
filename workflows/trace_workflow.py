@@ -30,7 +30,8 @@ class TraceWorkflow:
         vrf=None,
         route_destination=None,
         max_hops=20,
-        stop_on_destination=True
+        stop_on_destination=True,
+        start=None
     ):
 
         packet = self._build_packet(
@@ -48,12 +49,16 @@ class TraceWorkflow:
         protocol = packet.protocol
         service = packet.service
 
-        router = packet.current_router or router
-        vrf = packet.current_vrf or vrf
-        route_destination = route_destination or packet.destination
+        route_destination = (
+            route_destination
+            or packet.destination
+        )
 
         explanation = Explanation()
         packet.add_history("Trace started")
+
+        router = packet.current_router or router
+        vrf = packet.current_vrf or vrf
 
         state = TraversalState(
             router=router,
@@ -69,60 +74,172 @@ class TraceWorkflow:
         )
 
         #
-        # Existing global security evaluation.
-        # This remains unchanged during the TraceState refactor.
+        # Resolve an explicit boundary start, or fall back
+        # to automatic source resolution.
         #
-        security = self.twin.security.is_permitted(
-            source,
-            destination,
-            protocol,
-            service
-        )
+        if start or not state.router or not state.vrf:
 
-        state.security = security
-
-        explanation.add(
-            f"ACL decision: {security.reason}"
-        )
-
-        if not security.permitted:
-            state.mark_finished(
-                reason=security.reason
+            start_resolution = self.resolver.resolve_start(
+                start=start,
+                source_ip=packet.source
             )
 
-            return self._build_result(
-                state=state,
-                explanation=explanation
-            )
+            if not start_resolution.get("resolved"):
+                reason = start_resolution.get(
+                    "reason",
+                    f"Could not resolve source {packet.source}"
+                )
+
+                explanation.add(reason)
+                state.mark_finished(reason)
+
+                return self._build_result(
+                    state=state,
+                    explanation=explanation
+                )
+
+            method = start_resolution.get("method")
+
+            if method in [
+                "source_router_subnet",
+                "source_router_redundant",
+                "router_inventory",
+                "explicit_router_start"
+            ]:
+
+                state.set_router_target(
+                    router=(
+                        start_resolution.get("router")
+                        or start_resolution.get("device")
+                    ),
+                    vrf=start_resolution.get("vrf"),
+                    ingress_interface=start_resolution.get("interface")
+                )
+
+                explanation.add(
+                    f"Source {packet.source} resolved to "
+                    f"router {state.router} VRF {state.vrf}"
+                )
+
+                if start_resolution.get("candidates"):
+                    explanation.add(
+                        f"Source resolution used one of "
+                        f"{len(start_resolution['candidates'])} redundant "
+                        f"router candidates"
+                    )
+
+            elif method in [
+                "source_firewall_subnet",
+                "asa_interface"
+            ]:
+
+                explanation.add(
+                    f"Source resolved to firewall "
+                    f"{start_resolution.get('firewall')} "
+                    f"({start_resolution.get('interface')})"
+                )
+
+                traversal = self._trace_firewall(
+                    resolution=start_resolution,
+                    source=source,
+                    route_destination=route_destination,
+                    protocol=protocol,
+                    service=service,
+                    firewall_hops=state.firewall_hops,
+                    network_hops=state.network_hops,
+                    explanation=explanation
+                )
+
+                state.security = traversal.security
+
+                if traversal.output_packet:
+                    state.packet = traversal.output_packet
+
+                #
+                # Firewall denied the packet.
+                #
+                if not traversal.permitted:
+
+                    reason = traversal.reason or "Firewall denied traffic"
+
+                    explanation.add(
+                        f"Trace stopped: {reason}"
+                    )
+
+                    state.mark_finished(reason)
+
+                    return self._build_result(
+                        state=state,
+                        explanation=explanation
+                    )
+
+                #
+                # Destination reached inside firewall.
+                #
+                if (
+                    stop_on_destination
+                    and traversal.destination_reached
+                ):
+
+                    reason = (
+                        f"Destination reached via firewall "
+                        f"route {traversal.route}"
+                    )
+
+                    explanation.add(reason)
+
+                    state.mark_finished(
+                        reason=reason,
+                        destination_reached=True
+                    )
+
+                    return self._build_result(
+                        state=state,
+                        explanation=explanation
+                    )
+
+                if not self._continue_from_firewall_target(
+                    state=state,
+                    traversal=traversal,
+                    fallback_vrf=vrf,
+                    explanation=explanation
+                ):
+
+                    reason = (
+                        "Trace stopped after source firewall traversal: "
+                        "missing next-router inventory"
+                    )
+
+                    explanation.add(reason)
+
+                    state.mark_finished(reason)
+
+                    return self._build_result(
+                        state=state,
+                        explanation=explanation
+                    )
+                    
+            else:
+                reason = (
+                    f"Source {packet.source} resolved using "
+                    f"unsupported method {method}"
+                )
+
+                explanation.add(reason)
+                state.mark_finished(reason)
+
+                return self._build_result(
+                    state=state,
+                    explanation=explanation
+                )
 
         #
-        # Existing global NAT evaluation.
-        # This also remains unchanged during this refactor.
+        # Router/firewall traversal loop.
         #
-        translated_packet, nat_result = self.twin.nat.translate(
-            packet
-        )
-
-        explanation.add(
-            f"NAT decision: {nat_result.reason}"
-        )
-
-        if nat_result.matched:
-            explanation.add(
-                f"NAT source: "
-                f"{nat_result.source_before} -> "
-                f"{nat_result.source_after}"
-            )
-
-            explanation.add(
-                f"NAT destination: "
-                f"{nat_result.destination_before} -> "
-                f"{nat_result.destination_after}"
-            )
-
-        state.packet = translated_packet
-
-        for hop_number in range(1, max_hops + 1):
+        for hop_number in range(
+            1,
+            max_hops + 1
+        ):
 
             if state.finished:
                 break
@@ -169,51 +286,70 @@ class TraceWorkflow:
             state.last_route_result = route_result
 
             if not route:
-                state.mark_finished(
-                    reason=(
-                        f"No route matched on "
-                        f"{state.router} VRF {state.vrf}"
-                    )
+                reason = (
+                    f"No route matched on "
+                    f"{state.router} VRF {state.vrf}"
                 )
+
+                state.mark_finished(reason)
                 break
 
             state.packet.next_hop = route["next_hop"]
 
-            next_device, resolution = self._resolve_router_next_hop(
-                current_router=state.router,
-                current_vrf=state.vrf,
-                next_hop=route["next_hop"],
-                explanation=explanation
+            next_device, resolution = (
+                self._resolve_router_next_hop(
+                    current_router=state.router,
+                    current_vrf=state.vrf,
+                    next_hop=route["next_hop"],
+                    explanation=explanation
+                )
             )
 
-            if self._is_firewall_resolution(resolution):
+            #
+            # The packet has reached a firewall.
+            # ACL, NAT and firewall routing are evaluated here.
+            #
+            if self._is_firewall_resolution(
+                resolution
+            ):
 
                 traversal = self._trace_firewall(
                     resolution=resolution,
-                    source=source,
+                    source=state.packet.source,
                     route_destination=state.destination,
-                    protocol=protocol,
-                    service=service,
+                    protocol=state.packet.protocol,
+                    service=state.packet.service,
                     firewall_hops=state.firewall_hops,
                     network_hops=state.network_hops,
                     explanation=explanation
                 )
 
-                state.security = (
-                    traversal.security
-                    or state.security
-                )
+                if traversal.security:
+                    state.security = traversal.security
 
                 if traversal.output_packet:
                     state.packet = traversal.output_packet
 
+                #
+                # Firewall denied the packet.
+                #
+                if not traversal.permitted:
+
+                    reason = traversal.reason or "Firewall denied traffic"
+
+                    explanation.add(
+                        f"Trace stopped: {reason}"
+                    )
+
+                    state.mark_finished(reason)
+                    break
+
+                #
+                # Destination reached inside firewall.
+                #
                 if (
                     stop_on_destination
-                    and getattr(
-                        traversal,
-                        "destination_reached",
-                        False
-                    )
+                    and traversal.destination_reached
                 ):
                     reason = (
                         f"Destination reached via firewall "
@@ -228,10 +364,13 @@ class TraceWorkflow:
                     )
                     break
 
+                #
+                # Continue to next router.
+                #
                 if self._continue_from_firewall_target(
                     state=state,
                     traversal=traversal,
-                    fallback_vrf=vrf,
+                    fallback_vrf=state.vrf,
                     explanation=explanation
                 ):
                     continue
@@ -245,13 +384,18 @@ class TraceWorkflow:
                 state.mark_finished(reason)
                 break
 
+            #
+            # The next hop is another router.
+            #
             if next_device:
+
                 self._continue_to_router(
                     state=state,
                     next_device=next_device,
                     hop_number=hop_number,
                     explanation=explanation
                 )
+
                 continue
 
             reason = (
