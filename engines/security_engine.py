@@ -1,3 +1,5 @@
+import ipaddress
+
 from graph.graph import KnowledgeGraph
 from models.acl_match import ACLMatch
 from models.security_result import SecurityResult
@@ -48,9 +50,10 @@ class SecurityEngine:
                         if rel2 == "HAS_INTERFACE" and ctx.type == "Context":
                             context = ctx.name
 
-                    for rel3, fw in self.graph.neighbors(ctx.id):
-                        if rel3 == "HAS_CONTEXT" and fw.type == "Firewall":
-                            firewall = fw.name
+                    if context:
+                        for rel3, fw in self.graph.neighbors(ctx.id):
+                            if rel3 == "HAS_CONTEXT" and fw.type == "Firewall":
+                                firewall = fw.name
 
         return ACLMatch(
             firewall=firewall,
@@ -100,7 +103,21 @@ class SecurityEngine:
         if not protocol:
             return True
 
-        return rule.properties.get("protocol") == protocol
+        rule_protocol = str(
+            rule.properties.get("protocol") or ""
+        ).lower()
+
+        requested_protocol = str(protocol).lower()
+
+        if rule_protocol == "object-group":
+            return bool(
+                rule.properties.get("service")
+            )
+
+        if rule_protocol in ["ip", "any"]:
+            return True
+
+        return rule_protocol == requested_protocol
 
     def _service_matches(self, rule, service):
         if not service:
@@ -150,6 +167,15 @@ class SecurityEngine:
 
         if node.name.endswith(f":host {value}"):
             return True
+
+        if node.properties.get("type") == "network":
+            try:
+                return ipaddress.ip_address(value) in ipaddress.ip_network(
+                    object_value,
+                    strict=False
+                )
+            except (TypeError, ValueError):
+                return False
 
         return False
 

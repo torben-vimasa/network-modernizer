@@ -261,6 +261,24 @@ class GraphBuilder:
             graph.add_relationship(rule_node, target_node, relationship_type)
             return
 
+
+        if endpoint_type == "network":
+            target_node = graph.add_node(
+                "NetworkObject",
+                endpoint_value,
+                {
+                    "type": "network",
+                    "value": endpoint_value
+                }
+            )
+
+            graph.add_relationship(
+                rule_node,
+                target_node,
+                relationship_type
+            )
+            return
+
         if endpoint_type == "object":
             target_node = self._find_best_node(graph, "NetworkObject", endpoint_value)
             if target_node:

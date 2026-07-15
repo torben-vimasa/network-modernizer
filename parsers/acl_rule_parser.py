@@ -1,3 +1,5 @@
+import ipaddress
+
 from models.acl import ACL
 from models.acl_rule import ACLRule
 
@@ -112,6 +114,21 @@ class ACLRuleParser:
 
         if token == "object-group" and len(parts) > index + 1:
             return "object-group", parts[index + 1], index + 2
+
+        # Expanded ASA ACL syntax:
+        # 157.250.163.240 255.255.255.248
+        if len(parts) > index + 1:
+            mask = parts[index + 1]
+
+            try:
+                network = ipaddress.ip_network(
+                    f"{token}/{mask}",
+                    strict=False
+                )
+            except ValueError:
+                pass
+            else:
+                return "network", str(network), index + 2
 
         return "raw", token, index + 1
 
