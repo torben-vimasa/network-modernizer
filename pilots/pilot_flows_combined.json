@@ -131,7 +131,7 @@
     "start": {
       "type": "firewall",
       "context": "BDK-Teknik",
-      "interface": "NokiaJumphosts"
+      "interface": "Nokia_Jumphosts_DMZ"
     }
   },
   {
@@ -150,7 +150,7 @@
     "start": {
       "type": "firewall",
       "context": "BDK-Teknik",
-      "interface": "NokiaJumphosts"
+      "interface": "Nokia_Jumphosts_DMZ"
     }
   },
   {

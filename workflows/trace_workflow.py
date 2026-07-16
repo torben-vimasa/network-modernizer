@@ -296,6 +296,37 @@ class TraceWorkflow:
 
             state.packet.next_hop = route["next_hop"]
 
+            local_interface = next(
+                (
+                    node
+                    for node in self.twin.graph.find_by_type(
+                        "RouterInterface"
+                    )
+                    if node.name.startswith(f"{state.router}:")
+                    and str(
+                        node.properties.get("ip") or ""
+                    ).split("/")[0] == route["next_hop"]
+                ),
+                None
+            )
+
+            if local_interface:
+                interface_name = local_interface.name.split(":", 1)[-1]
+
+                reason = (
+                    "Destination reached through directly connected "
+                    f"router interface {interface_name}"
+                )
+
+                explanation.add(
+                    f"Route next-hop {route['next_hop']} is local to "
+                    f"{local_interface.name}"
+                )
+                explanation.add(reason)
+
+                state.mark_finished(reason)
+                break
+
             next_device, resolution = (
                 self._resolve_router_next_hop(
                     current_router=state.router,
