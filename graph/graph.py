@@ -27,6 +27,9 @@ class KnowledgeGraph:
             short_name = str(name).rsplit(":", 1)[-1]
             self._nodes_by_suffix[(node_type, short_name)].append(node_id)
 
+        elif properties:
+            self.nodes[node_id].properties.update(properties)
+
         return node_id
 
     def add_relationship(self, source, target, rel_type, properties=None):

@@ -86,17 +86,34 @@ class FirewallTraversalEngine:
             )
 
             if interface:
-                result.egress_interface = interface["name"]
+                result.egress_interface = (
+                    interface.get("nameif")
+                    or interface.get("name")
+                    or interface.get("interface")
+                )
 
+                #
+        # A route with an egress interface but no next hop
+        # represents direct Layer-2 delivery on a connected network.
         #
-        # Destination is only reached when there is no
-        # further egress interface to traverse.
-        #
-        if route_result.route.prefix != "0.0.0.0/0":
-            result.destination_reached = not bool(result.egress_interface)
+        if (
+            route_result.next_hop is None
+            and result.egress_interface
+        ):
+            result.destination_reached = True
+            result.permitted = True
+            result.output_packet = translated_packet
+            result.reason = (
+                "Destination reached through directly connected "
+                f"interface {result.egress_interface}"
+            )
+            return result
+
+        result.destination_reached = False
 
         topology_result = None
 
+        
         if result.egress_interface:
             topology_result = self.topology.find_connected_device(
                 context=result.context,

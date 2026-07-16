@@ -14,10 +14,29 @@ class InterfaceResolutionEngine:
 
             subnet = interface.get("subnet")
 
+            #
+            # New normalized firewall interface format
+            #
+            if not subnet:
+
+                address = interface.get("ip")
+                mask = interface.get("mask")
+
+                if address and mask:
+                    subnet = str(
+                        ipaddress.ip_network(
+                            f"{address}/{mask}",
+                            strict=False
+                        )
+                    )
+
             if not subnet:
                 continue
 
-            network = ipaddress.ip_network(subnet, strict=False)
+            network = ipaddress.ip_network(
+                subnet,
+                strict=False
+            )
 
             if ip in network:
                 return interface

@@ -43,8 +43,11 @@ class DigitalTwin:
 
         self.imported_config = self.asa_importer.import_config(asa_config_file)
 
+        self.nat_rules = self.imported_config.nat_rules
+
         self.nat = NATEngine(
-            self.imported_config.nat_rules
+            self.nat_rules,
+            graph=self.graph
         )
 
         self.trace = TraceWorkflow(self)

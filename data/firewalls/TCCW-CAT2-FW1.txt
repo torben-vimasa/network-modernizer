@@ -1,0 +1,2877 @@
+TCCW-CAT2-FW/unit-1-1/master/CAT2-DMZ# show run
+: Saved
+
+:
+: Hardware:   FPR4K-SM-12
+:
+ASA Version 9.18(3)56 <context>
+!
+terminal width 511
+hostname TCCW-CAT2-FW
+enable password ***** pbkdf2
+no names
+
+!
+interface vlan1665
+ shutdown
+ nameif TEST
+ security-level 50
+ no ip address
+!
+interface vlan2001
+ nameif TCCW-CAT2DMZ-00-SPNS2-DEVICE-MGMT-LINKNET
+ security-level 90
+ ip address 100.72.1.21 255.255.255.252
+!
+interface vlan2301
+ nameif TCCW-CAT2DMZ-01-AAA-DNS-NTP-LINKNET
+ security-level 50
+ ip address 100.72.2.1 255.255.255.252
+!
+interface vlan2302
+ nameif TCCW-CAT2DMZ-02-MGMT-SERVICES-LINKNET
+ security-level 50
+ ip address 100.72.2.5 255.255.255.252
+!
+interface vlan2304
+ nameif TCCW-CAT2DMZ-04-MONITORING-LINKNET
+ security-level 50
+ ip address 100.72.2.13 255.255.255.252
+!
+interface vlan2305
+ nameif TCCW-CAT2DMZ-05-MGMT-VXRAIL-LINKNET
+ security-level 50
+ ip address 100.72.2.17 255.255.255.252
+!
+interface vlan2306
+ nameif TCCW-CAT2DMZ-06-IDRAC-VXRAIL-LINKNET
+ security-level 50
+ ip address 100.72.2.21 255.255.255.252
+!
+interface vlan2307
+ nameif TCCW-CAT2DMZ-07-BACKUP-VXRAIL-LINKNET
+ security-level 50
+ ip address 100.72.2.25 255.255.255.252
+!
+interface vlan2308
+ shutdown
+ no nameif
+ security-level 50
+ no ip address
+!
+interface vlan2309
+ nameif TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMP-LINKNET
+ security-level 50
+ ip address 100.72.2.33 255.255.255.252
+!
+interface vlan2310
+ nameif TCCW-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN-LINKNET
+ security-level 50
+ ip address 100.72.2.37 255.255.255.252
+!
+interface vlan2311
+ nameif TCCW-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET
+ security-level 50
+ ip address 100.72.2.41 255.255.255.252
+!
+interface vlan2312
+ nameif TCCW-CAT2DMZ-12-CAT2-LINUX-REPOSITORY-LINKNET
+ security-level 50
+ ip address 100.72.2.45 255.255.255.252
+!
+interface vlan2313
+ nameif TCCW-CAT2DMZ-13-CAT2-ANTIVIRUS-LINKNET
+ security-level 50
+ ip address 100.72.2.49 255.255.255.252
+!
+interface vlan2314
+ nameif TCCW-CAT2DMZ-14-BDK-JUMP-LINKNET
+ security-level 50
+ ip address 100.72.2.53 255.255.255.252
+!
+interface vlan2315
+ nameif TCCW-CAT2DMZ-15-AEVEN-JUMP-LINKNET
+ security-level 50
+ ip address 100.72.2.57 255.255.255.252
+!
+interface vlan2318
+ nameif TCCW-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER-LINKNET
+ security-level 50
+ ip address 100.72.2.69 255.255.255.252
+!
+interface vlan2011
+ nameif TCCW-CAT2DMZ-TRANSIT-OBV-CAT3DMZ
+ security-level 0
+ ip address 100.72.1.17 255.255.255.252
+!
+interface vlan2012
+ nameif TCCW-CAT2DMZ-TRANSIT-RGDC-CAT3DMZ
+ security-level 0
+ ip address 100.72.1.13 255.255.255.252
+!
+interface vlan2100
+ nameif TRANSIT-TCCW-CAT2-NET_MGMT_BDK_CORE_A1
+ security-level 99
+ ip address 100.72.0.1 255.255.255.252
+!
+interface vlan2128
+ nameif TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCW1A
+ security-level 99
+ ip address 100.72.0.97 255.255.255.252
+!
+interface vlan2129
+ nameif TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCW2A
+ security-level 99
+ ip address 100.72.0.101 255.255.255.252
+!
+interface vlan2134
+ nameif TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_A_TCCW1A
+ security-level 99
+ ip address 100.72.0.121 255.255.255.252
+!
+interface vlan2135
+ nameif TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_A_TCCW2A
+ security-level 99
+ ip address 100.72.0.125 255.255.255.252
+!
+interface vlan2200
+ nameif TRANSIT-TCCW-CAT2-NET_MGMT_BDK_CORE_B1
+ security-level 99
+ ip address 100.72.0.129 255.255.255.252
+!
+interface vlan2234
+ nameif TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_B_TCCW1B
+ security-level 99
+ ip address 100.72.0.249 255.255.255.252
+!
+interface vlan2235
+ nameif TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_B_TCCW2B
+ security-level 99
+ ip address 100.72.0.253 255.255.255.252
+!
+interface vlan2751
+ nameif TRANSIT-SPNS1-TCCWCORE01
+ security-level 90
+ ip address 100.75.0.10 255.255.255.252
+!
+interface vlan2752
+ nameif TRANSIT-SPNS1-TCCWCORE02
+ security-level 90
+ ip address 100.75.0.14 255.255.255.252
+!
+same-security-traffic permit inter-interface
+no object-group-search access-control
+object network HOST-100.72.3.15--TCCW-CAT2DMZ-01-ISE
+ host 100.72.3.15
+object network HOST-100.72.35.15--TCCE-CAT2DMZ-01-ISE
+ host 100.72.35.15
+object service UDP-1812
+ service udp destination eq 1812
+object service UDP-1813
+ service udp destination eq 1813
+object network HOST-100.72.3.40--TCCW-CAT2DMZ-02-SSM
+ host 100.72.3.40
+object network HOST-100.72.35.40--TCCE-CAT2DMZ-02-SSM
+ host 100.72.35.40
+object network HOST-100.72.3.2--TCCW-CAT2DMZ-01-AD-DNS-NTP
+ host 100.72.3.2
+object network HOST-100.72.35.2--TCCE-CAT2DMZ-01-AD-DNS-NTP
+ host 100.72.35.2
+object service TCP-123
+ service tcp destination eq 123
+object service UDP-123
+ service udp destination eq ntp
+object service TCP-53
+ service tcp destination eq domain
+object service UDP-53
+ service udp destination eq domain
+object network NET-100.72.3.32--TCCW-CAT2DMZ-02-MGMT-SERVICES
+ subnet 100.72.3.32 255.255.255.224
+object network NET-100.72.35.32--TCCE-CAT2DMZ-02-MGMT-SERVICES
+ subnet 100.72.35.32 255.255.255.224
+object service TCP-22
+ service tcp destination eq ssh
+object service TCP-443
+ service tcp destination eq https
+object network NET-100.73.1.128-27BIT--RGDC-CAT3DMZ-00-SPNS2-DEVICE-MGMT
+ subnet 100.73.1.128 255.255.255.224
+object network NET-100.73.33.128-27BIT--OBV-CAT3DMZ-00-SPNS2-DEVICE-MGMT
+ subnet 100.73.33.128 255.255.255.224
+object network NET-100.72.1.128-27BIT--TCCW-CAT2DMZ-00-SPNS2-DEVICE-MGMT
+ subnet 100.72.1.128 255.255.255.224
+object network NET-100.72.33.128-27BIT--TCCE-CAT2DMZ-00-SPNS2-DEVICE-MGMT
+ subnet 100.72.33.128 255.255.255.224
+object network HOST-100.72.3.136--TCCW-CAT2DMZ-05-VX-VCENT01
+ host 100.72.3.136
+object network HOST-100.72.35.136--TCCE-CAT2DMZ-05-VX-VCENT01
+ host 100.72.35.136
+object network HOST-100.72.3.137--TCCW-CAT2DMZ-05-VX-MANAGER01-VCENT01
+ host 100.72.3.137
+object network HOST-100.72.35.137--TCCE-CAT2DMZ-05-VX-MANAGER01-VCENT01
+ host 100.72.35.137
+object network HOST-100.72.3.130--TCCW-CAT2DMZ-05-RAIL01
+ host 100.72.3.130
+object network HOST-100.72.3.131--TCCW-CAT2DMZ-05-RAIL02
+ host 100.72.3.131
+object network HOST-100.72.3.132--TCCW-CAT2DMZ-05-RAIL03
+ host 100.72.3.132
+object network HOST-100.72.35.130--TCCE-CAT2DMZ-05-RAIL01
+ host 100.72.35.130
+object network HOST-100.72.35.131--TCCE-CAT2DMZ-05-RAIL02
+ host 100.72.35.131
+object network HOST-100.72.35.132--TCCE-CAT2DMZ-05-RAIL03
+ host 100.72.35.132
+object service UDP-161
+ service udp destination eq snmp
+object service TCP-161
+ service tcp destination eq 161
+object network HOST-100.72.35.100--TCCE-CAT2DMZ-04-PRTG-E
+ host 100.72.35.100
+object network HOST-100.72.3.162--TCCW-CAT2DMZ-06-RAIL01-IDRAC
+ host 100.72.3.162
+object network HOST-100.72.3.163--TCCW-CAT2DMZ-06-RAIL02-IDRAC
+ host 100.72.3.163
+object network HOST-100.72.3.164--TCCW-CAT2DMZ-06-RAIL03-IDRAC
+ host 100.72.3.164
+object network HOST-100.72.35.162--TCCE-CAT2DMZ-06-RAIL01-IDRAC
+ host 100.72.35.162
+object network HOST-100.72.35.163--TCCE-CAT2DMZ-06-RAIL02-IDRAC
+ host 100.72.35.163
+object network HOST-100.72.35.164--TCCE-CAT2DMZ-06-RAIL03-IDRAC
+ host 100.72.35.164
+object service TCP-80
+ service tcp destination eq www
+object service UDP-623
+ service udp destination eq 623
+object service TCP-623
+ service tcp destination eq 623
+object service TCP-5900
+ service tcp destination eq 5900
+object service TCP-5901
+ service tcp destination eq 5901
+object network HOST-100.72.35.11--TCCE-CAT2DMZ-01-CAT2DC01
+ host 100.72.35.11
+object network HOST-100.72.3.11--TCCW-CAT2DMZ-01-CAT2DC02
+ host 100.72.3.11
+object service TCP-389
+ service tcp destination eq ldap
+object service TCP-636
+ service tcp destination eq ldaps
+object network HOST-100.72.33.129--TCCE-CAT2DMZ-00-NTP
+ host 100.72.33.129
+object network HOST-100.72.1.129--TCCW-CAT2DMZ-00-NTP
+ host 100.72.1.129
+object service TCP-1812
+ service tcp destination eq 1812
+object service TCP-1813
+ service tcp destination eq 1813
+object service UDP-49
+ service udp destination eq tacacs
+object service TCP-49
+ service tcp destination eq tacacs
+object network NET-100.72.0.0-16BIT--CAT2DMZ-NETWORKS
+ subnet 100.72.0.0 255.255.0.0
+object network HOST-100.72.3.100--TCCW-CAT2DMZ-04-PRTG-W
+ host 100.72.3.100
+object service TCP-3001-3008
+ service tcp destination range 3001 3008
+object network HOST-100.73.33.158--OBV-CAT3DMZ-00-OOB1
+ host 100.73.33.158
+object network HOST-100.73.1.158--RGDC-CAT3DMZ-00-OOB2
+ host 100.73.1.158
+object network HOST-100.73.1.157--RGDC-CAT3DMZ-00-OOB1
+ host 100.73.1.157
+object network HOST-100.72.33.157--TCCE-CAT2DMZ-00-OOB1
+ host 100.72.33.157
+object network HOST-100.72.33.158--TCCE-CAT2DMZ-00-OOB2
+ host 100.72.33.158
+object network HOST-100.72.1.157--TCCW-CAT2DMZ-00-OOB1
+ host 100.72.1.157
+object network HOST-100.72.1.158--TCCW-CAT2DMZ-00-OOB2
+ host 100.72.1.158
+object network HOST-100.72.36.6--TCCE-CAT2DMZ-09-EXT-PROVIDERS-JUMPHOST-WIN-Cat2JumpCORE-E
+ host 100.72.36.6
+object network HOST-100.72.36.10--TCCE-CAT2DMZ-09-EXT-PROVIDERS-JUMPHOST-LINUX-Cat2JumpSSH-E
+ host 100.72.36.10
+object network HOST-100.72.4.10--TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMPHOST-LINUX-Cat2JumpSSH-W
+ host 100.72.4.10
+object network HOST-100.72.4.6--TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMPHOST-WIN-Cat2JumpCORE-W
+ host 100.72.4.6
+object network HOST-100.72.36.5--TCCE-CAT2DMZ-09-EXT-PROVIDERS-JUMPHOST-WIN-OLD
+ host 100.72.36.5
+object network HOST-100.72.4.5--TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMPHOST-WIN-OLD
+ host 100.72.4.5
+object network HOST-100.72.4.164--TCCW-CAT2DMZ-14-BDK-JUMPHOST-WIN
+ host 100.72.4.164
+object network HOST-100.72.4.165--TCCW-CAT2DMZ-14-BDK-JUMPHOST-LINUX
+ host 100.72.4.165
+object network HOST-100.72.36.164--TCCE-CAT2DMZ-14-BDK-JUMPHOST-WIN
+ host 100.72.36.164
+object network HOST-100.72.36.165--TCCE-CAT2DMZ-14-BDK-JUMPHOST-LINUX
+ host 100.72.36.165
+object network HOST-100.72.4.196--TCCW-CAT2DMZ-15-AEVEN-JUMPHOST-WIN
+ host 100.72.4.196
+object network HOST-100.72.4.197--TCCW-CAT2DMZ-15-AEVEN-JUMPHOST-LINUX
+ host 100.72.4.197
+object network HOST-100.72.36.196--TCCE-CAT2DMZ-15-AEVEN-JUMPHOST-WIN
+ host 100.72.36.196
+object network HOST-100.72.36.197--TCCE-CAT2DMZ-15-AEVEN-JUMPHOST-LINUX
+ host 100.72.36.197
+object network HOST-100.72.36.98--TCCE-CAT2DMZ-12-LINUX-REPOSITORY
+ host 100.72.36.98
+object network HOST-100.72.4.98--TCCW-CAT2DMZ-12-LINUX-REPOSITORY
+ host 100.72.4.98
+object network HOST-172.27.2.206-JTTN-AREPOPBR01.BANE.DK
+ host 172.27.2.206
+object network HOST-100.72.36.130--TCCE-CAT2DMZ-13-SPNS2-CAT2DMZBDTCCE1
+ host 100.72.36.130
+object network HOST-100.72.4.130--TCCW-CAT2DMZ-13-SPNS2-CAT2DMZBDTCCW1
+ host 100.72.4.130
+object service TCP-3268
+ service tcp destination eq 3268
+object service TCP-3269
+ service tcp destination eq 3269
+object network HOST-172.27.200.17--JTTN-ABITDEFEND1.BANE.DK
+ host 172.27.200.17
+object service TCP-139
+ service tcp destination eq netbios-ssn
+object service TCP-445
+ service tcp destination eq 445
+object network HOST-100.72.4.70--TCCW-CAT2DMZ-11-SPNS2-A2LOGPOINT1-SYSLOG
+ host 100.72.4.70
+object network HOST-100.72.36.70--TCCE-CAT2DMZ-11-SPNS2-A2LOGPOINT2-SYSLOG
+ host 100.72.36.70
+object service TCP-514
+ service tcp destination eq rsh
+object service UDP-514
+ service udp destination eq syslog
+object network HOST-172.27.200.24--JTTN-ASMTP1.BANE.DK
+ host 172.27.200.24
+object service TCP-25
+ service tcp destination eq smtp
+object service TCP-587
+ service tcp destination eq 587
+object network NET-100.72.3.64--TCCW-CAT2DMZ-03-MGMT-NOKIA
+ subnet 100.72.3.64 255.255.255.224
+object network NET-100.72.35.64--TCCE-CAT2DMZ-03-MGMT-NOKIA
+ subnet 100.72.35.64 255.255.255.224
+object network NET-100.72.35.96--TCCE-CAT2DMZ-04-MONITORING
+ subnet 100.72.35.96 255.255.255.224
+object network NET-100.72.3.96--TCCW-CAT2DMZ-04-MONITORING
+ subnet 100.72.3.96 255.255.255.224
+object network NET-100.72.36.0--TCCE-CAT2DMZ-09-EXT-PROVIDERS-JUMP
+ subnet 100.72.36.0 255.255.255.224
+object network NET-100.72.4.0--TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMP
+ subnet 100.72.4.0 255.255.255.224
+object network NET-100.72.36.64--TCCE-CAT2DMZ-11-CAT2-SYSLOG
+ subnet 100.72.36.64 255.255.255.224
+object network NET-100.72.4.64--TCCW-CAT2DMZ-11-CAT2-SYSLOG
+ subnet 100.72.4.64 255.255.255.224
+object network NET-100.72.36.96--TCCE-CAT2DMZ-12-CAT2-LINUX-REPOSITORY
+ subnet 100.72.36.96 255.255.255.224
+object network NET-100.72.4.96--TCCW-CAT2DMZ-12-CAT2-LINUX-REPOSITORY
+ subnet 100.72.4.96 255.255.255.224
+object network NET-100.72.36.128--TCCE-CAT2DMZ-13-CAT2-ANTIVIRUS
+ subnet 100.72.36.128 255.255.255.224
+object network NET-100.72.4.128--TCCW-CAT2DMZ-13-CAT2-ANTIVIRUS
+ subnet 100.72.4.128 255.255.255.224
+object network NET-100.72.36.160--TCCE-CAT2DMZ-14-BDK-JUMP
+ subnet 100.72.36.160 255.255.255.224
+object network NET-100.72.4.160--TCCW-CAT2DMZ-14-BDK-JUMP
+ subnet 100.72.4.160 255.255.255.224
+object network NET-100.72.36.192--TCCE-CAT2DMZ-15-AEVEN-JUMP
+ subnet 100.72.36.192 255.255.255.224
+object network NET-100.72.4.192--TCCW-CAT2DMZ-15-AEVEN-JUMP
+ subnet 100.72.4.192 255.255.255.224
+object service TCP-7074
+ service tcp destination eq 7074
+object service TCP-7076
+ service tcp destination eq 7076
+object service TCP-7081
+ service tcp destination eq 7081
+object service TCP-7083
+ service tcp destination eq 7083
+object service TCP-8080
+ service tcp destination eq 8080
+object service TCP-8443
+ service tcp destination eq 8443
+object service TCP-8444
+ service tcp destination eq 8444
+object network NET-100.73.0.0-16BIT--CAT3DMZ-NETWORKS
+ subnet 100.73.0.0 255.255.0.0
+object network HOST-172.21.247.10--ABANECTXDC1
+ host 172.21.247.10
+object network HOST-172.21.247.11--ABANECTXDC2
+ host 172.21.247.11
+object service TCP-3389
+ service tcp destination eq 3389
+object network HOST-172.21.65.116--JTTN-AEVEN-JTTN-JUMPHOST1
+ host 172.21.65.116
+object network HOST-172.21.65.117--JTTN-AEVEN-JTTN-JUMPHOST2
+ host 172.21.65.117
+object network HOST-10.185.50.42--JTTN-BDK-JTTN-JUMPHOST1
+ host 10.185.50.42
+object network HOST-10.185.50.44--JTTN-BDK-JTTN-JUMPHOST2
+ host 10.185.50.44
+object network HOST-172.21.65.148--JTTN-EXT-PROVIDERS-JTTN-JUMPHOST1
+ host 172.21.65.148
+object network HOST-172.21.65.149--JTTN-EXT-PROVIDERS-JTTN-JUMPHOST2
+ host 172.21.65.149
+object network ABITDEFENDPRX1_172.27.200.18
+ host 172.27.200.18
+object service TCP-464
+ service tcp destination eq 464
+object service UDP-138
+ service udp destination eq netbios-dgm
+object service UDP-137
+ service udp destination eq netbios-ns
+object service TCP-135
+ service tcp destination eq 135
+object service TCP-88
+ service tcp destination eq 88
+object network HOST-100.72.3.16--TCCW-CAT2DMZ-01-A2WSUSTCCW1
+ host 100.72.3.16
+object network HOST-100.72.35.16--TCCE-CAT2DMZ-01-A2WSUSTCCE1
+ host 100.72.35.16
+object service TCP-8531
+ service tcp destination eq 8531
+object service TCP-8530
+ service tcp destination eq 8530
+object network HOST-172.27.200.34--JTTN-AWSUS1
+ host 172.27.200.34
+object service UDP-464
+ service udp destination eq 464
+object service TCP-49152-65535
+ service tcp destination range 49152 65535
+ description RPC
+object service UDP-389
+ service udp destination eq 389
+object service UDP-88
+ service udp destination eq 88
+object service UDP-445
+ service udp destination eq 445
+object network HOST-100.72.36.11--TCCE-CAT2DMZ-09-EXT-PROVIDERS-A2EXTPROWINJUMPE1
+ host 100.72.36.11
+object network HOST-100.72.36.12--TCCE-CAT2DMZ-09-EXT-PROVIDERS-A2EXTPROLINJUMPE1
+ host 100.72.36.12
+object network HOST-100.72.4.11--TCCW-CAT2DMZ-09-EXT-PROVIDERS-A2EXTPROWINJUMPW1
+ host 100.72.4.11
+object network HOST-100.72.4.12--TCCW-CAT2DMZ-09-EXT-PROVIDERS-A2EXTPROLINJUMPW1
+ host 100.72.4.12
+object service ICMP-ECHO
+ service icmp echo
+object network HOST-100.72.35.13--TCCE-CAT2DMZ-01-A2RDLICENSETCCE1
+ host 100.72.35.13
+object network NET-10.125.1.0-26BIT--BDK-CORE-A
+ subnet 10.125.1.0 255.255.255.192
+object network NET-10.125.0.0-24BIT--BDK-CORE-A-OOB
+ subnet 10.125.0.0 255.255.255.0
+object network NET-10.125.2.0-26BIT--BDK-CORE-B
+ subnet 10.125.2.0 255.255.255.192
+object network NET-10.125.3.0-24BIT--BDK-CORE-B-OOB
+ subnet 10.125.3.0 255.255.255.0
+object network NET-10.24.0.0-16BIT--STTN-Network-A
+ subnet 10.24.0.0 255.255.0.0
+object network NET-10.25.0.0-16BIT--STTN-Network-B
+ subnet 10.25.0.0 255.255.0.0
+object network NET-10.26.0.0-16BIT--STTN-Network-C
+ subnet 10.26.0.0 255.255.0.0
+object network NET-100.72.35.0--TCCE-CAT2DMZ-01-AAA-DNS-NTP
+ subnet 100.72.35.0 255.255.255.224
+object network NET-100.72.3.0--TCCW-CAT2DMZ-01-AAA-DNS-NTP
+ subnet 100.72.3.0 255.255.255.224
+object network HOST-100.72.35.13--TCCE-01-A2RDLICENSE1
+ host 100.72.35.13
+object network NET-100.72.3.128--TCCW-CAT2DMZ-05-MGMT-VXRAIL
+ subnet 100.72.3.128 255.255.255.224
+object network NET-100.72.35.128--TCCE-CAT2DMZ-05-MGMT-VXRAIL
+ subnet 100.72.35.128 255.255.255.224
+object network NET-100.72.3.160--TCCW-CAT2DMZ-06-IDRAC-VXRAIL
+ subnet 100.72.3.160 255.255.255.224
+object network NET-100.72.35.160--TCCE-CAT2DMZ-06-IDRAC-VXRAIL
+ subnet 100.72.35.160 255.255.255.224
+object network NET-100.72.36.32--TCCE-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN
+ subnet 100.72.36.32 255.255.255.224
+object network NET-100.72.4.32--TCCW-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN
+ subnet 100.72.4.32 255.255.255.224
+object network HOST-172.27.2.22--ABANE16.BANE.DK
+ host 172.27.2.22
+object network HOST-172.27.3.22--ABANE17.BANE.DK
+ host 172.27.3.22
+object network HOST-100.72.36.34--TCCE-CAT2DMZ-10-LOGPOINT-ADMIN
+ host 100.72.36.34
+object network HOST-100.72.4.34--TCCW-CAT2DMZ-10-LOGPOINT-ADMIN
+ host 100.72.4.34
+object network HOST-100.72.36.35--TCCE-CAT2DMZ-10-LOGPOINT-IDRAC
+ host 100.72.36.35
+object network HOST-100.72.4.35--TCCW-CAT2DMZ-10-LOGPOINT-IDRAC
+ host 100.72.4.35
+object network HOST-100.72.35.60--TCCE-CAT2DMZ-02-A2LINBACKUPTCCE1
+ host 100.72.35.60
+object network HOST-100.72.3.60--TCCW-CAT2DMZ-02-A2LINBACKUPTCCW1
+ host 100.72.3.60
+object network HOST-100.72.33.14--OBV-CAT3DMZ-FTD-OBV-TO-TCCE-LINKNET-IP
+ host 100.72.33.14
+object network HOST-100.72.33.18--RGDC-CAT3DMZ-FTD-RGDC-TO-TCCE-LINKNET-IP
+ host 100.72.33.18
+object network HOST-100.72.35.196--TCCE-CAT2DMZ-07-BACKUP-VXRAIL
+ host 100.72.35.196
+object network HOST-100.72.3.196--TCCW-CAT2DMZ-07-BACKUP-VXRAIL
+ host 100.72.3.196
+object network HOST-100.72.35.138--TCCE-CAT2DMZ-05-MGMT-VXRAIL
+ host 100.72.35.138
+object network HOST-100.72.3.138--TCCW-CAT2DMZ-05-MGMT-VXRAIL
+ host 100.72.3.138
+object network HOST-100.72.35.165--TCCE-CAT2DMZ-06-IDRAC-VXRAIL
+ host 100.72.35.165
+object network HOST-100.72.3.165--TCCW-CAT2DMZ-06-IDRAC-VXRAIL
+ host 100.72.3.165
+object network HOST-100.72.35.139--TCCE-CAT2DMZ-05-MGMT-VXRAIL
+ host 100.72.35.139
+object network HOST-100.72.3.139--TCCW-CAT2DMZ-05-MGMT-VXRAIL
+ host 100.72.3.139
+object network HOST-100.72.35.62--TCCE-CAT2DMZ-02-MGMT-SERVICES
+ host 100.72.35.62
+object network HOST-100.72.3.62--TCCW-CAT2DMZ-02-MGMT-SERVICES
+ host 100.72.3.62
+object service PBX
+ service tcp destination eq 1556
+object service VNETD
+ service tcp destination eq 13724
+object service WIN-SYSLOG-TCP
+ service tcp destination eq 10514
+object service WIN-SYSLOG-UDP
+ service udp destination eq 10514
+object service REPLICATION
+ service tcp destination eq 2051
+object service MEP
+ service tcp destination eq 3009
+object network HOST-100.72.36.70--TCCW-CAT2DMZ-11-CAT2-SYSLOG-A2LOGPOINT2
+ host 100.72.36.70
+object network HOST-100.72.4.70--TCCE-CAT2DMZ-11-CAT2-SYSLOG-A2LOGPOINT1
+ host 100.72.4.70
+object service UDP-135
+ service udp destination eq 135
+object service TCP-137
+ service tcp destination eq 137
+object service TCP-138
+ service tcp destination eq 138
+object service UDP-49152-65535
+ service udp destination range 49152 65535
+object service UDP-636
+ service udp destination eq 636
+object service UDP-3268
+ service udp destination eq 3268
+object service UDP-3269
+ service udp destination eq 3269
+object network HOST-100.72.32.122--TEMP-STTN-E-NTP-PEER
+ host 100.72.32.122
+object network HOST-100.72.0.122--TEMP-STTN-W-NTP-PEER
+ host 100.72.0.122
+object network HOST-100.72.33.129--TCCE-CAT2-CORE-MGMT
+ host 100.72.33.129
+object network HOST-100.72.1.129--TCCW-CAT2-CORE-MGMT
+ host 100.72.1.129
+object network HOST-172.21.1.201--ADNSFORW1
+ host 172.21.1.201
+object network HOST-172.21.1.202--ADNSFORW2
+ host 172.21.1.202
+object network HOST-100.72.35.60--TCCE-CAT2DMZ-02-A2LINBACKTCCE1
+ host 100.72.35.60
+object network HOST-100.72.3.60--TCCW-CAT2DMZ-02-A2LINBACKTCCW1
+ host 100.72.3.60
+object service UDP-69
+ service udp destination eq tftp
+object service TCP-902
+ service tcp destination eq 902
+object network HOST-100.72.3.11--TCCW-CAT2DMZ-01-AD-DNS-NTP
+ host 100.72.3.11
+object network HOST-100.72.35.11--TCCE-CAT2DMZ-01-AD-DNS-NTP
+ host 100.72.35.11
+object service TFTP
+ service udp destination eq tftp
+object service TCP-5480
+ service tcp destination eq 5480
+object network HOST-100.73.1.130--RGDC-CAT3-FW1-1-FXOS
+ host 100.73.1.130
+object network HOST-100.73.1.131--RGDC-CAT3-FW1-2-FXOS
+ host 100.73.1.131
+object network HOST-100.73.33.130--OBV-CAT3-FW1-1-FXOS
+ host 100.73.33.130
+object network HOST-100.73.33.131--OBV-CAT3-FW1-2-FXOS
+ host 100.73.33.131
+object network HOST-100.73.1.134--RGDC-CAT3DMZ-FMC-MGMT-IP
+ host 100.73.1.134
+object network HOST-100.73.33.134--OBV-CAT3DMZ-FMC-MGMT-IP
+ host 100.73.33.134
+object network HOST-100.72.1.130--TCCW-CAT2-FW1-1-FXOS
+ host 100.72.1.130
+object network HOST-100.72.1.131--TCCW-CAT2-FW1-2-FXOS
+ host 100.72.1.131
+object network HOST-100.72.33.130--TCCE-CAT2-FW1-1-FXOS
+ host 100.72.33.130
+object network HOST-100.72.33.131--TCCE-CAT2-FW1-2-FXOS
+ host 100.72.33.131
+object network HOST-100.73.1.129--RGDC-CAT3DMZ-CORESWITCH
+ host 100.73.1.129
+object network HOST-100.73.33.129--OBV-CAT3DMZ-CORESWITCH
+ host 100.73.33.129
+object network PoC_IXP_Source_Host
+ host 100.75.172.172
+object network HOST-10.150.211.2--JTTN
+ host 10.150.211.2
+object network HOST-10.150.211.1--JTTN
+ host 10.150.211.1
+object network HOST-10.150.210.2--JTTN
+ host 10.150.210.2
+object network HOST-10.150.210.1--JTTN
+ host 10.150.210.1
+object network HOST-10.150.199.11--JTTN
+ host 10.150.199.11
+object network HOST-10.150.199.20--JTTN
+ host 10.150.199.20
+object network HOST-10.185.50.85--JTTN
+ host 10.185.50.85
+object network HOST-172.17.88.240--JTTN
+ host 172.17.88.240
+object network HOST-10.138.63.118--JTTN
+ host 10.138.63.118
+object network HOST-172.17.88.237--JTTN
+ host 172.17.88.237
+object network HOST-172.17.88.239--JTTN
+ host 172.17.88.239
+object network HOST-172.17.88.238--JTTN
+ host 172.17.88.238
+object network HOST-172.17.88.232--JTTN
+ host 172.17.88.232
+object network HOST-172.17.88.233--JTTN
+ host 172.17.88.233
+object network HOST-172.19.255.129--JTTN
+ host 172.19.255.129
+object network HOST-172.19.255.137--JTTN
+ host 172.19.255.137
+object network HOST-100.126.255.62--JTTN
+ host 100.126.255.62
+object network HOST-100.65.5.4--JTTN
+ host 100.65.5.4
+object network HOST-100.65.5.5--JTTN
+ host 100.65.5.5
+object network HOST-100.126.255.129--JTTN
+ host 100.126.255.129
+object network HOST-100.126.255.130--JTTN
+ host 100.126.255.130
+object network HOST-100.126.255.1--JTTN
+ host 100.126.255.1
+object network HOST-100.126.255.2--JTTN
+ host 100.126.255.2
+object network HOST-100.126.255.144--JTTN
+ host 100.126.255.144
+object network HOST-100.65.2.41--JTTN
+ host 100.65.2.41
+object network HOST-100.65.2.193--JTTN
+ host 100.65.2.193
+object network HOST-100.65.5.1--JTTN
+ host 100.65.5.1
+object network HOST-100.126.255.50--JTTN
+ host 100.126.255.50
+object network HOST-100.65.2.33--JTTN
+ host 100.65.2.33
+object network HOST-100.65.2.49--JTTN
+ host 100.65.2.49
+object network HOST-172.27.3.149--JTTN
+ host 172.27.3.149
+object network HOST-172.27.3.150--JTTN
+ host 172.27.3.150
+object network HOST-100.126.255.121--JTTN
+ host 100.126.255.121
+object network HOST-100.65.2.81--JTTN
+ host 100.65.2.81
+object network HOST-100.65.2.9--JTTN
+ host 100.65.2.9
+object network HOST-100.126.255.58--JTTN
+ host 100.126.255.58
+object network HOST-100.65.2.73--JTTN
+ host 100.65.2.73
+object network HOST-100.65.2.1--JTTN
+ host 100.65.2.1
+object network HOST-172.24.12.61--JTTN
+ host 172.24.12.61
+object network HOST-172.23.3.6--JTTN
+ host 172.23.3.6
+object network HOST-172.21.2.104--JTTN
+ host 172.21.2.104
+object network HOST-172.21.2.103--JTTN
+ host 172.21.2.103
+object network HOST-10.185.50.11--JTTN
+ host 10.185.50.11
+object network HOST-10.185.50.12--JTTN
+ host 10.185.50.12
+object network HOST-172.21.1.201--JTTN
+ host 172.21.1.201
+object network HOST-10.185.230.200--JTTN
+ host 10.185.230.200
+object network HOST-172.27.210.4--JTTN
+ host 172.27.210.4
+object network HOST-172.27.210.5--JTTN
+ host 172.27.210.5
+object network HOST-172.27.210.20--JTTN
+ host 172.27.210.20
+object network HOST-172.27.210.21--JTTN
+ host 172.27.210.21
+object network HOST-172.27.3.242--JTTN
+ host 172.27.3.242
+object network HOST-172.27.3.243--JTTN
+ host 172.27.3.243
+object network HOST-172.21.2.180--JTTN
+ host 172.21.2.180
+object network HOST-172.27.3.101--JTTN
+ host 172.27.3.101
+object network HOST-172.27.3.102--JTTN
+ host 172.27.3.102
+object network HOST-172.27.3.43--JTTN
+ host 172.27.3.43
+object network HOST-172.21.1.76--JTTN
+ host 172.21.1.76
+object network HOST-172.27.210.36--JTTN
+ host 172.27.210.36
+object network HOST-172.27.210.68--JTTN
+ host 172.27.210.68
+object network HOST-100.73.66.5--CAT3DMZ-05-SUPPORT-ZONE-AVXRAIL-VCSA01
+ host 100.73.66.5
+object network HOST-100.126.255.65--JTTN
+ host 100.126.255.65
+ description OBVCORE01
+object network HOST-100.126.255.66--JTTN
+ host 100.126.255.66
+ description OBVCORE02
+object network HOST-100.126.255.69--JTTN
+ host 100.126.255.69
+ description OBVBrokerMgmtSw01
+object network HOST-100.126.255.114--JTTN
+ host 100.126.255.114
+ description OBVFW1 - admin context
+object network HOST-100.126.255.67-JTTN
+ host 100.126.255.67
+ description OBVbrokersw01
+object network HOST-172.21.248.70-JTTN
+ host 172.21.248.70
+ description VxRail CTX
+object service TCP-1514
+ service tcp destination eq 1514
+object service TCP-1515
+ service tcp destination eq 1515
+object network HOST-172.21.65.118--JTTN-AEVEN-JTTN-JUMPHOST3
+ host 172.21.65.118
+object network HOST-172.21.65.119--JTTN-AEVEN-JTTN-JUMPHOST4
+ host 172.21.65.119
+object network HOST-172.21.247.40--ACTXNS1
+ host 172.21.247.40
+ description CTASK0038214
+object network HOST-172.21.247.50--ACTXNS2
+ host 172.21.247.50
+ description CTASK0038214
+object network HOST-100.72.35.37-TCCE-UCS-PRTG
+ host 100.72.35.37
+object network HOST-100.72.3.12-TCCW-UCS-WSUS
+ host 100.72.3.12
+object network HOST-10.233.40.200-AEVEN-REMOTE-SITE-HOST
+ host 10.233.40.200
+object network HOST-100.72.36.5-UCS-Cat2JumpSPNS-E
+ host 100.72.36.5
+object network HOST-100.72.36.6-UCS-Cat2JumpCORE-E
+ host 100.72.36.6
+object network HOST-100.72.36.10-UCS-Cat2JumpSSH-E
+ host 100.72.36.10
+object network HOST-100.72.4.5-UCS-CAT2JUMPSPNS-W
+ host 100.72.4.5
+object network HOST-100.72.4.6-UCS-Cat2JumpCORE-W
+ host 100.72.4.6
+object network HOST-100.72.4.10-UCS-Cat2JumpSSH-W
+ host 100.72.4.10
+object network HOST-100.72.3.12-TCCW-UCS-Cat2WSUS01
+ host 100.72.3.12
+object network HOST-100.72.35.36-TCCE-UCS-Cat2Netbrain
+ host 100.72.35.36
+object network HOST-100.72.3.6-TCCW-UCS-VCENTER
+ host 100.72.3.6
+object network HOST-100.72.3.5-TCCW-UCS-ESX-NODE
+ host 100.72.3.5
+object network HOST-100.72.35.5-TCCE-UCS-ESX-NODE
+ host 100.72.35.5
+object network HOST-100.72.35.61-TCCE-UCS-Cat2NetbrainDB
+ host 100.72.35.61
+object network HOST-100.72.35.40-TCCE-UCS-Cat2SSM
+ host 100.72.35.40
+object network HOST-10.25.62.1-NTP-SOURCE-FROM-STTN-B
+ host 10.25.62.1
+object network HOST-10.24.62.1-NTP-SOURCE-FROM-STTN-A
+ host 10.24.62.1
+object network HOST-100.64.15.50-ELTEL-REMOTE-HOST1
+ host 100.64.15.50
+object network HOST-100.64.15.60-ELTEL-REMOTE-HOST2
+ host 100.64.15.60
+object network HOST-NAT-100.72.63.1--TCCW-CAT2DMZ-01-CAT2DC02
+ host 100.72.63.1
+object network HOST-10.147.62.10--NTP-JTTN
+ host 10.147.62.10
+object network HOST-10.9.77.10--NTP-JTTN
+ host 10.9.77.10
+object network HOST-NAT-100.72.63.2--TCCE-CAT2DMZ-01-CAT2DC01
+ host 100.72.63.2
+object network NET-10.185.250.0-25BIT--JTTN-DATADOMAIN
+ subnet 10.185.250.0 255.255.255.128
+object network HOST-10.233.40.200-AEVEN-REMOTE-SITE-PRTG-CONNECTION-HOST
+ host 10.233.40.200
+object network HOST-10.24.125.18--TCCE-OOB-IC-A
+ host 10.24.125.18
+object network HOST-10.25.125.18--TCCE-OOB-IC-B
+ host 10.25.125.18
+object network HOST-10.24.126.18--TCCW-OOB-IC-A
+ host 10.24.126.18
+object network HOST-10.25.126.18--TCCW-OOB-IC-B
+ host 10.25.126.18
+object network HOST-10.125.0.2--OBV-OOB-A
+ host 10.125.0.2
+object network HOST-10.125.0.6--HELSINGOER-OOB-A
+ host 10.125.0.6
+object network HOST-10.125.0.10--ROSKILDE-OOB-A
+ host 10.125.0.10
+object network HOST-10.125.0.14--KAASTRUPGAARD-OOB-A
+ host 10.125.0.14
+object network HOST-10.125.0.18--RINGSTED-OOB-A
+ host 10.125.0.18
+object network HOST-10.125.0.22--KORSOER-OOB-A
+ host 10.125.0.22
+object network HOST-10.125.0.26--ODENSE-OOB-A
+ host 10.125.0.26
+object network HOST-10.125.0.30--TCCW-OOB-A
+ host 10.125.0.30
+object network HOST-10.125.0.34--SVENDBORG-OOB-A
+ host 10.125.0.34
+object network HOST-10.125.0.38--KOEGE-OOB-A
+ host 10.125.0.38
+object network HOST-10.125.0.42--NAESTVED-OOB-A
+ host 10.125.0.42
+object network HOST-10.125.0.46--NYKOEBINGF-OOB-A
+ host 10.125.0.46
+object network HOST-10.125.0.50--VEJLE-OOB-A
+ host 10.125.0.50
+object network HOST-10.125.0.54--LUNDERSKOV-OOB-A
+ host 10.125.0.54
+object network HOST-10.125.0.58--TINGLEV-OOB-A
+ host 10.125.0.58
+object network HOST-10.125.0.62--TOENDER-OOB-A
+ host 10.125.0.62
+object network HOST-10.125.0.66--BRAMMING-OOB-A
+ host 10.125.0.66
+object network HOST-10.125.0.70--SKJERN-OOB-A
+ host 10.125.0.70
+object network HOST-10.125.0.74--HERNING-OOB-A
+ host 10.125.0.74
+object network HOST-10.125.0.78--STRUER-OOB-A
+ host 10.125.0.78
+object network HOST-10.125.0.82--THISTED-OOB-A
+ host 10.125.0.82
+object network HOST-10.125.0.86--FREDERIKSHAVN-OOB-A
+ host 10.125.0.86
+object network HOST-10.125.0.90--AALBORG-OOB-A
+ host 10.125.0.90
+object network HOST-10.125.0.94--LANGAA-OOB-A
+ host 10.125.0.94
+object network HOST-10.125.0.98--SKANDERBORG-OOB-A
+ host 10.125.0.98
+object network HOST-10.125.0.102--AARHUS-OOB-A
+ host 10.125.0.102
+object network HOST-10.125.3.2--OBV-OOB-B
+ host 10.125.3.2
+object network HOST-10.125.3.6--HELSINGOER-OOB-B
+ host 10.125.3.6
+object network HOST-10.125.3.10--ROSKILDE-OOB-B
+ host 10.125.3.10
+object network HOST-10.125.3.14--KAASTRUPGAARD-OOB-B
+ host 10.125.3.14
+object network HOST-10.125.3.18--RINGSTED-OOB-B
+ host 10.125.3.18
+object network HOST-10.125.3.22--KORSOER-OOB-B
+ host 10.125.3.22
+object network HOST-10.125.3.26--ODENSE-OOB-B
+ host 10.125.3.26
+object network HOST-10.125.3.30--TCCW-OOB-B
+ host 10.125.3.30
+object network HOST-10.125.3.34--SVENDBORG-OOB-B
+ host 10.125.3.34
+object network HOST-10.125.3.38--KOEGE-OOB-B
+ host 10.125.3.38
+object network HOST-10.125.3.42--NAESTVED-OOB-B
+ host 10.125.3.42
+object network HOST-10.125.3.46--NYKOEBINGF-OOB-B
+ host 10.125.3.46
+object network HOST-10.125.3.50--VEJLE-OOB-B
+ host 10.125.3.50
+object network HOST-10.125.3.54--LUNDERSKOV-OOB-B
+ host 10.125.3.54
+object network HOST-10.125.3.58--TINGLEV-OOB-B
+ host 10.125.3.58
+object network HOST-10.125.3.62--TOENDER-OOB-B
+ host 10.125.3.62
+object network HOST-10.125.3.66--BRAMMING-OOB-B
+ host 10.125.3.66
+object network HOST-10.125.3.70--SKJERN-OOB-B
+ host 10.125.3.70
+object network HOST-10.125.3.74--HERNING-OOB-B
+ host 10.125.3.74
+object network HOST-10.125.3.78--STRUER-OOB-B
+ host 10.125.3.78
+object network HOST-10.125.3.82--THISTED-OOB-B
+ host 10.125.3.82
+object network HOST-10.125.3.86--FREDERIKSHAVN-OOB-B
+ host 10.125.3.86
+object network HOST-10.125.3.90--AALBORG-OOB-B
+ host 10.125.3.90
+object network HOST-10.125.3.94--LANGAA-OOB-B
+ host 10.125.3.94
+object network HOST-10.125.3.98--SKANDERBORG-OOB-B
+ host 10.125.3.98
+object network HOST-10.125.3.102--AARHUS-OOB-B
+ host 10.125.3.102
+object network HOST-10.25.61.1-NTP-SOURCE-FROM-STTN-B
+ host 10.25.61.1
+object network HOST-10.24.61.1-NTP-SOURCE-FROM-STTN-A
+ host 10.24.61.1
+object network HOST-172.21.64.4--AMFASSPORTAL1
+ host 172.21.64.4
+object network HOST-172.21.64.52--ADBMFA1
+ host 172.21.64.52
+object network HOST-172.21.64.36--AMFANPS1
+ host 172.21.64.36
+object network HOST-172.21.64.37--AMFANPS2
+ host 172.21.64.37
+object network HOST-172.21.64.20--AEXTMFANPS1
+ host 172.21.64.20
+object network HOST-172.21.64.21--AEXTMFANPS2
+ host 172.21.64.21
+object network HOST-NAT-100.72.63.3--TCCW-CAT2DMZ-04-PRTG-W
+ host 100.72.63.3
+object network HOST-NAT-100.72.63.4--TCCE-CAT2DMZ-04-PRTG-E
+ host 100.72.63.4
+object network HOST-10.150.199.22-JTTN
+ host 10.150.199.22
+object network NET-10.125.0.0-22BIT--BDK-CORE
+ subnet 10.125.0.0 255.255.252.0
+object network HOST-100.73.66.25--CAT3DMZ-TEST-HOST
+ host 100.73.66.25
+object network HOST-10.185.50.51--JTTN
+ host 10.185.50.51
+object network HOST-10.185.50.52--JTTN
+ host 10.185.50.52
+object network HOST-172.21.251.19-STR-CAT3DMZ-BROKER-ZONE-ASMTPRELAY01
+ host 172.21.251.19
+object network HOST-GROUP-STR-CAT3DMZ-BROKER-ZONE-DHCP-RANGE-172.21.247.100-199
+ range 172.21.247.100 172.21.247.199
+object service TCP-SQLNET
+ service tcp destination eq sqlnet
+object network HOST-172.21.254.4-STR-CAT3DMZ-BROKER-ZONE-ADWHREPPBR01
+ host 172.21.254.4
+object network HOST-10.14.0.71-ALSTOM-TPS_DB_SRV
+ host 10.14.0.71
+object network HOST-10.14.0.81-ALSTOM-ATPS-TCC-DB
+ host 10.14.0.81
+object network HOST-172.21.248.50-STR-CAT3DMZ-BROKER-ZONE-AALSTOMJUMP2
+ host 172.21.248.50
+object network HOST-10.14.0.152-ALSTOM-JUMPSERVER
+ host 10.14.0.152
+object service FTP
+ service tcp destination eq ftp
+object service ICMP-ANY
+ service icmp
+object service PORT-RANGE-TCP-50000-50010-FTP
+ service tcp destination range 50000 50010
+object network HOST-172.21.251.18-STR-CAT3DMZ-BROKER-ZONE-ASPFIL01
+ host 172.21.251.18
+object network HOST-10.14.0.70-ALSTOM-TPS_DB_SRV
+ host 10.14.0.70
+object network HOST-100.72.35.59-A2NETBRAINDB2
+ host 100.72.35.59
+object network HOST-10.24.61.134-TP4100-E
+ host 10.24.61.134
+object network HOST-10.24.62.134-TP4100-W
+ host 10.24.62.134
+object network obv-dic-dmcwebapp
+ host 10.150.146.40
+object network fa-dic-dmcwebapp
+ host 10.150.146.140
+object network NET-10.125.1.0-24BIT--BDK-CORE-A
+ subnet 10.125.1.0 255.255.255.0
+object network NET-10.125.2.0-24BIT--BDK-CORE-B
+ subnet 10.125.2.0 255.255.255.0
+object service TCP-2068
+ service tcp destination eq 2068
+object service TCP-2049
+ service tcp destination eq nfs
+object network HOST-100.72.33.145--TCCE-CAT2DMZ-18-CATA-CIMC-INT
+ host 100.72.33.145
+object network HOST-100.72.33.144--TCCE-CAT2DMZ-18-CATA-MGMT-INT
+ host 100.72.33.144
+object network HOST-100.72.37.35--TCCE-CAT2DMZ-18-CATA-ENT-INT
+ host 100.72.37.35
+object network HOST-100.73.69.100-NET-SRV
+ host 100.73.69.100
+object network HOST-100.73.69.165--TPS-IF
+ host 100.73.69.165
+object network HOST-10.14.0.46-ALSTOM
+ host 10.14.0.46
+object network HOST-10.14.0.54-ALSTOM
+ host 10.14.0.54
+object network HOST-10.14.1.212-ALSTOM
+ host 10.14.1.212
+object service TCP-8010
+ service tcp destination eq 8010
+object network HOST-10.24.21.254-TP4100-ODENSE
+ host 10.24.21.254
+object network HOST-10.24.5.254-TP4100-ROSKILDE
+ host 10.24.5.254
+object network HOST-10.24.61.142-TP4100-OBV
+ host 10.24.61.142
+object-group service SSH tcp
+ port-object eq ssh
+object-group service AD_TCP tcp
+ port-object eq 445
+object-group service AD_UDP udp
+ port-object eq 135
+object-group service PORT-GROUP-AAA
+ service-object object UDP-1812
+ service-object object UDP-1813
+ service-object object TCP-1812
+ service-object object TCP-1813
+ service-object object TCP-49
+ service-object object UDP-49
+object-group service PORT-GROUP-DNS
+ service-object object TCP-53
+ service-object object UDP-53
+object-group service PORT-GROUP-NTP
+ service-object object UDP-123
+ service-object object TCP-123
+object-group network CAT3_JUMP
+ network-object host 100.73.36.5
+object-group service PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS
+ service-object object TCP-22
+ service-object object TCP-443
+ service-object object TCP-80
+object-group network HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS
+ network-object object HOST-100.72.36.5--TCCE-CAT2DMZ-09-EXT-PROVIDERS-JUMPHOST-WIN-OLD
+ network-object object HOST-100.72.4.5--TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMPHOST-WIN-OLD
+ network-object object HOST-100.72.36.6--TCCE-CAT2DMZ-09-EXT-PROVIDERS-JUMPHOST-WIN-Cat2JumpCORE-E
+ network-object object HOST-100.72.36.10--TCCE-CAT2DMZ-09-EXT-PROVIDERS-JUMPHOST-LINUX-Cat2JumpSSH-E
+ network-object object HOST-100.72.4.10--TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMPHOST-LINUX-Cat2JumpSSH-W
+ network-object object HOST-100.72.4.6--TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMPHOST-WIN-Cat2JumpCORE-W
+ network-object object HOST-100.72.36.11--TCCE-CAT2DMZ-09-EXT-PROVIDERS-A2EXTPROWINJUMPE1
+ network-object object HOST-100.72.36.12--TCCE-CAT2DMZ-09-EXT-PROVIDERS-A2EXTPROLINJUMPE1
+ network-object object HOST-100.72.4.11--TCCW-CAT2DMZ-09-EXT-PROVIDERS-A2EXTPROWINJUMPW1
+ network-object object HOST-100.72.4.12--TCCW-CAT2DMZ-09-EXT-PROVIDERS-A2EXTPROLINJUMPW1
+object-group network PoC_Destination_Hosts
+ network-object host 172.21.255.2
+ network-object host 172.21.255.34
+object-group network NET-GROUP-CAT3DMZ-00-SPNS2-DEVICE-MGMT
+ network-object object NET-100.73.1.128-27BIT--RGDC-CAT3DMZ-00-SPNS2-DEVICE-MGMT
+ network-object object NET-100.73.33.128-27BIT--OBV-CAT3DMZ-00-SPNS2-DEVICE-MGMT
+object-group network NET-GROUP-CAT2DMZ-00-SPNS2-DEVICE-MGMT
+ network-object object NET-100.72.1.128-27BIT--TCCW-CAT2DMZ-00-SPNS2-DEVICE-MGMT
+ network-object object NET-100.72.33.128-27BIT--TCCE-CAT2DMZ-00-SPNS2-DEVICE-MGMT
+object-group network HOST-GROUP-CAT2DMZ-05-VX-VCENT01
+ network-object object HOST-100.72.3.136--TCCW-CAT2DMZ-05-VX-VCENT01
+ network-object object HOST-100.72.35.136--TCCE-CAT2DMZ-05-VX-VCENT01
+object-group network HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+ network-object object HOST-100.72.3.11--TCCW-CAT2DMZ-01-AD-DNS-NTP
+ network-object object HOST-100.72.35.11--TCCE-CAT2DMZ-01-AD-DNS-NTP
+object-group network HOST-GROUP-CAT2DMZ-02-SSM
+ network-object object HOST-100.72.3.40--TCCW-CAT2DMZ-02-SSM
+ network-object object HOST-100.72.35.40--TCCE-CAT2DMZ-02-SSM
+object-group network NET-GROUP-CAT2DMZ-02-MGMT-SERVICES
+ network-object object NET-100.72.3.32--TCCW-CAT2DMZ-02-MGMT-SERVICES
+ network-object object NET-100.72.35.32--TCCE-CAT2DMZ-02-MGMT-SERVICES
+ network-object object HOST-100.72.35.60--TCCE-CAT2DMZ-02-A2LINBACKUPTCCE1
+ network-object object HOST-100.72.3.60--TCCW-CAT2DMZ-02-A2LINBACKUPTCCW1
+object-group network HOST-GROUP-CAT2DMZ-01-ISE
+ network-object object HOST-100.72.35.15--TCCE-CAT2DMZ-01-ISE
+ network-object object HOST-100.72.3.15--TCCW-CAT2DMZ-01-ISE
+object-group network HOST-GROUP-CAT2DMZ-05-MGMT-VXRAIL
+ network-object object HOST-100.72.3.130--TCCW-CAT2DMZ-05-RAIL01
+ network-object object HOST-100.72.3.131--TCCW-CAT2DMZ-05-RAIL02
+ network-object object HOST-100.72.3.132--TCCW-CAT2DMZ-05-RAIL03
+ network-object object HOST-100.72.35.130--TCCE-CAT2DMZ-05-RAIL01
+ network-object object HOST-100.72.35.131--TCCE-CAT2DMZ-05-RAIL02
+ network-object object HOST-100.72.35.132--TCCE-CAT2DMZ-05-RAIL03
+ network-object object HOST-100.72.3.136--TCCW-CAT2DMZ-05-VX-VCENT01
+ network-object object HOST-100.72.35.136--TCCE-CAT2DMZ-05-VX-VCENT01
+ network-object object HOST-100.72.3.137--TCCW-CAT2DMZ-05-VX-MANAGER01-VCENT01
+ network-object object HOST-100.72.35.137--TCCE-CAT2DMZ-05-VX-MANAGER01-VCENT01
+ network-object object HOST-100.72.35.138--TCCE-CAT2DMZ-05-MGMT-VXRAIL
+ network-object object HOST-100.72.3.138--TCCW-CAT2DMZ-05-MGMT-VXRAIL
+ network-object object HOST-100.72.35.165--TCCE-CAT2DMZ-06-IDRAC-VXRAIL
+ network-object object HOST-100.72.3.165--TCCW-CAT2DMZ-06-IDRAC-VXRAIL
+ network-object object HOST-100.72.35.139--TCCE-CAT2DMZ-05-MGMT-VXRAIL
+ network-object object HOST-100.72.3.139--TCCW-CAT2DMZ-05-MGMT-VXRAIL
+ network-object object HOST-100.72.35.62--TCCE-CAT2DMZ-02-MGMT-SERVICES
+ network-object object HOST-100.72.3.62--TCCW-CAT2DMZ-02-MGMT-SERVICES
+object-group network HOST-GROUP-CAT2DMZ-10-LOGPOINT-ADMIN
+ network-object object HOST-100.72.36.34--TCCE-CAT2DMZ-10-LOGPOINT-ADMIN
+ network-object object HOST-100.72.4.34--TCCW-CAT2DMZ-10-LOGPOINT-ADMIN
+ network-object object HOST-100.72.36.35--TCCE-CAT2DMZ-10-LOGPOINT-IDRAC
+ network-object object HOST-100.72.4.35--TCCW-CAT2DMZ-10-LOGPOINT-IDRAC
+object-group network HOST-GROUP-CAT2DMZ-06-VXRAIL-IDRAC
+ network-object object HOST-100.72.3.162--TCCW-CAT2DMZ-06-RAIL01-IDRAC
+ network-object object HOST-100.72.3.163--TCCW-CAT2DMZ-06-RAIL02-IDRAC
+ network-object object HOST-100.72.3.164--TCCW-CAT2DMZ-06-RAIL03-IDRAC
+ network-object object HOST-100.72.35.162--TCCE-CAT2DMZ-06-RAIL01-IDRAC
+ network-object object HOST-100.72.35.163--TCCE-CAT2DMZ-06-RAIL02-IDRAC
+ network-object object HOST-100.72.35.164--TCCE-CAT2DMZ-06-RAIL03-IDRAC
+object-group service PORT-GROUP-RMCP
+ service-object object UDP-623
+ service-object object TCP-623
+object-group service PORT-GROUP-VXRAIL-MGMT-ACCESS
+ service-object object TCP-22
+ service-object object TCP-443
+ service-object object TCP-80
+ service-object object UDP-623
+ service-object object TCP-623
+ service-object object TCP-5900
+ service-object object TCP-5901
+object-group service LDAP-S
+ service-object object TCP-389
+ service-object object TCP-636
+object-group service DNS
+ service-object object TCP-53
+ service-object object UDP-53
+object-group network HOST-GROUP-CAT2DMZ-05-VX-MANAGER01-VCENT01
+ network-object object HOST-100.72.3.137--TCCW-CAT2DMZ-05-VX-MANAGER01-VCENT01
+ network-object object HOST-100.72.35.137--TCCE-CAT2DMZ-05-VX-MANAGER01-VCENT01
+object-group service PORT-GROUP-BLACKBOX-CONSOLE-PORT1-8
+ service-object object TCP-3001-3008
+object-group network HOST-GROUP-CAT3DMZ-00-BLACKBOX-OOB-DEVICES
+ network-object object HOST-100.73.33.158--OBV-CAT3DMZ-00-OOB1
+ network-object object HOST-100.73.1.157--RGDC-CAT3DMZ-00-OOB1
+ network-object object HOST-100.73.1.158--RGDC-CAT3DMZ-00-OOB2
+object-group network HOST-GROUP-CAT2DMZ-00-BLACKBOX-OOB-DEVICES
+ network-object object HOST-100.72.33.157--TCCE-CAT2DMZ-00-OOB1
+ network-object object HOST-100.72.33.158--TCCE-CAT2DMZ-00-OOB2
+ network-object object HOST-100.72.1.157--TCCW-CAT2DMZ-00-OOB1
+ network-object object HOST-100.72.1.158--TCCW-CAT2DMZ-00-OOB2
+object-group network HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS
+ network-object object HOST-100.72.4.164--TCCW-CAT2DMZ-14-BDK-JUMPHOST-WIN
+ network-object object HOST-100.72.4.165--TCCW-CAT2DMZ-14-BDK-JUMPHOST-LINUX
+ network-object object HOST-100.72.36.164--TCCE-CAT2DMZ-14-BDK-JUMPHOST-WIN
+ network-object object HOST-100.72.36.165--TCCE-CAT2DMZ-14-BDK-JUMPHOST-LINUX
+object-group network HOST-GROUP-CAT2DMZ-04-PRTG
+ network-object object HOST-100.72.3.100--TCCW-CAT2DMZ-04-PRTG-W
+ network-object object HOST-100.72.35.100--TCCE-CAT2DMZ-04-PRTG-E
+object-group network HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS
+ network-object object HOST-100.72.4.196--TCCW-CAT2DMZ-15-AEVEN-JUMPHOST-WIN
+ network-object object HOST-100.72.4.197--TCCW-CAT2DMZ-15-AEVEN-JUMPHOST-LINUX
+ network-object object HOST-100.72.36.196--TCCE-CAT2DMZ-15-AEVEN-JUMPHOST-WIN
+ network-object object HOST-100.72.36.197--TCCE-CAT2DMZ-15-AEVEN-JUMPHOST-LINUX
+object-group network HOST-GROUP-CAT2DMZ-12-LINUX-REPOSITORY
+ network-object object HOST-100.72.36.98--TCCE-CAT2DMZ-12-LINUX-REPOSITORY
+ network-object object HOST-100.72.4.98--TCCW-CAT2DMZ-12-LINUX-REPOSITORY
+object-group network HOST-GROUP-CAT2DMZ-13-ANTIVIRUS
+ network-object object HOST-100.72.36.130--TCCE-CAT2DMZ-13-SPNS2-CAT2DMZBDTCCE1
+ network-object object HOST-100.72.4.130--TCCW-CAT2DMZ-13-SPNS2-CAT2DMZBDTCCW1
+object-group service GLOBAL-CATALOG
+ service-object object TCP-389
+ service-object object TCP-636
+ service-object object TCP-3268
+ service-object object TCP-3269
+object-group service PORT-GROUP-SPNS2-ANTIVIRUS-MGMT-PROTOCOLS
+ service-object object TCP-22
+ service-object object TCP-443
+ service-object object TCP-80
+object-group service PORT-GROUP-SPNS2-ANTIVIRUS-JTTN-PROTOCOLS
+ service-object object TCP-80
+ service-object object TCP-443
+ service-object object TCP-139
+ service-object object TCP-445
+object-group service PORT-GROUP-LOGPOINT
+ service-object object UDP-514
+ service-object object TCP-514
+object-group service PORT-GROUP-SPNS2-SMTP-MAIL-RELAY-JTTN-PROTOCOLS
+ service-object object TCP-25
+ service-object object TCP-587
+object-group network NET-GROUP-CAT2DMZ-03-MGMT-NOKIA
+ network-object object NET-100.72.3.64--TCCW-CAT2DMZ-03-MGMT-NOKIA
+ network-object object NET-100.72.35.64--TCCE-CAT2DMZ-03-MGMT-NOKIA
+object-group network NET-GROUP-CAT2DMZ-04-MONITORING
+ network-object object NET-100.72.3.96--TCCW-CAT2DMZ-04-MONITORING
+ network-object object NET-100.72.35.96--TCCE-CAT2DMZ-04-MONITORING
+object-group network NET-GROUP-CAT2DMZ-09-EXT-PROVIDERS-JUMP
+ network-object object NET-100.72.4.0--TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMP
+ network-object object NET-100.72.36.0--TCCE-CAT2DMZ-09-EXT-PROVIDERS-JUMP
+object-group service PORT-GROUP-SYSLOG-AgentX
+ service-object object TCP-1514
+ service-object object TCP-1515
+object-group network NET-GROUP-CAT2DMZ-12-CAT2-LINUX-REPOSITORY
+ network-object object NET-100.72.4.96--TCCW-CAT2DMZ-12-CAT2-LINUX-REPOSITORY
+ network-object object NET-100.72.36.96--TCCE-CAT2DMZ-12-CAT2-LINUX-REPOSITORY
+object-group network NET-GROUP-CAT2DMZ-13-CAT2-ANTIVIRUS
+ network-object object NET-100.72.4.128--TCCW-CAT2DMZ-13-CAT2-ANTIVIRUS
+ network-object object NET-100.72.36.128--TCCE-CAT2DMZ-13-CAT2-ANTIVIRUS
+object-group network NET-GROUP-CAT2DMZ-14-BDK-JUMP
+ network-object object NET-100.72.4.160--TCCW-CAT2DMZ-14-BDK-JUMP
+ network-object object NET-100.72.36.160--TCCE-CAT2DMZ-14-BDK-JUMP
+object-group network NET-GROUP-CAT2DMZ-15-AEVEN-JUMP
+ network-object object NET-100.72.4.192--TCCW-CAT2DMZ-15-AEVEN-JUMP
+ network-object object NET-100.72.36.192--TCCE-CAT2DMZ-15-AEVEN-JUMP
+object-group service PORT-GROUP-ANTIVIRUS
+ service-object object TCP-443
+ service-object object TCP-7074
+ service-object object TCP-7076
+ service-object object TCP-7081
+ service-object object TCP-7083
+ service-object object TCP-8080
+ service-object object TCP-8443
+ service-object object TCP-8444
+object-group network HOST-GROUP-ABANECTXDC-DNS-SERVERS
+ network-object object HOST-172.21.247.10--ABANECTXDC1
+ network-object object HOST-172.21.247.11--ABANECTXDC2
+object-group service PORT-GROUP-AEVEN-SPNS2-JUMPHOST-ACCESS
+ service-object object TCP-22
+ service-object object TCP-3389
+object-group network HOST-GROUP-AEVEN-JTTN-JUMPHOSTS
+ network-object object HOST-172.21.65.116--JTTN-AEVEN-JTTN-JUMPHOST1
+ network-object object HOST-172.21.65.117--JTTN-AEVEN-JTTN-JUMPHOST2
+ network-object object HOST-172.21.65.118--JTTN-AEVEN-JTTN-JUMPHOST3
+ network-object object HOST-172.21.65.119--JTTN-AEVEN-JTTN-JUMPHOST4
+object-group network HOST-GROUP-BDK-JTTN-JUMPHOSTS
+ network-object object HOST-10.185.50.42--JTTN-BDK-JTTN-JUMPHOST1
+ network-object object HOST-10.185.50.44--JTTN-BDK-JTTN-JUMPHOST2
+object-group service PORT-GROUP-BDK-SPNS2-JUMPHOST-ACCESS
+ service-object object TCP-22
+ service-object object TCP-3389
+object-group network HOST-GROUP-EXT-PROVIDERS-JTTN-JUMPHOSTS
+ network-object object HOST-172.21.65.148--JTTN-EXT-PROVIDERS-JTTN-JUMPHOST1
+ network-object object HOST-172.21.65.149--JTTN-EXT-PROVIDERS-JTTN-JUMPHOST2
+object-group service PORT-GROUP-EXT-PROVIDERS-SPNS2-JUMPHOST-ACCESS
+ service-object object TCP-22
+ service-object object TCP-3389
+object-group network HOST-GROUP-JTTN-FORWARD-DNS
+ network-object object HOST-172.21.1.201--ADNSFORW1
+ network-object object HOST-172.21.1.202--ADNSFORW2
+object-group service PORT-GROUP-WINDOWS-AD
+ service-object object TCP-88
+ service-object object TCP-135
+ service-object object TCP-139
+ service-object object UDP-137
+ service-object object UDP-138
+ service-object object TCP-464
+ service-object object TCP-445
+ service-object object TCP-389
+ service-object object TCP-636
+object-group network HOST-GROUP-CAT2DMZ-02-A2LINBACKUP
+ network-object object HOST-100.72.35.60--TCCE-CAT2DMZ-02-A2LINBACKUPTCCE1
+ network-object object HOST-100.72.3.60--TCCW-CAT2DMZ-02-A2LINBACKUPTCCW1
+object-group network HOST-GROUP-CAT2DMZ-01-WSUS-SERVERS
+ network-object object HOST-100.72.35.16--TCCE-CAT2DMZ-01-A2WSUSTCCE1
+ network-object object HOST-100.72.3.16--TCCW-CAT2DMZ-01-A2WSUSTCCW1
+object-group network HOST-GROUP-JTTN-DNS
+ network-object object HOST-172.27.2.22--ABANE16.BANE.DK
+ network-object object HOST-172.27.3.22--ABANE17.BANE.DK
+object-group network HOST-GROUP-JTTN-WSUS-SERVERS
+ network-object object HOST-172.27.200.34--JTTN-AWSUS1
+object-group service PORT-GROUP-AD-DOMAIN-SERVICES
+ service-object object UDP-123
+ service-object object TCP-135
+ service-object object TCP-464
+ service-object object TCP-389
+ service-object object TCP-636
+ service-object object TCP-3268
+ service-object object TCP-3269
+ service-object object TCP-53
+ service-object object UDP-53
+ service-object object TCP-88
+ service-object object TCP-445
+ service-object object UDP-464
+ service-object object TCP-49152-65535
+ service-object object UDP-389
+ service-object object UDP-88
+ service-object object UDP-445
+ service-object object UDP-135
+ service-object object UDP-137
+object-group network HOST-GROUP-CAT2DMZ-05-MGMT-VXRAIL-NODES
+ network-object object HOST-100.72.3.130--TCCW-CAT2DMZ-05-RAIL01
+ network-object object HOST-100.72.3.131--TCCW-CAT2DMZ-05-RAIL02
+ network-object object HOST-100.72.3.132--TCCW-CAT2DMZ-05-RAIL03
+ network-object object HOST-100.72.35.130--TCCE-CAT2DMZ-05-RAIL01
+ network-object object HOST-100.72.35.131--TCCE-CAT2DMZ-05-RAIL02
+ network-object object HOST-100.72.35.132--TCCE-CAT2DMZ-05-RAIL03
+object-group network HOST-GROUP-CAT2DMZ-01-RDLICENSE
+ network-object object HOST-100.72.35.13--TCCE-CAT2DMZ-01-A2RDLICENSETCCE1
+ network-object object HOST-100.72.35.13--TCCE-01-A2RDLICENSE1
+object-group network NET-GROUP-STTN-NETWORKS
+ network-object object NET-10.24.0.0-16BIT--STTN-Network-A
+ network-object object NET-10.25.0.0-16BIT--STTN-Network-B
+ network-object object NET-10.26.0.0-16BIT--STTN-Network-C
+object-group network HOST-GROUP-STTN-EXT-PROVIDERS-SPNS2-JUMPHOSTS-SSH-ACCESS
+ group-object NET-GROUP-STTN-NETWORKS
+object-group network NET-GROUP-BDK-CORE-NETWORKS
+ network-object object NET-10.125.1.0-26BIT--BDK-CORE-A
+ network-object object NET-10.125.0.0-24BIT--BDK-CORE-A-OOB
+ network-object object NET-10.125.2.0-26BIT--BDK-CORE-B
+ network-object object NET-10.125.3.0-24BIT--BDK-CORE-B-OOB
+object-group network HOST-GROUP-BDK-CORE-EXT-PROVIDERS-SPNS2-JUMPHOSTS-SSH-ACCESS
+ group-object NET-GROUP-BDK-CORE-NETWORKS
+object-group network HOST-GROUP-STTN-BDK-SPNS2-JUMPHOSTS-SSH-ACCESS
+ group-object NET-GROUP-STTN-NETWORKS
+object-group network HOST-GROUP-CAT2DMZ-05-VERITAS-NETBACKUP-MEDIA
+ network-object object HOST-100.72.35.139--TCCE-CAT2DMZ-05-MGMT-VXRAIL
+ network-object object HOST-100.72.3.139--TCCW-CAT2DMZ-05-MGMT-VXRAIL
+object-group network HOST-GROUP-CAT2DMZ-02-VERITAS-NETBACKUP-MASTER
+ network-object object HOST-100.72.35.62--TCCE-CAT2DMZ-02-MGMT-SERVICES
+ network-object object HOST-100.72.3.62--TCCW-CAT2DMZ-02-MGMT-SERVICES
+object-group network HOST-GROUP-CAT2DMZ-XX-SPNS2-JUMPHOSTS-RDP-ACCESS
+ group-object HOST-GROUP-CAT2DMZ-04-PRTG
+ group-object HOST-GROUP-CAT2DMZ-01-RDLICENSE
+ group-object HOST-GROUP-CAT2DMZ-05-VERITAS-NETBACKUP-MEDIA
+ group-object HOST-GROUP-CAT2DMZ-02-VERITAS-NETBACKUP-MASTER
+ group-object HOST-GROUP-CAT2DMZ-01-WSUS-SERVERS
+ group-object HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+object-group network HOST-GROUP-CAT2DMZ-XX-EXT-PROVIDERS-SPNS2-JUMPHOSTS-RDP-ACCESS
+ group-object HOST-GROUP-CAT2DMZ-XX-SPNS2-JUMPHOSTS-RDP-ACCESS
+object-group network HOST-GROUP-XX-CAT2DMZ-BDK-SPNS2-JUMPHOSTS-RDP-ACCESS
+ group-object HOST-GROUP-CAT2DMZ-XX-SPNS2-JUMPHOSTS-RDP-ACCESS
+object-group network HOST-GROUP-XX-CAT2DMZ-AEVEN-SPNS2-JUMPHOSTS-RDP-ACCESS
+ group-object HOST-GROUP-CAT2DMZ-XX-SPNS2-JUMPHOSTS-RDP-ACCESS
+ group-object HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS
+ group-object HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS
+object-group network HOST-GROUP-BDK-CORE-BDK-SPNS2-JUMPHOSTS-SSH-ACCESS
+ group-object NET-GROUP-BDK-CORE-NETWORKS
+object-group network HOST-GROUP-STTN-AEVEN-SPNS2-JUMPHOSTS-SSH-ACCESS
+ group-object NET-GROUP-STTN-NETWORKS
+object-group network HOST-GROUP-BDK-CORE-AEVEN-SPNS2-JUMPHOSTS-SSH-ACCESS
+ group-object NET-GROUP-BDK-CORE-NETWORKS
+object-group network NET-GROUP-CAT2DMZ-01-AAA-DNS-NTP
+ network-object object NET-100.72.3.0--TCCW-CAT2DMZ-01-AAA-DNS-NTP
+ network-object object NET-100.72.35.0--TCCE-CAT2DMZ-01-AAA-DNS-NTP
+object-group service PORT-GROUP-SYSLOG
+ service-object object UDP-514
+ service-object object TCP-514
+object-group network HOST-GROUP-UCS-PRTG
+ network-object object HOST-100.72.35.37-TCCE-UCS-PRTG
+object-group network NET-GROUP-CAT2DMZ-05-MGMT-VXRAIL
+ network-object object NET-100.72.3.128--TCCW-CAT2DMZ-05-MGMT-VXRAIL
+ network-object object NET-100.72.35.128--TCCE-CAT2DMZ-05-MGMT-VXRAIL
+object-group network NET-GROUP-CAT2DMZ-06-IDRAC-VXRAIL
+ network-object object NET-100.72.3.160--TCCW-CAT2DMZ-06-IDRAC-VXRAIL
+ network-object object NET-100.72.35.160--TCCE-CAT2DMZ-06-IDRAC-VXRAIL
+object-group network NET-GROUP-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN
+ network-object object NET-100.72.36.32--TCCE-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN
+ network-object object NET-100.72.4.32--TCCW-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN
+object-group service PORT-GROUP-WSUS-UPDATE
+ service-object object TCP-8530
+ service-object object TCP-8531
+object-group service PORT-GROUP-PRTG-MONITORING
+ service-object object UDP-161
+ service-object object TCP-161
+ service-object icmp echo
+object-group service PORT-GROUP-WEB
+ service-object object TCP-80
+ service-object object TCP-443
+object-group network HOST-GROUP-CAT2DMZ-07-DD-REPLICATION
+ network-object object HOST-100.72.35.196--TCCE-CAT2DMZ-07-BACKUP-VXRAIL
+ network-object object HOST-100.72.3.196--TCCW-CAT2DMZ-07-BACKUP-VXRAIL
+object-group network HOST-GROUP-CAT2DMZ-05-DD-HOSTS
+ network-object object HOST-100.72.35.138--TCCE-CAT2DMZ-05-MGMT-VXRAIL
+ network-object object HOST-100.72.3.138--TCCW-CAT2DMZ-05-MGMT-VXRAIL
+object-group network HOST-GROUP-CAT2DMZ-06-DD-IDRAC
+ network-object object HOST-100.72.35.165--TCCE-CAT2DMZ-06-IDRAC-VXRAIL
+ network-object object HOST-100.72.3.165--TCCW-CAT2DMZ-06-IDRAC-VXRAIL
+object-group service PORT-GROUP-NETBACKUP
+ service-object object PBX
+ service-object object VNETD
+object-group service PORT-GROUP-WIN-SYSLOG
+ service-object object WIN-SYSLOG-TCP
+ service-object object WIN-SYSLOG-UDP
+object-group service PORT-GROUP-LOG
+ group-object PORT-GROUP-LOGPOINT
+ group-object PORT-GROUP-WIN-SYSLOG
+object-group network HOST-GROUP-UCS-WSUS
+ network-object object HOST-100.72.3.12-TCCW-UCS-WSUS
+ network-object object HOST-100.72.3.12-TCCW-UCS-Cat2WSUS01
+object-group service PORT-GROUP-REPLICATION
+ service-object object REPLICATION
+ service-object object MEP
+object-group service PORT-GROUP-AD-DATADOMAIN-BACKUP
+ service-object object UDP-123
+ service-object object TCP-123
+ service-object object TCP-135
+ service-object object UDP-135
+ service-object object TCP-137
+ service-object object UDP-137
+ service-object object TCP-138
+ service-object object UDP-138
+ service-object object TCP-139
+ service-object object TCP-464
+ service-object object UDP-464
+ service-object object TCP-49152-65535
+ service-object object UDP-49152-65535
+ service-object object TCP-636
+ service-object object UDP-636
+ service-object object TCP-3268
+ service-object object TCP-3269
+ service-object object UDP-3268
+ service-object object UDP-3269
+ service-object object TCP-53
+ service-object object UDP-53
+ service-object object TCP-88
+ service-object object UDP-88
+ service-object object TCP-445
+ service-object object UDP-445
+ service-object object UDP-389
+ service-object object TCP-389
+object-group network HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+ network-object object HOST-100.72.4.70--TCCW-CAT2DMZ-11-SPNS2-A2LOGPOINT1-SYSLOG
+ network-object object HOST-100.72.36.70--TCCE-CAT2DMZ-11-SPNS2-A2LOGPOINT2-SYSLOG
+object-group service PORT-GROUP-DATA-DOMAIN-BACKUP-ACCESS
+ service-object object TCP-443
+ service-object object TCP-3389
+ service-object object ICMP-ECHO
+object-group network HOST-GROUP-STTN-NTP-PEER
+ network-object object HOST-100.72.32.122--TEMP-STTN-E-NTP-PEER
+ network-object object HOST-100.72.0.122--TEMP-STTN-W-NTP-PEER
+ network-object host 10.24.61.1
+object-group network HOST-GROUP-CAT2DMZ-00-CORE-MGMT
+ network-object object HOST-100.72.33.129--TCCE-CAT2-CORE-MGMT
+ network-object object HOST-100.72.1.129--TCCW-CAT2-CORE-MGMT
+object-group network HOST-GROUP-BDK-CORE-AND-STTN-BLACKBOX-OOB-DEVICES
+ network-object object HOST-10.24.125.18--TCCE-OOB-IC-A
+ network-object object HOST-10.25.125.18--TCCE-OOB-IC-B
+ network-object object HOST-10.24.126.18--TCCW-OOB-IC-A
+ network-object object HOST-10.25.126.18--TCCW-OOB-IC-B
+ network-object object HOST-10.125.0.2--OBV-OOB-A
+ network-object object HOST-10.125.0.6--HELSINGOER-OOB-A
+ network-object object HOST-10.125.0.10--ROSKILDE-OOB-A
+ network-object object HOST-10.125.0.14--KAASTRUPGAARD-OOB-A
+ network-object object HOST-10.125.0.18--RINGSTED-OOB-A
+ network-object object HOST-10.125.0.22--KORSOER-OOB-A
+ network-object object HOST-10.125.0.26--ODENSE-OOB-A
+ network-object object HOST-10.125.0.30--TCCW-OOB-A
+ network-object object HOST-10.125.0.34--SVENDBORG-OOB-A
+ network-object object HOST-10.125.0.38--KOEGE-OOB-A
+ network-object object HOST-10.125.0.42--NAESTVED-OOB-A
+ network-object object HOST-10.125.0.46--NYKOEBINGF-OOB-A
+ network-object object HOST-10.125.0.50--VEJLE-OOB-A
+ network-object object HOST-10.125.0.54--LUNDERSKOV-OOB-A
+ network-object object HOST-10.125.0.58--TINGLEV-OOB-A
+ network-object object HOST-10.125.0.62--TOENDER-OOB-A
+ network-object object HOST-10.125.0.66--BRAMMING-OOB-A
+ network-object object HOST-10.125.0.70--SKJERN-OOB-A
+ network-object object HOST-10.125.0.74--HERNING-OOB-A
+ network-object object HOST-10.125.0.78--STRUER-OOB-A
+ network-object object HOST-10.125.0.82--THISTED-OOB-A
+ network-object object HOST-10.125.0.86--FREDERIKSHAVN-OOB-A
+ network-object object HOST-10.125.0.90--AALBORG-OOB-A
+ network-object object HOST-10.125.0.94--LANGAA-OOB-A
+ network-object object HOST-10.125.0.98--SKANDERBORG-OOB-A
+ network-object object HOST-10.125.0.102--AARHUS-OOB-A
+ network-object object HOST-10.125.3.2--OBV-OOB-B
+ network-object object HOST-10.125.3.6--HELSINGOER-OOB-B
+ network-object object HOST-10.125.3.10--ROSKILDE-OOB-B
+ network-object object HOST-10.125.3.14--KAASTRUPGAARD-OOB-B
+ network-object object HOST-10.125.3.18--RINGSTED-OOB-B
+ network-object object HOST-10.125.3.22--KORSOER-OOB-B
+ network-object object HOST-10.125.3.26--ODENSE-OOB-B
+ network-object object HOST-10.125.3.30--TCCW-OOB-B
+ network-object object HOST-10.125.3.34--SVENDBORG-OOB-B
+ network-object object HOST-10.125.3.38--KOEGE-OOB-B
+ network-object object HOST-10.125.3.42--NAESTVED-OOB-B
+ network-object object HOST-10.125.3.46--NYKOEBINGF-OOB-B
+ network-object object HOST-10.125.3.50--VEJLE-OOB-B
+ network-object object HOST-10.125.3.54--LUNDERSKOV-OOB-B
+ network-object object HOST-10.125.3.58--TINGLEV-OOB-B
+ network-object object HOST-10.125.3.62--TOENDER-OOB-B
+ network-object object HOST-10.125.3.66--BRAMMING-OOB-B
+ network-object object HOST-10.125.3.70--SKJERN-OOB-B
+ network-object object HOST-10.125.3.74--HERNING-OOB-B
+ network-object object HOST-10.125.3.78--STRUER-OOB-B
+ network-object object HOST-10.125.3.82--THISTED-OOB-B
+ network-object object HOST-10.125.3.86--FREDERIKSHAVN-OOB-B
+ network-object object HOST-10.125.3.90--AALBORG-OOB-B
+ network-object object HOST-10.125.3.94--LANGAA-OOB-B
+ network-object object HOST-10.125.3.98--SKANDERBORG-OOB-B
+ network-object object HOST-10.125.3.102--AARHUS-OOB-B
+object-group service PORT-GROUP-VMWARE-SERVER-CONSOLE
+ service-object object TCP-902
+ service-object object TCP-443
+object-group network HOST-GROUP-UCS-JUMPHOSTS
+ network-object object HOST-100.72.36.5-UCS-Cat2JumpSPNS-E
+ network-object object HOST-100.72.36.6-UCS-Cat2JumpCORE-E
+ network-object object HOST-100.72.36.10-UCS-Cat2JumpSSH-E
+ network-object object HOST-100.72.4.5-UCS-CAT2JUMPSPNS-W
+ network-object object HOST-100.72.4.6-UCS-Cat2JumpCORE-W
+ network-object object HOST-100.72.4.10-UCS-Cat2JumpSSH-W
+object-group network HOST-GROUP-UCS-Cat2Netbrain
+ network-object object HOST-100.72.35.36-TCCE-UCS-Cat2Netbrain
+object-group network HOST-GROUP-CAT2DMZ-XX-UCS-JUMPHOSTS-RDP-ACCESS
+ group-object HOST-GROUP-UCS-PRTG
+ group-object HOST-GROUP-UCS-WSUS
+ group-object HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+ group-object HOST-GROUP-UCS-Cat2Netbrain
+object-group network HOST-GROUP-UCS-VCENTER-AND-UCS-ESX-NODES
+ network-object object HOST-100.72.3.6-TCCW-UCS-VCENTER
+ network-object object HOST-100.72.3.5-TCCW-UCS-ESX-NODE
+ network-object object HOST-100.72.35.5-TCCE-UCS-ESX-NODE
+object-group service PORT-GROUP-ADDC-DATADOMAIN-BACKUP
+ service-object object TCP-53
+ service-object object UDP-53
+ service-object object TCP-88
+ service-object object UDP-88
+ service-object object TCP-139
+ service-object object UDP-389
+ service-object object TCP-389
+ service-object object TCP-445
+ service-object object UDP-445
+ service-object object TCP-3268
+ service-object object UDP-3268
+ service-object object TCP-636
+ service-object object UDP-636
+ service-object object TCP-3269
+ service-object object UDP-3269
+object-group service PORT-GROUP-RDLICENSE-ACCESS-PORTS
+ service-object object TCP-135
+ service-object object TCP-49152-65535
+object-group network HOST-GROUP-CAT2DMZ-05-MGMT-VCENT
+ network-object object HOST-100.72.3.136--TCCW-CAT2DMZ-05-VX-VCENT01
+ network-object object HOST-100.72.35.136--TCCE-CAT2DMZ-05-VX-VCENT01
+object-group service PORT-GROUP-VC-MGMT
+ service-object object TCP-80
+ service-object object TCP-443
+ service-object object TCP-5480
+object-group service PORT-GROUP-SPNS2-DATADOMAIN-MGMT-PROTOCOLS
+ service-object object TCP-22
+ service-object object TCP-443
+object-group network HOST-GROUP-CAT3DMZ-FW-FXOS
+ network-object object HOST-100.73.1.130--RGDC-CAT3-FW1-1-FXOS
+ network-object object HOST-100.73.1.131--RGDC-CAT3-FW1-2-FXOS
+ network-object object HOST-100.73.33.130--OBV-CAT3-FW1-1-FXOS
+ network-object object HOST-100.73.33.131--OBV-CAT3-FW1-2-FXOS
+object-group network HOST-GROUP-CAT3DMZ-FMC-MGMT-IP
+ network-object object HOST-100.73.1.134--RGDC-CAT3DMZ-FMC-MGMT-IP
+ network-object object HOST-100.73.33.134--OBV-CAT3DMZ-FMC-MGMT-IP
+object-group network HOST-GROUP-CAT2DMZ-FW-FXOS
+ network-object object HOST-100.72.1.130--TCCW-CAT2-FW1-1-FXOS
+ network-object object HOST-100.72.1.131--TCCW-CAT2-FW1-2-FXOS
+ network-object object HOST-100.72.33.130--TCCE-CAT2-FW1-1-FXOS
+ network-object object HOST-100.72.33.131--TCCE-CAT2-FW1-2-FXOS
+object-group network HOST-GROUP-CAT3DMZ-00-CORE-SWITCHES
+ network-object object HOST-100.73.1.129--RGDC-CAT3DMZ-CORESWITCH
+ network-object object HOST-100.73.33.129--OBV-CAT3DMZ-CORESWITCH
+object-group network HOST-GROUP-JTTN-LOGPOINT-SYSLOG-SOURCES
+ network-object object HOST-10.150.211.2--JTTN
+ network-object object HOST-10.150.211.1--JTTN
+ network-object object HOST-10.150.210.2--JTTN
+ network-object object HOST-10.150.210.1--JTTN
+ network-object object HOST-10.150.199.11--JTTN
+ network-object object HOST-10.150.199.20--JTTN
+ network-object object HOST-10.185.50.85--JTTN
+ network-object object HOST-172.17.88.240--JTTN
+ network-object object HOST-10.138.63.118--JTTN
+ network-object object HOST-172.17.88.237--JTTN
+ network-object object HOST-172.17.88.239--JTTN
+ network-object object HOST-172.17.88.238--JTTN
+ network-object object HOST-172.17.88.232--JTTN
+ network-object object HOST-172.17.88.233--JTTN
+ network-object object HOST-172.19.255.129--JTTN
+ network-object object HOST-172.19.255.137--JTTN
+ network-object object HOST-100.126.255.62--JTTN
+ network-object object HOST-100.65.5.4--JTTN
+ network-object object HOST-100.65.5.5--JTTN
+ network-object object HOST-100.126.255.129--JTTN
+ network-object object HOST-100.126.255.130--JTTN
+ network-object object HOST-100.126.255.1--JTTN
+ network-object object HOST-100.126.255.2--JTTN
+ network-object object HOST-100.126.255.144--JTTN
+ network-object object HOST-100.65.2.41--JTTN
+ network-object object HOST-100.65.2.193--JTTN
+ network-object object HOST-100.65.5.1--JTTN
+ network-object object HOST-100.126.255.50--JTTN
+ network-object object HOST-100.65.2.33--JTTN
+ network-object object HOST-100.65.2.49--JTTN
+ network-object object HOST-172.27.3.149--JTTN
+ network-object object HOST-172.27.3.150--JTTN
+ network-object object HOST-100.126.255.121--JTTN
+ network-object object HOST-100.65.2.81--JTTN
+ network-object object HOST-100.65.2.9--JTTN
+ network-object object HOST-100.126.255.58--JTTN
+ network-object object HOST-100.65.2.73--JTTN
+ network-object object HOST-100.65.2.1--JTTN
+ network-object object HOST-172.24.12.61--JTTN
+ network-object object HOST-172.23.3.6--JTTN
+ network-object object HOST-172.21.2.104--JTTN
+ network-object object HOST-172.21.2.103--JTTN
+ network-object object HOST-10.185.50.11--JTTN
+ network-object object HOST-10.185.50.12--JTTN
+ network-object object HOST-172.21.1.201--JTTN
+ network-object object HOST-10.185.230.200--JTTN
+ network-object object HOST-172.27.210.4--JTTN
+ network-object object HOST-172.27.210.5--JTTN
+ network-object object HOST-172.27.210.20--JTTN
+ network-object object HOST-172.27.210.21--JTTN
+ network-object object HOST-172.27.3.242--JTTN
+ network-object object HOST-172.27.3.243--JTTN
+ network-object object HOST-172.21.2.180--JTTN
+ network-object object HOST-172.27.3.101--JTTN
+ network-object object HOST-172.27.3.102--JTTN
+ network-object object HOST-172.27.3.43--JTTN
+ network-object object HOST-172.27.210.36--JTTN
+ network-object object HOST-172.27.210.68--JTTN
+ network-object object HOST-172.21.247.10--ABANECTXDC1
+ network-object object HOST-172.21.247.11--ABANECTXDC2
+ network-object object HOST-172.27.2.22--ABANE16.BANE.DK
+ network-object object HOST-172.21.1.202--ADNSFORW2
+ network-object object HOST-172.27.200.17--JTTN-ABITDEFEND1.BANE.DK
+ network-object object HOST-100.126.255.65--JTTN
+ network-object object HOST-100.126.255.66--JTTN
+ network-object object HOST-100.126.255.69--JTTN
+ network-object object HOST-100.126.255.114--JTTN
+ network-object object HOST-100.126.255.67-JTTN
+ network-object object HOST-172.21.248.70-JTTN
+ network-object object HOST-172.27.3.22--ABANE17.BANE.DK
+ network-object object HOST-100.72.35.11--TCCE-CAT2DMZ-01-CAT2DC01
+ network-object object HOST-172.21.1.76--JTTN
+ network-object object HOST-172.21.247.40--ACTXNS1
+ network-object object HOST-172.21.247.50--ACTXNS2
+ network-object object HOST-10.147.62.10--NTP-JTTN
+ network-object object HOST-10.9.77.10--NTP-JTTN
+ network-object object HOST-10.150.199.22-JTTN
+ network-object object HOST-10.185.50.51--JTTN
+ network-object object HOST-10.185.50.52--JTTN
+object-group network HOST-GROUP-CAT3DMZ-05-SUPPORT-ZONE-VXRAIL-VCSA
+ network-object object HOST-100.73.66.5--CAT3DMZ-05-SUPPORT-ZONE-AVXRAIL-VCSA
+object-group network HOST-GROUP-JTTN-LOGPOINT-SYSLOG-SOURCES-TCP-1514+1515
+ network-object object HOST-172.27.210.4--JTTN
+ network-object object HOST-172.27.210.5--JTTN
+ network-object object HOST-172.27.210.20--JTTN
+ network-object object HOST-172.27.210.21--JTTN
+ network-object object HOST-172.27.3.242--JTTN
+ network-object object HOST-172.27.3.243--JTTN
+ network-object object HOST-172.21.2.180--JTTN
+ network-object object HOST-172.27.3.101--JTTN
+ network-object object HOST-172.27.3.102--JTTN
+ network-object object HOST-172.27.3.43--JTTN
+ network-object object HOST-172.27.2.22--ABANE16.BANE.DK
+ network-object object HOST-172.27.3.22--ABANE17.BANE.DK
+ network-object object HOST-172.21.2.104--JTTN
+ network-object object HOST-172.21.2.103--JTTN
+ network-object object HOST-10.185.50.11--JTTN
+ network-object object HOST-10.185.50.12--JTTN
+ network-object object HOST-172.21.1.76--JTTN
+ network-object object HOST-172.21.64.52--ADBMFA1
+ network-object object HOST-172.21.64.36--AMFANPS1
+ network-object object HOST-172.21.64.37--AMFANPS2
+ network-object object HOST-172.21.64.20--AEXTMFANPS1
+ network-object object HOST-172.21.64.21--AEXTMFANPS2
+object-group network HOST-GROUP-UCS-Cat2NetbrainDB
+ network-object object HOST-100.72.35.61-TCCE-UCS-Cat2NetbrainDB
+ network-object object HOST-100.72.35.59-A2NETBRAINDB2
+object-group network HOST-GROUP-UCS-Cat2SSM
+ network-object object HOST-100.72.35.40-TCCE-UCS-Cat2SSM
+object-group network HOST-GROUP-NTP-SOURCE-FROM-STTN-A
+ network-object object HOST-10.25.62.1-NTP-SOURCE-FROM-STTN-B
+ network-object object HOST-10.24.62.1-NTP-SOURCE-FROM-STTN-A
+object-group service PORT-GROUP-SSM
+ service-object object TCP-80
+ service-object object TCP-443
+object-group service PORT-GROUP-UCS-NETBRAIN-SERVICES
+ service-object object ICMP-ECHO
+ service-object object TCP-22
+ service-object object UDP-161
+ service-object object TCP-161
+object-group network HOST-GROUP-NTP-SOURCE-FROM-STTN
+ network-object object HOST-10.24.61.1-NTP-SOURCE-FROM-STTN-A
+ network-object object HOST-10.25.61.1-NTP-SOURCE-FROM-STTN-B
+object-group network HOST-GROUP-CAT2DMZ-09-FTP-WIN
+ network-object object HOST-100.72.4.6--TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMPHOST-WIN-Cat2JumpCORE-W
+ network-object object HOST-100.72.36.6--TCCE-CAT2DMZ-09-EXT-PROVIDERS-JUMPHOST-WIN-Cat2JumpCORE-E
+object-group service PORT-GROUP-IPERF
+ service-object tcp destination eq 5001
+ service-object udp destination eq 5001
+ service-object tcp destination eq 5201
+ service-object udp destination eq 5201
+object-group network TP4100-E-W
+ network-object object HOST-10.24.61.134-TP4100-E
+ network-object object HOST-10.24.62.134-TP4100-W
+object-group network dic-proxies
+ description CHG0056517
+ network-object host 10.150.146.34
+ network-object host 10.150.146.35
+ network-object host 10.150.146.134
+ network-object host 10.150.146.135
+object-group network dic-sc
+ description CHG0056517
+ network-object host 10.150.146.51
+ network-object host 10.150.146.52
+ network-object host 10.150.146.53
+ network-object host 10.150.146.54
+ network-object host 10.150.146.55
+ network-object host 10.150.146.56
+ network-object host 10.150.146.201
+ network-object host 10.150.146.202
+ network-object host 10.150.146.203
+ network-object host 10.150.146.204
+ network-object host 10.150.146.205
+ network-object host 10.150.146.206
+object-group service Cibicom_RTP
+ description CHG0056517
+ service-object udp destination range 6000 7280
+object-group service Frequentis_telefoni_RTP_UDP
+ description CHG0059497
+ service-object udp destination range 6000 7280
+object-group service Kommandoposter_RTP
+ description CHG0056517
+ service-object udp destination range 6000 7280
+object-group service PORT-GROUP-NTP-DNS
+ service-object object UDP-123
+ service-object object TCP-53
+ service-object object UDP-53
+object-group service PORT-GROUP-FOR-CATALYST-MAGLEV-USER
+ service-object tcp destination eq 2222
+ service-object tcp destination eq https
+object-group service PORT-GROUP-MGMT-OF-CATALYST
+ service-object tcp destination eq 2222
+ service-object tcp destination eq https
+ service-object tcp destination eq 9004
+ service-object tcp destination eq 9005
+object-group network BDK-CORE_NET_10.125.1.0_NET_10.125.2.0
+ network-object object NET-10.125.1.0-24BIT--BDK-CORE-A
+ network-object object NET-10.125.2.0-24BIT--BDK-CORE-B
+object-group network NETWORK-GROUP-TO-BE-ADMIN-BY-CATALYST
+ network-object 100.72.1.0 255.255.255.0
+ network-object 100.72.33.0 255.255.255.0
+ network-object 100.73.33.0 255.255.255.0
+ network-object 100.73.1.0 255.255.255.0
+object-group service PORT-GROUP-CATALYST-DEVICE-PROTOCOLS
+ service-object tcp destination eq ssh
+ service-object tcp destination eq 830
+ service-object udp destination eq snmp
+ service-object udp destination eq snmptrap
+ service-object icmp
+access-group IN-CAT2DMZ-00-SPNS2-DEVICE-MGMT in interface TCCW-CAT2DMZ-00-SPNS2-DEVICE-MGMT-LINKNET
+access-group IN-CAT2DMZ-01-AAA-DNS-NTP in interface TCCW-CAT2DMZ-01-AAA-DNS-NTP-LINKNET
+access-group IN-CAT2DMZ-02-MGMT-SERVICES in interface TCCW-CAT2DMZ-02-MGMT-SERVICES-LINKNET
+access-group IN-CAT2DMZ-04-MONITORING in interface TCCW-CAT2DMZ-04-MONITORING-LINKNET
+access-group IN-CAT2DMZ-05-MGMT-VXRAIL in interface TCCW-CAT2DMZ-05-MGMT-VXRAIL-LINKNET
+access-group IN-CAT2DMZ-06-IDRAC-VXRAIL in interface TCCW-CAT2DMZ-06-IDRAC-VXRAIL-LINKNET
+access-group IN-CAT2DMZ-07-BACKUP-VXRAIL in interface TCCW-CAT2DMZ-07-BACKUP-VXRAIL-LINKNET
+access-group IN-TRANSIT-SPNS1-TCCWCORE in interface TRANSIT-SPNS1-TCCWCORE02
+access-group IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP in interface TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMP-LINKNET
+access-group IN-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN in interface TCCW-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN-LINKNET
+access-group IN-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG in interface TCCW-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET
+access-group IN-CAT2DMZ-12-CAT2-LINUX-REPOSITORY in interface TCCW-CAT2DMZ-12-CAT2-LINUX-REPOSITORY-LINKNET
+access-group IN-CAT2DMZ-13-CAT2-ANTIVIRUS in interface TCCW-CAT2DMZ-13-CAT2-ANTIVIRUS-LINKNET
+access-group IN-CAT2DMZ-14-BDK-JUMP in interface TCCW-CAT2DMZ-14-BDK-JUMP-LINKNET
+access-group IN-CAT2DMZ-15-AEVEN-JUMP in interface TCCW-CAT2DMZ-15-AEVEN-JUMP-LINKNET
+access-group IN-CAT3DMZ-TRANSIT-CAT2DMZ in interface TCCW-CAT2DMZ-TRANSIT-OBV-CAT3DMZ
+access-group OUT-CAT2DMZ-TRANSIT-CAT3DMZ out interface TCCW-CAT2DMZ-TRANSIT-OBV-CAT3DMZ
+access-group IN-CAT3DMZ-TRANSIT-CAT2DMZ in interface TCCW-CAT2DMZ-TRANSIT-RGDC-CAT3DMZ
+access-group OUT-CAT2DMZ-TRANSIT-CAT3DMZ out interface TCCW-CAT2DMZ-TRANSIT-RGDC-CAT3DMZ
+access-group IN-TCCW-CAT2-NET_MGMT_BDK_CORE_A1-TRANSIT-CAT2DMZ in interface TRANSIT-TCCW-CAT2-NET_MGMT_BDK_CORE_A1
+access-group IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ in interface TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_A_TCCW1A
+access-group IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ in interface TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_A_TCCW2A
+access-group IN-TCCW-CAT2-NET_MGMT_BDK_CORE_B1-TRANSIT-CAT2DMZ in interface TRANSIT-TCCW-CAT2-NET_MGMT_BDK_CORE_B1
+access-group IN-TCCW-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ in interface TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_B_TCCW1B
+access-group IN-TCCW-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ in interface TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_B_TCCW2B
+access-group IN-TRANSIT-SPNS1-TCCWCORE in interface TRANSIT-SPNS1-TCCWCORE01
+access-group IN-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER in interface TCCW-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER-LINKNET
+access-group IN-TRANSIT-TCCW-CAT2-FTSVOIP-A in interface TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCW1A
+access-group IN-TRANSIT-TCCW-CAT2-FTSVOIP-A in interface TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCW2A
+access-list IN-CAT2DMZ-00-SPNS2-DEVICE-MGMT remark SPNS2-INFRASTUCTURE-MANAGEMENT
+access-list IN-CAT2DMZ-00-SPNS2-DEVICE-MGMT extended permit object-group PORT-GROUP-NTP object-group NET-GROUP-CAT2DMZ-00-SPNS2-DEVICE-MGMT object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP log
+access-list IN-CAT2DMZ-00-SPNS2-DEVICE-MGMT extended permit object-group PORT-GROUP-DNS object-group NET-GROUP-CAT2DMZ-00-SPNS2-DEVICE-MGMT object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP log
+access-list IN-CAT2DMZ-00-SPNS2-DEVICE-MGMT extended permit object-group PORT-GROUP-AAA object-group NET-GROUP-CAT2DMZ-00-SPNS2-DEVICE-MGMT object-group HOST-GROUP-CAT2DMZ-01-ISE
+access-list IN-CAT2DMZ-00-SPNS2-DEVICE-MGMT extended permit object-group PORT-GROUP-SYSLOG object-group NET-GROUP-CAT2DMZ-00-SPNS2-DEVICE-MGMT object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT2DMZ-00-SPNS2-DEVICE-MGMT extended permit object-group PORT-GROUP-NTP object-group HOST-GROUP-CAT2DMZ-00-CORE-MGMT object-group HOST-GROUP-STTN-NTP-PEER
+access-list IN-CAT2DMZ-00-SPNS2-DEVICE-MGMT extended permit object UDP-69 object-group NET-GROUP-CAT2DMZ-00-SPNS2-DEVICE-MGMT object-group HOST-GROUP-CAT2DMZ-02-A2LINBACKUP
+access-list IN-CAT2DMZ-00-SPNS2-DEVICE-MGMT extended permit tcp object-group HOST-GROUP-CAT2DMZ-FW-FXOS object-group HOST-GROUP-CAT2DMZ-02-A2LINBACKUP eq ssh
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit object-group PORT-GROUP-DNS object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP object-group HOST-GROUP-JTTN-DNS
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit object-group PORT-GROUP-DNS object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP object-group HOST-GROUP-JTTN-FORWARD-DNS
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit object-group PORT-GROUP-WSUS-UPDATE object-group HOST-GROUP-CAT2DMZ-01-WSUS-SERVERS object-group HOST-GROUP-JTTN-WSUS-SERVERS
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit object-group PORT-GROUP-SYSLOG object-group NET-GROUP-CAT2DMZ-01-AAA-DNS-NTP object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit tcp object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG eq 1514
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit tcp object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG eq 1515
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit object-group PORT-GROUP-ANTIVIRUS object-group HOST-GROUP-CAT2DMZ-01-RDLICENSE object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit object-group PORT-GROUP-ANTIVIRUS object-group HOST-GROUP-CAT2DMZ-01-WSUS-SERVERS object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit object-group PORT-GROUP-VC-MGMT object-group HOST-GROUP-CAT2DMZ-01-WSUS-SERVERS object-group HOST-GROUP-CAT2DMZ-05-MGMT-VCENT
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit object-group PORT-GROUP-WEB object-group HOST-GROUP-CAT2DMZ-01-WSUS-SERVERS object-group HOST-GROUP-CAT2DMZ-05-MGMT-VXRAIL-NODES
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit object-group PORT-GROUP-SYSLOG-AgentX object-group HOST-GROUP-UCS-WSUS object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit object-group PORT-GROUP-WSUS-UPDATE object-group HOST-GROUP-UCS-WSUS object-group HOST-GROUP-JTTN-WSUS-SERVERS
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit object-group PORT-GROUP-SYSLOG-AgentX object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit object-group PORT-GROUP-NTP object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP object-group HOST-GROUP-NTP-SOURCE-FROM-STTN
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP remark CTASK0038728
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit tcp object-group HOST-GROUP-CAT2DMZ-01-WSUS-SERVERS object HOST-100.72.4.5-UCS-CAT2JUMPSPNS-W eq 3389
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit tcp object-group HOST-GROUP-CAT2DMZ-01-WSUS-SERVERS object HOST-100.72.4.5-UCS-CAT2JUMPSPNS-W eq 445
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit tcp object-group HOST-GROUP-CAT2DMZ-01-ISE object HOST-100.72.36.10-UCS-Cat2JumpSSH-E eq ssh
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP remark .
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP remark CHG0058778-CTASK0040138 -- START
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit tcp object-group HOST-GROUP-CAT2DMZ-01-ISE object-group HOST-GROUP-CAT2DMZ-02-A2LINBACKUP eq ssh
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP remark CTASK0040483 -- START
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit object-group PORT-GROUP-SSM object-group HOST-GROUP-CAT2DMZ-01-ISE object-group HOST-GROUP-CAT2DMZ-02-SSM
+access-list IN-CAT2DMZ-01-AAA-DNS-NTP extended permit icmp object-group HOST-GROUP-CAT2DMZ-01-ISE object-group HOST-GROUP-CAT2DMZ-02-SSM
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-NTP object-group NET-GROUP-CAT2DMZ-02-MGMT-SERVICES object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP log
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-DNS object-group NET-GROUP-CAT2DMZ-02-MGMT-SERVICES object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP log
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-SYSLOG object-group NET-GROUP-CAT2DMZ-02-MGMT-SERVICES object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-WSUS-UPDATE object-group NET-GROUP-CAT2DMZ-02-MGMT-SERVICES object-group HOST-GROUP-CAT2DMZ-01-WSUS-SERVERS
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-WEB object-group HOST-GROUP-CAT2DMZ-02-A2LINBACKUP object-group HOST-GROUP-CAT2DMZ-12-LINUX-REPOSITORY
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-NETBACKUP object-group HOST-GROUP-CAT2DMZ-02-VERITAS-NETBACKUP-MASTER object-group HOST-GROUP-CAT2DMZ-05-VERITAS-NETBACKUP-MEDIA log
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-SPNS2-SMTP-MAIL-RELAY-JTTN-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-02-VERITAS-NETBACKUP-MASTER object HOST-172.27.200.24--JTTN-ASMTP1.BANE.DK
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-WSUS-UPDATE object-group HOST-GROUP-CAT2DMZ-02-VERITAS-NETBACKUP-MASTER object-group HOST-GROUP-CAT2DMZ-01-WSUS-SERVERS
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-AD-DATADOMAIN-BACKUP object-group HOST-GROUP-CAT2DMZ-02-VERITAS-NETBACKUP-MASTER object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-ANTIVIRUS object-group HOST-GROUP-CAT2DMZ-02-VERITAS-NETBACKUP-MASTER object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS log
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object TCP-22 object-group HOST-GROUP-CAT2DMZ-02-A2LINBACKUP object-group HOST-GROUP-CAT2DMZ-10-LOGPOINT-ADMIN
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-VMWARE-SERVER-CONSOLE object-group HOST-GROUP-CAT2DMZ-02-VERITAS-NETBACKUP-MASTER object HOST-100.72.35.136--TCCE-CAT2DMZ-05-VX-VCENT01
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-VMWARE-SERVER-CONSOLE object-group HOST-GROUP-CAT2DMZ-02-VERITAS-NETBACKUP-MASTER object HOST-100.72.3.136--TCCW-CAT2DMZ-05-VX-VCENT01
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-AD-DOMAIN-SERVICES object-group HOST-GROUP-CAT2DMZ-02-A2LINBACKUP object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-ANTIVIRUS object-group HOST-GROUP-CAT2DMZ-02-A2LINBACKUP object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-AD-DOMAIN-SERVICES object-group HOST-GROUP-UCS-PRTG object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-WSUS-UPDATE object-group HOST-GROUP-UCS-PRTG object-group HOST-GROUP-UCS-WSUS
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-SYSLOG-AgentX object-group HOST-GROUP-UCS-PRTG object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-PRTG-MONITORING object-group HOST-GROUP-UCS-PRTG object-group NET-GROUP-STTN-NETWORKS
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-PRTG-MONITORING object-group HOST-GROUP-UCS-PRTG object-group NET-GROUP-BDK-CORE-NETWORKS
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-AD-DOMAIN-SERVICES object-group HOST-GROUP-UCS-Cat2Netbrain object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-UCS-NETBRAIN-SERVICES object-group HOST-GROUP-UCS-Cat2Netbrain object-group NET-GROUP-STTN-NETWORKS
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-UCS-NETBRAIN-SERVICES object-group HOST-GROUP-UCS-Cat2Netbrain object-group NET-GROUP-BDK-CORE-NETWORKS
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-WSUS-UPDATE object-group HOST-GROUP-UCS-Cat2Netbrain object-group HOST-GROUP-UCS-WSUS
+access-list IN-CAT2DMZ-02-MGMT-SERVICES remark CTASK0038863
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit tcp object-group HOST-GROUP-UCS-PRTG object-group HOST-GROUP-BDK-CORE-AND-STTN-BLACKBOX-OOB-DEVICES eq https
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit tcp object-group HOST-GROUP-UCS-PRTG object-group NET-GROUP-BDK-CORE-NETWORKS eq https
+access-list IN-CAT2DMZ-02-MGMT-SERVICES remark .
+access-list IN-CAT2DMZ-02-MGMT-SERVICES remark CTASK0039045
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-UCS-NETBRAIN-SERVICES object-group HOST-GROUP-UCS-Cat2Netbrain object-group NET-GROUP-CAT3DMZ-00-SPNS2-DEVICE-MGMT
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-UCS-NETBRAIN-SERVICES object-group HOST-GROUP-UCS-Cat2Netbrain object-group NET-GROUP-CAT2DMZ-00-SPNS2-DEVICE-MGMT
+access-list IN-CAT2DMZ-02-MGMT-SERVICES remark .
+access-list IN-CAT2DMZ-02-MGMT-SERVICES remark CHG0058924
+access-list IN-CAT2DMZ-02-MGMT-SERVICES extended permit object-group PORT-GROUP-AD-DOMAIN-SERVICES object HOST-100.72.35.59-A2NETBRAINDB2 object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-04-MONITORING extended permit object-group PORT-GROUP-PRTG-MONITORING object-group HOST-GROUP-CAT2DMZ-04-PRTG object NET-100.72.0.0-16BIT--CAT2DMZ-NETWORKS
+access-list IN-CAT2DMZ-04-MONITORING extended permit object-group PORT-GROUP-PRTG-MONITORING object-group HOST-GROUP-CAT2DMZ-04-PRTG object NET-100.73.0.0-16BIT--CAT3DMZ-NETWORKS
+access-list IN-CAT2DMZ-04-MONITORING extended permit object-group PORT-GROUP-PRTG-MONITORING object-group HOST-GROUP-CAT2DMZ-04-PRTG object-group NET-GROUP-STTN-NETWORKS
+access-list IN-CAT2DMZ-04-MONITORING extended permit object-group PORT-GROUP-PRTG-MONITORING object-group HOST-GROUP-CAT2DMZ-04-PRTG object-group NET-GROUP-BDK-CORE-NETWORKS
+access-list IN-CAT2DMZ-04-MONITORING extended permit object TCP-443 object-group HOST-GROUP-CAT2DMZ-04-PRTG object-group HOST-GROUP-CAT2DMZ-05-MGMT-VXRAIL
+access-list IN-CAT2DMZ-04-MONITORING extended permit object-group PORT-GROUP-AD-DOMAIN-SERVICES object-group HOST-GROUP-CAT2DMZ-04-PRTG object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-04-MONITORING extended permit object-group PORT-GROUP-SYSLOG object-group NET-GROUP-CAT2DMZ-04-MONITORING object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT2DMZ-04-MONITORING extended permit object-group PORT-GROUP-WSUS-UPDATE object-group NET-GROUP-CAT2DMZ-04-MONITORING object-group HOST-GROUP-CAT2DMZ-01-WSUS-SERVERS
+access-list IN-CAT2DMZ-04-MONITORING extended permit object-group PORT-GROUP-SPNS2-SMTP-MAIL-RELAY-JTTN-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-04-PRTG object HOST-172.27.200.24--JTTN-ASMTP1.BANE.DK
+access-list IN-CAT2DMZ-04-MONITORING extended permit object-group PORT-GROUP-ANTIVIRUS object-group HOST-GROUP-CAT2DMZ-04-PRTG object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS
+access-list IN-CAT2DMZ-04-MONITORING extended permit object-group PORT-GROUP-SYSLOG-AgentX object-group HOST-GROUP-CAT2DMZ-04-PRTG object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT2DMZ-04-MONITORING extended permit object-group PORT-GROUP-PRTG-MONITORING object-group HOST-GROUP-CAT2DMZ-04-PRTG object HOST-100.72.33.144--TCCE-CAT2DMZ-18-CATA-MGMT-INT
+access-list IN-CAT2DMZ-04-MONITORING extended permit object TCP-443 object-group HOST-GROUP-CAT2DMZ-04-PRTG object HOST-100.72.33.144--TCCE-CAT2DMZ-18-CATA-MGMT-INT
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group LDAP-S object HOST-100.72.3.136--TCCW-CAT2DMZ-05-VX-VCENT01 object HOST-100.72.35.11--TCCE-CAT2DMZ-01-CAT2DC01
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group LDAP-S object HOST-100.72.3.136--TCCW-CAT2DMZ-05-VX-VCENT01 object HOST-100.72.3.11--TCCW-CAT2DMZ-01-CAT2DC02
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group LDAP-S object HOST-100.72.35.136--TCCE-CAT2DMZ-05-VX-VCENT01 object HOST-100.72.35.11--TCCE-CAT2DMZ-01-CAT2DC01
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group LDAP-S object HOST-100.72.35.136--TCCE-CAT2DMZ-05-VX-VCENT01 object HOST-100.72.3.11--TCCW-CAT2DMZ-01-CAT2DC02
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group DNS object-group HOST-GROUP-CAT2DMZ-05-MGMT-VXRAIL object HOST-100.72.35.11--TCCE-CAT2DMZ-01-CAT2DC01
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group DNS object-group HOST-GROUP-CAT2DMZ-05-MGMT-VXRAIL object HOST-100.72.3.11--TCCW-CAT2DMZ-01-CAT2DC02
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group PORT-GROUP-NTP object-group HOST-GROUP-CAT2DMZ-05-MGMT-VXRAIL object HOST-100.72.1.129--TCCW-CAT2DMZ-00-NTP
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group PORT-GROUP-NTP object-group HOST-GROUP-CAT2DMZ-05-MGMT-VXRAIL object HOST-100.72.33.129--TCCE-CAT2DMZ-00-NTP
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group PORT-GROUP-SYSLOG object-group NET-GROUP-CAT2DMZ-05-MGMT-VXRAIL object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group PORT-GROUP-WSUS-UPDATE object-group NET-GROUP-CAT2DMZ-05-MGMT-VXRAIL object-group HOST-GROUP-CAT2DMZ-01-WSUS-SERVERS
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group PORT-GROUP-NTP object-group HOST-GROUP-CAT2DMZ-05-DD-HOSTS object HOST-100.72.33.129--TCCE-CAT2DMZ-00-NTP
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group PORT-GROUP-NTP object-group HOST-GROUP-CAT2DMZ-05-DD-HOSTS object HOST-100.72.1.129--TCCW-CAT2DMZ-00-NTP
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group PORT-GROUP-DNS object-group HOST-GROUP-CAT2DMZ-05-DD-HOSTS object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group LDAP-S object-group HOST-GROUP-CAT2DMZ-05-DD-HOSTS object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group PORT-GROUP-LOG object-group HOST-GROUP-CAT2DMZ-05-DD-HOSTS object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group PORT-GROUP-SPNS2-SMTP-MAIL-RELAY-JTTN-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-05-DD-HOSTS object HOST-172.27.200.24--JTTN-ASMTP1.BANE.DK
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group PORT-GROUP-SPNS2-SMTP-MAIL-RELAY-JTTN-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-05-VERITAS-NETBACKUP-MEDIA object HOST-172.27.200.24--JTTN-ASMTP1.BANE.DK
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group PORT-GROUP-NETBACKUP object-group HOST-GROUP-CAT2DMZ-05-VERITAS-NETBACKUP-MEDIA object-group HOST-GROUP-CAT2DMZ-02-VERITAS-NETBACKUP-MASTER
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group PORT-GROUP-WSUS-UPDATE object-group HOST-GROUP-CAT2DMZ-05-VERITAS-NETBACKUP-MEDIA object-group HOST-GROUP-CAT2DMZ-01-WSUS-SERVERS
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group PORT-GROUP-AD-DATADOMAIN-BACKUP object-group HOST-GROUP-CAT2DMZ-05-VERITAS-NETBACKUP-MEDIA object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group PORT-GROUP-ANTIVIRUS object-group HOST-GROUP-CAT2DMZ-05-VERITAS-NETBACKUP-MEDIA object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS log
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object-group PORT-GROUP-ADDC-DATADOMAIN-BACKUP object-group HOST-GROUP-CAT2DMZ-05-DD-HOSTS object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object TCP-22 object-group HOST-GROUP-CAT2DMZ-05-VX-VCENT01 object-group HOST-GROUP-CAT2DMZ-02-A2LINBACKUP
+access-list IN-CAT2DMZ-05-MGMT-VXRAIL extended permit object TCP-22 object-group HOST-GROUP-CAT2DMZ-05-VX-MANAGER01-VCENT01 object-group HOST-GROUP-CAT2DMZ-02-A2LINBACKUP
+access-list IN-CAT2DMZ-06-IDRAC-VXRAIL extended permit object-group PORT-GROUP-SYSLOG object-group NET-GROUP-CAT2DMZ-06-IDRAC-VXRAIL object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT2DMZ-06-IDRAC-VXRAIL extended permit object-group PORT-GROUP-LOG object-group HOST-GROUP-CAT2DMZ-06-DD-IDRAC object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT2DMZ-06-IDRAC-VXRAIL extended permit object-group PORT-GROUP-SPNS2-SMTP-MAIL-RELAY-JTTN-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-06-DD-IDRAC object HOST-172.27.200.24--JTTN-ASMTP1.BANE.DK
+access-list IN-CAT2DMZ-06-IDRAC-VXRAIL extended permit object-group PORT-GROUP-NTP object-group NET-GROUP-CAT2DMZ-06-IDRAC-VXRAIL object HOST-100.72.1.129--TCCW-CAT2DMZ-00-NTP
+access-list IN-CAT2DMZ-06-IDRAC-VXRAIL extended permit object-group PORT-GROUP-NTP object-group NET-GROUP-CAT2DMZ-06-IDRAC-VXRAIL object HOST-100.72.33.129--TCCE-CAT2DMZ-00-NTP
+access-list IN-TRANSIT-SPNS1-OBVCORE extended permit tcp object PoC_IXP_Source_Host object-group PoC_Destination_Hosts eq ssh
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object ICMP-ECHO object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object NET-100.72.0.0-16BIT--CAT2DMZ-NETWORKS
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object ICMP-ECHO object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object NET-100.73.0.0-16BIT--CAT3DMZ-NETWORKS
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-VXRAIL-MGMT-ACCESS object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-05-MGMT-VXRAIL
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-VXRAIL-MGMT-ACCESS object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-06-VXRAIL-IDRAC
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-AD-DOMAIN-SERVICES object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-NTP object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-DNS object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group NET-GROUP-CAT2DMZ-00-SPNS2-DEVICE-MGMT
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group NET-GROUP-CAT3DMZ-00-SPNS2-DEVICE-MGMT
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-BLACKBOX-CONSOLE-PORT1-8 object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT3DMZ-00-BLACKBOX-OOB-DEVICES
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-BLACKBOX-CONSOLE-PORT1-8 object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-00-BLACKBOX-OOB-DEVICES
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-12-LINUX-REPOSITORY
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-SPNS2-ANTIVIRUS-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-ANTIVIRUS object-group NET-GROUP-CAT2DMZ-09-EXT-PROVIDERS-JUMP object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS log
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object TCP-443 object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-04-PRTG
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object TCP-3389 object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-XX-EXT-PROVIDERS-SPNS2-JUMPHOSTS-RDP-ACCESS
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object TCP-22 object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-STTN-EXT-PROVIDERS-SPNS2-JUMPHOSTS-SSH-ACCESS
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object TCP-22 object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-BDK-CORE-EXT-PROVIDERS-SPNS2-JUMPHOSTS-SSH-ACCESS
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-SYSLOG object-group NET-GROUP-CAT2DMZ-09-EXT-PROVIDERS-JUMP object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-WSUS-UPDATE object-group NET-GROUP-CAT2DMZ-09-EXT-PROVIDERS-JUMP object-group HOST-GROUP-CAT2DMZ-01-WSUS-SERVERS
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-10-LOGPOINT-ADMIN
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object TCP-22 object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-02-A2LINBACKUP
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-DATA-DOMAIN-BACKUP-ACCESS object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-02-VERITAS-NETBACKUP-MASTER
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-SPNS2-DATADOMAIN-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-05-DD-HOSTS
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-SPNS2-DATADOMAIN-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-06-DD-IDRAC
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-RDLICENSE-ACCESS-PORTS object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-01-RDLICENSE
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-VC-MGMT object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-05-MGMT-VCENT
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object TCP-3389 object-group HOST-GROUP-UCS-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-XX-UCS-JUMPHOSTS-RDP-ACCESS
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object TCP-443 object-group HOST-GROUP-UCS-JUMPHOSTS object-group HOST-GROUP-UCS-PRTG
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-AD-DOMAIN-SERVICES object-group HOST-GROUP-UCS-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-SYSLOG-AgentX object-group HOST-GROUP-UCS-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object TCP-22 object-group HOST-GROUP-UCS-JUMPHOSTS object-group NET-GROUP-STTN-NETWORKS
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object TCP-22 object-group HOST-GROUP-UCS-JUMPHOSTS object-group NET-GROUP-BDK-CORE-NETWORKS
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-VC-MGMT object-group HOST-GROUP-UCS-JUMPHOSTS object-group HOST-GROUP-UCS-VCENTER-AND-UCS-ESX-NODES
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-UCS-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-01-ISE
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-UCS-JUMPHOSTS object-group HOST-GROUP-UCS-Cat2Netbrain
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-UCS-JUMPHOSTS object-group HOST-GROUP-UCS-Cat2NetbrainDB
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-UCS-JUMPHOSTS object-group HOST-GROUP-UCS-Cat2SSM
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object ICMP-ECHO object-group HOST-GROUP-UCS-JUMPHOSTS object NET-100.72.0.0-16BIT--CAT2DMZ-NETWORKS
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object ICMP-ECHO object-group HOST-GROUP-UCS-JUMPHOSTS object NET-100.73.0.0-16BIT--CAT3DMZ-NETWORKS
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP remark CTASK0038863
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit tcp object-group HOST-GROUP-UCS-JUMPHOSTS object-group HOST-GROUP-UCS-Cat2SSM eq 8443
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-VC-MGMT object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-VCENTER-AND-UCS-ESX-NODES
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-01-ISE
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-Cat2Netbrain
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-Cat2NetbrainDB
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-Cat2SSM
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-JUMPHOSTS
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-PRTG eq 3389
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-PRTG eq https
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-Cat2SSM eq 8443
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object HOST-100.72.3.12-TCCW-UCS-Cat2WSUS01 eq 3389
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-Cat2Netbrain eq 3389
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-BLACKBOX-CONSOLE-PORT1-8 object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-BDK-CORE-AND-STTN-BLACKBOX-OOB-DEVICES
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object-group HOST-GROUP-BDK-CORE-AND-STTN-BLACKBOX-OOB-DEVICES eq https
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-BLACKBOX-CONSOLE-PORT1-8 object-group HOST-GROUP-UCS-JUMPHOSTS object-group HOST-GROUP-BDK-CORE-AND-STTN-BLACKBOX-OOB-DEVICES
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit tcp object-group HOST-GROUP-UCS-JUMPHOSTS object-group HOST-GROUP-BDK-CORE-AND-STTN-BLACKBOX-OOB-DEVICES eq https
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-WSUS-UPDATE object-group HOST-GROUP-UCS-JUMPHOSTS object-group HOST-GROUP-UCS-WSUS
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP remark .
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP remark CTASK0039540---- START
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-IPERF object HOST-100.72.36.11--TCCE-CAT2DMZ-09-EXT-PROVIDERS-A2EXTPROWINJUMPE1 object HOST-172.21.65.148--JTTN-EXT-PROVIDERS-JTTN-JUMPHOST1
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-IPERF object HOST-100.72.36.11--TCCE-CAT2DMZ-09-EXT-PROVIDERS-A2EXTPROWINJUMPE1 object HOST-100.73.66.25--CAT3DMZ-TEST-HOST
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP remark CTASK0039540---- END
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object-group PORT-GROUP-MGMT-OF-CATALYST object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object HOST-100.72.33.144--TCCE-CAT2DMZ-18-CATA-MGMT-INT
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object TCP-22 object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object HOST-100.72.33.145--TCCE-CAT2DMZ-18-CATA-CIMC-INT
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object TCP-443 object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object HOST-100.72.33.145--TCCE-CAT2DMZ-18-CATA-CIMC-INT
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit object TCP-2068 object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object HOST-100.72.33.145--TCCE-CAT2DMZ-18-CATA-CIMC-INT
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object HOST-100.73.69.100-NET-SRV eq 3389
+access-list IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS object HOST-100.73.69.100-NET-SRV eq https
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object ICMP-ECHO object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object NET-100.72.0.0-16BIT--CAT2DMZ-NETWORKS
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object ICMP-ECHO object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object NET-100.73.0.0-16BIT--CAT3DMZ-NETWORKS
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-VXRAIL-MGMT-ACCESS object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-05-MGMT-VXRAIL
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-VXRAIL-MGMT-ACCESS object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-06-VXRAIL-IDRAC
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-AD-DOMAIN-SERVICES object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-NTP object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-DNS object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group NET-GROUP-CAT2DMZ-00-SPNS2-DEVICE-MGMT
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group NET-GROUP-CAT3DMZ-00-SPNS2-DEVICE-MGMT
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-BLACKBOX-CONSOLE-PORT1-8 object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT3DMZ-00-BLACKBOX-OOB-DEVICES
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-BLACKBOX-CONSOLE-PORT1-8 object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-00-BLACKBOX-OOB-DEVICES
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-12-LINUX-REPOSITORY
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-SPNS2-ANTIVIRUS-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-ANTIVIRUS object-group NET-GROUP-CAT2DMZ-14-BDK-JUMP object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS log
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object TCP-443 object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-04-PRTG
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object TCP-3389 object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-XX-CAT2DMZ-BDK-SPNS2-JUMPHOSTS-RDP-ACCESS
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object TCP-22 object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-STTN-BDK-SPNS2-JUMPHOSTS-SSH-ACCESS
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object TCP-22 object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-BDK-CORE-BDK-SPNS2-JUMPHOSTS-SSH-ACCESS
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-SYSLOG object-group NET-GROUP-CAT2DMZ-14-BDK-JUMP object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-WSUS-UPDATE object-group NET-GROUP-CAT2DMZ-14-BDK-JUMP object-group HOST-GROUP-CAT2DMZ-01-WSUS-SERVERS
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-10-LOGPOINT-ADMIN
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object TCP-22 object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-02-A2LINBACKUP
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-DATA-DOMAIN-BACKUP-ACCESS object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-02-VERITAS-NETBACKUP-MASTER
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-SPNS2-DATADOMAIN-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-05-DD-HOSTS
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-SPNS2-DATADOMAIN-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-06-DD-IDRAC
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-RDLICENSE-ACCESS-PORTS object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-01-RDLICENSE
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-VC-MGMT object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-05-MGMT-VCENT
+access-list IN-CAT2DMZ-14-BDK-JUMP remark CTASK0038863
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-VC-MGMT object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-VCENTER-AND-UCS-ESX-NODES
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-01-ISE
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-Cat2Netbrain
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-Cat2NetbrainDB
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-Cat2SSM
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-JUMPHOSTS
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-PRTG eq 3389
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-PRTG eq https
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-Cat2SSM eq 8443
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object HOST-100.72.3.12-TCCW-UCS-Cat2WSUS01 eq 3389
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-Cat2Netbrain eq 3389
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-JUMPHOSTS eq 3389
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-BLACKBOX-CONSOLE-PORT1-8 object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-BDK-CORE-AND-STTN-BLACKBOX-OOB-DEVICES
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object-group HOST-GROUP-BDK-CORE-AND-STTN-BLACKBOX-OOB-DEVICES eq https
+access-list IN-CAT2DMZ-14-BDK-JUMP remark .
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object-group PORT-GROUP-FOR-CATALYST-MAGLEV-USER object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object HOST-100.72.33.144--TCCE-CAT2DMZ-18-CATA-MGMT-INT
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object TCP-22 object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object HOST-100.72.33.145--TCCE-CAT2DMZ-18-CATA-CIMC-INT
+access-list IN-CAT2DMZ-14-BDK-JUMP extended permit object TCP-443 object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS object HOST-100.72.33.145--TCCE-CAT2DMZ-18-CATA-CIMC-INT
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object ICMP-ECHO object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object NET-100.72.0.0-16BIT--CAT2DMZ-NETWORKS
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object ICMP-ECHO object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object NET-100.73.0.0-16BIT--CAT3DMZ-NETWORKS
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-VXRAIL-MGMT-ACCESS object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-05-MGMT-VXRAIL
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-VXRAIL-MGMT-ACCESS object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-06-VXRAIL-IDRAC
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-AD-DOMAIN-SERVICES object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-NTP object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-DNS object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group NET-GROUP-CAT2DMZ-00-SPNS2-DEVICE-MGMT
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group NET-GROUP-CAT3DMZ-00-SPNS2-DEVICE-MGMT
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-BLACKBOX-CONSOLE-PORT1-8 object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT3DMZ-00-BLACKBOX-OOB-DEVICES
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-BLACKBOX-CONSOLE-PORT1-8 object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-00-BLACKBOX-OOB-DEVICES
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-12-LINUX-REPOSITORY
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-SPNS2-ANTIVIRUS-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-ANTIVIRUS object-group NET-GROUP-CAT2DMZ-15-AEVEN-JUMP object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS log
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object TCP-443 object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-04-PRTG
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object TCP-3389 object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-XX-CAT2DMZ-AEVEN-SPNS2-JUMPHOSTS-RDP-ACCESS
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object TCP-22 object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-STTN-AEVEN-SPNS2-JUMPHOSTS-SSH-ACCESS
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object TCP-22 object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-BDK-CORE-AEVEN-SPNS2-JUMPHOSTS-SSH-ACCESS
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-SYSLOG object-group NET-GROUP-CAT2DMZ-15-AEVEN-JUMP object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-WSUS-UPDATE object-group NET-GROUP-CAT2DMZ-15-AEVEN-JUMP object-group HOST-GROUP-CAT2DMZ-01-WSUS-SERVERS
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-10-LOGPOINT-ADMIN
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object TCP-22 object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-02-A2LINBACKUP
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-DATA-DOMAIN-BACKUP-ACCESS object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-02-VERITAS-NETBACKUP-MASTER
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-SPNS2-DATADOMAIN-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-05-DD-HOSTS
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-SPNS2-DATADOMAIN-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-06-DD-IDRAC
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-RDLICENSE-ACCESS-PORTS object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-01-RDLICENSE
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-VC-MGMT object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-05-MGMT-VCENT
+access-list IN-CAT2DMZ-15-AEVEN-JUMP remark CTASK0038863
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-VC-MGMT object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-VCENTER-AND-UCS-ESX-NODES
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-01-ISE
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-Cat2Netbrain
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-Cat2NetbrainDB
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-Cat2SSM
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-SPNS2-DEVICE-MGMT-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-JUMPHOSTS
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-PRTG eq 3389
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-PRTG eq https
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-Cat2SSM eq 8443
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object HOST-100.72.3.12-TCCW-UCS-Cat2WSUS01 eq 3389
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-Cat2Netbrain eq 3389
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-UCS-JUMPHOSTS eq 3389
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-BLACKBOX-CONSOLE-PORT1-8 object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-BDK-CORE-AND-STTN-BLACKBOX-OOB-DEVICES
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit tcp object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-BDK-CORE-AND-STTN-BLACKBOX-OOB-DEVICES eq https
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object TCP-22 object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object TCP-22 object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS
+access-list IN-CAT2DMZ-15-AEVEN-JUMP remark .
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object-group PORT-GROUP-FOR-CATALYST-MAGLEV-USER object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object HOST-100.72.33.144--TCCE-CAT2DMZ-18-CATA-MGMT-INT
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object TCP-22 object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object HOST-100.72.33.145--TCCE-CAT2DMZ-18-CATA-CIMC-INT
+access-list IN-CAT2DMZ-15-AEVEN-JUMP extended permit object TCP-443 object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS object HOST-100.72.33.145--TCCE-CAT2DMZ-18-CATA-CIMC-INT
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ remark TRANSIT-FROM-CAT3DMZ
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object-group PORT-GROUP-AAA object-group NET-GROUP-CAT3DMZ-00-SPNS2-DEVICE-MGMT object-group HOST-GROUP-CAT2DMZ-01-ISE log
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object TFTP object-group NET-GROUP-CAT3DMZ-00-SPNS2-DEVICE-MGMT object HOST-100.72.35.60--TCCE-CAT2DMZ-02-A2LINBACKUPTCCE1
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object-group PORT-GROUP-EXT-PROVIDERS-SPNS2-JUMPHOST-ACCESS object-group HOST-GROUP-EXT-PROVIDERS-JTTN-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-09-EXT-PROVIDERS-SPNS2-JUMPHOSTS
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object-group PORT-GROUP-BDK-SPNS2-JUMPHOST-ACCESS object-group HOST-GROUP-BDK-JTTN-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-14-BDK-SPNS2-JUMPHOSTS
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object-group PORT-GROUP-AEVEN-SPNS2-JUMPHOST-ACCESS object-group HOST-GROUP-AEVEN-JTTN-JUMPHOSTS object-group HOST-GROUP-CAT2DMZ-15-AEVEN-SPNS2-JUMPHOSTS
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object-group PORT-GROUP-SYSLOG object-group NET-GROUP-CAT3DMZ-00-SPNS2-DEVICE-MGMT object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp object-group HOST-GROUP-CAT3DMZ-FW-FXOS object-group HOST-GROUP-CAT2DMZ-02-A2LINBACKUP eq ssh
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp object-group HOST-GROUP-CAT3DMZ-FMC-MGMT-IP object-group HOST-GROUP-CAT2DMZ-02-A2LINBACKUP eq ssh
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object-group PORT-GROUP-NTP object-group NET-GROUP-CAT3DMZ-00-SPNS2-DEVICE-MGMT object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit udp object-group HOST-GROUP-JTTN-LOGPOINT-SYSLOG-SOURCES object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG eq syslog
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit udp object-group HOST-GROUP-CAT3DMZ-05-SUPPORT-ZONE-VXRAIL-VCSA object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG eq syslog
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp object-group HOST-GROUP-JTTN-LOGPOINT-SYSLOG-SOURCES-TCP-1514+1515 object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG eq 1514
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp object-group HOST-GROUP-JTTN-LOGPOINT-SYSLOG-SOURCES-TCP-1514+1515 object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG eq 1515
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object TCP-443 object HOST-10.233.40.200-AEVEN-REMOTE-SITE-PRTG-CONNECTION-HOST object-group HOST-GROUP-UCS-PRTG
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object TCP-3389 object-group HOST-GROUP-AEVEN-JTTN-JUMPHOSTS object-group HOST-GROUP-UCS-JUMPHOSTS
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object TCP-3389 object-group HOST-GROUP-EXT-PROVIDERS-JTTN-JUMPHOSTS object-group HOST-GROUP-UCS-JUMPHOSTS
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object TCP-3389 object-group HOST-GROUP-BDK-JTTN-JUMPHOSTS object-group HOST-GROUP-UCS-JUMPHOSTS
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ remark CTASK0038728
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object TCP-3389 object HOST-100.64.15.50-ELTEL-REMOTE-HOST1 object-group HOST-GROUP-UCS-JUMPHOSTS
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object TCP-22 object HOST-100.64.15.60-ELTEL-REMOTE-HOST2 object-group HOST-GROUP-UCS-JUMPHOSTS
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ remark .
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ remark -CHG0057659-------- Begin
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object-group PORT-GROUP-SYSLOG object NET-10.185.250.0-25BIT--JTTN-DATADOMAIN object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ remark -CHG0057659-------- End
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ remark CTASK0038863
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object TCP-22 object HOST-100.64.15.50-ELTEL-REMOTE-HOST1 object-group HOST-GROUP-UCS-JUMPHOSTS
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ remark .
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ remark CTASK0039540---- START
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object-group PORT-GROUP-IPERF object HOST-172.21.65.148--JTTN-EXT-PROVIDERS-JTTN-JUMPHOST1 object HOST-100.72.36.11--TCCE-CAT2DMZ-09-EXT-PROVIDERS-A2EXTPROWINJUMPE1
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object-group PORT-GROUP-IPERF object HOST-100.73.66.25--CAT3DMZ-TEST-HOST object HOST-100.72.36.11--TCCE-CAT2DMZ-09-EXT-PROVIDERS-A2EXTPROWINJUMPE1
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ remark CTASK0039540---- END
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ remark CHG0058787 - BEGIN
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object TCP-SQLNET object HOST-GROUP-STR-CAT3DMZ-BROKER-ZONE-DHCP-RANGE-172.21.247.100-199 object-group HOST-GROUP-ALSTOM-TPS_DB_SRV log
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object TCP-SQLNET object HOST-172.21.254.4-STR-CAT3DMZ-BROKER-ZONE-ADWHREPPBR01 object HOST-10.14.0.71-ALSTOM-TPS_DB_SRV log
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit icmp object HOST-172.21.254.4-STR-CAT3DMZ-BROKER-ZONE-ADWHREPPBR01 object HOST-10.14.0.71-ALSTOM-TPS_DB_SRV log
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object TCP-SQLNET object HOST-GROUP-STR-CAT3DMZ-BROKER-ZONE-DHCP-RANGE-172.21.247.100-199 object HOST-10.14.0.81-ALSTOM-ATPS-TCC-DB log
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object TCP-3389 object HOST-172.21.248.50-STR-CAT3DMZ-BROKER-ZONE-AALSTOMJUMP2 object HOST-10.14.0.152-ALSTOM-JUMPSERVER log
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ remark CHG0058787 - END
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ remark CHG0059497 - START
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit udp 157.250.163.240 255.255.255.248 object-group dic-proxies eq ntp
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit udp 157.250.163.240 255.255.255.248 object-group dic-proxies eq sip
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit udp 157.250.163.240 255.255.255.248 object-group dic-sc eq sip
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object-group Cibicom_RTP 157.250.163.240 255.255.255.248 object-group dic-sc
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp 157.250.163.240 255.255.255.248 object-group dic-proxies eq 23017
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp 157.250.163.240 255.255.255.248 object-group dic-proxies eq 8070
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp 157.250.163.240 255.255.255.248 host 10.150.146.140 eq 8443
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp 157.250.163.240 255.255.255.248 host 10.150.146.40 eq 8443
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp 157.250.163.240 255.255.255.248 host 10.150.146.40 eq 8080
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp 157.250.163.240 255.255.255.248 host 10.150.146.140 eq 8080
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ remark CHG0059497 - END
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ remark CHG0059629 - START
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit udp 10.150.144.0 255.255.255.0 object-group dic-proxies eq ntp
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit udp 10.150.144.0 255.255.255.0 object-group dic-proxies eq sip
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit udp 10.150.144.0 255.255.255.0 object-group dic-sc eq sip
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object-group Kommandoposter_RTP 10.150.144.0 255.255.255.0 object-group dic-sc
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp 10.150.144.0 255.255.255.0 object-group dic-proxies eq 23017
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp 10.150.144.0 255.255.255.0 object-group dic-proxies eq 8070
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp 10.150.144.0 255.255.255.0 host 10.150.146.140 eq 8443
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp 10.150.144.0 255.255.255.0 host 10.150.146.40 eq 8443
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp 10.150.144.0 255.255.255.0 host 10.150.146.40 eq 8080
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp 10.150.144.0 255.255.255.0 host 10.150.146.140 eq 8080
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit udp 10.150.145.0 255.255.255.0 object-group dic-proxies eq ntp
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit udp 10.150.145.0 255.255.255.0 object-group dic-proxies eq sip
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit udp 10.150.145.0 255.255.255.0 object-group dic-sc eq sip
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object-group Kommandoposter_RTP 10.150.145.0 255.255.255.0 object-group dic-sc
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp 10.150.145.0 255.255.255.0 object-group dic-proxies eq 23017
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp 10.150.145.0 255.255.255.0 object-group dic-proxies eq 8070
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp 10.150.145.0 255.255.255.0 host 10.150.146.140 eq 8443
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp 10.150.145.0 255.255.255.0 host 10.150.146.40 eq 8443
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp 10.150.145.0 255.255.255.0 host 10.150.146.40 eq 8080
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit tcp 10.150.145.0 255.255.255.0 host 10.150.146.140 eq 8080
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ remark CHG0059629 - END
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object TCP-8010 object HOST-100.73.69.165--TPS-IF object HOST-10.14.0.46-ALSTOM log
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object TCP-8010 object HOST-100.73.69.165--TPS-IF object HOST-10.14.0.54-ALSTOM log
+access-list IN-CAT3DMZ-TRANSIT-CAT2DMZ extended permit object TCP-8010 object HOST-100.73.69.165--TPS-IF object HOST-10.14.1.212-ALSTOM log
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ remark TRANSIT-TO-CAT3DMZ
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ remark ------------- CHG0059629 - START ----------------------------
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended permit udp object-group dic-proxies 10.150.144.0 255.255.255.0 eq sip
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended permit udp object-group dic-sc 10.150.144.0 255.255.255.0 eq sip
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended permit object-group Frequentis_telefoni_RTP_UDP object-group dic-sc 10.150.144.0 255.255.255.0
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended permit udp object-group dic-proxies 10.150.145.0 255.255.255.0 eq sip
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended permit udp object-group dic-sc 10.150.145.0 255.255.255.0 eq sip
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended permit object-group Frequentis_telefoni_RTP_UDP object-group dic-sc 10.150.145.0 255.255.255.0
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ remark ------------- CHG0059629- END ----------------------------
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ remark ------------- CHG0059497 - START ----------------------------
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended permit udp object-group dic-proxies 157.250.163.240 255.255.255.248 eq sip
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended permit udp object-group dic-sc 157.250.163.240 255.255.255.248 eq sip
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended permit object-group Frequentis_telefoni_RTP_UDP object-group dic-sc 157.250.163.240 255.255.255.248
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ remark ------------- CHG0059497 - END ----------------------------
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended permit object-group PORT-GROUP-PRTG-MONITORING object-group HOST-GROUP-CAT2DMZ-04-PRTG object HOST-100.72.33.14--OBV-CAT3DMZ-FTD-OBV-TO-TCCE-LINKNET-IP
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended permit object-group PORT-GROUP-PRTG-MONITORING object-group HOST-GROUP-CAT2DMZ-04-PRTG object HOST-100.72.33.18--RGDC-CAT3DMZ-FTD-RGDC-TO-TCCE-LINKNET-IP
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ remark CTASK0039045
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended permit object-group PORT-GROUP-UCS-NETBRAIN-SERVICES object-group HOST-GROUP-UCS-Cat2Netbrain object-group NET-GROUP-CAT3DMZ-00-SPNS2-DEVICE-MGMT
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ remark .
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended deny ip any object NET-100.72.0.0-16BIT--CAT2DMZ-NETWORKS
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended deny ip object-group NET-GROUP-STTN-NETWORKS any
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended deny ip object-group NET-GROUP-BDK-CORE-NETWORKS any
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ remark CHG0058787 - BEGIN
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended permit object FTP object HOST-10.14.0.70-ALSTOM-TPS_DB_SRV object HOST-172.21.251.18-STR-CAT3DMZ-BROKER-ZONE-ASPFIL01
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended permit object ICMP-ANY object HOST-10.14.0.70-ALSTOM-TPS_DB_SRV object HOST-172.21.251.18-STR-CAT3DMZ-BROKER-ZONE-ASPFIL01
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended permit object PORT-RANGE-TCP-50000-50010-FTP object HOST-10.14.0.70-ALSTOM-TPS_DB_SRV object HOST-172.21.251.18-STR-CAT3DMZ-BROKER-ZONE-ASPFIL01
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended permit object TCP-587 object HOST-10.14.0.70-ALSTOM-TPS_DB_SRV object HOST-172.21.251.19-STR-CAT3DMZ-BROKER-ZONE-ASMTPRELAY01
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ remark CHG0058787 - END
+access-list OUT-CAT2DMZ-TRANSIT-CAT3DMZ extended permit ip any any log
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_A1-TRANSIT-CAT2DMZ remark CTASK0038729
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_A1-TRANSIT-CAT2DMZ extended permit icmp object-group NET-GROUP-BDK-CORE-NETWORKS object NET-100.72.0.0-16BIT--CAT2DMZ-NETWORKS
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_A1-TRANSIT-CAT2DMZ remark CTASK .
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_A1-TRANSIT-CAT2DMZ extended permit object TCP-49 object-group NET-GROUP-BDK-CORE-NETWORKS object-group HOST-GROUP-CAT2DMZ-01-ISE
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_A1-TRANSIT-CAT2DMZ extended permit object-group PORT-GROUP-SSM object-group NET-GROUP-BDK-CORE-NETWORKS object-group HOST-GROUP-UCS-Cat2SSM
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_A1-TRANSIT-CAT2DMZ extended permit object-group PORT-GROUP-SYSLOG object-group NET-GROUP-BDK-CORE-NETWORKS object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_A1-TRANSIT-CAT2DMZ remark CHG0057798-CTASK0039046
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_A1-TRANSIT-CAT2DMZ extended permit udp object-group NET-GROUP-BDK-CORE-NETWORKS object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP eq domain
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_A1-TRANSIT-CAT2DMZ remark DENY ANY
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_A1-TRANSIT-CAT2DMZ extended deny ip any any log
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ remark CTASK0038729
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ extended permit icmp object-group NET-GROUP-STTN-NETWORKS object NET-100.72.0.0-16BIT--CAT2DMZ-NETWORKS
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ remark CTASK .
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ extended permit object TCP-49 object-group NET-GROUP-STTN-NETWORKS object-group HOST-GROUP-CAT2DMZ-01-ISE
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ extended permit object-group PORT-GROUP-SSM object-group NET-GROUP-STTN-NETWORKS object-group HOST-GROUP-UCS-Cat2SSM
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ extended permit object-group PORT-GROUP-SYSLOG object-group NET-GROUP-STTN-NETWORKS object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ remark CHG0057798-CTASK0039046
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ extended permit udp object-group NET-GROUP-STTN-NETWORKS object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP eq domain
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ remark CHG0058077-CTASK0039278
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ extended permit tcp object-group NET-GROUP-STTN-NETWORKS object-group HOST-GROUP-CAT2DMZ-09-FTP-WIN eq ftp
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ remark CHG0059088-CTASK0040496
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ extended permit object TCP-22 object-group TP4100-E-W object-group HOST-GROUP-CAT2DMZ-02-A2LINBACKUP
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ remark CHG0059997-CTASK0041520 --------- START
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ extended permit tcp object HOST-10.24.21.254-TP4100-ODENSE object-group HOST-GROUP-CAT2DMZ-02-A2LINBACKUP eq ssh
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ extended permit tcp object HOST-10.24.5.254-TP4100-ROSKILDE object-group HOST-GROUP-CAT2DMZ-02-A2LINBACKUP eq ssh
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ extended permit tcp object HOST-10.24.61.142-TP4100-OBV object-group HOST-GROUP-CAT2DMZ-02-A2LINBACKUP eq ssh
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ remark DENY ANY
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ extended deny ip any any log
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_B1-TRANSIT-CAT2DMZ remark CTASK0038729
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_B1-TRANSIT-CAT2DMZ extended permit icmp object-group NET-GROUP-BDK-CORE-NETWORKS object NET-100.72.0.0-16BIT--CAT2DMZ-NETWORKS
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_B1-TRANSIT-CAT2DMZ remark CTASK .
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_B1-TRANSIT-CAT2DMZ extended permit object TCP-49 object-group NET-GROUP-BDK-CORE-NETWORKS object-group HOST-GROUP-CAT2DMZ-01-ISE
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_B1-TRANSIT-CAT2DMZ extended permit object-group PORT-GROUP-SSM object-group NET-GROUP-BDK-CORE-NETWORKS object-group HOST-GROUP-UCS-Cat2SSM
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_B1-TRANSIT-CAT2DMZ extended permit object-group PORT-GROUP-SYSLOG object-group NET-GROUP-BDK-CORE-NETWORKS object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_B1-TRANSIT-CAT2DMZ remark CHG0057798-CTASK0039046
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_B1-TRANSIT-CAT2DMZ extended permit udp object-group NET-GROUP-BDK-CORE-NETWORKS object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP eq domain
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_B1-TRANSIT-CAT2DMZ remark DENY ANY
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_CORE_B1-TRANSIT-CAT2DMZ extended deny ip any any log
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ remark CTASK0038729
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ extended permit icmp object-group NET-GROUP-STTN-NETWORKS object NET-100.72.0.0-16BIT--CAT2DMZ-NETWORKS
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ remark CTASK .
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ extended permit object TCP-49 object-group NET-GROUP-STTN-NETWORKS object-group HOST-GROUP-CAT2DMZ-01-ISE
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ extended permit object-group PORT-GROUP-SSM object-group NET-GROUP-STTN-NETWORKS object-group HOST-GROUP-UCS-Cat2SSM
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ extended permit object-group PORT-GROUP-SYSLOG object-group NET-GROUP-STTN-NETWORKS object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ remark CHG0057798-CTASK0039046
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ extended permit udp object-group NET-GROUP-STTN-NETWORKS object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP eq domain
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ remark DENY ANY
+access-list IN-TCCW-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ extended deny ip any any log
+access-list IN-CAT2DMZ-12-CAT2-LINUX-REPOSITORY extended permit object-group PORT-GROUP-AD-DOMAIN-SERVICES object-group HOST-GROUP-CAT2DMZ-12-LINUX-REPOSITORY object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-12-CAT2-LINUX-REPOSITORY extended permit object-group PORT-GROUP-SPNS2-SMTP-MAIL-RELAY-JTTN-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-12-LINUX-REPOSITORY object HOST-172.27.200.24--JTTN-ASMTP1.BANE.DK
+access-list IN-CAT2DMZ-12-CAT2-LINUX-REPOSITORY extended permit tcp object-group HOST-GROUP-CAT2DMZ-12-LINUX-REPOSITORY object HOST-172.27.2.206-JTTN-AREPOPBR01.BANE.DK eq www
+access-list IN-CAT2DMZ-12-CAT2-LINUX-REPOSITORY extended permit object-group PORT-GROUP-SYSLOG object-group NET-GROUP-CAT2DMZ-12-CAT2-LINUX-REPOSITORY object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT2DMZ-12-CAT2-LINUX-REPOSITORY extended permit object-group PORT-GROUP-ANTIVIRUS object-group HOST-GROUP-CAT2DMZ-12-LINUX-REPOSITORY object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS
+access-list IN-CAT2DMZ-13-CAT2-ANTIVIRUS extended permit object-group GLOBAL-CATALOG object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS object HOST-100.72.35.11--TCCE-CAT2DMZ-01-CAT2DC01
+access-list IN-CAT2DMZ-13-CAT2-ANTIVIRUS extended permit object-group GLOBAL-CATALOG object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS object HOST-100.72.3.11--TCCW-CAT2DMZ-01-CAT2DC02
+access-list IN-CAT2DMZ-13-CAT2-ANTIVIRUS extended permit object-group PORT-GROUP-DNS object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS object HOST-100.72.35.11--TCCE-CAT2DMZ-01-CAT2DC01
+access-list IN-CAT2DMZ-13-CAT2-ANTIVIRUS extended permit object-group PORT-GROUP-DNS object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS object HOST-100.72.3.11--TCCW-CAT2DMZ-01-CAT2DC02
+access-list IN-CAT2DMZ-13-CAT2-ANTIVIRUS extended permit object-group PORT-GROUP-SPNS2-ANTIVIRUS-JTTN-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS object ABITDEFENDPRX1_172.27.200.18
+access-list IN-CAT2DMZ-13-CAT2-ANTIVIRUS extended permit object-group PORT-GROUP-LOGPOINT object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS object HOST-100.72.4.70--TCCW-CAT2DMZ-11-SPNS2-A2LOGPOINT1-SYSLOG
+access-list IN-CAT2DMZ-13-CAT2-ANTIVIRUS extended permit object-group PORT-GROUP-LOGPOINT object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS object HOST-100.72.36.70--TCCE-CAT2DMZ-11-SPNS2-A2LOGPOINT2-SYSLOG
+access-list IN-CAT2DMZ-13-CAT2-ANTIVIRUS extended permit object-group PORT-GROUP-SPNS2-SMTP-MAIL-RELAY-JTTN-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS object HOST-172.27.200.24--JTTN-ASMTP1.BANE.DK
+access-list IN-CAT2DMZ-13-CAT2-ANTIVIRUS extended permit object-group PORT-GROUP-SYSLOG object-group NET-GROUP-CAT2DMZ-13-CAT2-ANTIVIRUS object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT2DMZ-13-CAT2-ANTIVIRUS extended permit object-group PORT-GROUP-NTP object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS object HOST-100.72.35.11--TCCE-CAT2DMZ-01-CAT2DC01
+access-list IN-CAT2DMZ-13-CAT2-ANTIVIRUS extended permit object-group PORT-GROUP-NTP object-group HOST-GROUP-CAT2DMZ-13-ANTIVIRUS object HOST-100.72.3.11--TCCW-CAT2DMZ-01-CAT2DC02
+access-list IN-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN extended permit object-group PORT-GROUP-AD-DOMAIN-SERVICES object-group HOST-GROUP-CAT2DMZ-10-LOGPOINT-ADMIN object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN extended permit object-group PORT-GROUP-SPNS2-SMTP-MAIL-RELAY-JTTN-PROTOCOLS object-group HOST-GROUP-CAT2DMZ-10-LOGPOINT-ADMIN object HOST-172.27.200.24--JTTN-ASMTP1.BANE.DK
+access-list IN-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN extended permit object-group PORT-GROUP-SYSLOG object-group NET-GROUP-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN object-group HOST-GROUP-CAT2DMZ-11-LOGPOINT-SYSLOG
+access-list IN-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG remark 2024-02-14, PEJ
+access-list IN-TCCE-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ remark CHG0058077-CTASK0039278
+access-list IN-TCCE-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ extended permit tcp object-group NET-GROUP-STTN-NETWORKS object-group HOST-GROUP-CAT2DMZ-09-FTP-WIN eq ftp
+access-list IN-TRANSIT-SPNS1-TCCWCORE extended permit tcp object PoC_IXP_Source_Host object-group PoC_Destination_Hosts eq ssh
+access-list IN-TRANSIT-SPNS1-TCCWCORE remark ------------- CHG0059629  START ----------------------------
+access-list IN-TRANSIT-SPNS1-TCCWCORE extended permit udp object-group dic-proxies 10.150.144.0 255.255.255.0 eq sip
+access-list IN-TRANSIT-SPNS1-TCCWCORE extended permit udp object-group dic-sc 10.150.144.0 255.255.255.0 eq sip
+access-list IN-TRANSIT-SPNS1-TCCWCORE extended permit object-group Frequentis_telefoni_RTP_UDP object-group dic-sc 10.150.144.0 255.255.255.0
+access-list IN-TRANSIT-SPNS1-TCCWCORE extended permit udp object-group dic-proxies 10.150.145.0 255.255.255.0 eq sip
+access-list IN-TRANSIT-SPNS1-TCCWCORE extended permit udp object-group dic-sc 10.150.145.0 255.255.255.0 eq sip
+access-list IN-TRANSIT-SPNS1-TCCWCORE extended permit object-group Frequentis_telefoni_RTP_UDP object-group dic-sc 10.150.145.0 255.255.255.0
+access-list IN-TRANSIT-SPNS1-TCCWCORE remark ------------- CHG0059629 END ----------------------------
+access-list IN-TRANSIT-SPNS1-TCCWCORE remark ------------- CHG0059497 - START ----------------------------
+access-list IN-TRANSIT-SPNS1-TCCWCORE extended permit udp object-group dic-proxies 157.250.163.240 255.255.255.248 eq sip
+access-list IN-TRANSIT-SPNS1-TCCWCORE extended permit udp object-group dic-sc 157.250.163.240 255.255.255.248 eq sip
+access-list IN-TRANSIT-SPNS1-TCCWCORE extended permit object-group Frequentis_telefoni_RTP_UDP object-group dic-sc 157.250.163.240 255.255.255.248
+access-list IN-TRANSIT-SPNS1-TCCWCORE remark ------------- CHG0059497 - END ----------------------------
+access-list IN-TRANSIT-SPNS1-TCCWCORE remark CHG0058787 - BEGIN
+access-list IN-TRANSIT-SPNS1-TCCWCORE extended permit object FTP object HOST-10.14.0.70-ALSTOM-TPS_DB_SRV object HOST-172.21.251.18-STR-CAT3DMZ-BROKER-ZONE-ASPFIL01 log
+access-list IN-TRANSIT-SPNS1-TCCWCORE extended permit object ICMP-ANY object HOST-10.14.0.70-ALSTOM-TPS_DB_SRV object HOST-172.21.251.18-STR-CAT3DMZ-BROKER-ZONE-ASPFIL01 log
+access-list IN-TRANSIT-SPNS1-TCCWCORE extended permit object PORT-RANGE-TCP-50000-50010-FTP object HOST-10.14.0.70-ALSTOM-TPS_DB_SRV object HOST-172.21.251.18-STR-CAT3DMZ-BROKER-ZONE-ASPFIL01 log
+access-list IN-TRANSIT-SPNS1-TCCWCORE extended permit object TCP-587 object HOST-10.14.0.70-ALSTOM-TPS_DB_SRV object HOST-172.21.251.19-STR-CAT3DMZ-BROKER-ZONE-ASMTPRELAY01 log
+access-list IN-TRANSIT-SPNS1-TCCWCORE remark CHG0058787 - END
+access-list IN-CAT2DMZ-07-BACKUP-VXRAIL extended deny ip any any
+access-list IN-TCCE-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ remark CHG0058077-CTASK0039278
+access-list IN-TCCE-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ extended permit tcp object-group NET-GROUP-STTN-NETWORKS object-group HOST-GROUP-CAT2DMZ-09-FTP-WIN eq ftp
+access-list IN-TCCE-CAT2-NET_MGMT_BDK_CORE_A1-TRANSIT-CAT2DMZ remark CHG0058077-CTASK0039278
+access-list IN-TCCE-CAT2-NET_MGMT_BDK_CORE_A1-TRANSIT-CAT2DMZ extended permit tcp object NET-10.125.0.0-22BIT--BDK-CORE object-group HOST-GROUP-CAT2DMZ-09-FTP-WIN eq ftp
+access-list IN-TCCE-CAT2-NET_MGMT_BDK_CORE_B1-TRANSIT-CAT2DMZ remark CHG0058077-CTASK0039278
+access-list IN-TCCE-CAT2-NET_MGMT_BDK_CORE_B1-TRANSIT-CAT2DMZ extended permit tcp object NET-10.125.0.0-22BIT--BDK-CORE object-group HOST-GROUP-CAT2DMZ-09-FTP-WIN eq ftp
+access-list IN-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER remark SPNS2-CATALYST-CENTER
+access-list IN-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER extended permit object-group PORT-GROUP-NTP-DNS object HOST-100.72.33.144--TCCE-CAT2DMZ-18-CATA-MGMT-INT object-group HOST-GROUP-CAT2DMZ-01-AD-DNS-NTP
+access-list IN-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER extended permit object-group PORT-GROUP-AAA object HOST-100.72.33.144--TCCE-CAT2DMZ-18-CATA-MGMT-INT object-group HOST-GROUP-CAT2DMZ-01-ISE
+access-list IN-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER extended permit object-group PORT-GROUP-CATALYST-DEVICE-PROTOCOLS object HOST-100.72.37.35--TCCE-CAT2DMZ-18-CATA-ENT-INT object-group NET-GROUP-STTN-NETWORKS
+access-list IN-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER extended permit object-group PORT-GROUP-CATALYST-DEVICE-PROTOCOLS object HOST-100.72.37.35--TCCE-CAT2DMZ-18-CATA-ENT-INT object-group BDK-CORE_NET_10.125.1.0_NET_10.125.2.0
+access-list IN-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER extended permit object-group PORT-GROUP-CATALYST-DEVICE-PROTOCOLS object HOST-100.72.33.144--TCCE-CAT2DMZ-18-CATA-MGMT-INT object-group NETWORK-GROUP-TO-BE-ADMIN-BY-CATALYST
+access-list IN-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER extended permit object TCP-22 object HOST-100.72.33.144--TCCE-CAT2DMZ-18-CATA-MGMT-INT object HOST-100.72.3.60--TCCW-CAT2DMZ-02-A2LINBACKUPTCCW1
+access-list IN-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER extended permit object TCP-2049 object HOST-100.72.33.144--TCCE-CAT2DMZ-18-CATA-MGMT-INT object HOST-100.72.3.60--TCCW-CAT2DMZ-02-A2LINBACKUPTCCW1
+access-list IN-TRANSIT-TCCW-CAT2-FTSVOIP-A extended permit udp object-group dic-proxies 10.150.144.0 255.255.255.0 eq sip
+access-list IN-TRANSIT-TCCW-CAT2-FTSVOIP-A extended permit udp object-group dic-sc 10.150.144.0 255.255.255.0 eq sip
+access-list IN-TRANSIT-TCCW-CAT2-FTSVOIP-A extended permit object-group Frequentis_telefoni_RTP_UDP object-group dic-sc 10.150.144.0 255.255.255.0
+access-list IN-TRANSIT-TCCW-CAT2-FTSVOIP-A extended permit udp object-group dic-proxies 10.150.145.0 255.255.255.0 eq sip
+access-list IN-TRANSIT-TCCW-CAT2-FTSVOIP-A extended permit udp object-group dic-sc 10.150.145.0 255.255.255.0 eq sip
+access-list IN-TRANSIT-TCCW-CAT2-FTSVOIP-A extended permit object-group Frequentis_telefoni_RTP_UDP object-group dic-sc 10.150.145.0 255.255.255.0
+access-list IN-TRANSIT-TCCW-CAT2-FTSVOIP-A extended permit udp object-group dic-proxies 157.250.163.240 255.255.255.248 eq sip
+access-list IN-TRANSIT-TCCW-CAT2-FTSVOIP-A extended permit udp object-group dic-sc 157.250.163.240 255.255.255.248 eq sip
+access-list IN-TRANSIT-TCCW-CAT2-FTSVOIP-A extended permit object-group Frequentis_telefoni_RTP_UDP object-group dic-sc 157.250.163.240 255.255.255.248
+pager lines 24
+logging enable
+logging timestamp
+no logging hide username
+logging buffer-size 500000
+logging monitor informational
+logging buffered informational
+logging trap informational
+logging device-id hostname
+logging host TCCW-CAT2DMZ-00-SPNS2-DEVICE-MGMT-LINKNET 100.72.36.70
+mtu TEST 1500
+mtu TCCW-CAT2DMZ-00-SPNS2-DEVICE-MGMT-LINKNET 1500
+mtu TCCW-CAT2DMZ-01-AAA-DNS-NTP-LINKNET 1500
+mtu TCCW-CAT2DMZ-02-MGMT-SERVICES-LINKNET 1500
+mtu TCCW-CAT2DMZ-04-MONITORING-LINKNET 1500
+mtu TCCW-CAT2DMZ-05-MGMT-VXRAIL-LINKNET 1500
+mtu TCCW-CAT2DMZ-06-IDRAC-VXRAIL-LINKNET 1500
+mtu TCCW-CAT2DMZ-07-BACKUP-VXRAIL-LINKNET 1500
+mtu TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMP-LINKNET 1500
+mtu TCCW-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN-LINKNET 1500
+mtu TCCW-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET 1500
+mtu TCCW-CAT2DMZ-12-CAT2-LINUX-REPOSITORY-LINKNET 1500
+mtu TCCW-CAT2DMZ-13-CAT2-ANTIVIRUS-LINKNET 1500
+mtu TCCW-CAT2DMZ-14-BDK-JUMP-LINKNET 1500
+mtu TCCW-CAT2DMZ-15-AEVEN-JUMP-LINKNET 1500
+mtu TCCW-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER-LINKNET 1500
+mtu TCCW-CAT2DMZ-TRANSIT-OBV-CAT3DMZ 1500
+mtu TCCW-CAT2DMZ-TRANSIT-RGDC-CAT3DMZ 1500
+mtu TRANSIT-TCCW-CAT2-NET_MGMT_BDK_CORE_A1 1500
+mtu TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCW1A 1500
+mtu TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCW2A 1500
+mtu TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_A_TCCW1A 1500
+mtu TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_A_TCCW2A 1500
+mtu TRANSIT-TCCW-CAT2-NET_MGMT_BDK_CORE_B1 1500
+mtu TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_B_TCCW1B 1500
+mtu TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_B_TCCW2B 1500
+mtu TRANSIT-SPNS1-TCCWCORE01 1500
+mtu TRANSIT-SPNS1-TCCWCORE02 1500
+no monitor-interface TEST
+no monitor-interface TCCW-CAT2DMZ-00-SPNS2-DEVICE-MGMT-LINKNET
+no monitor-interface TCCW-CAT2DMZ-01-AAA-DNS-NTP-LINKNET
+no monitor-interface TCCW-CAT2DMZ-02-MGMT-SERVICES-LINKNET
+no monitor-interface TCCW-CAT2DMZ-04-MONITORING-LINKNET
+no monitor-interface TCCW-CAT2DMZ-05-MGMT-VXRAIL-LINKNET
+no monitor-interface TCCW-CAT2DMZ-06-IDRAC-VXRAIL-LINKNET
+no monitor-interface TCCW-CAT2DMZ-07-BACKUP-VXRAIL-LINKNET
+no monitor-interface TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMP-LINKNET
+no monitor-interface TCCW-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN-LINKNET
+no monitor-interface TCCW-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET
+no monitor-interface TCCW-CAT2DMZ-12-CAT2-LINUX-REPOSITORY-LINKNET
+no monitor-interface TCCW-CAT2DMZ-13-CAT2-ANTIVIRUS-LINKNET
+no monitor-interface TCCW-CAT2DMZ-14-BDK-JUMP-LINKNET
+no monitor-interface TCCW-CAT2DMZ-15-AEVEN-JUMP-LINKNET
+no monitor-interface TCCW-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER-LINKNET
+no monitor-interface TCCW-CAT2DMZ-TRANSIT-OBV-CAT3DMZ
+no monitor-interface TCCW-CAT2DMZ-TRANSIT-RGDC-CAT3DMZ
+no monitor-interface TRANSIT-TCCW-CAT2-NET_MGMT_BDK_CORE_A1
+no monitor-interface TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCW1A
+no monitor-interface TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCW2A
+no monitor-interface TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_A_TCCW1A
+no monitor-interface TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_A_TCCW2A
+no monitor-interface TRANSIT-TCCW-CAT2-NET_MGMT_BDK_CORE_B1
+no monitor-interface TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_B_TCCW1B
+no monitor-interface TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_B_TCCW2B
+no monitor-interface TRANSIT-SPNS1-TCCWCORE01
+no monitor-interface TRANSIT-SPNS1-TCCWCORE02
+no monitor-interface service-module
+icmp unreachable rate-limit 1 burst-size 1
+no asdm history enable
+arp timeout 14400
+nat (TCCW-CAT2DMZ-01-AAA-DNS-NTP-LINKNET,TCCW-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET) source static HOST-100.72.3.11--TCCW-CAT2DMZ-01-CAT2DC02 HOST-NAT-100.72.63.1--TCCW-CAT2DMZ-01-CAT2DC02 destination static HOST-100.72.36.70--TCCE-CAT2DMZ-11-SPNS2-A2LOGPOINT2-SYSLOG HOST-100.72.36.70--TCCE-CAT2DMZ-11-SPNS2-A2LOGPOINT2-SYSLOG service TCP-1514 TCP-1514
+nat (TCCW-CAT2DMZ-01-AAA-DNS-NTP-LINKNET,TCCW-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET) source static HOST-100.72.3.11--TCCW-CAT2DMZ-01-CAT2DC02 HOST-NAT-100.72.63.1--TCCW-CAT2DMZ-01-CAT2DC02 destination static HOST-100.72.36.70--TCCE-CAT2DMZ-11-SPNS2-A2LOGPOINT2-SYSLOG HOST-100.72.36.70--TCCE-CAT2DMZ-11-SPNS2-A2LOGPOINT2-SYSLOG service TCP-1515 TCP-1515
+nat (TCCW-CAT2DMZ-01-AAA-DNS-NTP-LINKNET,TCCW-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET) source static HOST-100.72.35.11--TCCE-CAT2DMZ-01-CAT2DC01 HOST-NAT-100.72.63.2--TCCE-CAT2DMZ-01-CAT2DC01 destination static HOST-100.72.36.70--TCCE-CAT2DMZ-11-SPNS2-A2LOGPOINT2-SYSLOG HOST-100.72.36.70--TCCE-CAT2DMZ-11-SPNS2-A2LOGPOINT2-SYSLOG service TCP-1514 TCP-1514
+nat (TCCW-CAT2DMZ-01-AAA-DNS-NTP-LINKNET,TCCW-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET) source static HOST-100.72.35.11--TCCE-CAT2DMZ-01-CAT2DC01 HOST-NAT-100.72.63.2--TCCE-CAT2DMZ-01-CAT2DC01 destination static HOST-100.72.36.70--TCCE-CAT2DMZ-11-SPNS2-A2LOGPOINT2-SYSLOG HOST-100.72.36.70--TCCE-CAT2DMZ-11-SPNS2-A2LOGPOINT2-SYSLOG service TCP-1515 TCP-1515
+nat (TCCW-CAT2DMZ-04-MONITORING-LINKNET,TCCW-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET) source static HOST-100.72.35.100--TCCE-CAT2DMZ-04-PRTG-E HOST-NAT-100.72.63.4--TCCE-CAT2DMZ-04-PRTG-E destination static HOST-100.72.36.70--TCCE-CAT2DMZ-11-SPNS2-A2LOGPOINT2-SYSLOG HOST-100.72.36.70--TCCE-CAT2DMZ-11-SPNS2-A2LOGPOINT2-SYSLOG service TCP-1514 TCP-1514
+nat (TCCW-CAT2DMZ-04-MONITORING-LINKNET,TCCW-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET) source static HOST-100.72.35.100--TCCE-CAT2DMZ-04-PRTG-E HOST-NAT-100.72.63.4--TCCE-CAT2DMZ-04-PRTG-E destination static HOST-100.72.36.70--TCCE-CAT2DMZ-11-SPNS2-A2LOGPOINT2-SYSLOG HOST-100.72.36.70--TCCE-CAT2DMZ-11-SPNS2-A2LOGPOINT2-SYSLOG service TCP-1515 TCP-1515
+nat (TCCW-CAT2DMZ-04-MONITORING-LINKNET,TCCW-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET) source static HOST-100.72.3.100--TCCW-CAT2DMZ-04-PRTG-W HOST-NAT-100.72.63.3--TCCW-CAT2DMZ-04-PRTG-W destination static HOST-100.72.36.70--TCCE-CAT2DMZ-11-SPNS2-A2LOGPOINT2-SYSLOG HOST-100.72.36.70--TCCE-CAT2DMZ-11-SPNS2-A2LOGPOINT2-SYSLOG service TCP-1514 TCP-1514
+nat (TCCW-CAT2DMZ-04-MONITORING-LINKNET,TCCW-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET) source static HOST-100.72.3.100--TCCW-CAT2DMZ-04-PRTG-W HOST-NAT-100.72.63.3--TCCW-CAT2DMZ-04-PRTG-W destination static HOST-100.72.36.70--TCCE-CAT2DMZ-11-SPNS2-A2LOGPOINT2-SYSLOG HOST-100.72.36.70--TCCE-CAT2DMZ-11-SPNS2-A2LOGPOINT2-SYSLOG service TCP-1515 TCP-1515
+!
+prefix-list ALL_ROUTES seq 10 permit 0.0.0.0/0 le 32
+!
+prefix-list BDK-CORE-IN seq 6 permit 10.125.0.0/24
+prefix-list BDK-CORE-IN seq 11 permit 10.125.1.0/26
+prefix-list BDK-CORE-IN seq 16 permit 10.125.2.0/26
+prefix-list BDK-CORE-IN seq 21 permit 10.125.3.0/24
+!
+prefix-list BDK-CORE-OUT seq 25 permit 100.72.4.64/27
+prefix-list BDK-CORE-OUT seq 30 permit 100.72.36.64/27
+prefix-list BDK-CORE-OUT seq 35 permit 100.72.3.96/27
+prefix-list BDK-CORE-OUT seq 40 permit 100.72.35.96/27
+prefix-list BDK-CORE-OUT seq 45 permit 100.72.4.0/27
+prefix-list BDK-CORE-OUT seq 50 permit 100.72.36.0/27
+prefix-list BDK-CORE-OUT seq 55 permit 100.72.4.160/27
+prefix-list BDK-CORE-OUT seq 60 permit 100.72.36.160/27
+prefix-list BDK-CORE-OUT seq 65 permit 100.72.4.192/27
+prefix-list BDK-CORE-OUT seq 70 permit 100.72.36.192/27
+prefix-list BDK-CORE-OUT seq 80 permit 100.72.36.11/32
+prefix-list BDK-CORE-OUT seq 85 permit 100.72.36.12/32
+prefix-list BDK-CORE-OUT seq 90 permit 100.72.4.11/32
+prefix-list BDK-CORE-OUT seq 95 permit 100.72.4.12/32
+prefix-list BDK-CORE-OUT seq 100 permit 100.72.35.0/27
+prefix-list BDK-CORE-OUT seq 110 permit 100.72.35.32/27
+prefix-list BDK-CORE-OUT seq 115 permit 100.72.3.0/27
+prefix-list BDK-CORE-OUT seq 120 permit 100.72.3.32/27
+prefix-list BDK-CORE-OUT seq 125 permit 100.72.4.32/27
+prefix-list BDK-CORE-OUT seq 130 permit 100.72.37.32/27
+!
+prefix-list CAT2DMZ seq 5 permit 100.72.0.0/16 le 32
+!
+prefix-list CAT3DMZ seq 5 permit 100.72.0.0/16 le 32
+!
+prefix-list CAT3DMZ-CAT3 seq 5 permit 100.72.0.0/16 le 32
+prefix-list CAT3DMZ-CAT3 seq 10 permit 10.24.0.0/16 le 32
+prefix-list CAT3DMZ-CAT3 seq 15 permit 10.25.0.0/16 le 32
+prefix-list CAT3DMZ-CAT3 seq 20 permit 10.125.0.0/16 le 32
+prefix-list CAT3DMZ-CAT3 seq 30 permit 10.8.0.0/13 le 32
+prefix-list CAT3DMZ-CAT3 seq 40 permit 10.150.146.0/24
+prefix-list CAT3DMZ-CAT3 seq 50 permit 10.150.146.0/24 le 32
+!
+prefix-list CITRIX seq 10 permit 172.21.247.0/24
+prefix-list CITRIX seq 20 permit 172.21.248.0/24
+prefix-list CITRIX seq 30 permit 172.21.250.0/24
+prefix-list CITRIX seq 40 permit 172.21.251.0/24
+prefix-list CITRIX seq 50 permit 172.21.254.0/27
+prefix-list CITRIX seq 70 permit 100.73.69.160/27
+!
+prefix-list CONNECTED seq 15 permit 100.72.0.120/30
+!
+prefix-list DEFAULT seq 1000 permit 0.0.0.0/0
+!
+prefix-list FTSVOIP-IN seq 10 permit 10.150.146.0/24 le 32
+!
+prefix-list FTSVOIP-OUT seq 10 permit 157.250.163.240/28
+prefix-list FTSVOIP-OUT seq 20 permit 157.250.163.240/29
+prefix-list FTSVOIP-OUT seq 30 permit 10.150.144.0/23 le 32
+!
+prefix-list IXP seq 10 permit 10.8.0.0/13
+!
+prefix-list NO-DEFAULT seq 1000 deny 0.0.0.0/0
+prefix-list NO-DEFAULT seq 1100 permit 0.0.0.0/0 le 32
+!
+prefix-list STTN-IN seq 6 permit 10.24.0.0/16
+prefix-list STTN-IN seq 11 permit 10.25.0.0/16
+prefix-list STTN-IN seq 16 permit 10.26.0.0/16
+!
+prefix-list STTN-OUT seq 25 permit 100.72.4.64/27
+prefix-list STTN-OUT seq 30 permit 100.72.36.64/27
+prefix-list STTN-OUT seq 35 permit 100.72.3.96/27
+prefix-list STTN-OUT seq 40 permit 100.72.35.96/27
+prefix-list STTN-OUT seq 45 permit 100.72.4.0/27
+prefix-list STTN-OUT seq 50 permit 100.72.36.0/27
+prefix-list STTN-OUT seq 55 permit 100.72.4.160/27
+prefix-list STTN-OUT seq 60 permit 100.72.36.160/27
+prefix-list STTN-OUT seq 65 permit 100.72.4.192/27
+prefix-list STTN-OUT seq 70 permit 100.72.36.192/27
+prefix-list STTN-OUT seq 80 permit 100.72.36.11/32
+prefix-list STTN-OUT seq 85 permit 100.72.36.12/32
+prefix-list STTN-OUT seq 90 permit 100.72.4.11/32
+prefix-list STTN-OUT seq 95 permit 100.72.4.12/32
+prefix-list STTN-OUT seq 100 permit 100.72.35.0/27
+prefix-list STTN-OUT seq 110 permit 100.72.35.32/27
+prefix-list STTN-OUT seq 115 permit 100.72.3.0/27
+prefix-list STTN-OUT seq 120 permit 100.72.3.32/27
+prefix-list STTN-OUT seq 125 permit 100.72.4.32/27
+prefix-list STTN-OUT seq 130 permit 100.72.37.32/27
+!
+prefix-list TEMP-DENY-EXT-JUMP-HOSTS seq 80 permit 100.72.36.11/32
+prefix-list TEMP-DENY-EXT-JUMP-HOSTS seq 85 permit 100.72.36.12/32
+prefix-list TEMP-DENY-EXT-JUMP-HOSTS seq 90 permit 100.72.4.11/32
+prefix-list TEMP-DENY-EXT-JUMP-HOSTS seq 95 permit 100.72.4.12/32
+!
+bgp-community new-format
+!
+route-map TCCA-FTSVOIP-FOURTH-LOCAL-PREF deny 950
+ match ip address prefix-list DEFAULT
+
+!
+route-map TCCA-FTSVOIP-FOURTH-LOCAL-PREF permit 1000
+ match ip address prefix-list FTSVOIP-IN
+
+ set local-preference 1400
+!
+route-map ONLY-CAT2DMZ permit 10
+ match ip address prefix-list CAT2DMZ
+
+!
+route-map ONLY-CAT2DMZ deny 20
+
+!
+route-map MiddelfartPeB-FOUR-AS-PATH-PREPEND permit 900
+ match ip address prefix-list BDK-CORE-OUT
+
+ set as-path prepend 4202000000 4202000000 4202000000 4202000000
+!
+route-map TCCA-FTSVOIP-FIVE-AS-PATH-PREPEND permit 900
+ match ip address prefix-list FTSVOIP-OUT
+
+ set as-path prepend 4202000000 4202000000 4202000000 4202000000 4202000000
+!
+route-map MiddelfartPeB-FOURTH-LOCAL-PREF deny 950
+ match ip address prefix-list DEFAULT
+
+!
+route-map MiddelfartPeB-FOURTH-LOCAL-PREF permit 1000
+ match ip address prefix-list BDK-CORE-IN
+
+ set local-preference 1400
+!
+route-map TCCWCORE02-IN permit 10
+ match ip address prefix-list IXP
+
+!
+route-map TCCWCORE02-IN deny 1000
+
+!
+route-map TCCA-FTSVOIP-FOUR-AS-PATH-PREPEND permit 900
+ match ip address prefix-list FTSVOIP-OUT
+
+ set as-path prepend 4202000000 4202000000 4202000000 4202000000
+!
+route-map TCCWCORE01-IN permit 10
+ match ip address prefix-list IXP
+
+!
+route-map TCCWCORE01-IN deny 1000
+
+!
+route-map TCCB-THIRD-LOCAL-PREF deny 950
+ match ip address prefix-list DEFAULT
+
+!
+route-map TCCB-THIRD-LOCAL-PREF permit 1000
+ match ip address prefix-list STTN-IN
+
+ set local-preference 1800
+!
+route-map TCCA-THIRD-LOCAL-PREF deny 950
+ match ip address prefix-list DEFAULT
+
+!
+route-map TCCA-THIRD-LOCAL-PREF permit 1000
+ match ip address prefix-list STTN-IN
+
+ set local-preference 1800
+!
+route-map TCCB-FIVE-AS-PATH-PREPEND permit 1000
+ match ip address prefix-list STTN-OUT
+
+ set as-path prepend 4202000000 4202000000 4202000000 4202000000 4202000000
+!
+route-map TCCA-FIVE-AS-PATH-PREPEND permit 900
+ match ip address prefix-list STTN-OUT
+
+ set as-path prepend 4202000000 4202000000 4202000000 4202000000 4202000000
+!
+route-map MiddelfartPeA-THREE-AS-PATH-PREPEND permit 900
+ match ip address prefix-list BDK-CORE-OUT
+
+ set as-path prepend 4202000000 4202000000 4202000000
+!
+route-map TCCA-FTSVOIP-THIRD-LOCAL-PREF deny 950
+ match ip address prefix-list DEFAULT
+
+!
+route-map TCCA-FTSVOIP-THIRD-LOCAL-PREF permit 1000
+ match ip address prefix-list FTSVOIP-IN
+
+ set local-preference 1800
+!
+route-map TCCA-FOUR-AS-PATH-PREPEND permit 900
+ match ip address prefix-list STTN-OUT
+
+ set as-path prepend 4202000000 4202000000 4202000000 4202000000
+!
+route-map TCCB-FOUR-AS-PATH-PREPEND permit 1000
+ match ip address prefix-list STTN-OUT
+
+ set as-path prepend 4202000000 4202000000 4202000000 4202000000
+!
+route-map CONNECTED permit 10
+ match ip address prefix-list CONNECTED
+
+!
+route-map TCCB-FOURTH-LOCAL-PREF deny 950
+ match ip address prefix-list DEFAULT
+
+!
+route-map TCCB-FOURTH-LOCAL-PREF permit 1000
+ match ip address prefix-list STTN-IN
+
+ set local-preference 1400
+!
+route-map TCCA-FOURTH-LOCAL-PREF deny 950
+ match ip address prefix-list DEFAULT
+
+!
+route-map TCCA-FOURTH-LOCAL-PREF permit 1000
+ match ip address prefix-list STTN-IN
+
+ set local-preference 1400
+!
+route-map CAT2DMZ-FOURTH-MED permit 1000
+ set metric 200
+
+!
+route-map CAT2DMZ-SECOND-MED permit 1000
+ match ip address prefix-list CAT3DMZ-CAT3
+ set metric 150
+
+!
+route-map CAT2DMZ-SECOND-MED permit 2000
+ set metric 100
+
+!
+route-map TCCWCORE02-OUT permit 10
+ match ip address prefix-list CITRIX
+ set metric 100
+
+!
+route-map TCCWCORE02-OUT deny 1000
+
+!
+route-map MiddelfartPeA-THIRD-LOCAL-PREF deny 950
+ match ip address prefix-list DEFAULT
+
+!
+route-map MiddelfartPeA-THIRD-LOCAL-PREF permit 1000
+ match ip address prefix-list BDK-CORE-IN
+
+ set local-preference 1800
+!
+route-map TCCWCORE01-OUT permit 10
+ match ip address prefix-list CITRIX
+ set metric 75
+
+!
+route-map TCCWCORE01-OUT deny 1000
+
+!
+route-map TEMP-DENY-EXT-JUMP deny 10
+ match ip address prefix-list TEMP-DENY-EXT-JUMP-HOSTS
+
+!
+route-map TEMP-DENY-EXT-JUMP permit 1000
+
+!
+router bgp 4202000000
+ bgp router-id 100.72.1.1
+ address-family ipv4 unicast
+  neighbor 100.72.0.2 remote-as 4210000000
+  neighbor 100.72.0.2 description CAT2-NET_MGMT_BDK_CORE_A
+  neighbor 100.72.0.2 password 0 *****
+  neighbor 100.72.0.2 activate
+  neighbor 100.72.0.2 send-community
+  neighbor 100.72.0.2 route-map MiddelfartPeA-THIRD-LOCAL-PREF in
+  neighbor 100.72.0.2 route-map MiddelfartPeA-THREE-AS-PATH-PREPEND out
+  neighbor 100.72.2.2 remote-as 4202000000
+  neighbor 100.72.2.2 description CAT2DMZ-01-AAA-DNS-NTP
+  neighbor 100.72.2.2 activate
+  neighbor 100.72.2.2 send-community
+  neighbor 100.72.2.2 next-hop-self
+  neighbor 100.72.2.2 route-map ONLY-CAT2DMZ in
+  neighbor 100.72.2.2 route-map TEMP-DENY-EXT-JUMP out
+  neighbor 100.72.2.6 remote-as 4202000000
+  neighbor 100.72.2.6 description CAT2DMZ-02-MGMT-SERVICES
+  neighbor 100.72.2.6 activate
+  neighbor 100.72.2.6 send-community
+  neighbor 100.72.2.6 next-hop-self
+  neighbor 100.72.2.6 route-map ONLY-CAT2DMZ in
+  neighbor 100.72.2.6 route-map TEMP-DENY-EXT-JUMP out
+  neighbor 100.75.0.9 remote-as 65000
+  neighbor 100.75.0.9 description SPNS1 TCCWCORE01 IXP
+  neighbor 100.75.0.9 activate
+  neighbor 100.75.0.9 send-community
+  neighbor 100.75.0.9 next-hop-self
+  neighbor 100.75.0.9 route-map TCCWCORE01-IN in
+  neighbor 100.75.0.9 route-map TCCWCORE01-OUT out
+  neighbor 100.75.0.13 remote-as 65000
+  neighbor 100.75.0.13 description SPNS1 TCCWCORE02 IXP
+  neighbor 100.75.0.13 activate
+  neighbor 100.75.0.13 send-community
+  neighbor 100.75.0.13 next-hop-self
+  neighbor 100.75.0.13 route-map TCCWCORE02-IN in
+  neighbor 100.75.0.13 route-map TCCWCORE02-OUT out
+  neighbor 100.72.1.14 remote-as 4203000000
+  neighbor 100.72.1.14 description RGDC_CAT3_FW1
+  neighbor 100.72.1.14 password 3 *****
+  neighbor 100.72.1.14 activate
+  neighbor 100.72.1.14 send-community
+  neighbor 100.72.1.14 prefix-list NO-DEFAULT out
+  neighbor 100.72.1.14 route-map CAT2DMZ-FOURTH-MED out
+  neighbor 100.72.2.14 remote-as 4202000000
+  neighbor 100.72.2.14 description CAT2DMZ-04-MONITORING
+  neighbor 100.72.2.14 activate
+  neighbor 100.72.2.14 send-community
+  neighbor 100.72.2.14 next-hop-self
+  neighbor 100.72.2.14 route-map ONLY-CAT2DMZ in
+  neighbor 100.72.2.14 route-map TEMP-DENY-EXT-JUMP out
+  neighbor 100.72.1.18 remote-as 4203000000
+  neighbor 100.72.1.18 description OBV_CAT3_FW1
+  neighbor 100.72.1.18 password 3 *****
+  neighbor 100.72.1.18 activate
+  neighbor 100.72.1.18 send-community
+  neighbor 100.72.1.18 prefix-list NO-DEFAULT out
+  neighbor 100.72.1.18 route-map CAT2DMZ-SECOND-MED out
+  neighbor 100.72.2.18 remote-as 4202000000
+  neighbor 100.72.2.18 description CAT2DMZ-05-MGMT-VXRAIL
+  neighbor 100.72.2.18 activate
+  neighbor 100.72.2.18 send-community
+  neighbor 100.72.2.18 next-hop-self
+  neighbor 100.72.2.18 route-map ONLY-CAT2DMZ in
+  neighbor 100.72.2.18 route-map TEMP-DENY-EXT-JUMP out
+  neighbor 100.72.1.22 remote-as 4202000000
+  neighbor 100.72.1.22 description CAT2-MGMT-NETWORK
+  neighbor 100.72.1.22 activate
+  neighbor 100.72.1.22 send-community
+  neighbor 100.72.1.22 next-hop-self
+  neighbor 100.72.1.22 route-map ONLY-CAT2DMZ in
+  neighbor 100.72.1.22 route-map TEMP-DENY-EXT-JUMP out
+  neighbor 100.72.2.22 remote-as 4202000000
+  neighbor 100.72.2.22 description CAT2DMZ-06-IDRAC-VXRAIL
+  neighbor 100.72.2.22 activate
+  neighbor 100.72.2.22 send-community
+  neighbor 100.72.2.22 next-hop-self
+  neighbor 100.72.2.22 route-map ONLY-CAT2DMZ in
+  neighbor 100.72.2.22 route-map TEMP-DENY-EXT-JUMP out
+  neighbor 100.72.2.26 remote-as 4202000000
+  neighbor 100.72.2.26 description CAT2DMZ-07-BACKUP-VXRAIL
+  neighbor 100.72.2.26 activate
+  neighbor 100.72.2.26 send-community
+  neighbor 100.72.2.26 next-hop-self
+  neighbor 100.72.2.26 route-map ONLY-CAT2DMZ in
+  neighbor 100.72.2.26 route-map TEMP-DENY-EXT-JUMP out
+  neighbor 100.72.2.34 remote-as 4202000000
+  neighbor 100.72.2.34 description CAT2DMZ-09-EXT-PROVIDERS-JUMP
+  neighbor 100.72.2.34 activate
+  neighbor 100.72.2.34 send-community
+  neighbor 100.72.2.34 next-hop-self
+  neighbor 100.72.2.34 route-map ONLY-CAT2DMZ in
+  neighbor 100.72.2.34 route-map TEMP-DENY-EXT-JUMP out
+  neighbor 100.72.2.38 remote-as 4202000000
+  neighbor 100.72.2.38 description CAT2DMZ-10-CAT2-LOGPOINT-ADMIN
+  neighbor 100.72.2.38 activate
+  neighbor 100.72.2.38 send-community
+  neighbor 100.72.2.38 next-hop-self
+  neighbor 100.72.2.38 route-map ONLY-CAT2DMZ in
+  neighbor 100.72.2.38 route-map TEMP-DENY-EXT-JUMP out
+  neighbor 100.72.2.42 remote-as 4202000000
+  neighbor 100.72.2.42 description CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG
+  neighbor 100.72.2.42 activate
+  neighbor 100.72.2.42 send-community
+  neighbor 100.72.2.42 next-hop-self
+  neighbor 100.72.2.42 route-map TEMP-DENY-EXT-JUMP out
+  neighbor 100.72.2.46 remote-as 4202000000
+  neighbor 100.72.2.46 description CAT2DMZ-12-CAT2-LINUX-REPOSITORY
+  neighbor 100.72.2.46 activate
+  neighbor 100.72.2.46 send-community
+  neighbor 100.72.2.46 next-hop-self
+  neighbor 100.72.2.46 route-map ONLY-CAT2DMZ in
+  neighbor 100.72.2.46 route-map TEMP-DENY-EXT-JUMP out
+  neighbor 100.72.2.50 remote-as 4202000000
+  neighbor 100.72.2.50 description CAT2DMZ-13-CAT2-ANTIVIRUS
+  neighbor 100.72.2.50 activate
+  neighbor 100.72.2.50 send-community
+  neighbor 100.72.2.50 next-hop-self
+  neighbor 100.72.2.50 route-map ONLY-CAT2DMZ in
+  neighbor 100.72.2.50 route-map TEMP-DENY-EXT-JUMP out
+  neighbor 100.72.2.54 remote-as 4202000000
+  neighbor 100.72.2.54 description CAT2DMZ-14-BDK-JUMP
+  neighbor 100.72.2.54 activate
+  neighbor 100.72.2.54 send-community
+  neighbor 100.72.2.54 next-hop-self
+  neighbor 100.72.2.54 route-map ONLY-CAT2DMZ in
+  neighbor 100.72.2.54 route-map TEMP-DENY-EXT-JUMP out
+  neighbor 100.72.2.58 remote-as 4202000000
+  neighbor 100.72.2.58 description CAT2DMZ-15-AEVEN-JUMP
+  neighbor 100.72.2.58 activate
+  neighbor 100.72.2.58 send-community
+  neighbor 100.72.2.58 next-hop-self
+  neighbor 100.72.2.58 route-map ONLY-CAT2DMZ in
+  neighbor 100.72.2.58 route-map TEMP-DENY-EXT-JUMP out
+  neighbor 100.72.2.70 remote-as 4202000000
+  neighbor 100.72.2.70 description CAT2DMZ-18-CAT2-CAT-CENTER-ENTER
+  neighbor 100.72.2.70 activate
+  neighbor 100.72.2.70 send-community
+  neighbor 100.72.2.70 next-hop-self
+  neighbor 100.72.2.70 route-map TEMP-DENY-EXT-JUMP out
+  neighbor 100.72.0.98 remote-as 4210006200
+  neighbor 100.72.0.98 description FTSVOIP-THIRD
+  neighbor 100.72.0.98 password 0 *****
+  neighbor 100.72.0.98 activate
+  neighbor 100.72.0.98 send-community
+  neighbor 100.72.0.98 route-map TCCA-FTSVOIP-THIRD-LOCAL-PREF in
+  neighbor 100.72.0.98 route-map TCCA-FTSVOIP-FOUR-AS-PATH-PREPEND out
+  neighbor 100.72.0.102 remote-as 4210006200
+  neighbor 100.72.0.102 description FTSVOIP-FOURTH
+  neighbor 100.72.0.102 password 0 *****
+  neighbor 100.72.0.102 activate
+  neighbor 100.72.0.102 send-community
+  neighbor 100.72.0.102 route-map TCCA-FTSVOIP-FOURTH-LOCAL-PREF in
+  neighbor 100.72.0.102 route-map TCCA-FTSVOIP-FIVE-AS-PATH-PREPEND out
+  neighbor 100.72.0.122 remote-as 4210006200
+  neighbor 100.72.0.122 description CAT2-NET_MGMT_BDK_STTN_A
+  neighbor 100.72.0.122 password 0 *****
+  neighbor 100.72.0.122 activate
+  neighbor 100.72.0.122 send-community
+  neighbor 100.72.0.122 route-map TCCA-THIRD-LOCAL-PREF in
+  neighbor 100.72.0.122 route-map TCCA-FOUR-AS-PATH-PREPEND out
+  neighbor 100.72.0.126 remote-as 4210006200
+  neighbor 100.72.0.126 description CAT2-NET_MGMT_BDK_STTN_A
+  neighbor 100.72.0.126 password 0 *****
+  neighbor 100.72.0.126 activate
+  neighbor 100.72.0.126 send-community
+  neighbor 100.72.0.126 route-map TCCA-FOURTH-LOCAL-PREF in
+  neighbor 100.72.0.126 route-map TCCA-FIVE-AS-PATH-PREPEND out
+  neighbor 100.72.0.130 remote-as 4220000000
+  neighbor 100.72.0.130 description CAT2-NET_MGMT_BDK_CORE_B
+  neighbor 100.72.0.130 password 0 *****
+  neighbor 100.72.0.130 activate
+  neighbor 100.72.0.130 send-community
+  neighbor 100.72.0.130 route-map MiddelfartPeB-FOURTH-LOCAL-PREF in
+  neighbor 100.72.0.130 route-map MiddelfartPeB-FOUR-AS-PATH-PREPEND out
+  neighbor 100.72.0.250 remote-as 4220006200
+  neighbor 100.72.0.250 description CAT2-NET_MGMT_BDK_STTN_B
+  neighbor 100.72.0.250 password 0 *****
+  neighbor 100.72.0.250 activate
+  neighbor 100.72.0.250 send-community
+  neighbor 100.72.0.250 route-map TCCB-THIRD-LOCAL-PREF in
+  neighbor 100.72.0.250 route-map TCCB-FOUR-AS-PATH-PREPEND out
+  neighbor 100.72.0.254 remote-as 4220006200
+  neighbor 100.72.0.254 description CAT2-NET_MGMT_BDK_STTN_B
+  neighbor 100.72.0.254 password 0 *****
+  neighbor 100.72.0.254 activate
+  neighbor 100.72.0.254 send-community
+  neighbor 100.72.0.254 route-map TCCB-FOURTH-LOCAL-PREF in
+  neighbor 100.72.0.254 route-map TCCB-FIVE-AS-PATH-PREPEND out
+  network 100.72.4.11 mask 255.255.255.255
+  network 100.72.36.11 mask 255.255.255.255
+  network 100.72.4.12 mask 255.255.255.255
+  network 100.72.36.12 mask 255.255.255.255
+  no auto-summary
+  no synchronization
+ exit-address-family
+!
+route TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMP-LINKNET 100.72.4.11 255.255.255.255 100.72.2.34 1
+route TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMP-LINKNET 100.72.4.12 255.255.255.255 100.72.2.34 1
+route TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMP-LINKNET 100.72.36.11 255.255.255.255 100.72.2.34 1
+route TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMP-LINKNET 100.72.36.12 255.255.255.255 100.72.2.34 1
+timeout xlate 3:00:00
+timeout pat-xlate 0:00:30
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 sctp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00 mgcp-pat 0:05:00
+timeout sip 0:30:00 sip_media 0:02:00 sip-invite 0:03:00 sip-disconnect 0:02:00
+timeout sip-provisional-media 0:02:00 uauth 0:05:00 absolute
+timeout tcp-proxy-reassembly 0:01:00
+timeout floating-conn 0:00:00
+timeout conn-holddown 0:00:15
+timeout igp stale-route 0:01:10
+user-identity default-domain LOCAL
+aaa authentication login-history
+snmp-server host-group TCCW-CAT2DMZ-04-MONITORING-LINKNET HOST-100.72.35.100--TCCE-CAT2DMZ-04-PRTG-E poll community ***** version 2c
+snmp-server host-group TCCW-CAT2DMZ-04-MONITORING-LINKNET HOST-100.72.3.100--TCCW-CAT2DMZ-04-PRTG-W poll community ***** version 2c
+snmp-server host-group TCCW-CAT2DMZ-02-MGMT-SERVICES-LINKNET HOST-100.72.35.36-TCCE-UCS-Cat2Netbrain poll community ***** version 2c
+no snmp-server location
+no snmp-server contact
+snmp-server community *****
+crypto ipsec security-association pmtu-aging infinite
+telnet timeout 1
+ssh stricthostkeycheck
+ssh timeout 10
+ssh version 2
+no threat-detection statistics tcp-intercept
+dynamic-access-policy-record DfltAccessPolicy
+!
+class-map traceroute
+ match any
+class-map inspection_default
+ match default-inspection-traffic
+!
+!
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+  no tcp-inspection
+policy-map global_policy
+ class inspection_default
+  inspect dns preset_dns_map
+  inspect ftp
+  inspect ip-options
+  inspect netbios
+  inspect rsh
+  inspect esmtp
+  inspect sqlnet
+  inspect sunrpc
+  inspect tftp
+  inspect snmp
+  inspect icmp
+  inspect sip
+!
+service-policy global_policy global
+Cryptochecksum:4e51bc235e113a8d7b3e966284c38f66
+: end

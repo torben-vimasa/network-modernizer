@@ -10,3 +10,4 @@ class RouterInterface:
     mask: str | None = None
     hsrp_virtual_ip: str | None = None
     hsrp_state: str | None = None
+    hsrp_priority: int | None = None

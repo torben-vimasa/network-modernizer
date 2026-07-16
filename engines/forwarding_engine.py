@@ -69,6 +69,40 @@ class ForwardingEngine:
                 )
             )
 
+        priority_matches = [
+            candidate
+            for candidate in hsrp_matches
+            if candidate.get("hsrp_priority") is not None
+        ]
+
+        if priority_matches:
+            highest_priority = max(
+                candidate["hsrp_priority"]
+                for candidate in priority_matches
+            )
+
+            highest_matches = [
+                candidate
+                for candidate in priority_matches
+                if candidate["hsrp_priority"] == highest_priority
+            ]
+
+            if len(highest_matches) == 1:
+                candidate = highest_matches[0]
+
+                return ForwardingResult(
+                    resolved=True,
+                    method="hsrp_priority",
+                    device=candidate["device"],
+                    device_type=candidate["device_type"],
+                    interface=candidate["interface"],
+                    reason=(
+                        f"Next-hop {next_hop} matches HSRP VIP "
+                        f"{candidate['interface']} with highest "
+                        f"configured priority {highest_priority}"
+                    )
+                )
+
         if len(hsrp_matches) == 1:
 
             candidate = hsrp_matches[0]
@@ -150,6 +184,7 @@ class ForwardingEngine:
                     "ip": neighbor.properties.get("ip"),
                     "hsrp_virtual_ip": neighbor.properties.get("hsrp_virtual_ip"),
                     "hsrp_state": neighbor.properties.get("hsrp_state"),
+                    "hsrp_priority": neighbor.properties.get("hsrp_priority"),
                     "reason": f"{neighbor.name} is in subnet {subnet.name}"
                 }
             )

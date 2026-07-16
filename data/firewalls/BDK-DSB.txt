@@ -1,0 +1,984 @@
+hostname BDK-DSB
+domain-name baneisp.dk
+enable password $sha512$5000$xUXpLssZrCIZz/RUjacggQ==$zHyUB57kJlvnXUoAOp2j4w== pbkdf2
+names
+!
+interface TenGigabitEthernet0/8.1200
+ description DSB_TCS
+ nameif DSB
+ security-level 0
+ ip address 10.124.85.2 255.255.0.0
+!
+interface TenGigabitEthernet0/9.256
+ description banenet
+ nameif inside
+ security-level 100
+ ip address 172.20.1.15 255.255.255.0 standby 172.20.1.16
+!
+dns server-group DefaultDNS
+ domain-name baneisp.dk
+object network audvtogsta1m_172.27.2.188
+ host 172.27.2.188
+object network aapptogstasec1m_172.27.210.21
+ host 172.27.210.21
+object network aapptogstapri1m_172.27.210.5
+ host 172.27.210.5
+object network Evhns-dlh-dlz-bdk-dev
+ host 10.231.61.164
+object network Evhns-dlh-dlz-bdk-uat
+ host 10.231.66.164
+object network Evhns-dlh-dlz-bdk-prd
+ host 10.231.68.100
+object network BDKORA003.bane.dk_10.110.2.105
+ host 10.110.2.105
+object network ABDKDSBIZ_10.110.3.246
+ host 10.110.3.246
+object network BaneIT-CLIENT-NET_10.3.0.0_16
+ subnet 10.3.0.0 255.255.0.0
+object network ENK-S2-DSB_10.231.9.133
+ host 10.231.9.133
+object network ENK-S2-UAT-DSB_10.231.16.71
+ host 10.231.16.71
+object network HN-S-DSB_10.215.47.197
+ host 10.215.47.197
+object network HN-S-DEV-DSB_10.215.44.197
+ host 10.215.44.197
+object-group network SOA_IGP2
+ network-object host 10.35.29.230
+ network-object host 10.35.32.230
+ network-object host 10.35.36.230
+object-group network DSB_player
+ network-object host 10.124.85.1
+object-group network DNSSERVERS-DSB
+ network-object host 10.35.21.11
+ network-object host 10.35.30.107
+object-group network DNSSERVERS-BANEDK
+ network-object host 172.27.2.22
+ network-object host 172.27.3.22
+object-group network Togleder_SRV
+ network-object host 172.27.3.152
+ network-object host 172.27.3.153
+object-group network DSB_SAP_Servers
+ network-object host 10.236.130.11
+ network-object host 10.236.130.4
+ network-object host 10.237.130.4
+ network-object host 10.239.130.4
+ network-object host 10.236.130.15
+ network-object host 10.236.130.8
+ network-object host 10.237.130.8
+ network-object host 10.239.130.8
+object-group service CHG0056395
+ description CTASK0037768
+ service-object tcp destination eq https
+ service-object tcp destination eq 5671
+ service-object tcp destination eq 5672
+ service-object tcp destination eq 9093
+object-group network DSB_ENK_HN
+ network-object object ENK-S2-DSB_10.231.9.133
+ network-object object ENK-S2-UAT-DSB_10.231.16.71
+ network-object object HN-S-DSB_10.215.47.197
+ network-object object HN-S-DEV-DSB_10.215.44.197
+access-list ind-fra-inside remark MIGRATION PART 1 - 2023-01-31 BEGIN------------------
+access-list ind-fra-inside extended permit tcp host 172.27.210.21 host 192.168.14.60 eq 50004
+access-list ind-fra-inside extended permit tcp 100.64.15.0 255.255.255.0 any eq www
+access-list ind-fra-inside extended permit icmp host 80.243.122.5 host 10.35.38.230
+access-list ind-fra-inside extended permit tcp host 80.243.122.5 host 10.35.38.230 eq 8443
+access-list ind-fra-inside extended permit icmp host 80.243.122.6 host 10.35.38.230
+access-list ind-fra-inside extended permit tcp host 80.243.122.6 host 10.35.38.230 eq 8443
+access-list ind-fra-inside extended permit icmp host 80.243.122.26 object-group SOA_IGP2
+access-list ind-fra-inside extended permit tcp host 80.243.122.26 object-group SOA_IGP2 eq 8443
+access-list ind-fra-inside extended permit icmp host 80.243.122.14 object-group SOA_IGP2
+access-list ind-fra-inside extended permit tcp host 80.243.122.14 object-group SOA_IGP2 eq 8443
+access-list ind-fra-inside extended permit icmp host 80.243.122.12 object-group SOA_IGP2
+access-list ind-fra-inside extended permit tcp host 80.243.122.12 object-group SOA_IGP2 eq 8443
+access-list ind-fra-inside extended permit udp object-group DNSSERVERS-BANEDK object-group DNSSERVERS-DSB eq domain
+access-list ind-fra-inside extended permit tcp host 172.27.3.43 host 10.35.38.230 eq 8200
+access-list ind-fra-inside extended permit tcp host 172.27.3.43 host 10.35.21.154 eq www
+access-list ind-fra-inside extended permit tcp host 172.27.210.5 host 10.35.34.214 eq 8091
+access-list ind-fra-inside extended permit tcp host 172.27.210.21 host 10.35.34.214 eq 8091
+access-list ind-fra-inside extended permit tcp any host 10.35.14.14 eq 1200
+access-list ind-fra-inside extended permit tcp any host 10.35.14.14 eq ftp
+access-list ind-fra-inside remark CHG0056395-CTASK0037768
+access-list ind-fra-inside extended permit object-group CHG0056395 object audvtogsta1m_172.27.2.188 object Evhns-dlh-dlz-bdk-dev
+access-list ind-fra-inside extended permit object-group CHG0056395 object aapptogstasec1m_172.27.210.21 object Evhns-dlh-dlz-bdk-dev
+access-list ind-fra-inside extended permit object-group CHG0056395 object aapptogstapri1m_172.27.210.5 object Evhns-dlh-dlz-bdk-dev
+access-list ind-fra-inside extended permit object-group CHG0056395 object audvtogsta1m_172.27.2.188 object Evhns-dlh-dlz-bdk-uat
+access-list ind-fra-inside extended permit object-group CHG0056395 object aapptogstasec1m_172.27.210.21 object Evhns-dlh-dlz-bdk-uat
+access-list ind-fra-inside extended permit object-group CHG0056395 object aapptogstapri1m_172.27.210.5 object Evhns-dlh-dlz-bdk-uat
+access-list ind-fra-inside extended permit object-group CHG0056395 object audvtogsta1m_172.27.2.188 object Evhns-dlh-dlz-bdk-prd
+access-list ind-fra-inside extended permit object-group CHG0056395 object aapptogstasec1m_172.27.210.21 object Evhns-dlh-dlz-bdk-prd
+access-list ind-fra-inside extended permit object-group CHG0056395 object aapptogstapri1m_172.27.210.5 object Evhns-dlh-dlz-bdk-prd
+access-list ind-fra-inside remark ...
+access-list ind-fra-inside remark CHG0060603-CTASK0042251 ---- BEGIN
+access-list ind-fra-inside extended permit tcp object BaneIT-CLIENT-NET_10.3.0.0_16 object-group DSB_ENK_HN eq https
+access-list ind-fra-inside extended deny ip any any
+access-list ind-fra-inside remark MIGRATION PART 1 - 2023-01-31 END------------------
+access-list ind-fra-DSB remark MIGRATION PART 1 - 2023-01-31 BEGIN------------------
+access-list ind-fra-DSB extended permit tcp any host 10.110.4.10 eq ftp log
+access-list ind-fra-DSB extended permit tcp any host 172.21.1.76 eq ftp log
+access-list ind-fra-DSB extended permit tcp host 10.35.114.24 host 172.27.3.43 eq 9500
+access-list ind-fra-DSB extended permit tcp host 10.35.114.23 host 172.27.3.43 eq 9500
+access-list ind-fra-DSB extended permit tcp host 10.35.38.10 host 172.27.3.43 eq 9500
+access-list ind-fra-DSB extended permit tcp host 10.35.38.11 host 172.27.3.43 eq 9500
+access-list ind-fra-DSB extended permit tcp host 10.35.38.12 host 172.27.3.43 eq 9500
+access-list ind-fra-DSB extended permit tcp host 10.35.38.13 host 172.27.3.43 eq 9500
+access-list ind-fra-DSB extended permit tcp host 10.35.11.7 host 172.27.210.5 eq www
+access-list ind-fra-DSB extended permit tcp host 10.139.52.30 host 172.27.210.5 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.114.160 host 172.27.210.5 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.114.161 host 172.27.210.5 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.11.7 host 172.27.210.21 eq www
+access-list ind-fra-DSB extended permit tcp host 10.139.52.30 host 172.27.210.21 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.114.160 host 172.27.210.21 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.114.161 host 172.27.210.21 eq www
+access-list ind-fra-DSB extended permit tcp object-group DSB_player host 172.27.210.21 eq 81
+access-list ind-fra-DSB extended permit tcp host 10.35.60.60 host 172.27.210.21 eq 81
+access-list ind-fra-DSB extended permit tcp host 10.210.208.36 host 172.27.210.21 eq www
+access-list ind-fra-DSB extended permit tcp host 10.210.208.39 host 172.27.210.21 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.11.7 host 172.27.2.188 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.114.160 host 172.27.2.188 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.114.161 host 172.27.2.188 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.114.163 host 172.27.2.188 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.114.164 host 172.27.2.188 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.114.166 host 172.27.2.188 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.114.167 host 172.27.2.188 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.114.169 host 172.27.2.188 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.114.170 host 172.27.2.188 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.11.25 host 172.27.2.188 eq www
+access-list ind-fra-DSB extended permit tcp host 10.139.52.82 host 172.27.2.188 eq www
+access-list ind-fra-DSB extended permit tcp host 10.139.52.83 host 172.27.2.188 eq www
+access-list ind-fra-DSB extended permit icmp host 10.35.38.230 host 80.243.122.3
+access-list ind-fra-DSB extended permit tcp host 10.35.38.230 host 80.243.122.3 eq https
+access-list ind-fra-DSB extended permit tcp host 10.35.38.230 host 80.243.122.3 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.34.214 host 10.110.3.246 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.34.214 host 10.110.4.135 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.34.214 object-group Togleder_SRV eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.34.214 host 172.27.210.5 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.34.214 host 172.27.210.21 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.34.214 host 172.27.2.188 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.34.213 host 172.31.6.170 eq 8091
+access-list ind-fra-DSB extended permit tcp host 10.35.34.213 host 10.110.4.195 eq 8091
+access-list ind-fra-DSB extended permit tcp host 10.35.34.217 host 172.31.6.170 eq 8091
+access-list ind-fra-DSB extended permit tcp host 10.35.34.217 host 172.27.210.5 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.34.217 host 172.27.210.21 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.34.217 host 172.27.2.188 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.34.217 host 10.110.4.195 eq 8091
+access-list ind-fra-DSB extended permit tcp host 10.35.34.217 host 172.21.5.14 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.34.217 host 172.27.3.156 eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.34.217 object-group Togleder_SRV eq www
+access-list ind-fra-DSB extended permit tcp host 10.35.34.212 host 10.110.4.197 eq 8091
+access-list ind-fra-DSB extended permit tcp host 10.35.34.212 host 172.31.6.170 eq 8091
+access-list ind-fra-DSB extended permit tcp host 10.35.34.212 host 10.110.4.196 eq 8091
+access-list ind-fra-DSB extended permit tcp host 10.35.34.212 host 172.31.6.171 eq 8091
+access-list ind-fra-DSB extended permit tcp host 10.35.34.212 host 172.31.6.172 eq 8091
+access-list ind-fra-DSB extended permit tcp host 10.35.34.212 host 10.110.4.195 eq 8091
+access-list ind-fra-DSB extended permit udp object-group DNSSERVERS-DSB object-group DNSSERVERS-BANEDK eq domain
+access-list ind-fra-DSB extended permit tcp object-group DNSSERVERS-DSB object-group DNSSERVERS-BANEDK eq domain
+access-list ind-fra-DSB extended permit icmp object-group SOA_IGP2 host 80.243.122.23
+access-list ind-fra-DSB extended permit icmp host 10.35.38.230 host 80.243.122.4
+access-list ind-fra-DSB extended permit tcp host 10.35.38.230 host 80.243.122.4 eq https
+access-list ind-fra-DSB extended permit tcp host 10.35.38.230 host 80.243.122.4 eq www
+access-list ind-fra-DSB extended permit tcp object-group SOA_IGP2 host 80.243.122.23 eq https
+access-list ind-fra-DSB extended permit tcp object-group SOA_IGP2 host 80.243.122.23 eq www
+access-list ind-fra-DSB extended permit icmp object-group SOA_IGP2 host 80.243.122.8
+access-list ind-fra-DSB extended permit ip any host 10.110.2.48
+access-list ind-fra-DSB extended permit tcp host 10.124.85.1 host 10.110.2.49 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.35.53.34 host 10.110.2.49 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.139.50.244 host 10.110.2.49 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.139.50.252 host 10.110.2.49 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.139.50.117 host 10.110.2.49 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.139.50.19 host 10.110.2.49 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.35.24.172 host 10.110.2.49 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.35.54.51 host 10.110.2.49 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.239.240.100 host 10.110.2.48 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.236.240.148 host 10.110.2.48 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.237.240.148 host 10.110.2.48 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.239.240.149 host 10.110.2.48 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.124.85.1 host 10.110.2.48 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.236.240.100 host 10.110.2.6 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.237.240.100 host 10.110.2.6 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.238.240.100 host 10.110.2.6 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.35.14.152 host 10.110.2.5 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.236.240.148 host 10.110.2.6 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.237.240.148 host 10.110.2.6 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.236.240.148 host 10.110.2.5 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.237.240.148 host 10.110.2.5 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.239.240.149 host 10.110.2.5 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.35.36.40 host 10.110.2.6 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.35.14.153 host 10.110.2.6 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.239.240.100 host 10.110.2.6 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.239.240.149 host 10.110.2.6 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.35.36.40 host 10.110.2.5 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.35.14.153 host 10.110.2.5 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.239.240.100 host 10.110.2.5 eq sqlnet
+access-list ind-fra-DSB extended permit tcp object-group DSB_SAP_Servers host 10.110.2.6 eq sqlnet
+access-list ind-fra-DSB extended permit tcp object-group DSB_SAP_Servers host 10.110.2.5 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.239.240.149 host 10.110.2.103 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.239.240.100 host 10.110.2.103 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.35.14.153 host 10.110.2.103 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.35.36.40 host 10.110.2.103 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.236.240.148 host 10.110.2.103 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.237.240.148 host 10.110.2.103 eq sqlnet
+access-list ind-fra-DSB extended permit tcp object-group DSB_SAP_Servers host 10.110.2.103 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.124.85.1 host 10.110.3.39 eq 7777
+access-list ind-fra-DSB extended permit tcp host 10.124.85.1 host 10.83.5.161 eq 3389
+access-list ind-fra-DSB extended permit tcp host 10.124.85.1 host 172.27.200.45 eq https
+access-list ind-fra-DSB remark CTASK0034351 2023-02-06
+access-list ind-fra-DSB extended permit tcp host 10.238.240.100 host 10.110.2.105 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.237.240.100 host 10.110.2.105 eq sqlnet
+access-list ind-fra-DSB extended permit tcp host 10.236.240.100 host 10.110.2.105 eq sqlnet
+access-list ind-fra-DSB remark .
+access-list ind-fra-DSB remark CTASK0034570 2023-03-20
+access-list ind-fra-DSB extended permit tcp host 10.60.9.127 host 10.110.2.105 eq sqlnet
+access-list ind-fra-DSB remark .
+access-list ind-fra-DSB extended permit tcp object-group DSB_player object-group Togleder_SRV eq 81
+access-list ind-fra-DSB extended permit tcp host 10.35.60.60 object-group Togleder_SRV eq 81
+access-list ind-fra-DSB remark CTASK0037297 ------------- BEGIN
+access-list ind-fra-DSB extended permit tcp host 10.124.85.1 host 10.110.2.103 eq sqlnet
+access-list ind-fra-DSB remark CTASK0037297 ------------- END
+access-list ind-fra-DSB remark CHG0055972-CTASK0037462
+access-list ind-fra-DSB extended permit tcp host 10.124.85.1 object audvtogsta1m_172.27.2.188 eq www
+access-list ind-fra-DSB extended permit tcp host 10.124.85.1 object audvtogsta1m_172.27.2.188 eq https
+access-list ind-fra-DSB extended permit tcp host 10.124.85.1 object aapptogstasec1m_172.27.210.21 eq www
+access-list ind-fra-DSB extended permit tcp host 10.124.85.1 object aapptogstasec1m_172.27.210.21 eq https
+access-list ind-fra-DSB extended permit tcp host 10.124.85.1 object aapptogstapri1m_172.27.210.5 eq www
+access-list ind-fra-DSB extended permit tcp host 10.124.85.1 object aapptogstapri1m_172.27.210.5 eq https
+access-list ind-fra-DSB remark ....
+access-list ind-fra-DSB remark CHG0060002-CTASK0041529 ------ BEGIN
+access-list ind-fra-DSB extended permit tcp object-group DSB_player object BDKORA003.bane.dk_10.110.2.105 eq sqlnet
+access-list ind-fra-DSB remark CHG0060549-CTASK0042190 ---- BEGIN
+access-list ind-fra-DSB extended permit tcp object-group DSB_player object ABDKDSBIZ_10.110.3.246 eq www
+access-list ind-fra-DSB extended deny ip any any
+access-list ind-fra-DSB remark MIGRATION PART 1 - 2023-01-31 END------------------
+pager lines 24
+logging enable
+logging timestamp
+no logging hide username
+logging standby
+logging buffer-size 204800
+logging trap informational
+logging asdm informational
+logging facility 16
+logging queue 0
+logging device-id context-name
+logging host inside 172.17.88.240
+mtu DSB 1500
+mtu inside 1500
+icmp unreachable rate-limit 1 burst-size 1
+no asdm history enable
+arp timeout 14400
+nat (inside,DSB) source dynamic BaneIT-CLIENT-NET_10.3.0.0_16 interface destination static DSB_ENK_HN DSB_ENK_HN
+access-group ind-fra-DSB in interface DSB
+access-group ind-fra-inside in interface inside
+route inside 0.0.0.0 0.0.0.0 172.20.1.1 1
+route DSB 10.0.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.1.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.2.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.4.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.6.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.18.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.19.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.20.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.22.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.29.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.30.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.31.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.33.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.35.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.36.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.40.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.42.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.45.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.48.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.50.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.51.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.54.0.0 255.255.0.0 10.124.85.1 1
+route inside 10.56.60.0 255.255.255.0 172.20.1.1 1
+route DSB 10.60.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.61.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.62.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.63.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.64.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.71.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.72.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.73.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.75.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.81.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.83.4.201 255.255.255.255 10.124.85.1 1
+route DSB 10.83.5.201 255.255.255.255 10.124.85.1 1
+route DSB 10.83.5.208 255.255.255.255 10.124.85.1 1
+route DSB 10.90.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.96.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.101.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.102.0.0 255.255.0.0 10.124.85.1 1
+route inside 10.110.4.0 255.255.255.0 172.20.1.1 1
+route DSB 10.111.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.116.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.117.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.125.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.136.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.139.52.0 255.255.255.0 10.124.85.1 1
+route DSB 10.139.52.30 255.255.255.255 10.124.85.1 1
+route DSB 10.139.52.82 255.255.255.255 10.124.85.1 1
+route DSB 10.139.52.83 255.255.255.255 10.124.85.1 1
+route DSB 10.143.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.155.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.163.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.174.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.180.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.182.0.0 255.255.0.0 10.124.85.1 1
+route inside 10.185.50.0 255.255.255.0 172.20.1.1 1
+route DSB 10.191.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.194.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.198.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.199.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.200.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.202.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.204.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.206.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.213.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.215.44.128 255.255.255.128 10.124.85.1 1
+route DSB 10.215.47.128 255.255.255.128 10.124.85.1 1
+route DSB 10.231.9.128 255.255.255.192 10.124.85.1 1
+route DSB 10.231.16.64 255.255.255.192 10.124.85.1 1
+route DSB 10.231.61.0 255.255.255.0 10.124.85.1 1
+route DSB 10.231.66.0 255.255.255.0 10.124.85.1 1
+route DSB 10.231.68.0 255.255.255.0 10.124.85.1 1
+route DSB 10.236.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.237.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.238.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.239.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.240.0.0 255.255.0.0 10.124.85.1 1
+route DSB 10.245.0.0 255.255.0.0 10.124.85.1 1
+route inside 100.73.3.0 255.255.255.0 172.20.1.1 1
+route inside 100.73.35.0 255.255.255.0 172.20.1.1 1
+route DSB 172.168.14.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.0.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.1.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.11.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.12.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.13.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.14.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.20.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.22.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.72.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.74.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.75.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.101.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.150.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.151.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.156.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.192.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.200.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.201.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.216.0 255.255.255.0 10.124.85.1 1
+route DSB 192.168.220.0 255.255.254.0 10.124.85.1 1
+route DSB 192.168.234.0 255.255.255.0 10.124.85.1 1
+timeout xlate 3:00:00
+timeout pat-xlate 0:00:30
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 sctp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00 mgcp-pat 0:05:00
+timeout sip 0:30:00 sip_media 0:02:00 sip-invite 0:03:00 sip-disconnect 0:02:00
+timeout sip-provisional-media 0:02:00 uauth 0:05:00 absolute
+timeout tcp-proxy-reassembly 0:01:00
+timeout floating-conn 0:00:00
+timeout conn-holddown 0:00:15
+timeout igp stale-route 0:01:10
+user-identity default-domain LOCAL
+aaa authentication login-history
+snmp-server host inside 10.185.50.51 poll community ***** version 2c
+snmp-server host inside 10.185.50.60 poll community ***** version 2c
+snmp-server host inside 10.185.50.71 poll community ***** version 2c
+snmp-server host inside 10.185.50.72 poll community ***** version 2c
+no snmp-server location
+no snmp-server contact
+snmp-server community *****
+crypto ipsec security-association pmtu-aging infinite
+telnet timeout 5
+ssh stricthostkeycheck
+ssh 100.64.15.0 255.255.255.0 inside
+ssh 10.185.50.0 255.255.255.0 inside
+ssh 172.17.88.240 255.255.255.255 inside
+ssh timeout 15
+ssh version 2
+management-access inside
+no threat-detection statistics tcp-intercept
+dynamic-access-policy-record DfltAccessPolicy
+username CSM_MNG password D3rVBI/NED/QBA/1 encrypted privilege 15
+username bane password ZfuTiLIjZg9MOjul encrypted privilege 15
+username administrator password SKDFjxOM/GI8W.0r encrypted
+username dschr password CKLbIS9QdLA.oZja encrypted privilege 15
+username dschrode password yuR2zy4h6sn5R3Ab encrypted privilege 15
+username fleeltel password BuHCz2A3evRwDmy1 encrypted privilege 15
+!
+class-map inspection_default
+ match default-inspection-traffic
+!
+!
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+  no tcp-inspection
+policy-map global_policy
+ class inspection_default
+  inspect dns preset_dns_map
+  inspect ftp
+  inspect h323 h225
+  inspect h323 ras
+  inspect netbios
+  inspect rsh
+  inspect rtsp
+  inspect skinny
+  inspect esmtp
+  inspect sqlnet
+  inspect sunrpc
+  inspect tftp
+  inspect sip
+  inspect xdmcp
+  inspect icmp
+  inspect icmp error
+  inspect http
+!
+service-policy global_policy global
+Cryptochecksum:ebda79f298bcfe5a874028f57b8c0ef7
+: end
+BHASA1/baneisp.dk/BDK-DSB/pri/act#              sh acc
+BHASA1/baneisp.dk/BDK-DSB/pri/act#              sh access-list
+access-list cached ACL log flows: total 54, denied 0 (deny-flow-max 4096)
+            alert-interval 300
+access-list ind-fra-inside; 75 elements; name hash: 0xc20d0ead
+access-list ind-fra-inside line 1 remark MIGRATION PART 1 - 2023-01-31 BEGIN------------------
+access-list ind-fra-inside line 2 extended permit tcp host 172.27.210.21 host 192.168.14.60 eq 50004 (hitcnt=0) 0x6ffbbfc3
+access-list ind-fra-inside line 3 extended permit tcp 100.64.15.0 255.255.255.0 any eq www (hitcnt=2) 0x01a28c7e
+access-list ind-fra-inside line 4 extended permit icmp host 80.243.122.5 host 10.35.38.230 (hitcnt=0) 0xc2f9a2c6
+access-list ind-fra-inside line 5 extended permit tcp host 80.243.122.5 host 10.35.38.230 eq 8443 (hitcnt=0) 0xa7e665c4
+access-list ind-fra-inside line 6 extended permit icmp host 80.243.122.6 host 10.35.38.230 (hitcnt=0) 0x77a44823
+access-list ind-fra-inside line 7 extended permit tcp host 80.243.122.6 host 10.35.38.230 eq 8443 (hitcnt=0) 0x3dc2438c
+access-list ind-fra-inside line 8 extended permit icmp host 80.243.122.26 object-group SOA_IGP2 (hitcnt=0) 0x1597c126
+  access-list ind-fra-inside line 8 extended permit icmp host 80.243.122.26 host 10.35.29.230 (hitcnt=0) 0x0ae51121
+  access-list ind-fra-inside line 8 extended permit icmp host 80.243.122.26 host 10.35.32.230 (hitcnt=0) 0xe1834b56
+  access-list ind-fra-inside line 8 extended permit icmp host 80.243.122.26 host 10.35.36.230 (hitcnt=0) 0xe60537d7
+access-list ind-fra-inside line 9 extended permit tcp host 80.243.122.26 object-group SOA_IGP2 eq 8443 (hitcnt=0) 0xf5093852
+  access-list ind-fra-inside line 9 extended permit tcp host 80.243.122.26 host 10.35.29.230 eq 8443 (hitcnt=0) 0xaacac22c
+  access-list ind-fra-inside line 9 extended permit tcp host 80.243.122.26 host 10.35.32.230 eq 8443 (hitcnt=0) 0x496886a0
+  access-list ind-fra-inside line 9 extended permit tcp host 80.243.122.26 host 10.35.36.230 eq 8443 (hitcnt=0) 0xb2a3cee4
+access-list ind-fra-inside line 10 extended permit icmp host 80.243.122.14 object-group SOA_IGP2 (hitcnt=0) 0x8fff40b1
+  access-list ind-fra-inside line 10 extended permit icmp host 80.243.122.14 host 10.35.29.230 (hitcnt=0) 0x6615b7b4
+  access-list ind-fra-inside line 10 extended permit icmp host 80.243.122.14 host 10.35.32.230 (hitcnt=0) 0xda932593
+  access-list ind-fra-inside line 10 extended permit icmp host 80.243.122.14 host 10.35.36.230 (hitcnt=0) 0x89bbc0fc
+access-list ind-fra-inside line 11 extended permit tcp host 80.243.122.14 object-group SOA_IGP2 eq 8443 (hitcnt=0) 0x4d3e745c
+  access-list ind-fra-inside line 11 extended permit tcp host 80.243.122.14 host 10.35.29.230 eq 8443 (hitcnt=0) 0xcc2446ea
+  access-list ind-fra-inside line 11 extended permit tcp host 80.243.122.14 host 10.35.32.230 eq 8443 (hitcnt=0) 0xfbb8c52b
+  access-list ind-fra-inside line 11 extended permit tcp host 80.243.122.14 host 10.35.36.230 eq 8443 (hitcnt=0) 0xae6756b4
+access-list ind-fra-inside line 12 extended permit icmp host 80.243.122.12 object-group SOA_IGP2 (hitcnt=0) 0xe8a80e27
+  access-list ind-fra-inside line 12 extended permit icmp host 80.243.122.12 host 10.35.29.230 (hitcnt=0) 0x7432ea50
+  access-list ind-fra-inside line 12 extended permit icmp host 80.243.122.12 host 10.35.32.230 (hitcnt=0) 0x7c7730f4
+  access-list ind-fra-inside line 12 extended permit icmp host 80.243.122.12 host 10.35.36.230 (hitcnt=0) 0x2901cac9
+access-list ind-fra-inside line 13 extended permit tcp host 80.243.122.12 object-group SOA_IGP2 eq 8443 (hitcnt=0) 0x20403720
+  access-list ind-fra-inside line 13 extended permit tcp host 80.243.122.12 host 10.35.29.230 eq 8443 (hitcnt=0) 0x743ab04a
+  access-list ind-fra-inside line 13 extended permit tcp host 80.243.122.12 host 10.35.32.230 eq 8443 (hitcnt=0) 0x5d22fe3e
+  access-list ind-fra-inside line 13 extended permit tcp host 80.243.122.12 host 10.35.36.230 eq 8443 (hitcnt=0) 0x348ba8f2
+access-list ind-fra-inside line 14 extended permit udp object-group DNSSERVERS-BANEDK object-group DNSSERVERS-DSB eq domain (hitcnt=27681) 0xd87762cf
+  access-list ind-fra-inside line 14 extended permit udp host 172.27.2.22 host 10.35.21.11 eq domain (hitcnt=16558) 0x3afd1f95
+  access-list ind-fra-inside line 14 extended permit udp host 172.27.2.22 host 10.35.30.107 eq domain (hitcnt=0) 0x42f746ec
+  access-list ind-fra-inside line 14 extended permit udp host 172.27.3.22 host 10.35.21.11 eq domain (hitcnt=11121) 0x6abae87f
+  access-list ind-fra-inside line 14 extended permit udp host 172.27.3.22 host 10.35.30.107 eq domain (hitcnt=2) 0x41a2f952
+access-list ind-fra-inside line 15 extended permit tcp host 172.27.3.43 host 10.35.38.230 eq 8200 (hitcnt=0) 0x463659bd
+access-list ind-fra-inside line 16 extended permit tcp host 172.27.3.43 host 10.35.21.154 eq www (hitcnt=0) 0x98aef455
+access-list ind-fra-inside line 17 extended permit tcp host 172.27.210.5 host 10.35.34.214 eq 8091 (hitcnt=935) 0x2c935b3a
+access-list ind-fra-inside line 18 extended permit tcp host 172.27.210.21 host 10.35.34.214 eq 8091 (hitcnt=253) 0xa8227d4d
+access-list ind-fra-inside line 19 extended permit tcp any host 10.35.14.14 eq 1200 (hitcnt=87) 0xb4b0ebc9
+access-list ind-fra-inside line 20 extended permit tcp any host 10.35.14.14 eq ftp (hitcnt=47) 0xdaf1fc1f
+access-list ind-fra-inside line 21 remark CHG0056395-CTASK0037768
+access-list ind-fra-inside line 22 extended permit object-group CHG0056395 object audvtogsta1m_172.27.2.188 object Evhns-dlh-dlz-bdk-dev (hitcnt=468) 0x1b7e827e
+  access-list ind-fra-inside line 22 extended permit tcp host 172.27.2.188 host 10.231.61.164 eq https (hitcnt=1) 0x5777fb2a
+  access-list ind-fra-inside line 22 extended permit tcp host 172.27.2.188 host 10.231.61.164 eq 5671 (hitcnt=467) 0xec76f271
+  access-list ind-fra-inside line 22 extended permit tcp host 172.27.2.188 host 10.231.61.164 eq 5672 (hitcnt=0) 0x6ab49ce6
+  access-list ind-fra-inside line 22 extended permit tcp host 172.27.2.188 host 10.231.61.164 eq 9093 (hitcnt=0) 0xaaee1c78
+access-list ind-fra-inside line 23 extended permit object-group CHG0056395 object aapptogstasec1m_172.27.210.21 object Evhns-dlh-dlz-bdk-dev (hitcnt=0) 0xc3cae096
+  access-list ind-fra-inside line 23 extended permit tcp host 172.27.210.21 host 10.231.61.164 eq https (hitcnt=0) 0xf79e6d6e
+  access-list ind-fra-inside line 23 extended permit tcp host 172.27.210.21 host 10.231.61.164 eq 5671 (hitcnt=0) 0xe576527b
+  access-list ind-fra-inside line 23 extended permit tcp host 172.27.210.21 host 10.231.61.164 eq 5672 (hitcnt=0) 0xddbc2100
+  access-list ind-fra-inside line 23 extended permit tcp host 172.27.210.21 host 10.231.61.164 eq 9093 (hitcnt=0) 0xbe538f94
+access-list ind-fra-inside line 24 extended permit object-group CHG0056395 object aapptogstapri1m_172.27.210.5 object Evhns-dlh-dlz-bdk-dev (hitcnt=0) 0x6416d2f7
+  access-list ind-fra-inside line 24 extended permit tcp host 172.27.210.5 host 10.231.61.164 eq https (hitcnt=0) 0x9be46250
+  access-list ind-fra-inside line 24 extended permit tcp host 172.27.210.5 host 10.231.61.164 eq 5671 (hitcnt=0) 0xe73467f9
+  access-list ind-fra-inside line 24 extended permit tcp host 172.27.210.5 host 10.231.61.164 eq 5672 (hitcnt=0) 0x63f95696
+  access-list ind-fra-inside line 24 extended permit tcp host 172.27.210.5 host 10.231.61.164 eq 9093 (hitcnt=0) 0x060352d2
+access-list ind-fra-inside line 25 extended permit object-group CHG0056395 object audvtogsta1m_172.27.2.188 object Evhns-dlh-dlz-bdk-uat (hitcnt=0) 0x22f9ffce
+  access-list ind-fra-inside line 25 extended permit tcp host 172.27.2.188 host 10.231.66.164 eq https (hitcnt=0) 0x3d582a72
+  access-list ind-fra-inside line 25 extended permit tcp host 172.27.2.188 host 10.231.66.164 eq 5671 (hitcnt=0) 0xa2ff2439
+  access-list ind-fra-inside line 25 extended permit tcp host 172.27.2.188 host 10.231.66.164 eq 5672 (hitcnt=0) 0x7ca160f6
+  access-list ind-fra-inside line 25 extended permit tcp host 172.27.2.188 host 10.231.66.164 eq 9093 (hitcnt=0) 0xba8898d9
+access-list ind-fra-inside line 26 extended permit object-group CHG0056395 object aapptogstasec1m_172.27.210.21 object Evhns-dlh-dlz-bdk-uat (hitcnt=0) 0xa03cfc29
+  access-list ind-fra-inside line 26 extended permit tcp host 172.27.210.21 host 10.231.66.164 eq https (hitcnt=0) 0xfae0d1d4
+  access-list ind-fra-inside line 26 extended permit tcp host 172.27.210.21 host 10.231.66.164 eq 5671 (hitcnt=0) 0xd06f7e1b
+  access-list ind-fra-inside line 26 extended permit tcp host 172.27.210.21 host 10.231.66.164 eq 5672 (hitcnt=0) 0x45063d56
+  access-list ind-fra-inside line 26 extended permit tcp host 172.27.210.21 host 10.231.66.164 eq 9093 (hitcnt=0) 0x399ae835
+access-list ind-fra-inside line 27 extended permit object-group CHG0056395 object aapptogstapri1m_172.27.210.5 object Evhns-dlh-dlz-bdk-uat (hitcnt=216) 0xcfc6eda4
+  access-list ind-fra-inside line 27 extended permit tcp host 172.27.210.5 host 10.231.66.164 eq https (hitcnt=0) 0xdeb6ce28
+  access-list ind-fra-inside line 27 extended permit tcp host 172.27.210.5 host 10.231.66.164 eq 5671 (hitcnt=216) 0x17413a09
+  access-list ind-fra-inside line 27 extended permit tcp host 172.27.210.5 host 10.231.66.164 eq 5672 (hitcnt=0) 0x7fa1b24b
+  access-list ind-fra-inside line 27 extended permit tcp host 172.27.210.5 host 10.231.66.164 eq 9093 (hitcnt=0) 0xbbbec2dc
+access-list ind-fra-inside line 28 extended permit object-group CHG0056395 object audvtogsta1m_172.27.2.188 object Evhns-dlh-dlz-bdk-prd (hitcnt=160) 0x30b263b5
+  access-list ind-fra-inside line 28 extended permit tcp host 172.27.2.188 host 10.231.68.100 eq https (hitcnt=160) 0x66053daf
+  access-list ind-fra-inside line 28 extended permit tcp host 172.27.2.188 host 10.231.68.100 eq 5671 (hitcnt=0) 0xbd7b3841
+  access-list ind-fra-inside line 28 extended permit tcp host 172.27.2.188 host 10.231.68.100 eq 5672 (hitcnt=0) 0xd6119a64
+  access-list ind-fra-inside line 28 extended permit tcp host 172.27.2.188 host 10.231.68.100 eq 9093 (hitcnt=0) 0x26c824a0
+access-list ind-fra-inside line 29 extended permit object-group CHG0056395 object aapptogstasec1m_172.27.210.21 object Evhns-dlh-dlz-bdk-prd (hitcnt=0) 0x5ee9f6b4
+  access-list ind-fra-inside line 29 extended permit tcp host 172.27.210.21 host 10.231.68.100 eq https (hitcnt=0) 0x75d1000b
+  access-list ind-fra-inside line 29 extended permit tcp host 172.27.210.21 host 10.231.68.100 eq 5671 (hitcnt=0) 0x2dcc8312
+  access-list ind-fra-inside line 29 extended permit tcp host 172.27.210.21 host 10.231.68.100 eq 5672 (hitcnt=0) 0xf69019a8
+  access-list ind-fra-inside line 29 extended permit tcp host 172.27.210.21 host 10.231.68.100 eq 9093 (hitcnt=0) 0xd3807c10
+access-list ind-fra-inside line 30 extended permit object-group CHG0056395 object aapptogstapri1m_172.27.210.5 object Evhns-dlh-dlz-bdk-prd (hitcnt=202) 0x61858547
+  access-list ind-fra-inside line 30 extended permit tcp host 172.27.210.5 host 10.231.68.100 eq https (hitcnt=4) 0xf76645ce
+  access-list ind-fra-inside line 30 extended permit tcp host 172.27.210.5 host 10.231.68.100 eq 5671 (hitcnt=198) 0x2f63668e
+  access-list ind-fra-inside line 30 extended permit tcp host 172.27.210.5 host 10.231.68.100 eq 5672 (hitcnt=0) 0x224e93fd
+  access-list ind-fra-inside line 30 extended permit tcp host 172.27.210.5 host 10.231.68.100 eq 9093 (hitcnt=0) 0x623d016a
+access-list ind-fra-inside line 31 remark ...
+access-list ind-fra-inside line 32 remark CHG0060603-CTASK0042251 ---- BEGIN
+access-list ind-fra-inside line 33 extended permit tcp object BaneIT-CLIENT-NET_10.3.0.0_16 object-group DSB_ENK_HN eq https (hitcnt=1) 0x6824e132
+  access-list ind-fra-inside line 33 extended permit tcp 10.3.0.0 255.255.0.0 host 10.231.9.133 eq https (hitcnt=1) 0xc641d05b
+  access-list ind-fra-inside line 33 extended permit tcp 10.3.0.0 255.255.0.0 host 10.231.16.71 eq https (hitcnt=0) 0x288c02f5
+  access-list ind-fra-inside line 33 extended permit tcp 10.3.0.0 255.255.0.0 host 10.215.47.197 eq https (hitcnt=0) 0x56e04907
+  access-list ind-fra-inside line 33 extended permit tcp 10.3.0.0 255.255.0.0 host 10.215.44.197 eq https (hitcnt=0) 0x4c50a41b
+access-list ind-fra-inside line 34 extended deny ip any any (hitcnt=55756905) 0x97ff54ab
+access-list ind-fra-inside line 35 remark MIGRATION PART 1 - 2023-01-31 END------------------
+access-list ind-fra-DSB; 163 elements; name hash: 0xe7e31f91
+access-list ind-fra-DSB line 1 remark MIGRATION PART 1 - 2023-01-31 BEGIN------------------
+access-list ind-fra-DSB line 2 extended permit tcp any host 10.110.4.10 eq ftp log informational interval 300 (hitcnt=0) 0x53fc9845
+access-list ind-fra-DSB line 3 extended permit tcp any host 172.21.1.76 eq ftp log informational interval 300 (hitcnt=3313901) 0x320fbaef
+access-list ind-fra-DSB line 4 extended permit tcp host 10.35.114.24 host 172.27.3.43 eq 9500 (hitcnt=0) 0x2271ae6d
+access-list ind-fra-DSB line 5 extended permit tcp host 10.35.114.23 host 172.27.3.43 eq 9500 (hitcnt=0) 0x72b42d43
+access-list ind-fra-DSB line 6 extended permit tcp host 10.35.38.10 host 172.27.3.43 eq 9500 (hitcnt=0) 0x5c64637d
+access-list ind-fra-DSB line 7 extended permit tcp host 10.35.38.11 host 172.27.3.43 eq 9500 (hitcnt=0) 0xd2bc3eef
+access-list ind-fra-DSB line 8 extended permit tcp host 10.35.38.12 host 172.27.3.43 eq 9500 (hitcnt=0) 0xaabda63a
+access-list ind-fra-DSB line 9 extended permit tcp host 10.35.38.13 host 172.27.3.43 eq 9500 (hitcnt=0) 0xb50917bf
+access-list ind-fra-DSB line 10 extended permit tcp host 10.35.11.7 host 172.27.210.5 eq www (hitcnt=0) 0x5025b5cf
+access-list ind-fra-DSB line 11 extended permit tcp host 10.139.52.30 host 172.27.210.5 eq www (hitcnt=0) 0x23832d4a
+access-list ind-fra-DSB line 12 extended permit tcp host 10.35.114.160 host 172.27.210.5 eq www (hitcnt=0) 0x424168bb
+access-list ind-fra-DSB line 13 extended permit tcp host 10.35.114.161 host 172.27.210.5 eq www (hitcnt=0) 0xb4e86960
+access-list ind-fra-DSB line 14 extended permit tcp host 10.35.11.7 host 172.27.210.21 eq www (hitcnt=0) 0xad17801b
+access-list ind-fra-DSB line 15 extended permit tcp host 10.139.52.30 host 172.27.210.21 eq www (hitcnt=0) 0xb18c0723
+access-list ind-fra-DSB line 16 extended permit tcp host 10.35.114.160 host 172.27.210.21 eq www (hitcnt=0) 0x986e8536
+access-list ind-fra-DSB line 17 extended permit tcp host 10.35.114.161 host 172.27.210.21 eq www (hitcnt=0) 0xffebfd5c
+access-list ind-fra-DSB line 18 extended permit tcp object-group DSB_player host 172.27.210.21 eq 81 (hitcnt=788658) 0xbcb74f77
+  access-list ind-fra-DSB line 18 extended permit tcp host 10.124.85.1 host 172.27.210.21 eq 81 (hitcnt=788658) 0x5f600132
+access-list ind-fra-DSB line 19 extended permit tcp host 10.35.60.60 host 172.27.210.21 eq 81 (hitcnt=0) 0xf15ef017
+access-list ind-fra-DSB line 20 extended permit tcp host 10.210.208.36 host 172.27.210.21 eq www (hitcnt=0) 0xc080744d
+access-list ind-fra-DSB line 21 extended permit tcp host 10.210.208.39 host 172.27.210.21 eq www (hitcnt=0) 0x7152dc9a
+access-list ind-fra-DSB line 22 extended permit tcp host 10.35.11.7 host 172.27.2.188 eq www (hitcnt=0) 0x906d208d
+access-list ind-fra-DSB line 23 extended permit tcp host 10.35.114.160 host 172.27.2.188 eq www (hitcnt=0) 0x6a39dc87
+access-list ind-fra-DSB line 24 extended permit tcp host 10.35.114.161 host 172.27.2.188 eq www (hitcnt=0) 0xcf9d1090
+access-list ind-fra-DSB line 25 extended permit tcp host 10.35.114.163 host 172.27.2.188 eq www (hitcnt=0) 0x9a858527
+access-list ind-fra-DSB line 26 extended permit tcp host 10.35.114.164 host 172.27.2.188 eq www (hitcnt=0) 0xf2db55eb
+access-list ind-fra-DSB line 27 extended permit tcp host 10.35.114.166 host 172.27.2.188 eq www (hitcnt=0) 0x3a2153a3
+access-list ind-fra-DSB line 28 extended permit tcp host 10.35.114.167 host 172.27.2.188 eq www (hitcnt=0) 0x9ea1c77c
+access-list ind-fra-DSB line 29 extended permit tcp host 10.35.114.169 host 172.27.2.188 eq www (hitcnt=0) 0x7a72b9ac
+access-list ind-fra-DSB line 30 extended permit tcp host 10.35.114.170 host 172.27.2.188 eq www (hitcnt=0) 0x57991e38
+access-list ind-fra-DSB line 31 extended permit tcp host 10.35.11.25 host 172.27.2.188 eq www (hitcnt=0) 0xa08f51c8
+access-list ind-fra-DSB line 32 extended permit tcp host 10.139.52.82 host 172.27.2.188 eq www (hitcnt=0) 0x32cee2f2
+access-list ind-fra-DSB line 33 extended permit tcp host 10.139.52.83 host 172.27.2.188 eq www (hitcnt=0) 0x0bbc6073
+access-list ind-fra-DSB line 34 extended permit icmp host 10.35.38.230 host 80.243.122.3 (hitcnt=0) 0xc05f6909
+access-list ind-fra-DSB line 35 extended permit tcp host 10.35.38.230 host 80.243.122.3 eq https (hitcnt=0) 0xec2ebdbc
+access-list ind-fra-DSB line 36 extended permit tcp host 10.35.38.230 host 80.243.122.3 eq www (hitcnt=0) 0x1c50c3f7
+access-list ind-fra-DSB line 37 extended permit tcp host 10.35.34.214 host 10.110.3.246 eq www (hitcnt=0) 0x3a9d6edc
+access-list ind-fra-DSB line 38 extended permit tcp host 10.35.34.214 host 10.110.4.135 eq www (hitcnt=0) 0x154c887f
+access-list ind-fra-DSB line 39 extended permit tcp host 10.35.34.214 object-group Togleder_SRV eq www (hitcnt=0) 0x18c8cca6
+  access-list ind-fra-DSB line 39 extended permit tcp host 10.35.34.214 host 172.27.3.152 eq www (hitcnt=0) 0x5d4dbc82
+  access-list ind-fra-DSB line 39 extended permit tcp host 10.35.34.214 host 172.27.3.153 eq www (hitcnt=0) 0xaac3e4e5
+access-list ind-fra-DSB line 40 extended permit tcp host 10.35.34.214 host 172.27.210.5 eq www (hitcnt=13059) 0xbcf64d75
+access-list ind-fra-DSB line 41 extended permit tcp host 10.35.34.214 host 172.27.210.21 eq www (hitcnt=5633) 0xd891a571
+access-list ind-fra-DSB line 42 extended permit tcp host 10.35.34.214 host 172.27.2.188 eq www (hitcnt=7236) 0xc70ee95f
+access-list ind-fra-DSB line 43 extended permit tcp host 10.35.34.213 host 172.31.6.170 eq 8091 (hitcnt=0) 0x58c492e0
+access-list ind-fra-DSB line 44 extended permit tcp host 10.35.34.213 host 10.110.4.195 eq 8091 (hitcnt=0) 0xce1a27bb
+access-list ind-fra-DSB line 45 extended permit tcp host 10.35.34.217 host 172.31.6.170 eq 8091 (hitcnt=0) 0x15a99b07
+access-list ind-fra-DSB line 46 extended permit tcp host 10.35.34.217 host 172.27.210.5 eq www (hitcnt=0) 0x02ff8844
+access-list ind-fra-DSB line 47 extended permit tcp host 10.35.34.217 host 172.27.210.21 eq www (hitcnt=0) 0xb7526519
+access-list ind-fra-DSB line 48 extended permit tcp host 10.35.34.217 host 172.27.2.188 eq www (hitcnt=0) 0xf3f2a635
+access-list ind-fra-DSB line 49 extended permit tcp host 10.35.34.217 host 10.110.4.195 eq 8091 (hitcnt=0) 0xbcfd8f82
+access-list ind-fra-DSB line 50 extended permit tcp host 10.35.34.217 host 172.21.5.14 eq www (hitcnt=0) 0xb52ed44f
+access-list ind-fra-DSB line 51 extended permit tcp host 10.35.34.217 host 172.27.3.156 eq www (hitcnt=0) 0xeefdc573
+access-list ind-fra-DSB line 52 extended permit tcp host 10.35.34.217 object-group Togleder_SRV eq www (hitcnt=0) 0xe3ba8398
+  access-list ind-fra-DSB line 52 extended permit tcp host 10.35.34.217 host 172.27.3.152 eq www (hitcnt=0) 0x718a5645
+  access-list ind-fra-DSB line 52 extended permit tcp host 10.35.34.217 host 172.27.3.153 eq www (hitcnt=0) 0xb384cc13
+access-list ind-fra-DSB line 53 extended permit tcp host 10.35.34.212 host 10.110.4.197 eq 8091 (hitcnt=0) 0x3b476751
+access-list ind-fra-DSB line 54 extended permit tcp host 10.35.34.212 host 172.31.6.170 eq 8091 (hitcnt=0) 0x90d5a0c9
+access-list ind-fra-DSB line 55 extended permit tcp host 10.35.34.212 host 10.110.4.196 eq 8091 (hitcnt=0) 0x9b9bc801
+access-list ind-fra-DSB line 56 extended permit tcp host 10.35.34.212 host 172.31.6.171 eq 8091 (hitcnt=0) 0x48892701
+access-list ind-fra-DSB line 57 extended permit tcp host 10.35.34.212 host 172.31.6.172 eq 8091 (hitcnt=0) 0x078d93e2
+access-list ind-fra-DSB line 58 extended permit tcp host 10.35.34.212 host 10.110.4.195 eq 8091 (hitcnt=0) 0x1b7e22d9
+access-list ind-fra-DSB line 59 extended permit udp object-group DNSSERVERS-DSB object-group DNSSERVERS-BANEDK eq domain (hitcnt=186080) 0x183ce4e1
+  access-list ind-fra-DSB line 59 extended permit udp host 10.35.21.11 host 172.27.2.22 eq domain (hitcnt=101393) 0xd4d11bc2
+  access-list ind-fra-DSB line 59 extended permit udp host 10.35.21.11 host 172.27.3.22 eq domain (hitcnt=6240) 0x8ed06968
+  access-list ind-fra-DSB line 59 extended permit udp host 10.35.30.107 host 172.27.2.22 eq domain (hitcnt=68524) 0xc978870e
+  access-list ind-fra-DSB line 59 extended permit udp host 10.35.30.107 host 172.27.3.22 eq domain (hitcnt=9923) 0xa0adb0ef
+access-list ind-fra-DSB line 60 extended permit tcp object-group DNSSERVERS-DSB object-group DNSSERVERS-BANEDK eq domain (hitcnt=0) 0xf7c59fe7
+  access-list ind-fra-DSB line 60 extended permit tcp host 10.35.21.11 host 172.27.2.22 eq domain (hitcnt=0) 0x83036bdc
+  access-list ind-fra-DSB line 60 extended permit tcp host 10.35.21.11 host 172.27.3.22 eq domain (hitcnt=0) 0x155cbde5
+  access-list ind-fra-DSB line 60 extended permit tcp host 10.35.30.107 host 172.27.2.22 eq domain (hitcnt=0) 0x78bd37ae
+  access-list ind-fra-DSB line 60 extended permit tcp host 10.35.30.107 host 172.27.3.22 eq domain (hitcnt=0) 0x6070c057
+access-list ind-fra-DSB line 61 extended permit icmp object-group SOA_IGP2 host 80.243.122.23 (hitcnt=0) 0xbb629097
+  access-list ind-fra-DSB line 61 extended permit icmp host 10.35.29.230 host 80.243.122.23 (hitcnt=0) 0x068a36b9
+  access-list ind-fra-DSB line 61 extended permit icmp host 10.35.32.230 host 80.243.122.23 (hitcnt=0) 0xe8b5b778
+  access-list ind-fra-DSB line 61 extended permit icmp host 10.35.36.230 host 80.243.122.23 (hitcnt=0) 0x7700d021
+access-list ind-fra-DSB line 62 extended permit icmp host 10.35.38.230 host 80.243.122.4 (hitcnt=0) 0xfd42dd73
+access-list ind-fra-DSB line 63 extended permit tcp host 10.35.38.230 host 80.243.122.4 eq https (hitcnt=0) 0xa5bb3c31
+access-list ind-fra-DSB line 64 extended permit tcp host 10.35.38.230 host 80.243.122.4 eq www (hitcnt=0) 0x93c6f7f4
+access-list ind-fra-DSB line 65 extended permit tcp object-group SOA_IGP2 host 80.243.122.23 eq https (hitcnt=0) 0xab982a75
+  access-list ind-fra-DSB line 65 extended permit tcp host 10.35.29.230 host 80.243.122.23 eq https (hitcnt=0) 0x0c98ad77
+  access-list ind-fra-DSB line 65 extended permit tcp host 10.35.32.230 host 80.243.122.23 eq https (hitcnt=0) 0xba09781d
+  access-list ind-fra-DSB line 65 extended permit tcp host 10.35.36.230 host 80.243.122.23 eq https (hitcnt=0) 0x057328b1
+access-list ind-fra-DSB line 66 extended permit tcp object-group SOA_IGP2 host 80.243.122.23 eq www (hitcnt=0) 0x9481a53a
+  access-list ind-fra-DSB line 66 extended permit tcp host 10.35.29.230 host 80.243.122.23 eq www (hitcnt=0) 0x28b24fa1
+  access-list ind-fra-DSB line 66 extended permit tcp host 10.35.32.230 host 80.243.122.23 eq www (hitcnt=0) 0xea6fb143
+  access-list ind-fra-DSB line 66 extended permit tcp host 10.35.36.230 host 80.243.122.23 eq www (hitcnt=0) 0xd240c291
+access-list ind-fra-DSB line 67 extended permit icmp object-group SOA_IGP2 host 80.243.122.8 (hitcnt=0) 0xa3336209
+  access-list ind-fra-DSB line 67 extended permit icmp host 10.35.29.230 host 80.243.122.8 (hitcnt=0) 0xc42c8419
+  access-list ind-fra-DSB line 67 extended permit icmp host 10.35.32.230 host 80.243.122.8 (hitcnt=0) 0x947dc0f5
+  access-list ind-fra-DSB line 67 extended permit icmp host 10.35.36.230 host 80.243.122.8 (hitcnt=0) 0x32cbf34d
+access-list ind-fra-DSB line 68 extended permit ip any host 10.110.2.48 (hitcnt=0) 0x7c378a09
+access-list ind-fra-DSB line 69 extended permit tcp host 10.124.85.1 host 10.110.2.49 eq sqlnet (hitcnt=0) 0xa3cda1f6
+access-list ind-fra-DSB line 70 extended permit tcp host 10.35.53.34 host 10.110.2.49 eq sqlnet (hitcnt=0) 0x4f000265
+access-list ind-fra-DSB line 71 extended permit tcp host 10.139.50.244 host 10.110.2.49 eq sqlnet (hitcnt=0) 0xc0b7e348
+access-list ind-fra-DSB line 72 extended permit tcp host 10.139.50.252 host 10.110.2.49 eq sqlnet (hitcnt=0) 0x78f2c628
+access-list ind-fra-DSB line 73 extended permit tcp host 10.139.50.117 host 10.110.2.49 eq sqlnet (hitcnt=0) 0xd5eaa477
+access-list ind-fra-DSB line 74 extended permit tcp host 10.139.50.19 host 10.110.2.49 eq sqlnet (hitcnt=0) 0x43cf54c3
+access-list ind-fra-DSB line 75 extended permit tcp host 10.35.24.172 host 10.110.2.49 eq sqlnet (hitcnt=0) 0x4ee6e6db
+access-list ind-fra-DSB line 76 extended permit tcp host 10.35.54.51 host 10.110.2.49 eq sqlnet (hitcnt=0) 0x7e537e79
+access-list ind-fra-DSB line 77 extended permit tcp host 10.239.240.100 host 10.110.2.48 eq sqlnet (hitcnt=0) 0xa1d778bd
+access-list ind-fra-DSB line 78 extended permit tcp host 10.236.240.148 host 10.110.2.48 eq sqlnet (hitcnt=0) 0x77755429
+access-list ind-fra-DSB line 79 extended permit tcp host 10.237.240.148 host 10.110.2.48 eq sqlnet (hitcnt=0) 0xc178a3cb
+access-list ind-fra-DSB line 80 extended permit tcp host 10.239.240.149 host 10.110.2.48 eq sqlnet (hitcnt=0) 0xeacc9932
+access-list ind-fra-DSB line 81 extended permit tcp host 10.124.85.1 host 10.110.2.48 eq sqlnet (hitcnt=0) 0x755cdb28
+access-list ind-fra-DSB line 82 extended permit tcp host 10.236.240.100 host 10.110.2.6 eq sqlnet (hitcnt=0) 0xff4f2eeb
+access-list ind-fra-DSB line 83 extended permit tcp host 10.237.240.100 host 10.110.2.6 eq sqlnet (hitcnt=0) 0xa3129db3
+access-list ind-fra-DSB line 84 extended permit tcp host 10.238.240.100 host 10.110.2.6 eq sqlnet (hitcnt=0) 0x98f2f78a
+access-list ind-fra-DSB line 85 extended permit tcp host 10.35.14.152 host 10.110.2.5 eq sqlnet (hitcnt=0) 0x4226080b
+access-list ind-fra-DSB line 86 extended permit tcp host 10.236.240.148 host 10.110.2.6 eq sqlnet (hitcnt=0) 0x1490d5ff
+access-list ind-fra-DSB line 87 extended permit tcp host 10.237.240.148 host 10.110.2.6 eq sqlnet (hitcnt=0) 0x84e3df75
+access-list ind-fra-DSB line 88 extended permit tcp host 10.236.240.148 host 10.110.2.5 eq sqlnet (hitcnt=0) 0xf1c9d9c3
+access-list ind-fra-DSB line 89 extended permit tcp host 10.237.240.148 host 10.110.2.5 eq sqlnet (hitcnt=0) 0x03f496b6
+access-list ind-fra-DSB line 90 extended permit tcp host 10.239.240.149 host 10.110.2.5 eq sqlnet (hitcnt=0) 0x05b9204c
+access-list ind-fra-DSB line 91 extended permit tcp host 10.35.36.40 host 10.110.2.6 eq sqlnet (hitcnt=0) 0x0fcf6574
+access-list ind-fra-DSB line 92 extended permit tcp host 10.35.14.153 host 10.110.2.6 eq sqlnet (hitcnt=0) 0x9e9b5da3
+access-list ind-fra-DSB line 93 extended permit tcp host 10.239.240.100 host 10.110.2.6 eq sqlnet (hitcnt=0) 0xf9ec360a
+access-list ind-fra-DSB line 94 extended permit tcp host 10.239.240.149 host 10.110.2.6 eq sqlnet (hitcnt=1) 0x3d303ba9
+access-list ind-fra-DSB line 95 extended permit tcp host 10.35.36.40 host 10.110.2.5 eq sqlnet (hitcnt=0) 0x7b340409
+access-list ind-fra-DSB line 96 extended permit tcp host 10.35.14.153 host 10.110.2.5 eq sqlnet (hitcnt=0) 0xf8d2f1c4
+access-list ind-fra-DSB line 97 extended permit tcp host 10.239.240.100 host 10.110.2.5 eq sqlnet (hitcnt=0) 0xcd45b1ec
+access-list ind-fra-DSB line 98 extended permit tcp object-group DSB_SAP_Servers host 10.110.2.6 eq sqlnet (hitcnt=0) 0xd04478a3
+  access-list ind-fra-DSB line 98 extended permit tcp host 10.236.130.11 host 10.110.2.6 eq sqlnet (hitcnt=0) 0x948e64b6
+  access-list ind-fra-DSB line 98 extended permit tcp host 10.236.130.4 host 10.110.2.6 eq sqlnet (hitcnt=0) 0x2b4fb167
+  access-list ind-fra-DSB line 98 extended permit tcp host 10.237.130.4 host 10.110.2.6 eq sqlnet (hitcnt=0) 0x1a1cc008
+  access-list ind-fra-DSB line 98 extended permit tcp host 10.239.130.4 host 10.110.2.6 eq sqlnet (hitcnt=0) 0x2db00830
+  access-list ind-fra-DSB line 98 extended permit tcp host 10.236.130.15 host 10.110.2.6 eq sqlnet (hitcnt=0) 0xbaa805f2
+  access-list ind-fra-DSB line 98 extended permit tcp host 10.236.130.8 host 10.110.2.6 eq sqlnet (hitcnt=0) 0x45c53ce7
+  access-list ind-fra-DSB line 98 extended permit tcp host 10.237.130.8 host 10.110.2.6 eq sqlnet (hitcnt=0) 0xe442899e
+  access-list ind-fra-DSB line 98 extended permit tcp host 10.239.130.8 host 10.110.2.6 eq sqlnet (hitcnt=0) 0x0e5360fb
+access-list ind-fra-DSB line 99 extended permit tcp object-group DSB_SAP_Servers host 10.110.2.5 eq sqlnet (hitcnt=0) 0x81c9d0f9
+  access-list ind-fra-DSB line 99 extended permit tcp host 10.236.130.11 host 10.110.2.5 eq sqlnet (hitcnt=0) 0x685885ac
+  access-list ind-fra-DSB line 99 extended permit tcp host 10.236.130.4 host 10.110.2.5 eq sqlnet (hitcnt=0) 0x818793d8
+  access-list ind-fra-DSB line 99 extended permit tcp host 10.237.130.4 host 10.110.2.5 eq sqlnet (hitcnt=0) 0xf8947956
+  access-list ind-fra-DSB line 99 extended permit tcp host 10.239.130.4 host 10.110.2.5 eq sqlnet (hitcnt=0) 0xa2cafcfd
+  access-list ind-fra-DSB line 99 extended permit tcp host 10.236.130.15 host 10.110.2.5 eq sqlnet (hitcnt=0) 0x7b2997ac
+  access-list ind-fra-DSB line 99 extended permit tcp host 10.236.130.8 host 10.110.2.5 eq sqlnet (hitcnt=0) 0x801181c5
+  access-list ind-fra-DSB line 99 extended permit tcp host 10.237.130.8 host 10.110.2.5 eq sqlnet (hitcnt=0) 0xae6b5727
+  access-list ind-fra-DSB line 99 extended permit tcp host 10.239.130.8 host 10.110.2.5 eq sqlnet (hitcnt=0) 0xa0fb425d
+access-list ind-fra-DSB line 100 extended permit tcp host 10.239.240.149 host 10.110.2.103 eq sqlnet (hitcnt=0) 0x350b9c47
+access-list ind-fra-DSB line 101 extended permit tcp host 10.239.240.100 host 10.110.2.103 eq sqlnet (hitcnt=0) 0xb10f728a
+access-list ind-fra-DSB line 102 extended permit tcp host 10.35.14.153 host 10.110.2.103 eq sqlnet (hitcnt=0) 0xfc3e3ba3
+access-list ind-fra-DSB line 103 extended permit tcp host 10.35.36.40 host 10.110.2.103 eq sqlnet (hitcnt=0) 0x8de501a2
+access-list ind-fra-DSB line 104 extended permit tcp host 10.236.240.148 host 10.110.2.103 eq sqlnet (hitcnt=0) 0x9416644f
+access-list ind-fra-DSB line 105 extended permit tcp host 10.237.240.148 host 10.110.2.103 eq sqlnet (hitcnt=0) 0xc30edacb
+access-list ind-fra-DSB line 106 extended permit tcp object-group DSB_SAP_Servers host 10.110.2.103 eq sqlnet (hitcnt=0) 0x490d64ca
+  access-list ind-fra-DSB line 106 extended permit tcp host 10.236.130.11 host 10.110.2.103 eq sqlnet (hitcnt=0) 0xa66b265d
+  access-list ind-fra-DSB line 106 extended permit tcp host 10.236.130.4 host 10.110.2.103 eq sqlnet (hitcnt=0) 0xbaf4470c
+  access-list ind-fra-DSB line 106 extended permit tcp host 10.237.130.4 host 10.110.2.103 eq sqlnet (hitcnt=0) 0x07a4a3e8
+  access-list ind-fra-DSB line 106 extended permit tcp host 10.239.130.4 host 10.110.2.103 eq sqlnet (hitcnt=0) 0xd5515c86
+  access-list ind-fra-DSB line 106 extended permit tcp host 10.236.130.15 host 10.110.2.103 eq sqlnet (hitcnt=0) 0xf5919fd5
+  access-list ind-fra-DSB line 106 extended permit tcp host 10.236.130.8 host 10.110.2.103 eq sqlnet (hitcnt=0) 0x1400a74b
+  access-list ind-fra-DSB line 106 extended permit tcp host 10.237.130.8 host 10.110.2.103 eq sqlnet (hitcnt=0) 0xda5414f2
+  access-list ind-fra-DSB line 106 extended permit tcp host 10.239.130.8 host 10.110.2.103 eq sqlnet (hitcnt=0) 0xcf454682
+access-list ind-fra-DSB line 107 extended permit tcp host 10.124.85.1 host 10.110.3.39 eq 7777 (hitcnt=5220919) 0xe69b73fb
+access-list ind-fra-DSB line 108 extended permit tcp host 10.124.85.1 host 10.83.5.161 eq 3389 (hitcnt=3845) 0x2beda846
+access-list ind-fra-DSB line 109 extended permit tcp host 10.124.85.1 host 172.27.200.45 eq https (hitcnt=1420) 0x74f3f791
+access-list ind-fra-DSB line 110 remark CTASK0034351 2023-02-06
+access-list ind-fra-DSB line 111 extended permit tcp host 10.238.240.100 host 10.110.2.105 eq sqlnet (hitcnt=7952) 0xe36585c1
+access-list ind-fra-DSB line 112 extended permit tcp host 10.237.240.100 host 10.110.2.105 eq sqlnet (hitcnt=33) 0xbad0f8d8
+access-list ind-fra-DSB line 113 extended permit tcp host 10.236.240.100 host 10.110.2.105 eq sqlnet (hitcnt=2) 0xd19a07f1
+access-list ind-fra-DSB line 114 remark .
+access-list ind-fra-DSB line 115 remark CTASK0034570 2023-03-20
+access-list ind-fra-DSB line 116 extended permit tcp host 10.60.9.127 host 10.110.2.105 eq sqlnet (hitcnt=0) 0x10f26f54
+access-list ind-fra-DSB line 117 remark .
+access-list ind-fra-DSB line 118 extended permit tcp object-group DSB_player object-group Togleder_SRV eq 81 (hitcnt=64313) 0xd53bef98
+  access-list ind-fra-DSB line 118 extended permit tcp host 10.124.85.1 host 172.27.3.152 eq 81 (hitcnt=29152) 0x30e5def5
+  access-list ind-fra-DSB line 118 extended permit tcp host 10.124.85.1 host 172.27.3.153 eq 81 (hitcnt=35161) 0x4837254b
+access-list ind-fra-DSB line 119 extended permit tcp host 10.35.60.60 object-group Togleder_SRV eq 81 (hitcnt=0) 0x1f571517
+  access-list ind-fra-DSB line 119 extended permit tcp host 10.35.60.60 host 172.27.3.152 eq 81 (hitcnt=0) 0x8e8daae8
+  access-list ind-fra-DSB line 119 extended permit tcp host 10.35.60.60 host 172.27.3.153 eq 81 (hitcnt=0) 0xa231fc40
+access-list ind-fra-DSB line 120 remark CTASK0037297 ------------- BEGIN
+access-list ind-fra-DSB line 121 extended permit tcp host 10.124.85.1 host 10.110.2.103 eq sqlnet (hitcnt=492077) 0x0cb2048c
+access-list ind-fra-DSB line 122 remark CTASK0037297 ------------- END
+access-list ind-fra-DSB line 123 remark CHG0055972-CTASK0037462
+access-list ind-fra-DSB line 124 extended permit tcp host 10.124.85.1 object audvtogsta1m_172.27.2.188 eq www (hitcnt=286593) 0x2a9df402
+  access-list ind-fra-DSB line 124 extended permit tcp host 10.124.85.1 host 172.27.2.188 eq www (hitcnt=286593) 0x2a9df402
+access-list ind-fra-DSB line 125 extended permit tcp host 10.124.85.1 object audvtogsta1m_172.27.2.188 eq https (hitcnt=0) 0x49db87e7
+  access-list ind-fra-DSB line 125 extended permit tcp host 10.124.85.1 host 172.27.2.188 eq https (hitcnt=0) 0x49db87e7
+access-list ind-fra-DSB line 126 extended permit tcp host 10.124.85.1 object aapptogstasec1m_172.27.210.21 eq www (hitcnt=301084) 0x87d33740
+  access-list ind-fra-DSB line 126 extended permit tcp host 10.124.85.1 host 172.27.210.21 eq www (hitcnt=301084) 0x87d33740
+access-list ind-fra-DSB line 127 extended permit tcp host 10.124.85.1 object aapptogstasec1m_172.27.210.21 eq https (hitcnt=0) 0xc327282b
+  access-list ind-fra-DSB line 127 extended permit tcp host 10.124.85.1 host 172.27.210.21 eq https (hitcnt=0) 0xc327282b
+access-list ind-fra-DSB line 128 extended permit tcp host 10.124.85.1 object aapptogstapri1m_172.27.210.5 eq www (hitcnt=302724) 0x0dbd6eeb
+  access-list ind-fra-DSB line 128 extended permit tcp host 10.124.85.1 host 172.27.210.5 eq www (hitcnt=302724) 0x0dbd6eeb
+access-list ind-fra-DSB line 129 extended permit tcp host 10.124.85.1 object aapptogstapri1m_172.27.210.5 eq https (hitcnt=0) 0x69294c92
+  access-list ind-fra-DSB line 129 extended permit tcp host 10.124.85.1 host 172.27.210.5 eq https (hitcnt=0) 0x69294c92
+access-list ind-fra-DSB line 130 remark ....
+access-list ind-fra-DSB line 131 remark CHG0060002-CTASK0041529 ------ BEGIN
+access-list ind-fra-DSB line 132 extended permit tcp object-group DSB_player object BDKORA003.bane.dk_10.110.2.105 eq sqlnet (hitcnt=199) 0x78d6d669
+  access-list ind-fra-DSB line 132 extended permit tcp host 10.124.85.1 host 10.110.2.105 eq sqlnet (hitcnt=199) 0xc88a9c7e
+access-list ind-fra-DSB line 133 remark CHG0060549-CTASK0042190 ---- BEGIN
+access-list ind-fra-DSB line 134 extended permit tcp object-group DSB_player object ABDKDSBIZ_10.110.3.246 eq www (hitcnt=3598) 0x760a8e92
+  access-list ind-fra-DSB line 134 extended permit tcp host 10.124.85.1 host 10.110.3.246 eq www (hitcnt=3598) 0xa1d94b66
+access-list ind-fra-DSB line 135 extended deny ip any any (hitcnt=932409) 0x3c7d62aa
+access-list ind-fra-DSB line 136 remark MIGRATION PART 1 - 2023-01-31 END------------------
+BHASA1/baneisp.dk/BDK-DSB/pri/act#               sh route
+Routing Table: BDK-DSB
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, V - VPN
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, + - replicated route
+Gateway of last resort is 172.20.1.1 to network 0.0.0.0
+S*       0.0.0.0 0.0.0.0 [1/0] via 172.20.1.1, inside
+S        10.0.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.1.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.2.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.4.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.6.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.18.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.19.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.20.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.22.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.29.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.30.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.31.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.33.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.35.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.36.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.40.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.42.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.45.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.48.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.50.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.51.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.54.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.56.60.0 255.255.255.0 [1/0] via 172.20.1.1, inside
+S        10.60.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.61.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.62.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.63.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.64.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.71.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.72.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.73.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.75.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.81.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.83.4.201 255.255.255.255 [1/0] via 10.124.85.1, DSB
+S        10.83.5.201 255.255.255.255 [1/0] via 10.124.85.1, DSB
+S        10.83.5.208 255.255.255.255 [1/0] via 10.124.85.1, DSB
+S        10.90.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.96.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.101.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.102.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.110.4.0 255.255.255.0 [1/0] via 172.20.1.1, inside
+S        10.111.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.116.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.117.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+C        10.124.0.0 255.255.0.0 is directly connected, DSB
+L        10.124.85.2 255.255.255.255 is directly connected, DSB
+S        10.125.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.136.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.139.52.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        10.139.52.30 255.255.255.255 [1/0] via 10.124.85.1, DSB
+S        10.139.52.82 255.255.255.255 [1/0] via 10.124.85.1, DSB
+S        10.139.52.83 255.255.255.255 [1/0] via 10.124.85.1, DSB
+S        10.143.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.155.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.163.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.174.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.180.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.182.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.185.50.0 255.255.255.0 [1/0] via 172.20.1.1, inside
+S        10.191.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.194.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.198.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.199.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.200.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.202.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.204.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.206.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.213.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.215.44.128 255.255.255.128 [1/0] via 10.124.85.1, DSB
+S        10.215.47.128 255.255.255.128 [1/0] via 10.124.85.1, DSB
+S        10.231.9.128 255.255.255.192 [1/0] via 10.124.85.1, DSB
+S        10.231.16.64 255.255.255.192 [1/0] via 10.124.85.1, DSB
+S        10.231.61.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        10.231.66.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        10.231.68.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        10.236.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.237.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.238.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.239.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.240.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        10.245.0.0 255.255.0.0 [1/0] via 10.124.85.1, DSB
+S        100.73.3.0 255.255.255.0 [1/0] via 172.20.1.1, inside
+S        100.73.35.0 255.255.255.0 [1/0] via 172.20.1.1, inside
+C        172.20.1.0 255.255.255.0 is directly connected, inside
+L        172.20.1.15 255.255.255.255 is directly connected, inside
+S        172.168.14.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.0.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.1.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.11.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.12.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.13.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.14.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.20.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.22.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.72.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.74.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.75.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.101.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.150.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.151.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.156.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.192.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.200.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.201.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.216.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+S        192.168.220.0 255.255.254.0 [1/0] via 10.124.85.1, DSB
+S        192.168.234.0 255.255.255.0 [1/0] via 10.124.85.1, DSB
+BHASA1/baneisp.dk/BDK-DSB/pri/act#          sh v cry
+BHASA1/baneisp.dk/BDK-DSB/pri/act#          sh crypto is
+BHASA1/baneisp.dk/BDK-DSB/pri/act#          sh crypto isakmp
+There are no IKEv1 SAs
+There are no IKEv2 SAs
+Global IKEv1 Statistics
+  Active Tunnels:              0
+  Previous Tunnels:            0
+  In Octets:                   0
+  In Packets:                  0
+  In Drop Packets:             0
+  In Notifys:                  0
+  In P2 Exchanges:             0
+  In P2 Exchange Invalids:     0
+  In P2 Exchange Rejects:      0
+  In P2 Sa Delete Requests:    0
+  In P2 Dup Remote Proxy:      0
+  Out Octets:                  0
+  Out Packets:                 0
+  Out Drop Packets:            0
+  Out Notifys:                 0
+  Out P2 Exchanges:            0
+  Out P2 Exchange Invalids:    0
+  Out P2 Exchange Rejects:     0
+  Out P2 Sa Delete Requests:   0
+  Initiator Tunnels:           0
+  Initiator Fails:             0
+  Responder Fails:             0
+  System Capacity Fails:       0
+  Auth Fails:                  0
+  Decrypt Fails:               0
+  Hash Valid Fails:            0
+  No Sa Fails:                 0
+IKEV1 Call Admission Statistics
+  Max In-Negotiation SAs:                  1
+  In-Negotiation SAs:                      0
+  In-Negotiation SAs Highwater:            0
+  In-Negotiation SAs Rejected:             0
+Global IKEv2 Statistics
+  Active Tunnels:                          0
+  Previous Tunnels:                        0
+  In Octets:                               0
+  In Packets:                              0
+  In Drop Packets:                         0
+  In Drop Fragments:                       0
+  In Notifys:                              0
+  In P2 Exchange:                          0
+  In P2 Exchange Invalids:                 0
+  In P2 Exchange Rejects:                  0
+  In IPSEC Delete:                         0
+  In IKE Delete:                           0
+  Out Octets:                              0
+  Out Packets:                             0
+  Out Drop Packets:                        0
+  Out Drop Fragments:                      0
+  Out Notifys:                             0
+  Out P2 Exchange:                         0
+  Out P2 Exchange Invalids:                0
+  Out P2 Exchange Rejects:                 0
+  Out IPSEC Delete:                        0
+  Out IKE Delete:                          0
+  SAs Locally Initiated:                   0
+  SAs Locally Initiated Failed:            0
+  SAs Remotely Initiated:                  0
+  SAs Remotely Initiated Failed:           0
+  System Capacity Failures:                0
+  Authentication Failures:                 0
+  Decrypt Failures:                        0
+  Hash Failures:                           0
+  Invalid SPI:                             0
+  In Configs:                              0
+  Out Configs:                             0
+  In Configs Rejects:                      0
+  Out Configs Rejects:                     0
+  Previous Tunnels:                        0
+  Previous Tunnels Wraps:                  0
+  In DPD Messages:                         0
+  Out DPD Messages:                        0
+  Out NAT Keepalives:                      0
+  IKE Rekey Locally Initiated:             0
+  IKE Rekey Remotely Initiated:            0
+  CHILD Rekey Locally Initiated:           0
+  CHILD Rekey Remotely Initiated:          0
+IKEV2 Call Admission Statistics
+  Max Active SAs:                   No Limit
+  Max In-Negotiation SAs:                  1
+  Cookie Challenge Threshold:         Always
+  Active SAs:                              0
+  In-Negotiation SAs:                      0
+  Incoming Requests:                       0
+  Incoming Requests Accepted:              0
+  Incoming Requests Rejected:              0
+  Outgoing Requests:                       0
+  Outgoing Requests Accepted:              0
+  Outgoing Requests Rejected:              0
+  Rejected Requests:                       0
+  Rejected Over Max SA limit:              0
+  Rejected Low Resources:                  0
+  Rejected Reboot In Progress:             0
+  Cookie Challenges:                       0
+  Cookie Challenges Passed:                0
+  Cookie Challenges Failed:                0
+Global IKEv1 IPSec over TCP Statistics
+--------------------------------
+Embryonic connections: 0
+Active connections: 0
+Previous connections: 0
+Inbound packets: 0
+Inbound dropped packets: 0
+Outbound packets: 0
+Outbound dropped packets: 0
+RST packets: 0
+Recevied ACK heart-beat packets: 0
+Bad headers: 0
+Bad trailers: 0
+Timer failures: 0
+Checksum errors: 0
+Internal errors: 0
+BHASA1/baneisp.dk/BDK-DSB/pri/act#       sh vpn-d s
+BHASA1/baneisp.dk/BDK-DSB/pri/act#       sh vpn-sessiondb
+ No sessions to display.
+BHASA1/baneisp.dk/BDK-DSB/pri/act#

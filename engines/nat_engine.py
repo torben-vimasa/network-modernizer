@@ -7,8 +7,9 @@ from models.nat_result import NATResult
 
 class NATEngine:
 
-    def __init__(self, rules=None):
+    def __init__(self, rules=None, graph=None):
         self.rules = self._sort_rules(rules or [])
+        self.graph = graph
 
     def translate(self, packet):
 
@@ -99,15 +100,83 @@ class NATEngine:
         )
 
     def _matches_source(self, rule, source):
-
-        if not rule.source_original:
-            return True
-
-        return rule.source_original == source
+        return self._matches_value(
+            rule.source_original,
+            source
+        )
 
     def _matches_destination(self, rule, destination):
+        return self._matches_value(
+            rule.destination_original,
+            destination
+        )
 
-        if not rule.destination_original:
+    def _matches_value(self, configured_value, packet_value):
+        if not configured_value:
             return True
 
-        return rule.destination_original == destination
+        if configured_value in ["any", "any4"]:
+            return True
+
+        if configured_value == packet_value:
+            return True
+
+        if not self.graph:
+            return False
+
+        node = (
+            self.graph.find("NetworkObject", configured_value)
+            or self.graph.find("ObjectGroup", configured_value)
+        )
+
+        if not node:
+            return False
+
+        return self._node_matches_ip(
+            node,
+            packet_value,
+            visited=set()
+        )
+
+    def _node_matches_ip(self, node, ip_value, visited):
+        import ipaddress
+
+        if node.id in visited:
+            return False
+
+        visited.add(node.id)
+
+        if node.type == "ObjectGroup":
+            for relation, member in self.graph.neighbors(node.id):
+                if relation != "HAS_MEMBER":
+                    continue
+
+                if self._node_matches_ip(
+                    member,
+                    ip_value,
+                    visited
+                ):
+                    return True
+
+            return False
+
+        value = node.properties.get("value")
+
+        if not value:
+            value = node.name
+
+        value = str(value).strip()
+
+        if value.startswith("host "):
+            return value.split(maxsplit=1)[1] == ip_value
+
+        if value == ip_value:
+            return True
+
+        try:
+            return ipaddress.ip_address(ip_value) in ipaddress.ip_network(
+                value,
+                strict=False
+            )
+        except ValueError:
+            return False

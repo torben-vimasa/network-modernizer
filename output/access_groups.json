@@ -1,52 +1,772 @@
 [
     {
+        "context": "BDK-DSB",
+        "acl": "ind-fra-DSB",
+        "direction": "in",
+        "asa_interface": "DSB",
+        "raw": "access-group ind-fra-DSB in interface DSB"
+    },
+    {
+        "context": "BDK-DSB",
+        "acl": "ind-fra-inside",
+        "direction": "in",
+        "asa_interface": "inside",
+        "raw": "access-group ind-fra-inside in interface inside"
+    },
+    {
+        "context": "BDK-Enterprise",
+        "acl": "access-in-external",
+        "direction": "in",
+        "asa_interface": "External",
+        "raw": "access-group access-in-external in interface External"
+    },
+    {
+        "context": "BDK-Enterprise",
+        "acl": "acc_outgoing_outside",
+        "direction": "out",
+        "asa_interface": "External",
+        "raw": "access-group acc_outgoing_outside out interface External"
+    },
+    {
+        "context": "BDK-Enterprise",
+        "acl": "access-in-uagdmz",
+        "direction": "in",
+        "asa_interface": "UAGDMZ",
+        "raw": "access-group access-in-uagdmz in interface UAGDMZ"
+    },
+    {
+        "context": "BDK-Enterprise",
+        "acl": "access-in-internal",
+        "direction": "in",
+        "asa_interface": "Internal",
+        "raw": "access-group access-in-internal in interface Internal"
+    },
+    {
+        "context": "BDK-Enterprise",
+        "acl": "access-in-wwwbane",
+        "direction": "in",
+        "asa_interface": "wwwBane",
+        "raw": "access-group access-in-wwwbane in interface wwwBane"
+    },
+    {
+        "context": "BDK-Enterprise",
+        "acl": "access-in-dmz1",
+        "direction": "in",
+        "asa_interface": "DMZzone1",
+        "raw": "access-group access-in-dmz1 in interface DMZzone1"
+    },
+    {
+        "context": "BDK-Enterprise",
+        "acl": "access-in-dmz2",
+        "direction": "in",
+        "asa_interface": "DMZzone2",
+        "raw": "access-group access-in-dmz2 in interface DMZzone2"
+    },
+    {
+        "context": "BDK-Enterprise",
+        "acl": "access-in-mobildatafangst",
+        "direction": "in",
+        "asa_interface": "Mobildatafangst",
+        "raw": "access-group access-in-mobildatafangst in interface Mobildatafangst"
+    },
+    {
+        "context": "BDK-Enterprise",
+        "acl": "access-in-mobildatafangstrelaydmz",
+        "direction": "in",
+        "asa_interface": "MobildatafangstRelayDMZ",
+        "raw": "access-group access-in-mobildatafangstrelaydmz in interface MobildatafangstRelayDMZ"
+    },
+    {
+        "context": "BDK-Enterprise",
+        "acl": "access-in-ocsdmz1",
+        "direction": "in",
+        "asa_interface": "OCSDmz1",
+        "raw": "access-group access-in-ocsdmz1 in interface OCSDmz1"
+    },
+    {
+        "context": "BDK-Enterprise",
+        "acl": "access-in-ocsdmz2",
+        "direction": "in",
+        "asa_interface": "OCSDmz2",
+        "raw": "access-group access-in-ocsdmz2 in interface OCSDmz2"
+    },
+    {
+        "context": "BDK-Enterprise",
+        "acl": "access-in-baneudv",
+        "direction": "in",
+        "asa_interface": "BaneUdv",
+        "raw": "access-group access-in-baneudv in interface BaneUdv"
+    },
+    {
+        "context": "BDK-Enterprise",
+        "acl": "access-in-baneudvqa",
+        "direction": "in",
+        "asa_interface": "BaneUdvQA",
+        "raw": "access-group access-in-baneudvqa in interface BaneUdvQA"
+    },
+    {
+        "context": "BDK-Mgmt",
         "acl": "access-in-sttn_mgmt",
         "direction": "in",
-        "asa_interface": "STTN_MGMT"
+        "asa_interface": "STTN_MGMT",
+        "raw": "access-group access-in-sttn_mgmt in interface STTN_MGMT"
     },
     {
+        "context": "BDK-Mgmt",
         "acl": "access-in-cs",
         "direction": "in",
-        "asa_interface": "CS"
+        "asa_interface": "CS",
+        "raw": "access-group access-in-cs in interface CS"
     },
     {
+        "context": "BDK-Mgmt",
         "acl": "access-in-bane1",
         "direction": "in",
-        "asa_interface": "Bane1"
+        "asa_interface": "Bane1",
+        "raw": "access-group access-in-bane1 in interface Bane1"
     },
     {
+        "context": "BDK-Mgmt",
         "acl": "access-in-ts",
         "direction": "in",
-        "asa_interface": "TS"
+        "asa_interface": "TS",
+        "raw": "access-group access-in-ts in interface TS"
     },
     {
-        "acl": "access-in-dics",
+        "context": "BDK-Mgmt",
+        "acl": "access-in-mgmt_jttn",
         "direction": "in",
-        "asa_interface": "DICS"
+        "asa_interface": "MGMT_JTTN",
+        "raw": "access-group access-in-mgmt_jttn in interface MGMT_JTTN"
     },
     {
+        "context": "BDK-Mgmt",
         "acl": "access-in-fdrift",
         "direction": "in",
-        "asa_interface": "Fdrift"
+        "asa_interface": "Fdrift",
+        "raw": "access-group access-in-fdrift in interface Fdrift"
     },
     {
+        "context": "BDK-Mgmt",
         "acl": "access-in-fservice",
         "direction": "in",
-        "asa_interface": "Fservice"
+        "asa_interface": "Fservice",
+        "raw": "access-group access-in-fservice in interface Fservice"
     },
     {
+        "context": "BDK-Mgmt",
         "acl": "access-in-signal_program",
         "direction": "in",
-        "asa_interface": "Signal-Program"
+        "asa_interface": "Signal-Program",
+        "raw": "access-group access-in-signal_program in interface Signal-Program"
     },
     {
+        "context": "BDK-Mgmt",
         "acl": "access-in-dwdm",
         "direction": "in",
-        "asa_interface": "DWDM"
+        "asa_interface": "DWDM",
+        "raw": "access-group access-in-dwdm in interface DWDM"
     },
     {
+        "context": "BDK-Mgmt",
         "acl": "access-in-SPNS2-TRANSIT-JTTN",
         "direction": "in",
-        "asa_interface": "SPNS2-TRANSIT-JTTN"
+        "asa_interface": "SPNS2-TRANSIT-JTTN",
+        "raw": "access-group access-in-SPNS2-TRANSIT-JTTN in interface SPNS2-TRANSIT-JTTN"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_TDC-Secure-Mobile",
+        "direction": "in",
+        "asa_interface": "TDC-Secure-Mobile",
+        "raw": "access-group acc_in_TDC-Secure-Mobile in interface TDC-Secure-Mobile"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_TDC-ALARMNET",
+        "direction": "in",
+        "asa_interface": "TDC-ALARMNET",
+        "raw": "access-group acc_in_TDC-ALARMNET in interface TDC-ALARMNET"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_Cyberkey",
+        "direction": "in",
+        "asa_interface": "Cyberkey_Cibicom",
+        "raw": "access-group acc_in_Cyberkey in interface Cyberkey_Cibicom"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_BDK-APN1717",
+        "direction": "in",
+        "asa_interface": "BDK-APN1717",
+        "raw": "access-group acc_in_BDK-APN1717 in interface BDK-APN1717"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_LAN-SIP-CPE1",
+        "direction": "in",
+        "asa_interface": "LAN-SIP-CPE1",
+        "raw": "access-group acc_in_LAN-SIP-CPE1 in interface LAN-SIP-CPE1"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_LAN-SIP-CPE2",
+        "direction": "in",
+        "asa_interface": "LAN-SIP-CPE2",
+        "raw": "access-group acc_in_LAN-SIP-CPE2 in interface LAN-SIP-CPE2"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_ext_cibicom_rgdc",
+        "direction": "in",
+        "asa_interface": "ext_cibicom_rgdc",
+        "raw": "access-group acc_in_ext_cibicom_rgdc in interface ext_cibicom_rgdc"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_ext_cibicom_obv",
+        "direction": "in",
+        "asa_interface": "ext_cibicom_obv",
+        "raw": "access-group acc_in_ext_cibicom_obv in interface ext_cibicom_obv"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_outside",
+        "direction": "in",
+        "asa_interface": "outside",
+        "raw": "access-group acc_in_outside in interface outside"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_outgoing_outside",
+        "direction": "out",
+        "asa_interface": "outside",
+        "raw": "access-group acc_outgoing_outside out interface outside"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_inside",
+        "direction": "in",
+        "asa_interface": "inside",
+        "raw": "access-group acc_in_inside in interface inside"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_PSI-OCK",
+        "direction": "in",
+        "asa_interface": "PSI-OCK",
+        "raw": "access-group acc_in_PSI-OCK in interface PSI-OCK"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_UDV-NET",
+        "direction": "in",
+        "asa_interface": "UDV-NET",
+        "raw": "access-group acc_in_UDV-NET in interface UDV-NET"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_Internet_service",
+        "direction": "in",
+        "asa_interface": "Internet_service",
+        "raw": "access-group acc_in_Internet_service in interface Internet_service"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth2c1",
+        "direction": "in",
+        "asa_interface": "eth2c1",
+        "raw": "access-group acc_in_eth2c1 in interface eth2c1"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_SCADA-Overvaagning",
+        "direction": "in",
+        "asa_interface": "SCADA-Overvaagning",
+        "raw": "access-group acc_in_SCADA-Overvaagning in interface SCADA-Overvaagning"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_esb",
+        "direction": "in",
+        "asa_interface": "esb",
+        "raw": "access-group acc_in_esb in interface esb"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth2c2",
+        "direction": "in",
+        "asa_interface": "eth2c2",
+        "raw": "access-group acc_in_eth2c2 in interface eth2c2"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "PaloAlto-updates",
+        "direction": "in",
+        "asa_interface": "PaloAlto-updates",
+        "raw": "access-group PaloAlto-updates in interface PaloAlto-updates"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s3p1c4",
+        "direction": "in",
+        "asa_interface": "eth-s3p1c4",
+        "raw": "access-group acc_in_eth-s3p1c4 in interface eth-s3p1c4"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s3p1c22",
+        "direction": "in",
+        "asa_interface": "eth-s3p1c22",
+        "raw": "access-group acc_in_eth-s3p1c22 in interface eth-s3p1c22"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s3p1c10",
+        "direction": "in",
+        "asa_interface": "eth-s3p1c10",
+        "raw": "access-group acc_in_eth-s3p1c10 in interface eth-s3p1c10"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s3p1c5",
+        "direction": "in",
+        "asa_interface": "eth-s3p1c5",
+        "raw": "access-group acc_in_eth-s3p1c5 in interface eth-s3p1c5"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth1c0",
+        "direction": "in",
+        "asa_interface": "eth1c0",
+        "raw": "access-group acc_in_eth1c0 in interface eth1c0"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s3p1c23",
+        "direction": "in",
+        "asa_interface": "eth-s3p1c23",
+        "raw": "access-group acc_in_eth-s3p1c23 in interface eth-s3p1c23"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s3p1c18",
+        "direction": "in",
+        "asa_interface": "eth-s3p1c18",
+        "raw": "access-group acc_in_eth-s3p1c18 in interface eth-s3p1c18"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s2p1c0",
+        "direction": "in",
+        "asa_interface": "eth-s2p1c0",
+        "raw": "access-group acc_in_eth-s2p1c0 in interface eth-s2p1c0"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s3p1c6",
+        "direction": "in",
+        "asa_interface": "eth-s3p1c6",
+        "raw": "access-group acc_in_eth-s3p1c6 in interface eth-s3p1c6"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s3p1c24",
+        "direction": "in",
+        "asa_interface": "eth-s3p1c24",
+        "raw": "access-group acc_in_eth-s3p1c24 in interface eth-s3p1c24"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s3p1c19",
+        "direction": "in",
+        "asa_interface": "eth-s3p1c19",
+        "raw": "access-group acc_in_eth-s3p1c19 in interface eth-s3p1c19"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s3p1c12",
+        "direction": "in",
+        "asa_interface": "eth-s3p1c12",
+        "raw": "access-group acc_in_eth-s3p1c12 in interface eth-s3p1c12"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s2p3c0",
+        "direction": "in",
+        "asa_interface": "eth-s2p3c0",
+        "raw": "access-group acc_in_eth-s2p3c0 in interface eth-s2p3c0"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s3p1c7",
+        "direction": "in",
+        "asa_interface": "eth-s3p1c7",
+        "raw": "access-group acc_in_eth-s3p1c7 in interface eth-s3p1c7"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_BECOS-32",
+        "direction": "in",
+        "asa_interface": "BECOS-32",
+        "raw": "access-group acc_in_BECOS-32 in interface BECOS-32"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s3p1c13",
+        "direction": "in",
+        "asa_interface": "eth-s3p1c13",
+        "raw": "access-group acc_in_eth-s3p1c13 in interface eth-s3p1c13"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s3p1c8",
+        "direction": "in",
+        "asa_interface": "eth-s3p1c8",
+        "raw": "access-group acc_in_eth-s3p1c8 in interface eth-s3p1c8"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s3p1c14",
+        "direction": "in",
+        "asa_interface": "eth-s3p1c14",
+        "raw": "access-group acc_in_eth-s3p1c14 in interface eth-s3p1c14"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s3p1c2",
+        "direction": "in",
+        "asa_interface": "eth-s3p1c2",
+        "raw": "access-group acc_in_eth-s3p1c2 in interface eth-s3p1c2"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s3p1c20",
+        "direction": "in",
+        "asa_interface": "eth-s3p1c20",
+        "raw": "access-group acc_in_eth-s3p1c20 in interface eth-s3p1c20"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s2p2c0",
+        "direction": "in",
+        "asa_interface": "eth-s2p2c0",
+        "raw": "access-group acc_in_eth-s2p2c0 in interface eth-s2p2c0"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s3p1c3",
+        "direction": "in",
+        "asa_interface": "eth-s3p1c3",
+        "raw": "access-group acc_in_eth-s3p1c3 in interface eth-s3p1c3"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_SIP-DMZ",
+        "direction": "in",
+        "asa_interface": "SIP-DMZ",
+        "raw": "access-group acc_in_SIP-DMZ in interface SIP-DMZ"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth-s1p1c0",
+        "direction": "in",
+        "asa_interface": "eth-s1p1c0",
+        "raw": "access-group acc_in_eth-s1p1c0 in interface eth-s1p1c0"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_eth4c0",
+        "direction": "in",
+        "asa_interface": "eth4c0",
+        "raw": "access-group acc_in_eth4c0 in interface eth4c0"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_NPS_Extern",
+        "direction": "in",
+        "asa_interface": "NPS_Extern",
+        "raw": "access-group acc_in_NPS_Extern in interface NPS_Extern"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_psi-ock-tig-gateway1",
+        "direction": "in",
+        "asa_interface": "psi-ock-tig-gateway1",
+        "raw": "access-group acc_in_psi-ock-tig-gateway1 in interface psi-ock-tig-gateway1"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_psi-ock-tig-gateway2",
+        "direction": "in",
+        "asa_interface": "psi-ock-tig-gateway2",
+        "raw": "access-group acc_in_psi-ock-tig-gateway2 in interface psi-ock-tig-gateway2"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_ALARM1123-ServerNet",
+        "direction": "in",
+        "asa_interface": "ALARM1123-ServerNet",
+        "raw": "access-group acc_in_ALARM1123-ServerNet in interface ALARM1123-ServerNet"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_DIAMONT_MGMT",
+        "direction": "in",
+        "asa_interface": "DIAMONT_MGMT",
+        "raw": "access-group acc_in_DIAMONT_MGMT in interface DIAMONT_MGMT"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "EltelJumphost_in",
+        "direction": "in",
+        "asa_interface": "Eltel_JumpHost_DMZ",
+        "raw": "access-group EltelJumphost_in in interface Eltel_JumpHost_DMZ"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_dmz-airtame",
+        "direction": "in",
+        "asa_interface": "dmz-airtame",
+        "raw": "access-group acc_in_dmz-airtame in interface dmz-airtame"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_PBASE2022",
+        "direction": "in",
+        "asa_interface": "PBASE2022",
+        "raw": "access-group acc_in_PBASE2022 in interface PBASE2022"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_Priveledged_Remote_Access_PoC",
+        "direction": "in",
+        "asa_interface": "Priveledged_Remote_Access_PoC",
+        "raw": "access-group acc_in_Priveledged_Remote_Access_PoC in interface Priveledged_Remote_Access_PoC"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "Aevenjumphost_in",
+        "direction": "in",
+        "asa_interface": "Aeven_JumpHost_DMZ",
+        "raw": "access-group Aevenjumphost_in in interface Aeven_JumpHost_DMZ"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_VULSCANSRVS01_DMZ",
+        "direction": "in",
+        "asa_interface": "VULSCANSRVS01_DMZ",
+        "raw": "access-group acc_in_VULSCANSRVS01_DMZ in interface VULSCANSRVS01_DMZ"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_Aeven_Vulnerability_scan_probes",
+        "direction": "in",
+        "asa_interface": "Aeven_Vulnerability_scan_probes",
+        "raw": "access-group acc_in_Aeven_Vulnerability_scan_probes in interface Aeven_Vulnerability_scan_probes"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_EXT-PROVIDERS-JTTN-JUMPHOST",
+        "direction": "in",
+        "asa_interface": "EXT-PROVIDERS-JTTN-JUMPHOST",
+        "raw": "access-group acc_in_EXT-PROVIDERS-JTTN-JUMPHOST in interface EXT-PROVIDERS-JTTN-JUMPHOST"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "Cegaljumphost_in",
+        "direction": "in",
+        "asa_interface": "Cegal_JumpHost_DMZ",
+        "raw": "access-group Cegaljumphost_in in interface Cegal_JumpHost_DMZ"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_Cibicomjumphost",
+        "direction": "in",
+        "asa_interface": "dmz_cibicom_jumpservers",
+        "raw": "access-group acc_in_Cibicomjumphost in interface dmz_cibicom_jumpservers"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_MFA_NPS_EXT",
+        "direction": "in",
+        "asa_interface": "MFA_NPS_EXT",
+        "raw": "access-group acc_in_MFA_NPS_EXT in interface MFA_NPS_EXT"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_MFA_NPS_DK",
+        "direction": "in",
+        "asa_interface": "MFA_NPS_DK",
+        "raw": "access-group acc_in_MFA_NPS_DK in interface MFA_NPS_DK"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_MFA_BACKEND",
+        "direction": "in",
+        "asa_interface": "MFA_BACKEND",
+        "raw": "access-group acc_in_MFA_BACKEND in interface MFA_BACKEND"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_MDR",
+        "direction": "in",
+        "asa_interface": "MDR",
+        "raw": "access-group acc_in_MDR in interface MDR"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "acc_in_UDV_Teknik",
+        "direction": "in",
+        "asa_interface": "UDV_Teknik",
+        "raw": "access-group acc_in_UDV_Teknik in interface UDV_Teknik"
+    },
+    {
+        "context": "BDK-Teknik",
+        "acl": "NokiaJumphosts_in",
+        "direction": "in",
+        "asa_interface": "Nokia_Jumphosts_DMZ",
+        "raw": "access-group NokiaJumphosts_in in interface Nokia_Jumphosts_DMZ"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "CSM_FW_ACL_KMD_Internal",
+        "direction": "in",
+        "asa_interface": "KMD_Internal",
+        "raw": "access-group CSM_FW_ACL_KMD_Internal in interface KMD_Internal"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "CSM_FW_ACL_KMD_DMZ",
+        "direction": "in",
+        "asa_interface": "KMD_DMZ",
+        "raw": "access-group CSM_FW_ACL_KMD_DMZ in interface KMD_DMZ"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "CSM_FW_ACL_KMD_Preprod",
+        "direction": "in",
+        "asa_interface": "KMD_Preprod",
+        "raw": "access-group CSM_FW_ACL_KMD_Preprod in interface KMD_Preprod"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "CSM_FW_ACL_KMD_Backup",
+        "direction": "in",
+        "asa_interface": "KMD_Backup",
+        "raw": "access-group CSM_FW_ACL_KMD_Backup in interface KMD_Backup"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "CSM_FW_ACL_KMD_INFOCARE",
+        "direction": "in",
+        "asa_interface": "KMD_INFOCARE",
+        "raw": "access-group CSM_FW_ACL_KMD_INFOCARE in interface KMD_INFOCARE"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "CSM_FW_ACL_KMD_BaneIT",
+        "direction": "in",
+        "asa_interface": "KMD_BaneIT",
+        "raw": "access-group CSM_FW_ACL_KMD_BaneIT in interface KMD_BaneIT"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "Aeven_DNOC_in",
+        "direction": "in",
+        "asa_interface": "Aeven_DNOC",
+        "raw": "access-group Aeven_DNOC_in in interface Aeven_DNOC"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "CSM_FW_ACL_KMD_Mgmt",
+        "direction": "in",
+        "asa_interface": "KMD_Mgmt",
+        "raw": "access-group CSM_FW_ACL_KMD_Mgmt in interface KMD_Mgmt"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "outside_access_in",
+        "direction": "in",
+        "asa_interface": "outside",
+        "raw": "access-group outside_access_in in interface outside"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "acc_outgoing_outside",
+        "direction": "out",
+        "asa_interface": "outside",
+        "raw": "access-group acc_outgoing_outside out interface outside"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "CSM_FW_ACL_Siemens_public",
+        "direction": "in",
+        "asa_interface": "Siemens_public",
+        "raw": "access-group CSM_FW_ACL_Siemens_public in interface Siemens_public"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "CSM_FW_ACL_inside",
+        "direction": "in",
+        "asa_interface": "inside",
+        "raw": "access-group CSM_FW_ACL_inside in interface inside"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "CSM_FW_ACL_JTL",
+        "direction": "in",
+        "asa_interface": "JTL",
+        "raw": "access-group CSM_FW_ACL_JTL in interface JTL"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "BIX-to-TMG_access_in",
+        "direction": "in",
+        "asa_interface": "BIX-to-TMG",
+        "raw": "access-group BIX-to-TMG_access_in in interface BIX-to-TMG"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "BIX-to-TMG_Internet_access",
+        "direction": "in",
+        "asa_interface": "Internet_service",
+        "raw": "access-group BIX-to-TMG_Internet_access in interface Internet_service"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "CSM_FW_ACL_PSI-KC-Server",
+        "direction": "in",
+        "asa_interface": "PSI-KC-Server",
+        "raw": "access-group CSM_FW_ACL_PSI-KC-Server in interface PSI-KC-Server"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "CSM_FW_ACL_PSI-OC-Serverr",
+        "direction": "in",
+        "asa_interface": "PSI-OC-Serverr",
+        "raw": "access-group CSM_FW_ACL_PSI-OC-Serverr in interface PSI-OC-Serverr"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "management_access_in",
+        "direction": "in",
+        "asa_interface": "management",
+        "raw": "access-group management_access_in in interface management"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "CSM_FW_ACL_Siemens_Inside_VPN",
+        "direction": "in",
+        "asa_interface": "Siemens_Inside_VPN",
+        "raw": "access-group CSM_FW_ACL_Siemens_Inside_VPN in interface Siemens_Inside_VPN"
+    },
+    {
+        "context": "Site2Site-VPN",
+        "acl": "CSM_FW_ACL_GSMR_Phase3",
+        "direction": "in",
+        "asa_interface": "GSMR_Phase3",
+        "raw": "access-group CSM_FW_ACL_GSMR_Phase3 in interface GSMR_Phase3"
     }
 ]

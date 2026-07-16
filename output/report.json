@@ -1,19 +1,82 @@
 {
+    "contexts": 5,
     "names": 40,
-    "access_lists": 1147,
-    "objects": 416,
-    "any_any_rules": 2,
-    "acl_count": 12,
+    "objects": 4395,
+    "access_lists": 101313,
+    "any_any_rules": 268,
+    "acl_count": 148,
     "top_acls": {
-        "access-in-bane1": 384,
-        "access-in-signal_program": 313,
-        "access-in-cs": 128,
-        "CSM_AAA_AUTHE_Bane1_FirewallMgt": 125,
-        "access-in-sttn_mgmt": 87,
-        "access-in-SPNS2-TRANSIT-JTTN": 37,
-        "access-in-dwdm": 34,
-        "access-in-fdrift": 14,
-        "access-in-dics": 9,
-        "access-in-fservice": 9
-    }
+        "BDK-Teknik:acc_in_inside": 22018,
+        "Site2Site-VPN:CSM_FW_ACL_KMD_DMZ": 14400,
+        "Site2Site-VPN:CSM_FW_ACL_inside": 10495,
+        "Site2Site-VPN:CSM_FW_ACL_KMD_Internal": 8351,
+        "BDK-Mgmt:access-in-bane1": 5603,
+        "BDK-Mgmt:access-in-SPNS2-TRANSIT-JTTN": 3130,
+        "BDK-Teknik:Aevenjumphost_in": 2886,
+        "Site2Site-VPN:CSM_FW_ACL_KMD_BaneIT": 2045,
+        "BDK-Enterprise:access-in-internal": 2031,
+        "BDK-Mgmt:access-in-cs": 1959,
+        "BDK-Mgmt:access-in-signal_program": 1869,
+        "BDK-Teknik:acc_in_Cibicomjumphost": 1850,
+        "BDK-Teknik:acc_in_eth-s3p1c13": 1770,
+        "BDK-Teknik:acc_in_eth-s3p1c19": 1413,
+        "BDK-Teknik:NokiaJumphosts_in": 1008,
+        "BDK-Teknik:acc_in_EXT-PROVIDERS-JTTN-JUMPHOST": 954,
+        "Site2Site-VPN:outside_access_in": 948,
+        "Site2Site-VPN:BIX-to-TMG_access_in": 905,
+        "BDK-Teknik:acc_in_eth-s3p1c7": 839,
+        "BDK-Teknik:acc_in_TDC-Secure-Mobile": 811
+    },
+    "context_reports": [
+        {
+            "context": "BDK-DSB",
+            "names": 0,
+            "objects": 13,
+            "access_lists": 431,
+            "acl_count": 2,
+            "interfaces": 2,
+            "access_groups": 2,
+            "any_any_rules": 4
+        },
+        {
+            "context": "BDK-Enterprise",
+            "names": 0,
+            "objects": 395,
+            "access_lists": 3471,
+            "acl_count": 13,
+            "interfaces": 12,
+            "access_groups": 13,
+            "any_any_rules": 20
+        },
+        {
+            "context": "BDK-Mgmt",
+            "names": 40,
+            "objects": 918,
+            "access_lists": 13276,
+            "acl_count": 12,
+            "interfaces": 11,
+            "access_groups": 10,
+            "any_any_rules": 4
+        },
+        {
+            "context": "BDK-Teknik",
+            "names": 0,
+            "objects": 1819,
+            "access_lists": 40788,
+            "acl_count": 67,
+            "interfaces": 69,
+            "access_groups": 65,
+            "any_any_rules": 230
+        },
+        {
+            "context": "Site2Site-VPN",
+            "names": 0,
+            "objects": 1250,
+            "access_lists": 43347,
+            "acl_count": 54,
+            "interfaces": 19,
+            "access_groups": 20,
+            "any_any_rules": 10
+        }
+    ]
 }

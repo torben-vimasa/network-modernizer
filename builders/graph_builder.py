@@ -645,6 +645,7 @@ class GraphBuilder:
                     "mask": i.get("mask"),
                     "hsrp_virtual_ip": i["hsrp_virtual_ip"],
                     "hsrp_state": hsrp.get("state") if hsrp else i.get("hsrp_state"),
+                    "hsrp_priority": i.get("hsrp_priority"),
                     "vrf": i.get("vrf")
                 }
             )

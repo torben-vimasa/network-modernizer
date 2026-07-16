@@ -38,6 +38,12 @@ class RouterInterfaceParser:
                         current.ip = ip_part
                         if len(parts) >= 4:
                             current.mask = parts[3]
+                            
+            elif stripped.startswith("priority "):
+                parts = stripped.split()
+
+                if len(parts) >= 2 and parts[1].isdigit():
+                    current.hsrp_priority = int(parts[1])
 
             elif stripped.startswith("ip "):
                 parts = stripped.split()

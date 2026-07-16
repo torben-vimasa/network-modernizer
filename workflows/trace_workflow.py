@@ -781,7 +781,9 @@ class TraceWorkflow:
 
             if method in [
                 "router_inventory",
-                "topology_connected_to"
+                "topology_connected_to",
+                "hsrp_priority",
+                "hsrp_active"
             ]:
                 state.set_router_target(
                     router=next_device.get("router"),

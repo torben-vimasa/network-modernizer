@@ -1,166 +1,241 @@
 import json
 from pathlib import Path
 
-config_file = Path("data/asa_config.txt")
+CONTEXTS_DIR = Path("data/contexts")
+OUTPUT_DIR = Path("output")
 
-with open(config_file, "r") as f:
-    lines = f.readlines()
 
-name_count = 0
-access_list_count = 0
-object_count = 0
-any_any_rules = []
-acl_counts = {}
-rules = []
-interfaces = []
-current_interface = None
-access_groups = []
+def parse_context_file(context_file: Path) -> dict:
+    context_name = context_file.stem
 
-for line in lines:
-    line = line.strip()
+    with open(context_file, "r", encoding="utf-8", errors="ignore") as handle:
+        lines = handle.readlines()
 
-    if line.startswith("interface "):
-        current_interface = {
-            "physical_interface": line.replace("interface ", ""),
-            "asa_interface": None,
-            "security_level": None,
-            "ip_address": None,
-            "subnet_mask": None,
-            "standby_ip": None
-        }
+    name_count = 0
+    object_count = 0
+    any_any_rules = []
+    acl_counts = {}
+    rules = []
+    interfaces = []
+    access_groups = []
+    current_interface = None
 
-    elif current_interface and line.startswith("nameif "):
-        current_interface["asa_interface"] = line.replace("nameif ", "")
+    for raw_line in lines:
+        line = raw_line.strip()
 
-    elif current_interface and line.startswith("security-level "):
-        current_interface["security_level"] = line.replace("security-level ", "")
+        if not line:
+            continue
 
-    elif current_interface and line.startswith("ip address "):
-        parts = line.split()
+        if line.startswith("interface "):
+            if current_interface is not None:
+                interfaces.append(current_interface)
 
-        if len(parts) >= 4:
-            current_interface["ip_address"] = parts[2]
-            current_interface["subnet_mask"] = parts[3]
+            current_interface = {
+                "context": context_name,
+                "physical_interface": line.replace("interface ", "", 1),
+                "asa_interface": None,
+                "security_level": None,
+                "ip_address": None,
+                "subnet_mask": None,
+                "standby_ip": None,
+                "shutdown": False
+            }
+            continue
 
-        if "standby" in parts:
-            standby_index = parts.index("standby")
-            if len(parts) > standby_index + 1:
-                current_interface["standby_ip"] = parts[standby_index + 1]
+        if current_interface is not None:
+            if line == "shutdown":
+                current_interface["shutdown"] = True
+                continue
 
-        interfaces.append(current_interface)
-        current_interface = None
+            if line.startswith("nameif "):
+                current_interface["asa_interface"] = line.replace("nameif ", "", 1)
+                continue
 
-    if line.startswith("name "):
-        name_count += 1
+            if line.startswith("security-level "):
+                current_interface["security_level"] = line.replace("security-level ", "", 1)
+                continue
 
-    if line.startswith("object network"):
-        object_count += 1
+            if line.startswith("ip address "):
+                parts = line.split()
 
-    if line.startswith("access-list "):
-        access_list_count += 1
-        parts = line.split()
+                if len(parts) >= 4:
+                    current_interface["ip_address"] = parts[2]
+                    current_interface["subnet_mask"] = parts[3]
 
-        if len(parts) > 1:
+                if "standby" in parts:
+                    standby_index = parts.index("standby")
+                    if len(parts) > standby_index + 1:
+                        current_interface["standby_ip"] = parts[standby_index + 1]
+
+                interfaces.append(current_interface)
+                current_interface = None
+                continue
+
+            if line == "!":
+                interfaces.append(current_interface)
+                current_interface = None
+                continue
+
+        if line.startswith("name "):
+            name_count += 1
+
+        if line.startswith("object network "):
+            object_count += 1
+
+        if line.startswith("access-group "):
+            parts = line.split()
+
+            if len(parts) >= 5:
+                access_groups.append({
+                    "context": context_name,
+                    "acl": parts[1],
+                    "direction": parts[2],
+                    "asa_interface": parts[4],
+                    "raw": line
+                })
+
+            continue
+
+        if line.startswith("access-list "):
+            if " remark " in f" {line} ":
+                continue
+
+            if " permit " not in f" {line} " and " deny " not in f" {line} ":
+                continue
+
+            parts = line.split()
+
+            if len(parts) < 3:
+                continue
+
             acl_name = parts[1]
             acl_counts[acl_name] = acl_counts.get(acl_name, 0) + 1
 
             rules.append({
+                "context": context_name,
                 "acl": acl_name,
-                "rule": line
+                "rule": line,
+                "asa_interface": None
             })
 
-        if " any any" in line:
-            any_any_rules.append(line)
-    if line.startswith("access-group "):
-        parts = line.split()
+            if " any any" in line or " any4 any4" in line:
+                any_any_rules.append(line)
 
-        if len(parts) >= 5:
-            access_groups.append({
-                "acl": parts[1],
-                "direction": parts[2],
-                "asa_interface": parts[4]
-            })
-            acl_to_interface = {
-    ag["acl"]: ag["asa_interface"]
-    for ag in access_groups
-}
+    if current_interface is not None:
+        interfaces.append(current_interface)
 
-for rule in rules:
-    rule["asa_interface"] = acl_to_interface.get(rule["acl"], "unknown")
-top_acls = dict(
-    sorted(
-        acl_counts.items(),
-        key=lambda x: x[1],
-        reverse=True
-    )[:10]
-)
+    acl_to_interface = {
+        access_group["acl"]: access_group["asa_interface"]
+        for access_group in access_groups
+    }
 
-report = {
-    "names": name_count,
-    "access_lists": access_list_count,
-    "objects": object_count,
-    "any_any_rules": len(any_any_rules),
-    "acl_count": len(acl_counts),
-    "top_acls": top_acls
-}
+    for rule in rules:
+        rule["asa_interface"] = acl_to_interface.get(rule["acl"], "unknown")
 
-with open("output/report.json", "w") as f:
-    json.dump(report, f, indent=4)
+    return {
+        "context": context_name,
+        "names": name_count,
+        "objects": object_count,
+        "acl_counts": acl_counts,
+        "rules": rules,
+        "interfaces": interfaces,
+        "access_groups": access_groups,
+        "any_any_rules": any_any_rules
+    }
 
-with open("output/rules.json", "w") as f:
-    json.dump(rules, f, indent=4)
 
-print("ASA Analyse")
-print("------------")
-print(f"Names: {name_count}")
-print(f"Access Lists: {access_list_count}")
-print(f"Objects: {object_count}")
-print(f"Any-Any Rules: {len(any_any_rules)}")
-print(f"ACL Count: {len(acl_counts)}")
+def main() -> None:
+    OUTPUT_DIR.mkdir(exist_ok=True)
 
-print("\nTop ACLs")
-print("--------")
-for acl, count in top_acls.items():
-    print(f"{acl}: {count}")
+    if not CONTEXTS_DIR.exists():
+        raise FileNotFoundError(f"Context directory does not exist: {CONTEXTS_DIR}")
 
-print("\nOutput gemt:")
-print("output/report.json")
-print("output/rules.json")
-largest_acl = max(acl_counts, key=acl_counts.get)
+    context_files = sorted(CONTEXTS_DIR.glob("*.txt"))
 
-largest_acl_rules = [
-    rule for rule in rules
-    if rule["acl"] == largest_acl
-]
+    if not context_files:
+        raise FileNotFoundError(f"No context files found in {CONTEXTS_DIR}")
 
-with open("output/largest_acl.json", "w") as f:
-    json.dump(largest_acl_rules, f, indent=4)
+    all_rules = []
+    all_interfaces = []
+    all_access_groups = []
+    context_reports = []
+    global_acl_counts = {}
+    total_names = 0
+    total_objects = 0
+    total_any_any = 0
 
-print(f"\nStørste ACL: {largest_acl}")
-print(f"Regler: {len(largest_acl_rules)}")
-service_counts = {}
+    print(f"Contexts found: {len(context_files)}")
 
-for rule in largest_acl_rules:
-    text = rule["rule"]
+    for context_file in context_files:
+        result = parse_context_file(context_file)
 
-    if " permit tcp " in text:
-        service_counts["tcp"] = service_counts.get("tcp", 0) + 1
+        all_rules.extend(result["rules"])
+        all_interfaces.extend(result["interfaces"])
+        all_access_groups.extend(result["access_groups"])
 
-    elif " permit udp " in text:
-        service_counts["udp"] = service_counts.get("udp", 0) + 1
+        total_names += result["names"]
+        total_objects += result["objects"]
+        total_any_any += len(result["any_any_rules"])
 
-    elif " permit icmp " in text:
-        service_counts["icmp"] = service_counts.get("icmp", 0) + 1
+        for acl_name, count in result["acl_counts"].items():
+            global_acl_counts[f"{result['context']}:{acl_name}"] = count
 
-print("\nServices i største ACL")
-print(service_counts)
-with open("output/interfaces.json", "w") as f:
-    json.dump(interfaces, f, indent=4)
+        context_reports.append({
+            "context": result["context"],
+            "names": result["names"],
+            "objects": result["objects"],
+            "access_lists": len(result["rules"]),
+            "acl_count": len(result["acl_counts"]),
+            "interfaces": len(result["interfaces"]),
+            "access_groups": len(result["access_groups"]),
+            "any_any_rules": len(result["any_any_rules"])
+        })
 
-print("output/interfaces.json")
-print(f"Interfaces fundet: {len(interfaces)}")
-with open("output/access_groups.json", "w") as f:
-    json.dump(access_groups, f, indent=4)
+        print(
+            f"{result['context']}: "
+            f"{len(result['rules'])} rules, "
+            f"{len(result['acl_counts'])} ACLs, "
+            f"{len(result['interfaces'])} interfaces, "
+            f"{len(result['access_groups'])} access-groups"
+        )
 
-print("output/access_groups.json")
-print(f"Access-groups fundet: {len(access_groups)}")
+    report = {
+        "contexts": len(context_files),
+        "names": total_names,
+        "objects": total_objects,
+        "access_lists": len(all_rules),
+        "any_any_rules": total_any_any,
+        "acl_count": len(global_acl_counts),
+        "top_acls": dict(
+            sorted(
+                global_acl_counts.items(),
+                key=lambda item: item[1],
+                reverse=True
+            )[:20]
+        ),
+        "context_reports": context_reports
+    }
+
+    for filename, content in [
+        ("report.json", report),
+        ("rules.json", all_rules),
+        ("interfaces.json", all_interfaces),
+        ("access_groups.json", all_access_groups)
+    ]:
+        with open(OUTPUT_DIR / filename, "w", encoding="utf-8") as handle:
+            json.dump(content, handle, indent=4, ensure_ascii=False)
+
+    print()
+    print("Output written:")
+    print("output/report.json")
+    print("output/rules.json")
+    print("output/interfaces.json")
+    print("output/access_groups.json")
+    print()
+    print(f"Rules: {len(all_rules)}")
+    print(f"Interfaces: {len(all_interfaces)}")
+    print(f"Access-groups: {len(all_access_groups)}")
+
+
+if __name__ == "__main__":
+    main()
