@@ -148,11 +148,12 @@ class FirewallTraversalEngine:
             and not result.next_device.get("resolved")
             and result.egress_interface
         ):
-            result.next_device["method"] = "unresolved_neighbor_on_egress_subnet"
+            result.next_device["method"] = "inventory_boundary"
+            result.next_device["inventory_boundary"] = True
             result.next_device["reason"] = (
                 f"Next-hop {route_result.next_hop} is reachable via firewall "
-                f"egress interface {result.egress_interface}, but no router "
-                f"interface owning that IP was found in the current graph"
+                f"egress interface {result.egress_interface}, but no managed "
+                f"device interface owns that IP in the current inventory"
             )
             result.next_device["confidence"] = "medium"
 

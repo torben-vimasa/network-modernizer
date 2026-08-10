@@ -11,9 +11,6 @@
         "BDK-Mgmt",
         "OBvDCPe1",
         "OBV-CAT3-FW1-1"
-      ],
-      "acl_rules": [
-        "access-in-bane1:467"
       ]
     }
   },

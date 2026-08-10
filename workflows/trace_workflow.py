@@ -429,6 +429,19 @@ class TraceWorkflow:
 
                 continue
 
+            if (
+                resolution
+                and resolution.get("type") == "inventory_boundary"
+            ):
+                reason = (
+                    f"Trace stopped at inventory boundary: "
+                    f"{resolution.get('reason')}"
+                )
+
+                explanation.add(reason)
+                state.mark_finished(reason)
+                break
+
             reason = (
                 f"Trace stopped: next hop "
                 f"{route['next_hop']} could not be "
@@ -579,6 +592,14 @@ class TraceWorkflow:
                     f"Forwarding: {forward.reason}"
                 )
 
+            if forward:
+                explanation.add(
+                    f"DEBUG Forwarding: "
+                    f"method={forward.method}, "
+                    f"resolved={forward.resolved}, "
+                    f"inventory_boundary={forward.inventory_boundary}"
+                )
+
         if (
             not next_device
             and forward
@@ -602,6 +623,18 @@ class TraceWorkflow:
                     "vrf": current_vrf,
                     "interface": forward.interface
                 }
+
+        if (
+            not next_device
+            and not resolution
+            and forward
+            and forward.inventory_boundary
+        ):
+            resolution = {
+                "type": "inventory_boundary",
+                "reason": forward.reason,
+                "confidence": "high"
+            }
 
         if not next_device and not resolution:
             resolution = self.resolver.resolve_ip(
@@ -803,6 +836,22 @@ class TraceWorkflow:
             return True
 
         next_device = traversal.next_device
+
+        if (
+            next_device
+            and next_device.get("inventory_boundary")
+        ):
+            reason = next_device.get(
+                "reason",
+                "Trace reached the managed inventory boundary"
+            )
+
+            explanation.add(
+                f"Inventory boundary: {reason}"
+            )
+
+            state.mark_finished(reason)
+            return True
 
         if (
             next_device

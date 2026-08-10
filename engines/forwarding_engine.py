@@ -31,13 +31,37 @@ class ForwardingEngine:
             exclude_device=current_device
         )
 
-        if not result.get("found"):
+        #
+        # No subnet contains the next-hop IP
+        #
+        if not result["subnet_found"]:
             return ForwardingResult(
                 resolved=False,
-                method="none",
+                method="unknown",
                 reason=f"No subnet found for {next_hop}"
             )
 
+        #
+        # Subnet exists, but no managed device owns the next-hop.
+        # This usually indicates a provider-managed CPE/PE router.
+        #
+        if not result["found"]:
+            print(
+                f"DEBUG INVENTORY BOUNDARY: "
+                f"device={current_device}, "
+                f"next_hop={next_hop}, "
+                f"subnet={result['subnet']}"
+            )
+            return ForwardingResult(
+                resolved=False,
+                method="inventory_boundary",
+                inventory_boundary=True,
+                reason=(
+                    f"Next-hop {next_hop} belongs to subnet "
+                    f"{result['subnet']}, but no managed device "
+                    f"owns the next-hop address."
+                )
+         )
         #
         # Step 3
         # HSRP lookup
@@ -147,7 +171,10 @@ class ForwardingEngine:
 
         if not subnet:
             return {
+                "subnet_found": False,
                 "found": False,
+                "subnet": None,
+                "candidate_count": 0,
                 "reason": f"No subnet found for next-hop {next_hop}",
                 "candidates": []
             }
@@ -190,8 +217,10 @@ class ForwardingEngine:
             )
 
         return {
+            "subnet_found": True,
             "found": bool(candidates),
             "subnet": subnet.name,
+            "candidate_count": len(candidates),
             "candidates": candidates
         }
 

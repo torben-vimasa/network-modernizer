@@ -169,6 +169,11 @@ def determine_status(result) -> str:
         or "no firewall route found" in text
     ):
         return "no_route"
+    #
+    # The trace reached the edge of the managed inventory.
+    #
+    if "inventory boundary" in text:
+        return "inventory_boundary"
 
     incomplete_markers = [
         "could not resolve source",
@@ -358,7 +363,7 @@ def print_pilot_result(
     )
 
     print(f"    Status : {evaluation['status']}")
-
+   
     if evaluation["devices"]:
         print("    Path   : " + " -> ".join(evaluation["devices"]))
     else:
@@ -455,6 +460,11 @@ def main() -> int:
                 pilot,
                 result
             )
+
+            if number in [7, 8]:
+                print("DEBUG EXPLANATION:")
+                for line in explanation_lines(result):
+                    print(f"    {line}")
 
             print_pilot_result(
                 number=number,
