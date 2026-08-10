@@ -1,0 +1,12 @@
+﻿
+Path                                             LineNumber Line                                                   
+----                                             ---------- ----                                                   
+C:\network-modernizer\test_import_builder.py              3 from builders.import_builder import ImportBuilder      
+C:\network-modernizer\test_import_builder.py             12 ImportBuilder(graph).build(result)                     
+C:\network-modernizer\api\digital_twin.py                 6 from builders.import_builder import ImportBuilder      
+C:\network-modernizer\api\digital_twin.py                42         self.import_builder = ImportBuilder(self.graph)
+C:\network-modernizer\api\digital_twin.py                59         self.import_builder.build(result)              
+C:\network-modernizer\api\digital_twin.py                68             self.import_builder.build(result)          
+C:\network-modernizer\builders\import_builder.py          5 class ImportBuilder:                                   
+
+

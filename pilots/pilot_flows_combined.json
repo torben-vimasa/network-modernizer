@@ -226,7 +226,7 @@
     "start": {
       "type": "firewall",
       "context": "BDK-Teknik",
-      "interface": "Aevenjumphost"
+      "interface": "Aeven_JumpHost_DMZ"
     }
   },
   {
@@ -245,7 +245,7 @@
     "start": {
       "type": "firewall",
       "context": "BDK-Teknik",
-      "interface": "Aevenjumphost"
+      "interface": "Aeven_JumpHost_DMZ"
     }
   },
   {

@@ -30,7 +30,9 @@ class FirewallTraversalEngine:
             packet.source,
             packet.destination,
             packet.protocol,
-            packet.service
+            packet.service,
+            context=result.context,
+            ingress_interface=result.ingress_interface
         )
 
         result.security = security

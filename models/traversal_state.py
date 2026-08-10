@@ -30,6 +30,7 @@ class TraversalState:
 
     finished: bool = False
     destination_reached: bool = False
+    inventory_boundary: bool = False
     stop_reason: str | None = None
 
     def key(self):
@@ -51,11 +52,13 @@ class TraversalState:
     def mark_finished(
         self,
         reason=None,
-        destination_reached=False
+        destination_reached=False,
+        inventory_boundary=False
     ):
         self.finished = True
         self.stop_reason = reason
         self.destination_reached = destination_reached
+        self.inventory_boundary = inventory_boundary
 
     def set_router_target(
         self,

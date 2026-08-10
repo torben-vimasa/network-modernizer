@@ -19,7 +19,10 @@ class ImportDispatcher:
             first = f.read(8000)
 
         # Cisco ASA
-        if "ASA Version" in first or "ASA" in first:
+        if (
+            "ASA Version" in first
+            or "Cisco Adaptive Security Appliance" in first
+        ):
             return self.asa.import_config(filename)
 
         # Cisco IOS-XR

@@ -1,0 +1,541 @@
+OBvKMDSw1#show run
+Building configuration...
+
+Current configuration : 13945 bytes
+!
+! Last configuration change at 12:59:45 CEST Tue Apr 28 2026 by T1OT-AEVN-MCAL
+! NVRAM config last updated at 12:59:46 CEST Tue Apr 28 2026 by T1OT-AEVN-MCAL
+!
+version 16.6
+service nagle
+no service pad
+service timestamps debug datetime localtime show-timezone
+service timestamps log datetime localtime show-timezone
+service password-encryption
+service compress-config
+no platform punt-keepalive disable-kernel-core
+!
+hostname OBvKMDSw1
+!
+!
+vrf definition Mgmt-vrf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+logging buffered 20000
+no logging console
+enable secret 5 $1$qbxP$6wtRTmZRDHUj5EZBCA4n50
+!
+aaa new-model
+!
+!
+aaa group server tacacs+ TACACSGROUP
+ server name TACACSSRV1
+ server name TACACSSRV2
+!
+aaa authentication login onlyvty group TACACSGROUP local
+aaa authorization exec default group TACACSGROUP local 
+aaa authorization commands 0 default group TACACSGROUP none 
+aaa authorization commands 1 default group TACACSGROUP none 
+aaa authorization commands 15 default group TACACSGROUP none 
+aaa accounting exec default start-stop group TACACSGROUP
+aaa accounting commands 0 default start-stop group TACACSGROUP
+aaa accounting commands 1 default start-stop group TACACSGROUP
+aaa accounting commands 15 default start-stop group TACACSGROUP
+aaa accounting system default start-stop group TACACSGROUP
+!
+!
+!
+!
+!
+!
+aaa session-id common
+clock timezone CEST 1 0
+clock summer-time CEST recurring last Sun Mar 2:00 last Sun Oct 3:00
+switch 1 provision ws-c3850-12xs
+!
+!
+!
+!
+!
+coap http enable
+!
+ip routing
+!
+ip vrf SIP-CPE1
+ rd 1740:1740
+!
+ip name-server 10.185.50.11 10.185.50.12
+ip domain name baneisp.dk
+!
+!
+!
+no login on-success log
+!
+!
+!
+!
+!
+!
+!
+vtp mode transparent
+udld enable
+
+!
+crypto pki trustpoint TP-self-signed-220763722
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-220763722
+ revocation-check none
+ rsakeypair TP-self-signed-220763722
+!
+!
+crypto pki certificate chain TP-self-signed-220763722
+ certificate self-signed 01
+  30820229 30820192 A0030201 02020101 300D0609 2A864886 F70D0101 05050030 
+  30312E30 2C060355 04031325 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 32323037 36333732 32301E17 0D313630 39313631 35323631 
+  305A170D 32303031 30313030 30303030 5A303031 2E302C06 03550403 1325494F 
+  532D5365 6C662D53 69676E65 642D4365 72746966 69636174 652D3232 30373633 
+  37323230 819F300D 06092A86 4886F70D 01010105 0003818D 00308189 02818100 
+  997E4DDF 6C2E5E30 4D61AB9F 0681BFA0 189AEB79 1CCB266E 6C792BB5 9E25431A 
+  BEB79985 A894B28E AD7E1909 DCB359D0 72EEDFD1 5BB70395 7B52C920 24FEB621 
+  17CAD8D0 03AF5F95 5965C9B6 EA4E6A34 03DA3095 5A7BE8EE D8332342 973B171B 
+  EBB4703C 695E7078 05F39F68 0985E5C7 3D36DEAC 6BBA7019 AEC0A319 429D3D93 
+  02030100 01A35330 51300F06 03551D13 0101FF04 05300301 01FF301F 0603551D 
+  23041830 16801438 54171248 742BE5E6 6166F3E3 C9F8949C 01B45530 1D060355 
+  1D0E0416 04143854 17124874 2BE5E661 66F3E3C9 F8949C01 B455300D 06092A86 
+  4886F70D 01010505 00038181 0013D8BF 4616A99F D3CD74F8 73748C31 E107A9A1 
+  033B7F75 73EA687F 22D0A680 7368A3BC AD6E4E30 6E1FA54B 74C26EC1 EB8A17EE 
+  9DDE4EA9 762DED3D CFF604E8 8AE0FDB9 114D4D7B BDD5B55C 05ABC05B 4ACCAAA8 
+  740433E2 87F1BEBD A0F7080D 92D02D7D 369CBC1C 494E53D6 18525733 6EFDEF0B 
+  C092F5FA D75F55AD 074DDBD8 49
+  	quit
+!
+!
+!
+diagnostic bootup level minimal
+!
+spanning-tree mode rapid-pvst
+spanning-tree portfast default
+spanning-tree portfast bpduguard default
+spanning-tree extend system-id
+spanning-tree vlan 1-708,710-730,734-739,742-1199,1201-1806,1808 priority 36864
+spanning-tree vlan 1809-4094 priority 36864
+spanning-tree vlan 709,731-733,740-741,1200,1807 priority 8192
+archive
+ log config
+  logging enable
+errdisable recovery cause udld
+errdisable recovery cause bpduguard
+errdisable recovery interval 60
+!
+username JTTN secret 5 $1$p.TS$nE0CQctMQdM/5AB7PyYUp0
+!
+redundancy
+ mode sso
+!
+!
+transceiver type all
+ monitoring
+hw-switch switch 1 logging onboard message
+!
+vlan 709
+ name TDC_Secure_Mobile
+!
+vlan 730
+ name TDC_TDC_Alarm1123
+!
+vlan 731
+ name TDC_BDK_Alarm1123
+!
+vlan 732
+ name TDC-Secure-PROD-HHT
+!
+vlan 733
+ name hht-public-jtl
+!
+vlan 740
+ name WAN-SIP-CPE1
+!
+vlan 807
+ name Cyberkey
+!
+vlan 999
+ name Unused
+!
+vlan 1200
+ name DSB
+!
+vlan 1710
+ name TDC_Secure_APN1710
+!
+vlan 1717
+ name TDC_Secure_APN1717
+!
+vlan 1740
+ name LAN-SIP-CPE1
+!
+vlan 1741
+ name LAN-SIP-CPE2
+!
+vlan 1806
+ name ext_cibicom_rgdc
+!
+vlan 1807
+ name ext_cibicom_obv
+!
+vlan 1900
+ name KMD-Internal
+!
+vlan 1901
+ name KMD-DMZ
+!
+vlan 1902
+ name KMD-PREPROD
+!
+vlan 1903
+ name KMD-BACKUP
+!
+vlan 1905
+ name KMD-DRIFT
+!
+vlan 1906
+ name KMD_INFOCARE
+!
+vlan 1907
+ name KMD-BaneIT-Client
+!
+vlan 1909
+ name Aeven_DNOC
+!
+vlan 1910
+ name KMD-Management
+!
+!
+class-map match-any system-cpp-police-topology-control
+  description Topology control
+class-map match-any system-cpp-police-sw-forward
+  description Sw forwarding, L2 LVX data, LOGGING
+class-map match-any system-cpp-default
+  description DHCP Snooping, EWLC control, EWCL data 
+class-map match-any system-cpp-police-sys-data
+  description Learning cache ovfl, Crypto Control, Exception, EGR Exception, NFL SAMPLED DATA, RPF Failed
+class-map match-any system-cpp-police-punt-webauth
+  description Punt Webauth
+class-map match-any system-cpp-police-l2lvx-control
+  description L2 LVX control packets
+class-map match-any system-cpp-police-forus
+  description Forus Address resolution and Forus traffic
+class-map match-any system-cpp-police-multicast-end-station
+  description MCAST END STATION
+class-map match-any system-cpp-police-multicast
+  description Transit Traffic and MCAST Data
+class-map match-any system-cpp-police-l2-control
+  description L2 control
+class-map match-any system-cpp-police-dot1x-auth
+  description DOT1X Auth
+class-map match-any system-cpp-police-data
+  description ICMP redirect, ICMP_GEN and BROADCAST
+class-map match-any system-cpp-police-stackwise-virt-control
+  description Stackwise Virtual
+class-map match-any non-client-nrt-class
+class-map match-any system-cpp-police-routing-control
+  description Routing control
+class-map match-any system-cpp-police-protocol-snooping
+  description Protocol snooping
+class-map match-any system-cpp-police-system-critical
+  description System Critical and Gold
+!
+policy-map system-cpp-policy
+policy-map port_child_policy
+ class non-client-nrt-class
+  bandwidth remaining ratio 10
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ vrf forwarding Mgmt-vrf
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface TenGigabitEthernet1/0/1
+ description OBvKMDSw1-ASA1.OBvDC -10GE FO- bane 9180295
+ switchport trunk allowed vlan 709,730,731,807,1200,1717,1740,1741,1806,1807
+ switchport trunk allowed vlan add 1900-1902,1905-1907,1909,1910
+ switchport mode trunk
+ load-interval 60
+ spanning-tree portfast trunk
+!
+interface TenGigabitEthernet1/0/2
+ description ERROR ON PORT 2022-11-25(PRB0041981)
+ switchport trunk allowed vlan 709,730-733,1200,1710,1717,1740,1741,1900-1910
+ switchport mode trunk
+ load-interval 60
+ shutdown
+ spanning-tree portfast trunk
+ spanning-tree cost 2000
+!
+interface TenGigabitEthernet1/0/3
+ description OBVKMDSw1 -- NNITSw
+ switchport trunk allowed vlan 1900-1910
+ switchport mode trunk
+ load-interval 60
+!
+interface TenGigabitEthernet1/0/4
+ description OBvASA1-Enterprise -10GE FO- bane 9180295
+ switchport trunk allowed vlan 709,730,731,807,1200,1717,1740,1741,1806,1807
+ switchport trunk allowed vlan add 1900-1902,1905-1907,1909,1910
+ switchport mode trunk
+ load-interval 60
+ spanning-tree portfast trunk
+!
+interface TenGigabitEthernet1/0/5
+ description OBvKMDSw1--OBvDC1 -10G FO- bane 9180296
+ switchport trunk allowed vlan none
+ switchport mode trunk
+ load-interval 60
+!
+interface TenGigabitEthernet1/0/6
+ description TDC Alarmnet 1123 bane 8180795
+ switchport trunk allowed vlan 730,731
+ switchport mode trunk
+ no logging event link-status
+ load-interval 60
+ no cdp enable
+ no snmp trap link-status
+ spanning-tree portfast disable
+ spanning-tree link-type point-to-point
+!
+interface TenGigabitEthernet1/0/7
+ description HHT over public provided VPN for JTL. To JTL-GSMR-OBV Gi0/0/0 in KH.257 rack M1. banenr 9180539
+ switchport trunk allowed vlan 732,733
+ switchport mode trunk
+!
+interface TenGigabitEthernet1/0/8
+ description LEDIG
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface TenGigabitEthernet1/0/9
+ description HHT:OBVKMDSw1--OBVFW1PRI -Ge FO- Bane 9180541
+ switchport trunk allowed vlan 732,733,1710
+ switchport mode trunk
+ no cdp enable
+ udld port disable
+!
+interface TenGigabitEthernet1/0/10
+ description Flyt fra OBV2KMDSw1--OBVFW1SEC -Ge FO- Bane 9180540
+ switchport access vlan 999
+ switchport trunk allowed vlan 732,733,1710
+ switchport mode trunk
+ no cdp enable
+ udld port disable
+!
+interface TenGigabitEthernet1/0/11
+ description OBvKMDSw1--RGDCKMDSw1 -GE FO bane 9180633
+ switchport trunk allowed vlan 709,730-733,807,1200,1710,1717,1740,1741,1806
+ switchport trunk allowed vlan add 1807,1900-1910
+ switchport mode trunk
+ load-interval 60
+ spanning-tree cost 2000
+!
+interface TenGigabitEthernet1/0/12
+ description TDC Secure for SCADA (709), Alarm1123 (730), HHT-Public (732), HHT-Public-JTL (733), SIP-CPE1 (740) - TDC HX913870.  banenr 9101052
+ switchport trunk allowed vlan 709,730,732,733,740,1710,1717
+ switchport mode trunk
+ switchport nonegotiate
+ no logging event link-status
+ load-interval 60
+ no cdp enable
+ udld port disable
+ no snmp trap link-status
+ spanning-tree portfast disable
+!
+interface TenGigabitEthernet1/1/1
+ description OBvKMDSw1--DSB-TATA-WAN-1G-HX928812
+ switchport trunk allowed vlan 1200
+ switchport mode trunk
+ switchport nonegotiate
+ load-interval 60
+ shutdown
+ udld port aggressive
+ spanning-tree portfast disable
+ spanning-tree link-type point-to-point
+!
+interface TenGigabitEthernet1/1/2
+ description LEDIG (Tidligere DSB-TATA-HX928813)
+ switchport trunk allowed vlan 1200
+ switchport mode trunk
+ switchport nonegotiate
+ load-interval 60
+ shutdown
+ udld port aggressive
+ spanning-tree portfast disable
+ spanning-tree link-type point-to-point
+!
+interface TenGigabitEthernet1/1/3
+ description ext_cibicom_obv - CHG0055983
+ switchport access vlan 1807
+ switchport mode access
+ no cdp enable
+ no snmp trap link-status
+!
+interface TenGigabitEthernet1/1/4
+ description Res GPS Lokaltog 140525-jbal
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+ no cdp enable
+ no snmp trap link-status
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan740
+ description WAN-SIP-CPE1
+ ip vrf forwarding SIP-CPE1
+ ip address 93.167.254.254 255.255.255.252
+!
+interface Vlan1740
+ description LAN-SIP-CPE1
+ ip vrf forwarding SIP-CPE1
+ ip address 93.167.254.1 255.255.255.240
+!
+interface Vlan1910
+ description Management
+ ip address 10.110.6.132 255.255.255.240
+!
+ip default-gateway 10.110.6.129
+ip forward-protocol nd
+ip telnet source-interface Vlan1910
+no ip http server
+ip http authentication local
+ip http secure-server
+ip route 0.0.0.0 0.0.0.0 10.110.6.129
+ip route vrf SIP-CPE1 128.77.191.0 255.255.255.192 93.167.254.253
+ip route vrf SIP-CPE1 128.77.191.64 255.255.255.192 93.167.254.253
+ip tacacs source-interface Vlan1910
+ip ssh source-interface Vlan1910
+ip ssh version 2
+!
+!
+ip access-list extended MGMT-ACCESS
+ permit ip host 10.185.50.51 any
+ip access-list extended VTY_ACCESS
+ permit tcp any any eq 22
+ deny   ip any any log
+!
+logging trap warnings
+logging source-interface Vlan1910
+logging host 10.185.50.51
+!
+!
+snmp-server community 2ex3me RO 20
+snmp-server community h.0p16.y RW 20
+snmp-server trap-source Vlan1910
+snmp-server location KH.258, banedanmark DataCenter2, Otto Bussesvej 8.2, 2450 Kbh.SV
+snmp-server contact NOC 16666
+snmp-server enable traps snmp linkdown linkup coldstart warmstart
+snmp-server enable traps envmon fan shutdown supply temperature status
+snmp-server host 10.185.50.51 2ex3me 
+snmp ifmib ifindex persist
+tacacs server TACACSSRV1
+ address ipv4 100.73.35.15
+ key 7 001D1A5552480A525A
+tacacs server TACACSSRV2
+ address ipv4 100.73.3.15
+ key 7 031D5258501C20181B
+!
+!
+!
+control-plane
+ service-policy input system-cpp-policy
+!
+banner exec ^C
+ *******************************************************************
+ **+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+**
+ **                  This is a private Device!!                   **
+ **  If you have no legitimate purpose for accessing this device  **
+ **              - then please exit immediately !!                **
+ **+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+**
+ *******************************************************************
+^C
+banner login ^C
+ *******************************************************************
+ **+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+**
+ **                  This is a private Device!!                   **
+ **  If you have no legitimate purpose for accessing this device  **
+ **              - then please exit immediately !!                **
+ **+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+**
+ *******************************************************************
+^C
+!
+line con 0
+ exec-timeout 30 0
+ logging synchronous
+ login authentication onlyvty
+ stopbits 1
+line aux 0
+ stopbits 1
+line vty 0 4
+ access-class VTY_ACCESS in
+ exec-timeout 30 0
+ logging synchronous
+ login authentication onlyvty
+ transport input ssh
+ transport output ssh
+line vty 5 15
+ access-class VTY_ACCESS in
+ exec-timeout 30 0
+ logging synchronous
+ login authentication onlyvty
+ transport input ssh
+ transport output ssh
+!
+ntp source Vlan1910
+ntp server 10.185.50.11
+ntp server 10.185.50.12
+!
+wsma agent exec
+ profile httplistener
+ profile httpslistener
+!
+wsma agent config
+ profile httplistener
+ profile httpslistener
+!
+wsma agent filesys
+ profile httplistener
+ profile httpslistener
+!
+wsma agent notify
+ profile httplistener
+ profile httpslistener
+!
+!
+wsma profile listener httplistener
+ transport http
+!
+wsma profile listener httpslistener
+ transport https
+!
+end
+

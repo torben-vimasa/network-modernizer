@@ -439,7 +439,10 @@ class TraceWorkflow:
                 )
 
                 explanation.add(reason)
-                state.mark_finished(reason)
+                state.mark_finished(
+                    reason=reason,
+                    inventory_boundary=True
+                )
                 break
 
             reason = (
@@ -850,7 +853,10 @@ class TraceWorkflow:
                 f"Inventory boundary: {reason}"
             )
 
-            state.mark_finished(reason)
+            state.mark_finished(
+                reason=reason,
+                inventory_boundary=True
+            )
             return True
 
         if (
@@ -923,11 +929,39 @@ class TraceWorkflow:
             )
         )
 
+    def _derive_status(self, state):
+
+        if state.destination_reached:
+            return "reachable"
+
+        if state.inventory_boundary:
+            return "inventory_boundary"
+
+        if (
+            state.security
+            and getattr(state.security, "permitted", None) is False
+        ):
+            return "denied"
+
+        reason = (state.stop_reason or "").lower()
+
+        if "no route matched" in reason:
+            return "incomplete_data"
+
+        if "could not resolve" in reason:
+            return "incomplete_data"
+
+        if "missing next-router inventory" in reason:
+            return "incomplete_data"
+
+        return "incomplete_data"
+        
     def _build_result(
         self,
         state,
         explanation
     ):
+        status = self._derive_status(state)
 
         return TraceResult(
             security=state.security,
@@ -935,5 +969,7 @@ class TraceWorkflow:
             hops=state.hops,
             firewall_hops=state.firewall_hops,
             network_hops=state.network_hops,
-            explanation=explanation
+            explanation=explanation,
+            status=status,
+            reason=state.stop_reason
         )

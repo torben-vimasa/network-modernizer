@@ -3,6 +3,8 @@ import ipaddress
 from graph.graph import KnowledgeGraph
 from models.acl_match import ACLMatch
 from models.security_result import SecurityResult
+from models.security_context import SecurityContext
+from models.security_assessment import SecurityAssessment
 
 
 class SecurityEngine:
@@ -10,10 +12,36 @@ class SecurityEngine:
     def __init__(self, graph: KnowledgeGraph):
         self.graph = graph
 
-    def is_permitted(self, source, destination, protocol=None, service=None):
+    def is_permitted(
+        self,
+        source,
+        destination,
+        protocol=None,
+        service=None,
+        context=None,
+        ingress_interface=None
+    ):
         result = SecurityResult()
 
-        for rule in self._matching_rules(source, destination, protocol, service):
+        rules = self._matching_rules(
+            source,
+            destination,
+            protocol,
+            service
+        )
+
+        if context or ingress_interface:
+            rules = [
+                rule
+                for rule in rules
+                if self._rule_applies_to_interface(
+                    rule,
+                    context,
+                    ingress_interface
+                )
+            ]
+
+        for rule in rules:
             if rule.properties.get("action") == "deny":
                 result.permitted = False
                 result.rule = rule
@@ -21,7 +49,7 @@ class SecurityEngine:
                 result.reason = f"Matched deny rule {rule.name}"
                 return result
 
-        for rule in self._matching_rules(source, destination, protocol, service):
+        for rule in rules:
             if rule.properties.get("action") == "permit":
                 result.permitted = True
                 result.rule = rule
@@ -32,7 +60,7 @@ class SecurityEngine:
         result.permitted = False
         result.reason = "No ACL rule matched"
         return result
-
+        
     def _build_acl_match(self, rule):
         acl_name = rule.properties.get("acl")
         acl_node = self.graph.find("ACL", acl_name)
@@ -188,3 +216,116 @@ class SecurityEngine:
                 return True
 
         return False
+
+    def _rule_applies_to_interface(
+        self,
+        rule,
+        context,
+        ingress_interface
+    ):
+        acl_name = rule.properties.get("acl")
+
+        if not acl_name:
+            return False
+
+        for node in self.graph.nodes.values():
+            if node.type != "ASAInterface":
+                continue
+
+            if node.properties.get("context") != context:
+                continue
+
+            interface_matches = (
+                node.properties.get("nameif") == ingress_interface
+                or node.properties.get("interface") == ingress_interface
+            )
+
+            if not interface_matches:
+                continue
+
+            for relation, neighbor in self.graph.neighbors(node.id):
+                if (
+                    relation == "USES_ACL"
+                    and neighbor.type == "ACL"
+                    and neighbor.name == acl_name
+                ):
+                    return True
+
+        return False
+
+    def evaluate_context(
+        self,
+        security_context: SecurityContext
+    ):
+        if security_context.inventory_boundary:
+            return self._evaluate_inventory_boundary(
+                security_context
+            )
+
+        return SecurityAssessment(
+            classification="unclassified",
+            disposition="observe",
+            confidence="low",
+            message="No context-aware security classification matched."
+        )
+
+    def _evaluate_inventory_boundary(
+        self,
+        security_context: SecurityContext
+    ):
+        evidence = []
+
+        if security_context.firewall_traversed:
+            evidence.append("firewall_traversed")
+
+        if security_context.acl_permitted is True:
+            evidence.append("acl_permitted")
+
+        if security_context.nat_evaluated:
+            evidence.append("nat_evaluated")
+
+        if security_context.forwarding_complete:
+            evidence.append("forwarding_complete")
+
+        if security_context.egress_interface:
+            evidence.append(
+                f"egress_interface={security_context.egress_interface}"
+            )
+
+        if security_context.next_hop:
+            evidence.append(
+                f"next_hop={security_context.next_hop}"
+            )
+
+        if (
+            security_context.forwarding_complete
+            and security_context.egress_device
+            and security_context.egress_interface
+        ):
+            return SecurityAssessment(
+                classification="permitted_to_inventory_boundary",
+                disposition="observe",
+                confidence="high",
+                message=(
+                    "Traffic is permitted through the managed security path "
+                    "and exits the known inventory."
+                ),
+                device=security_context.egress_device,
+                interface=security_context.egress_interface,
+                next_hop=security_context.next_hop,
+                evidence=evidence
+            )
+
+        return SecurityAssessment(
+            classification="inventory_boundary_unresolved",
+            disposition="observe",
+            confidence="medium",
+            message=(
+                "Trace reached the inventory boundary, but managed-path "
+                "forwarding could not be fully established."
+            ),
+            device=security_context.egress_device,
+            interface=security_context.egress_interface,
+            next_hop=security_context.next_hop,
+            evidence=evidence
+        )

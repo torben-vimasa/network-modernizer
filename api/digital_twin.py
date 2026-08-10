@@ -18,6 +18,7 @@ from importers.router_importer import RouterImporter
 from models.application_trace_result import ApplicationTraceResult
 
 from workflows.trace_workflow import TraceWorkflow
+from models.security_context import SecurityContext
 
 
 class DigitalTwin:
@@ -116,7 +117,7 @@ class DigitalTwin:
 
             return None
 
-        return self.trace.trace(
+        trace = self.trace.trace(
             source=source,
             destination=destination,
             protocol=protocol,
@@ -125,6 +126,16 @@ class DigitalTwin:
             vrf=vrf,
             route_destination=route_destination or destination
         )
+
+        trace.security_assessment = self._evaluate_trace_security(
+            trace=trace,
+            source=source,
+            destination=destination,
+            protocol=protocol,
+            service=service
+        )
+
+        return trace
 
     def trace_application(
         self,
@@ -224,3 +235,97 @@ class DigitalTwin:
 
         with open(file, encoding="utf-8") as f:
             return json.load(f)
+
+    def _evaluate_trace_security(
+        self,
+        trace,
+        source,
+        destination,
+        protocol=None,
+        service=None
+    ):
+        if trace is None:
+            return None
+
+        firewall_hops = [
+            hop
+            for hop in getattr(trace, "network_hops", [])
+            if getattr(hop, "hop_type", None) == "firewall"
+        ]
+
+        last_firewall = (
+            firewall_hops[-1]
+            if firewall_hops
+            else None
+        )
+
+        acl_permitted = None
+
+        if last_firewall is not None:
+            policy = getattr(last_firewall, "policy", None)
+
+            if policy == "permit":
+                acl_permitted = True
+            elif policy == "deny":
+                acl_permitted = False
+
+        security_context = SecurityContext(
+            source=source,
+            destination=destination,
+            protocol=protocol,
+            service=service,
+
+            trace_status=getattr(trace, "status", None),
+
+            egress_device=(
+                getattr(last_firewall, "device", None)
+                if last_firewall
+                else None
+            ),
+
+            egress_interface=(
+                getattr(last_firewall, "egress_interface", None)
+                if last_firewall
+                else None
+            ),
+
+            next_hop=(
+                getattr(last_firewall, "next_hop", None)
+                if last_firewall
+                else None
+            ),
+
+            firewall_traversed=bool(firewall_hops),
+
+            acl_permitted=acl_permitted,
+
+            nat_evaluated=bool(
+                last_firewall
+                and getattr(last_firewall, "nat_rule", None)
+            ),
+
+            inventory_boundary=(
+                getattr(trace, "status", None)
+                == "inventory_boundary"
+            ),
+
+            forwarding_complete=bool(
+                getattr(trace, "status", None)
+                == "inventory_boundary"
+                and last_firewall
+                and getattr(
+                    last_firewall,
+                    "egress_interface",
+                    None
+                )
+                and getattr(
+                    last_firewall,
+                    "next_hop",
+                    None
+                )
+            )
+        )
+
+        return self.security.evaluate_context(
+            security_context
+        )
