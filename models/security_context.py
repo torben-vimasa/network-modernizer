@@ -24,3 +24,6 @@ class SecurityContext:
 
     inventory_boundary: bool = False
     forwarding_complete: bool = False
+
+    acl_rule: str | None = None
+    security_reason: str | None = None

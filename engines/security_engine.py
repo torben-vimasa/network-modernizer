@@ -41,26 +41,34 @@ class SecurityEngine:
                 )
             ]
 
-        for rule in rules:
-            if rule.properties.get("action") == "deny":
-                result.permitted = False
-                result.rule = rule
-                result.match = self._build_acl_match(rule)
-                result.reason = f"Matched deny rule {rule.name}"
-                return result
+        rules = sorted(
+            rules,
+            key=lambda rule: int(
+                rule.properties.get("sequence") or 999999
+            )
+        )
 
         for rule in rules:
-            if rule.properties.get("action") == "permit":
-                result.permitted = True
-                result.rule = rule
-                result.match = self._build_acl_match(rule)
-                result.reason = f"Matched permit rule {rule.name}"
-                return result
+            action = rule.properties.get("action")
+
+            if action not in ["permit", "deny"]:
+                continue
+
+            result.permitted = action == "permit"
+            result.rule = rule
+            result.match = self._build_acl_match(rule)
+            result.reason = (
+                f"Matched {action} rule {rule.name} "
+                f"(sequence {rule.properties.get('sequence')})"
+            )
+
+            return result
 
         result.permitted = False
         result.reason = "No ACL rule matched"
         return result
-        
+
+                      
     def _build_acl_match(self, rule):
         acl_name = rule.properties.get("acl")
         acl_node = self.graph.find("ACL", acl_name)
@@ -151,8 +159,63 @@ class SecurityEngine:
         if not service:
             return True
 
-        return rule.properties.get("service") == service
+        service_type = rule.properties.get("service_type")
+        rule_service = rule.properties.get("service")
 
+        #
+        # Exact service match:
+        # eq 443
+        #
+        if service_type == "eq":
+            return (
+                str(rule_service).lower()
+                == str(service).lower()
+            )
+
+        #
+        # Port range:
+        # range 7937 9936
+        #
+        if service_type == "range":
+            start = rule.properties.get("service_start")
+            end = rule.properties.get("service_end")
+
+            try:
+                requested = int(service)
+                start = int(start)
+                end = int(end)
+            except (TypeError, ValueError):
+                return False
+
+            return start <= requested <= end
+
+        #
+        # Service object-group.
+        # Existing object-group handling remains permissive
+        # until group membership is evaluated explicitly.
+        #
+        if service_type == "object-group":
+            return bool(rule_service)
+
+        #
+        # No destination service restriction:
+        # e.g. "permit tcp host A host B"
+        #
+        if not service_type and not rule_service:
+            return True
+
+        #
+        # Backward compatibility for rules that only have
+        # the legacy service field.
+        #
+        if rule_service is not None:
+            return (
+                str(rule_service).lower()
+                == str(service).lower()
+            )
+
+        return False
+        
     def _targets(self, node_id, relationship_type):
         return [
             neighbor
@@ -262,6 +325,11 @@ class SecurityEngine:
                 security_context
             )
 
+        if security_context.trace_status == "denied":
+            return self._evaluate_denied(
+                security_context
+            )
+
         return SecurityAssessment(
             classification="unclassified",
             disposition="observe",
@@ -328,4 +396,37 @@ class SecurityEngine:
             interface=security_context.egress_interface,
             next_hop=security_context.next_hop,
             evidence=evidence
+        )
+
+    def _evaluate_denied(
+        self,
+        security_context: SecurityContext
+    ):
+        if security_context.acl_rule:
+            return SecurityAssessment(
+                classification="explicit_policy_deny",
+                disposition="deny",
+                confidence="high",
+                message=(
+                    "Traffic was explicitly denied by a matching ACL rule."
+                ),
+                device=security_context.egress_device,
+                interface=security_context.ingress_interface,
+                evidence=[
+                    f"acl_rule={security_context.acl_rule}"
+                ]
+            )
+
+        return SecurityAssessment(
+            classification="no_acl_match",
+            disposition="deny",
+            confidence="high",
+            message=(
+                "Traffic was denied because no ACL rule matched."
+            ),
+            device=security_context.egress_device,
+            interface=security_context.ingress_interface,
+            evidence=[
+                "implicit_deny"
+            ]
         )

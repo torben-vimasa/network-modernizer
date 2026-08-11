@@ -28,6 +28,7 @@ class GraphBuilder:
         self._add_router_inventory(graph)
 
         self._add_firewall_interfaces(graph)
+        self._add_access_groups(graph)
         self._add_router_interfaces(graph)
         self._add_firewall_bgp(graph)
         
@@ -199,6 +200,9 @@ class GraphBuilder:
                         "source": rule.source,
                         "destination": rule.destination,
                         "service": rule.service,
+                        "service_type": getattr(rule, "service_type", None),
+                        "service_start": getattr(rule, "service_start", None),
+                        "service_end": getattr(rule, "service_end", None),
                         "hitcnt": rule.hitcnt,
                         "source_type": getattr(rule, "source_type", None),
                         "source_value": getattr(rule, "source_value", None),
@@ -428,6 +432,7 @@ class GraphBuilder:
                 f'{interface["device"]}:{interface_name}',
                 {
                     "device": interface["device"],
+                    "context": interface["device"],
                     "interface": interface["interface"],
                     "nameif": interface.get("nameif"),
                     "vlan": interface.get("vlan"),
@@ -731,3 +736,41 @@ class GraphBuilder:
             return str(ipaddress.ip_network(f"{ip}/{mask}", strict=False))
 
         return None
+
+    def _add_access_groups(self, graph):
+        file = self.output_dir / "access_groups.json"
+
+        if not file.exists():
+            return
+
+        access_groups = self._load_json("access_groups.json")
+
+        for entry in access_groups:
+            context = entry.get("context") or entry.get("device")
+            interface = (
+                entry.get("asa_interface")
+                or entry.get("interface")
+            )
+            acl_name = entry.get("acl")
+
+            if not context or not interface or not acl_name:
+                continue
+
+            interface_node = graph.find(
+                "ASAInterface",
+                f"{context}:{interface}"
+            )
+
+            if not interface_node:
+                continue
+
+            acl_node = graph.add_node(
+                "ACL",
+                acl_name
+            )
+
+            graph.add_relationship(
+                interface_node.id,
+                acl_node,
+                "USES_ACL"
+            )

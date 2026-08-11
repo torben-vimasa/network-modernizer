@@ -24,6 +24,10 @@ class ACLRule:
 
     service: str | None = None
 
+    service_type: str | None = None
+    service_start: str | None = None
+    service_end: str | None = None
+    
     remark: str | None = None
 
     hitcnt: int | None = None

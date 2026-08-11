@@ -963,7 +963,7 @@ class TraceWorkflow:
     ):
         status = self._derive_status(state)
 
-        return TraceResult(
+        result = TraceResult(
             security=state.security,
             route=state.last_route_result,
             hops=state.hops,
@@ -973,3 +973,20 @@ class TraceWorkflow:
             status=status,
             reason=state.stop_reason
         )
+
+        packet = state.packet
+
+        if packet is not None:
+            result.security_assessment = (
+                self.twin._evaluate_trace_security(
+                    trace=result,
+                    source=packet.source,
+                    destination=packet.destination,
+                    protocol=packet.protocol,
+                    service=packet.service
+                )
+            )
+        else:
+            result.security_assessment = None
+
+        return result

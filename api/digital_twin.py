@@ -127,15 +127,7 @@ class DigitalTwin:
             route_destination=route_destination or destination
         )
 
-        trace.security_assessment = self._evaluate_trace_security(
-            trace=trace,
-            source=source,
-            destination=destination,
-            protocol=protocol,
-            service=service
-        )
-
-        return trace
+     
 
     def trace_application(
         self,
@@ -269,13 +261,29 @@ class DigitalTwin:
             elif policy == "deny":
                 acl_permitted = False
 
+        security = getattr(trace, "security", None)
+
+        acl_rule = None
+        security_reason = None
+
+        if security is not None:
+            security_reason = getattr(security, "reason", None)
+
+            rule = getattr(security, "rule", None)
+
+            if rule is not None:
+                acl_rule = getattr(rule, "name", None)
+
         security_context = SecurityContext(
             source=source,
             destination=destination,
             protocol=protocol,
             service=service,
-
+            
             trace_status=getattr(trace, "status", None),
+
+            acl_rule=acl_rule,
+            security_reason=security_reason,
 
             egress_device=(
                 getattr(last_firewall, "device", None)

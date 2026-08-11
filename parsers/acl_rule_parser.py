@@ -48,6 +48,12 @@ class ACLRuleParser:
 
             hitcnt = self._find_hitcnt(line)
 
+            service_info = self._extract_service(parts)
+
+            if service:
+                service_info["service"] = service
+                service_info["service_type"] = "object-group"
+
             rule = ACLRule(
                 acl_name=acl_name,
                 sequence=index,
@@ -63,7 +69,11 @@ class ACLRuleParser:
                 destination_type=destination_type,
                 destination_value=destination_value,
 
-                service=service or self._extract_service(parts),
+                service=service_info["service"],
+                service_type=service_info["service_type"],
+                service_start=service_info["service_start"],
+                service_end=service_info["service_end"],
+
                 hitcnt=hitcnt,
                 properties={
                     "raw": line
@@ -153,10 +163,37 @@ class ACLRuleParser:
         return int(value)
 
     def _extract_service(self, parts):
+        result = {
+            "service": None,
+            "service_type": None,
+            "service_start": None,
+            "service_end": None
+        }
+
         if "eq" in parts:
             index = parts.index("eq")
 
             if len(parts) > index + 1:
-                return parts[index + 1]
+                value = parts[index + 1]
 
-        return None
+                result["service"] = value
+                result["service_type"] = "eq"
+                result["service_start"] = value
+                result["service_end"] = value
+
+                return result
+
+        if "range" in parts:
+            index = parts.index("range")
+
+            if len(parts) > index + 2:
+                start = parts[index + 1]
+                end = parts[index + 2]
+
+                result["service_type"] = "range"
+                result["service_start"] = start
+                result["service_end"] = end
+
+                return result
+
+        return result
