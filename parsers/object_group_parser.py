@@ -43,11 +43,20 @@ class ObjectParser:
                 continue
 
             if line.startswith("object-group service "):
-                name = line.replace("object-group service ", "").strip()
+                parts = line.split()
+
+                if len(parts) < 3:
+                    continue
+
+                name = parts[2]
 
                 current_group = ObjectGroup(
                     name=f"{context_name}:{name}"
                 )
+
+                object_groups.append(current_group)
+                current_object = None
+                continue
 
                 object_groups.append(current_group)
                 current_object = None
@@ -85,6 +94,10 @@ class ObjectParser:
 
                 elif line.startswith("service-object "):
                     member = line.replace("service-object ", "").strip()
+                    current_group.members.append(member)
+
+                elif line.startswith("port-object "):
+                    member = line.replace("port-object ", "").strip()
                     current_group.members.append(member)
 
         return network_objects, object_groups

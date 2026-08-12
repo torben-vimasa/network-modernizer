@@ -19,7 +19,10 @@ class SecurityEngine:
         protocol=None,
         service=None,
         context=None,
-        ingress_interface=None
+        ingress_interface=None,
+        egress_interface=None,
+        defer_global_acl=False
+        
     ):
         result = SecurityResult()
 
@@ -30,14 +33,47 @@ class SecurityEngine:
             service
         )
 
-        if context or ingress_interface:
+        #
+        # During firewall pre-check we may not know the egress
+        # interface yet. FTD global ACL evaluation is therefore
+        # deferred until firewall routing has resolved egress.
+        #
+        if defer_global_acl and context and not egress_interface:
+            firewall = self.graph.find(
+                "Firewall",
+                context
+            )
+
+            has_global_acl = False
+
+            if firewall:
+                for relation, neighbor in self.graph.neighbors(
+                    firewall.id
+                ):
+                    if (
+                        relation == "USES_GLOBAL_ACL"
+                        and neighbor.type == "ACL"
+                    ):
+                        has_global_acl = True
+                        break
+
+            if has_global_acl:
+                result.permitted = True
+                result.reason = (
+                    "Global ACL evaluation deferred until "
+                    "firewall egress interface is resolved"
+                )
+                return result
+
+        if context or ingress_interface or egress_interface:
             rules = [
                 rule
                 for rule in rules
                 if self._rule_applies_to_interface(
                     rule,
                     context,
-                    ingress_interface
+                    ingress_interface,
+                    egress_interface
                 )
             ]
 
@@ -66,8 +102,8 @@ class SecurityEngine:
 
         result.permitted = False
         result.reason = "No ACL rule matched"
-        return result
 
+        return result
                       
     def _build_acl_match(self, rule):
         acl_name = rule.properties.get("acl")
@@ -265,6 +301,34 @@ class SecurityEngine:
             parts = raw.split()
 
             #
+            # FTD service group port-object:
+            #
+            # eq 1514
+            # range 49152 65535
+            #
+            if len(parts) >= 2 and parts[0].lower() == "eq":
+                member_service = parts[1].lower()
+
+                if member_service == requested_service:
+                    return True
+
+                continue
+
+            if len(parts) >= 3 and parts[0].lower() == "range":
+                try:
+                    start = int(parts[1])
+                    end = int(parts[2])
+                    requested = int(service)
+                except (TypeError, ValueError):
+                    continue
+
+                if start <= requested <= end:
+                    return True
+
+                continue
+
+
+            #
             # Nested service object-group:
             # group-object SOME_GROUP
             #
@@ -349,6 +413,43 @@ class SecurityEngine:
             return True
 
         object_value = node.properties.get("value")
+        object_type = node.properties.get("type")
+
+        #
+        # Object-group members may be references to another
+        # context-scoped NetworkObject.
+        #
+        # Example:
+        # OBV-CAT3-FW1-1:HOST-172.27.210.20--JTTN
+        #
+        if object_type == "raw_member" and object_value:
+            referenced_node = self.graph.find(
+                "NetworkObject",
+                object_value
+            )
+
+            if (
+                referenced_node
+                and referenced_node.id != node.id
+            ):
+                return self._network_object_matches(
+                    referenced_node,
+                    value
+                )
+
+            #
+            # raw_member may also reference a nested ObjectGroup.
+            #
+            referenced_group = self.graph.find(
+                "ObjectGroup",
+                object_value
+            )
+
+            if referenced_group:
+                return self._object_group_matches(
+                    referenced_group,
+                    value
+                )
 
         if object_value == value:
             return True
@@ -371,9 +472,11 @@ class SecurityEngine:
         if node.name.endswith(f":host {value}"):
             return True
 
-        if node.properties.get("type") == "network":
+        if object_type in ["network", "subnet"]:
             try:
-                return ipaddress.ip_address(value) in ipaddress.ip_network(
+                return ipaddress.ip_address(
+                    value
+                ) in ipaddress.ip_network(
                     object_value,
                     strict=False
                 )
@@ -382,13 +485,38 @@ class SecurityEngine:
 
         return False
 
-    def _object_group_matches(self, node, value):
+    def _object_group_matches(
+        self,
+        node,
+        value,
+        visited=None
+    ):
+        if visited is None:
+            visited = set()
+
+        if node.id in visited:
+            return False
+
+        visited.add(node.id)
+
         for relation, member in self.graph.neighbors(node.id):
             if relation != "HAS_MEMBER":
                 continue
 
-            if self._node_matches_value(member, value):
-                return True
+            if member.type == "NetworkObject":
+                if self._network_object_matches(
+                    member,
+                    value
+                ):
+                    return True
+
+            elif member.type == "ObjectGroup":
+                if self._object_group_matches(
+                    member,
+                    value,
+                    visited
+                ):
+                    return True
 
         return False
 
@@ -396,13 +524,52 @@ class SecurityEngine:
         self,
         rule,
         context,
-        ingress_interface
+        ingress_interface,
+        egress_interface=None
     ):
         acl_name = rule.properties.get("acl")
 
         if not acl_name:
             return False
 
+        #
+        # If rule carries an explicit context, it must match
+        # the firewall currently being evaluated.
+        #
+        rule_context = rule.properties.get("context")
+
+        if (
+            rule_context
+            and rule_context != context
+        ):
+            return False
+
+        #
+        # FTD advanced rules may explicitly specify
+        # the source/ingress interface.
+        #
+        source_ifc = rule.properties.get("source_ifc")
+
+        if (
+            source_ifc
+            and source_ifc != ingress_interface
+        ):
+            return False
+
+        destination_ifc = rule.properties.get(
+            "destination_ifc"
+        )
+
+        if (
+            destination_ifc
+            and egress_interface
+            and destination_ifc != egress_interface
+        ):
+            return False
+
+        #
+        # Classic ASA interface ACL
+        #
         for node in self.graph.nodes.values():
             if node.type != "ASAInterface":
                 continue
@@ -412,7 +579,8 @@ class SecurityEngine:
 
             interface_matches = (
                 node.properties.get("nameif") == ingress_interface
-                or node.properties.get("interface") == ingress_interface
+                or
+                node.properties.get("interface") == ingress_interface
             )
 
             if not interface_matches:
@@ -421,6 +589,25 @@ class SecurityEngine:
             for relation, neighbor in self.graph.neighbors(node.id):
                 if (
                     relation == "USES_ACL"
+                    and neighbor.type == "ACL"
+                    and neighbor.name == acl_name
+                ):
+                    return True
+
+        #
+        # FTD global ACL
+        #
+        firewall = self.graph.find(
+            "Firewall",
+            context
+        )
+
+        if firewall:
+            for relation, neighbor in self.graph.neighbors(
+                firewall.id
+            ):
+                if (
+                    relation == "USES_GLOBAL_ACL"
                     and neighbor.type == "ACL"
                     and neighbor.name == acl_name
                 ):
@@ -439,6 +626,11 @@ class SecurityEngine:
 
         if security_context.trace_status == "denied":
             return self._evaluate_denied(
+                security_context
+            )
+
+        if security_context.acl_permitted is True:
+            return self._evaluate_permitted(
                 security_context
             )
 
@@ -509,6 +701,43 @@ class SecurityEngine:
             next_hop=security_context.next_hop,
             evidence=evidence
         )
+
+    def _evaluate_permitted(
+        self,
+        security_context: SecurityContext
+    ):
+        evidence = []
+
+        if security_context.firewall_traversed:
+            evidence.append("firewall_traversed")
+
+        evidence.append("acl_permitted")
+
+        if security_context.acl_rule:
+            evidence.append(
+                f"acl_rule={security_context.acl_rule}"
+            )
+
+        if security_context.ingress_interface:
+            evidence.append(
+                f"ingress_interface={security_context.ingress_interface}"
+            )
+
+        if security_context.ingress_device:
+            evidence.append(
+                f"ingress_device={security_context.ingress_device}"
+            )
+
+        return SecurityAssessment(
+            classification="permitted_by_policy",
+            disposition="allow",
+            confidence="high",
+            message="Traffic was permitted by a matching ACL rule.",
+            device=security_context.ingress_device,
+            interface=security_context.ingress_interface,
+            evidence=evidence
+        )
+
 
     def _evaluate_denied(
         self,

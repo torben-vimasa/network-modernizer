@@ -126,7 +126,7 @@ class DigitalTwin:
             vrf=vrf,
             route_destination=route_destination or destination
         )
-
+        return trace
      
 
     def trace_application(

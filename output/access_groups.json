@@ -768,5 +768,425 @@
         "direction": "in",
         "asa_interface": "GSMR_Phase3",
         "raw": "access-group CSM_FW_ACL_GSMR_Phase3 in interface GSMR_Phase3"
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "acl": "CSM_FW_ACL_",
+        "direction": "global",
+        "asa_interface": null,
+        "raw": "access-group CSM_FW_ACL_ global"
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "acl": "CSM_FW_ACL_",
+        "direction": "global",
+        "asa_interface": null,
+        "raw": "access-group CSM_FW_ACL_ global"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-00-SPNS2-DEVICE-MGMT",
+        "direction": "in",
+        "asa_interface": "TCCE-CAT2DMZ-00-SPNS2-DEVICE-MGMT-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-00-SPNS2-DEVICE-MGMT in interface TCCE-CAT2DMZ-00-SPNS2-DEVICE-MGMT-LINKNET"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-01-AAA-DNS-NTP",
+        "direction": "in",
+        "asa_interface": "TCCE-CAT2DMZ-01-AAA-DNS-NTP-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-01-AAA-DNS-NTP in interface TCCE-CAT2DMZ-01-AAA-DNS-NTP-LINKNET"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-02-MGMT-SERVICES",
+        "direction": "in",
+        "asa_interface": "TCCE-CAT2DMZ-02-MGMT-SERVICES-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-02-MGMT-SERVICES in interface TCCE-CAT2DMZ-02-MGMT-SERVICES-LINKNET"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-04-MONITORING",
+        "direction": "in",
+        "asa_interface": "TCCE-CAT2DMZ-04-MONITORING-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-04-MONITORING in interface TCCE-CAT2DMZ-04-MONITORING-LINKNET"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-05-MGMT-VXRAIL",
+        "direction": "in",
+        "asa_interface": "TCCE-CAT2DMZ-05-MGMT-VXRAIL-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-05-MGMT-VXRAIL in interface TCCE-CAT2DMZ-05-MGMT-VXRAIL-LINKNET"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-06-IDRAC-VXRAIL",
+        "direction": "in",
+        "asa_interface": "TCCE-CAT2DMZ-06-IDRAC-VXRAIL-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-06-IDRAC-VXRAIL in interface TCCE-CAT2DMZ-06-IDRAC-VXRAIL-LINKNET"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER",
+        "direction": "in",
+        "asa_interface": "TCCE-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER in interface TCCE-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER-LINKNET"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP",
+        "direction": "in",
+        "asa_interface": "TCCE-CAT2DMZ-09-EXT-PROVIDERS-JUMP-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP in interface TCCE-CAT2DMZ-09-EXT-PROVIDERS-JUMP-LINKNET"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-14-BDK-JUMP",
+        "direction": "in",
+        "asa_interface": "TCCE-CAT2DMZ-14-BDK-JUMP-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-14-BDK-JUMP in interface TCCE-CAT2DMZ-14-BDK-JUMP-LINKNET"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-15-AEVEN-JUMP",
+        "direction": "in",
+        "asa_interface": "TCCE-CAT2DMZ-15-AEVEN-JUMP-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-15-AEVEN-JUMP in interface TCCE-CAT2DMZ-15-AEVEN-JUMP-LINKNET"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-CAT3DMZ-TRANSIT-CAT2DMZ",
+        "direction": "in",
+        "asa_interface": "TCCE-CAT2DMZ-TRANSIT-OBV-CAT3DMZ",
+        "raw": "access-group IN-CAT3DMZ-TRANSIT-CAT2DMZ in interface TCCE-CAT2DMZ-TRANSIT-OBV-CAT3DMZ"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "OUT-CAT2DMZ-TRANSIT-CAT3DMZ",
+        "direction": "out",
+        "asa_interface": "TCCE-CAT2DMZ-TRANSIT-OBV-CAT3DMZ",
+        "raw": "access-group OUT-CAT2DMZ-TRANSIT-CAT3DMZ out interface TCCE-CAT2DMZ-TRANSIT-OBV-CAT3DMZ"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-CAT3DMZ-TRANSIT-CAT2DMZ",
+        "direction": "in",
+        "asa_interface": "TCCE-CAT2DMZ-TRANSIT-RGDC-CAT3DMZ",
+        "raw": "access-group IN-CAT3DMZ-TRANSIT-CAT2DMZ in interface TCCE-CAT2DMZ-TRANSIT-RGDC-CAT3DMZ"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "OUT-CAT2DMZ-TRANSIT-CAT3DMZ",
+        "direction": "out",
+        "asa_interface": "TCCE-CAT2DMZ-TRANSIT-RGDC-CAT3DMZ",
+        "raw": "access-group OUT-CAT2DMZ-TRANSIT-CAT3DMZ out interface TCCE-CAT2DMZ-TRANSIT-RGDC-CAT3DMZ"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-TCCE-CAT2-NET_MGMT_BDK_CORE_A1-TRANSIT-CAT2DMZ",
+        "direction": "in",
+        "asa_interface": "TRANSIT-TCCE-CAT2-NET_MGMT_BDK_CORE_A1",
+        "raw": "access-group IN-TCCE-CAT2-NET_MGMT_BDK_CORE_A1-TRANSIT-CAT2DMZ in interface TRANSIT-TCCE-CAT2-NET_MGMT_BDK_CORE_A1"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-TCCE-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ",
+        "direction": "in",
+        "asa_interface": "TRANSIT-TCCE-CAT2-NET_MGMT_BDK_STTN_A_TCCE1A",
+        "raw": "access-group IN-TCCE-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ in interface TRANSIT-TCCE-CAT2-NET_MGMT_BDK_STTN_A_TCCE1A"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-TCCE-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ",
+        "direction": "in",
+        "asa_interface": "TRANSIT-TCCE-CAT2-NET_MGMT_BDK_STTN_A_TCCE2A",
+        "raw": "access-group IN-TCCE-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ in interface TRANSIT-TCCE-CAT2-NET_MGMT_BDK_STTN_A_TCCE2A"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-TCCE-CAT2-NET_MGMT_BDK_CORE_B1-TRANSIT-CAT2DMZ",
+        "direction": "in",
+        "asa_interface": "TRANSIT-TCCE-CAT2-NET_MGMT_BDK_CORE_B1",
+        "raw": "access-group IN-TCCE-CAT2-NET_MGMT_BDK_CORE_B1-TRANSIT-CAT2DMZ in interface TRANSIT-TCCE-CAT2-NET_MGMT_BDK_CORE_B1"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-TCCE-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ",
+        "direction": "in",
+        "asa_interface": "TRANSIT-TCCE-CAT2-NET_MGMT_BDK_STTN_B_TCCE1B",
+        "raw": "access-group IN-TCCE-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ in interface TRANSIT-TCCE-CAT2-NET_MGMT_BDK_STTN_B_TCCE1B"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-TCCE-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ",
+        "direction": "in",
+        "asa_interface": "TRANSIT-TCCE-CAT2-NET_MGMT_BDK_STTN_B_TCCE2B",
+        "raw": "access-group IN-TCCE-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ in interface TRANSIT-TCCE-CAT2-NET_MGMT_BDK_STTN_B_TCCE2B"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-12-CAT2-LINUX-REPOSITORY",
+        "direction": "in",
+        "asa_interface": "TCCE-CAT2DMZ-12-CAT2-LINUX-REPOSITORY-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-12-CAT2-LINUX-REPOSITORY in interface TCCE-CAT2DMZ-12-CAT2-LINUX-REPOSITORY-LINKNET"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-13-CAT2-ANTIVIRUS",
+        "direction": "in",
+        "asa_interface": "TCCE-CAT2DMZ-13-CAT2-ANTIVIRUS-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-13-CAT2-ANTIVIRUS in interface TCCE-CAT2DMZ-13-CAT2-ANTIVIRUS-LINKNET"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN",
+        "direction": "in",
+        "asa_interface": "TCCE-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN in interface TCCE-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN-LINKNET"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG",
+        "direction": "in",
+        "asa_interface": "TCCE-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG in interface TCCE-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-07-BACKUP-VXRAIL",
+        "direction": "in",
+        "asa_interface": "TCCE-CAT2DMZ-07-BACKUP-VXRAIL-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-07-BACKUP-VXRAIL in interface TCCE-CAT2DMZ-07-BACKUP-VXRAIL-LINKNET"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-TRANSIT-SPNS1-OBVCORE",
+        "direction": "in",
+        "asa_interface": "TRANSIT-SPNS1-OBVCORE01",
+        "raw": "access-group IN-TRANSIT-SPNS1-OBVCORE in interface TRANSIT-SPNS1-OBVCORE01"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-TRANSIT-SPNS1-OBVCORE",
+        "direction": "in",
+        "asa_interface": "TRANSIT-SPNS1-OBVCORE02",
+        "raw": "access-group IN-TRANSIT-SPNS1-OBVCORE in interface TRANSIT-SPNS1-OBVCORE02"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-TRANSIT-TCCE-CAT2-FTSVOIP-A",
+        "direction": "in",
+        "asa_interface": "TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCE1A",
+        "raw": "access-group IN-TRANSIT-TCCE-CAT2-FTSVOIP-A in interface TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCE1A"
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "acl": "IN-TRANSIT-TCCE-CAT2-FTSVOIP-A",
+        "direction": "in",
+        "asa_interface": "TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCE2A",
+        "raw": "access-group IN-TRANSIT-TCCE-CAT2-FTSVOIP-A in interface TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCE2A"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-00-SPNS2-DEVICE-MGMT",
+        "direction": "in",
+        "asa_interface": "TCCW-CAT2DMZ-00-SPNS2-DEVICE-MGMT-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-00-SPNS2-DEVICE-MGMT in interface TCCW-CAT2DMZ-00-SPNS2-DEVICE-MGMT-LINKNET"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-01-AAA-DNS-NTP",
+        "direction": "in",
+        "asa_interface": "TCCW-CAT2DMZ-01-AAA-DNS-NTP-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-01-AAA-DNS-NTP in interface TCCW-CAT2DMZ-01-AAA-DNS-NTP-LINKNET"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-02-MGMT-SERVICES",
+        "direction": "in",
+        "asa_interface": "TCCW-CAT2DMZ-02-MGMT-SERVICES-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-02-MGMT-SERVICES in interface TCCW-CAT2DMZ-02-MGMT-SERVICES-LINKNET"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-04-MONITORING",
+        "direction": "in",
+        "asa_interface": "TCCW-CAT2DMZ-04-MONITORING-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-04-MONITORING in interface TCCW-CAT2DMZ-04-MONITORING-LINKNET"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-05-MGMT-VXRAIL",
+        "direction": "in",
+        "asa_interface": "TCCW-CAT2DMZ-05-MGMT-VXRAIL-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-05-MGMT-VXRAIL in interface TCCW-CAT2DMZ-05-MGMT-VXRAIL-LINKNET"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-06-IDRAC-VXRAIL",
+        "direction": "in",
+        "asa_interface": "TCCW-CAT2DMZ-06-IDRAC-VXRAIL-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-06-IDRAC-VXRAIL in interface TCCW-CAT2DMZ-06-IDRAC-VXRAIL-LINKNET"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-07-BACKUP-VXRAIL",
+        "direction": "in",
+        "asa_interface": "TCCW-CAT2DMZ-07-BACKUP-VXRAIL-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-07-BACKUP-VXRAIL in interface TCCW-CAT2DMZ-07-BACKUP-VXRAIL-LINKNET"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-TRANSIT-SPNS1-TCCWCORE",
+        "direction": "in",
+        "asa_interface": "TRANSIT-SPNS1-TCCWCORE02",
+        "raw": "access-group IN-TRANSIT-SPNS1-TCCWCORE in interface TRANSIT-SPNS1-TCCWCORE02"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP",
+        "direction": "in",
+        "asa_interface": "TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMP-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-09-EXT-PROVIDERS-JUMP in interface TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMP-LINKNET"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN",
+        "direction": "in",
+        "asa_interface": "TCCW-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN in interface TCCW-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN-LINKNET"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG",
+        "direction": "in",
+        "asa_interface": "TCCW-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG in interface TCCW-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-12-CAT2-LINUX-REPOSITORY",
+        "direction": "in",
+        "asa_interface": "TCCW-CAT2DMZ-12-CAT2-LINUX-REPOSITORY-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-12-CAT2-LINUX-REPOSITORY in interface TCCW-CAT2DMZ-12-CAT2-LINUX-REPOSITORY-LINKNET"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-13-CAT2-ANTIVIRUS",
+        "direction": "in",
+        "asa_interface": "TCCW-CAT2DMZ-13-CAT2-ANTIVIRUS-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-13-CAT2-ANTIVIRUS in interface TCCW-CAT2DMZ-13-CAT2-ANTIVIRUS-LINKNET"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-14-BDK-JUMP",
+        "direction": "in",
+        "asa_interface": "TCCW-CAT2DMZ-14-BDK-JUMP-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-14-BDK-JUMP in interface TCCW-CAT2DMZ-14-BDK-JUMP-LINKNET"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-15-AEVEN-JUMP",
+        "direction": "in",
+        "asa_interface": "TCCW-CAT2DMZ-15-AEVEN-JUMP-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-15-AEVEN-JUMP in interface TCCW-CAT2DMZ-15-AEVEN-JUMP-LINKNET"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-CAT3DMZ-TRANSIT-CAT2DMZ",
+        "direction": "in",
+        "asa_interface": "TCCW-CAT2DMZ-TRANSIT-OBV-CAT3DMZ",
+        "raw": "access-group IN-CAT3DMZ-TRANSIT-CAT2DMZ in interface TCCW-CAT2DMZ-TRANSIT-OBV-CAT3DMZ"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "OUT-CAT2DMZ-TRANSIT-CAT3DMZ",
+        "direction": "out",
+        "asa_interface": "TCCW-CAT2DMZ-TRANSIT-OBV-CAT3DMZ",
+        "raw": "access-group OUT-CAT2DMZ-TRANSIT-CAT3DMZ out interface TCCW-CAT2DMZ-TRANSIT-OBV-CAT3DMZ"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-CAT3DMZ-TRANSIT-CAT2DMZ",
+        "direction": "in",
+        "asa_interface": "TCCW-CAT2DMZ-TRANSIT-RGDC-CAT3DMZ",
+        "raw": "access-group IN-CAT3DMZ-TRANSIT-CAT2DMZ in interface TCCW-CAT2DMZ-TRANSIT-RGDC-CAT3DMZ"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "OUT-CAT2DMZ-TRANSIT-CAT3DMZ",
+        "direction": "out",
+        "asa_interface": "TCCW-CAT2DMZ-TRANSIT-RGDC-CAT3DMZ",
+        "raw": "access-group OUT-CAT2DMZ-TRANSIT-CAT3DMZ out interface TCCW-CAT2DMZ-TRANSIT-RGDC-CAT3DMZ"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-TCCW-CAT2-NET_MGMT_BDK_CORE_A1-TRANSIT-CAT2DMZ",
+        "direction": "in",
+        "asa_interface": "TRANSIT-TCCW-CAT2-NET_MGMT_BDK_CORE_A1",
+        "raw": "access-group IN-TCCW-CAT2-NET_MGMT_BDK_CORE_A1-TRANSIT-CAT2DMZ in interface TRANSIT-TCCW-CAT2-NET_MGMT_BDK_CORE_A1"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ",
+        "direction": "in",
+        "asa_interface": "TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_A_TCCW1A",
+        "raw": "access-group IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ in interface TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_A_TCCW1A"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ",
+        "direction": "in",
+        "asa_interface": "TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_A_TCCW2A",
+        "raw": "access-group IN-TCCW-CAT2-NET_MGMT_BDK_STTN_A-TRANSIT-CAT2DMZ in interface TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_A_TCCW2A"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-TCCW-CAT2-NET_MGMT_BDK_CORE_B1-TRANSIT-CAT2DMZ",
+        "direction": "in",
+        "asa_interface": "TRANSIT-TCCW-CAT2-NET_MGMT_BDK_CORE_B1",
+        "raw": "access-group IN-TCCW-CAT2-NET_MGMT_BDK_CORE_B1-TRANSIT-CAT2DMZ in interface TRANSIT-TCCW-CAT2-NET_MGMT_BDK_CORE_B1"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-TCCW-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ",
+        "direction": "in",
+        "asa_interface": "TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_B_TCCW1B",
+        "raw": "access-group IN-TCCW-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ in interface TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_B_TCCW1B"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-TCCW-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ",
+        "direction": "in",
+        "asa_interface": "TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_B_TCCW2B",
+        "raw": "access-group IN-TCCW-CAT2-NET_MGMT_BDK_STTN_B-TRANSIT-CAT2DMZ in interface TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_B_TCCW2B"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-TRANSIT-SPNS1-TCCWCORE",
+        "direction": "in",
+        "asa_interface": "TRANSIT-SPNS1-TCCWCORE01",
+        "raw": "access-group IN-TRANSIT-SPNS1-TCCWCORE in interface TRANSIT-SPNS1-TCCWCORE01"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER",
+        "direction": "in",
+        "asa_interface": "TCCW-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER-LINKNET",
+        "raw": "access-group IN-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER in interface TCCW-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER-LINKNET"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-TRANSIT-TCCW-CAT2-FTSVOIP-A",
+        "direction": "in",
+        "asa_interface": "TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCW1A",
+        "raw": "access-group IN-TRANSIT-TCCW-CAT2-FTSVOIP-A in interface TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCW1A"
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "acl": "IN-TRANSIT-TCCW-CAT2-FTSVOIP-A",
+        "direction": "in",
+        "asa_interface": "TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCW2A",
+        "raw": "access-group IN-TRANSIT-TCCW-CAT2-FTSVOIP-A in interface TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCW2A"
     }
 ]

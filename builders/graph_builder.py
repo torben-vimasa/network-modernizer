@@ -143,6 +143,9 @@ class GraphBuilder:
         network_objects_file = self.output_dir / "network_objects.json"
         object_groups_file = self.output_dir / "object_groups.json"
 
+        #
+        # Add all concrete network objects first.
+        #
         if network_objects_file.exists():
             for obj in self._load_json("network_objects.json"):
                 graph.add_node(
@@ -154,9 +157,16 @@ class GraphBuilder:
                     }
                 )
 
+        #
+        # First create all ObjectGroup nodes.
+        #
+        groups = []
+
         if object_groups_file.exists():
-            for group in self._load_json("object_groups.json"):
-                group_node = graph.add_node(
+            groups = self._load_json("object_groups.json")
+
+            for group in groups:
+                graph.add_node(
                     "ObjectGroup",
                     group["name"],
                     {
@@ -164,17 +174,59 @@ class GraphBuilder:
                     }
                 )
 
-                for member in group["members"]:
-                    member_node = graph.add_node(
-                        "NetworkObject",
-                        member,
-                        {
-                            "type": "raw_member",
-                            "value": member
-                        }
+        #
+        # Then create HAS_MEMBER relationships.
+        #
+        # Doing this as a second pass ensures nested ObjectGroups
+        # already exist before we resolve group-object references.
+        #
+        for group in groups:
+            group_node_id = f"ObjectGroup:{group['name']}"
+
+            for member in group["members"]:
+
+                #
+                # Prefer an already parsed NetworkObject.
+                #
+                existing_node = graph.find(
+                    "NetworkObject",
+                    member
+                )
+
+                if existing_node:
+                    member_id = existing_node.id
+
+                else:
+                    #
+                    # group-object may reference another ObjectGroup.
+                    #
+                    existing_group = graph.find(
+                        "ObjectGroup",
+                        member
                     )
 
-                    graph.add_relationship(group_node, member_node, "HAS_MEMBER")
+                    if existing_group:
+                        member_id = existing_group.id
+
+                    else:
+                        #
+                        # Only create a raw placeholder when the
+                        # referenced object/group is genuinely unknown.
+                        #
+                        member_id = graph.add_node(
+                            "NetworkObject",
+                            member,
+                            {
+                                "type": "raw_member",
+                                "value": member
+                            }
+                        )
+
+                graph.add_relationship(
+                    group_node_id,
+                    member_id,
+                    "HAS_MEMBER"
+                )
 
     def _add_acl_rules(self, graph):
         rules_file = self.output_dir / "rules.json"
@@ -208,6 +260,11 @@ class GraphBuilder:
                         "source_value": getattr(rule, "source_value", None),
                         "destination_type": getattr(rule, "destination_type", None),
                         "destination_value": getattr(rule, "destination_value", None),
+
+                        "context": rule.properties.get("context"),
+                        "source_ifc": rule.properties.get("source_ifc"),
+                        "destination_ifc": rule.properties.get("destination_ifc"),
+
                         "raw": rule.properties.get("raw")
                     }
                 )
@@ -752,8 +809,42 @@ class GraphBuilder:
                 or entry.get("interface")
             )
             acl_name = entry.get("acl")
+            direction = entry.get("direction")
 
-            if not context or not interface or not acl_name:
+            if not context or not acl_name:
+                continue
+
+            #
+            # FTD global ACL
+            #
+            # access-group CSM_FW_ACL_ global
+            #
+            if direction == "global":
+                firewall_node = graph.find(
+                    "Firewall",
+                    context
+                )
+
+                if not firewall_node:
+                    continue
+
+                acl_node = graph.add_node(
+                    "ACL",
+                    acl_name
+                )
+
+                graph.add_relationship(
+                    firewall_node.id,
+                    acl_node,
+                    "USES_GLOBAL_ACL"
+                )
+
+                continue
+
+            #
+            # Classic ASA interface ACL
+            #
+            if not interface:
                 continue
 
             interface_node = graph.find(

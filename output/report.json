@@ -1,10 +1,12 @@
 {
     "contexts": 5,
+    "firewalls": 4,
+    "input_files": 9,
     "names": 40,
-    "objects": 4395,
-    "access_lists": 101313,
-    "any_any_rules": 268,
-    "acl_count": 148,
+    "objects": 7354,
+    "access_lists": 108023,
+    "any_any_rules": 289,
+    "acl_count": 201,
     "top_acls": {
         "BDK-Teknik:acc_in_inside": 22018,
         "Site2Site-VPN:CSM_FW_ACL_KMD_DMZ": 14400,
@@ -12,6 +14,8 @@
         "Site2Site-VPN:CSM_FW_ACL_KMD_Internal": 8351,
         "BDK-Mgmt:access-in-bane1": 5603,
         "BDK-Mgmt:access-in-SPNS2-TRANSIT-JTTN": 3130,
+        "RGDC-CAT3-FW1-1:CSM_FW_ACL_": 2957,
+        "OBV-CAT3-FW1-1:CSM_FW_ACL_": 2917,
         "BDK-Teknik:Aevenjumphost_in": 2886,
         "Site2Site-VPN:CSM_FW_ACL_KMD_BaneIT": 2045,
         "BDK-Enterprise:access-in-internal": 2031,
@@ -23,9 +27,7 @@
         "BDK-Teknik:NokiaJumphosts_in": 1008,
         "BDK-Teknik:acc_in_EXT-PROVIDERS-JTTN-JUMPHOST": 954,
         "Site2Site-VPN:outside_access_in": 948,
-        "Site2Site-VPN:BIX-to-TMG_access_in": 905,
-        "BDK-Teknik:acc_in_eth-s3p1c7": 839,
-        "BDK-Teknik:acc_in_TDC-Secure-Mobile": 811
+        "Site2Site-VPN:BIX-to-TMG_access_in": 905
     },
     "context_reports": [
         {
@@ -77,6 +79,46 @@
             "interfaces": 19,
             "access_groups": 20,
             "any_any_rules": 10
+        },
+        {
+            "context": "OBV-CAT3-FW1-1",
+            "names": 0,
+            "objects": 1124,
+            "access_lists": 2917,
+            "acl_count": 1,
+            "interfaces": 46,
+            "access_groups": 1,
+            "any_any_rules": 4
+        },
+        {
+            "context": "RGDC-CAT3-FW1-1",
+            "names": 0,
+            "objects": 1124,
+            "access_lists": 2958,
+            "acl_count": 2,
+            "interfaces": 48,
+            "access_groups": 1,
+            "any_any_rules": 4
+        },
+        {
+            "context": "TCCE-CAT2-FW1",
+            "names": 0,
+            "objects": 357,
+            "access_lists": 417,
+            "acl_count": 23,
+            "interfaces": 29,
+            "access_groups": 29,
+            "any_any_rules": 7
+        },
+        {
+            "context": "TCCW-CAT2-FW1",
+            "names": 0,
+            "objects": 354,
+            "access_lists": 418,
+            "acl_count": 27,
+            "interfaces": 29,
+            "access_groups": 29,
+            "any_any_rules": 6
         }
     ]
 }

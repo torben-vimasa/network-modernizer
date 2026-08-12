@@ -32,7 +32,8 @@ class FirewallTraversalEngine:
             packet.protocol,
             packet.service,
             context=result.context,
-            ingress_interface=result.ingress_interface
+            ingress_interface=result.ingress_interface,
+            defer_global_acl=True
         )
 
         result.security = security
@@ -93,6 +94,32 @@ class FirewallTraversalEngine:
                     or interface.get("name")
                     or interface.get("interface")
                 )
+
+            #
+            # Final context-aware security evaluation.
+            #
+            # FTD global ACL rules may specify both source_ifc
+            # and destination_ifc. destination_ifc can only be
+            # validated after firewall routing has resolved egress.
+            #
+            final_security = self.twin.security.is_permitted(
+                packet.source,
+                packet.destination,
+                packet.protocol,
+                packet.service,
+                context=result.context,
+                ingress_interface=result.ingress_interface,
+                egress_interface=result.egress_interface
+            )
+
+            result.security = final_security
+
+            if not final_security.permitted:
+                result.output_packet = translated_packet
+                result.permitted = False
+                result.reason = final_security.reason
+                return result
+
 
                 #
         # A route with an egress interface but no next hop

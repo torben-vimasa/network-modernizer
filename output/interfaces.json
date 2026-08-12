@@ -1128,5 +1128,1525 @@
         "subnet_mask": "255.255.255.240",
         "standby_ip": "10.138.63.82",
         "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1",
+        "asa_interface": null,
+        "security_level": null,
+        "ip_address": null,
+        "subnet_mask": null,
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3001",
+        "asa_interface": "OBV-CAT3DMZ-00-SPNS2-DEVICE-MGMT-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.33.21",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3301",
+        "asa_interface": "OBV-CAT3DMZ-01-AAA-DNS-NTP-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.34.1",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3302",
+        "asa_interface": "OBV-CAT3DMZ-02-MGMT-SERVICES-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.34.5",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3304",
+        "asa_interface": "OBV-CAT3DMZ-04-MONITORING-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.34.13",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3309",
+        "asa_interface": "OBV-CAT3DMZ-09-MGMT-JUMPHOST-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.34.33",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3310",
+        "asa_interface": "OBV-CAT3DMZ-10-API-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.34.37",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3311",
+        "asa_interface": "OBV-CAT3DMZ-11-COMM-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.34.41",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3312",
+        "asa_interface": "OBV-CAT3DMZ-12-DWH-FE-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.34.45",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3313",
+        "asa_interface": "OBV-CAT3DMZ-13-DWH-BE-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.34.49",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3316",
+        "asa_interface": "OBV-CAT3DMZ-16-GA-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.34.61",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3317",
+        "asa_interface": "OBV-CAT3DMZ-17-MGMT-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.34.65",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3318",
+        "asa_interface": "OBV-CAT3DMZ-18-MSVC-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.34.69",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3319",
+        "asa_interface": "OBV-CAT3DMZ-19-TOPODB-BE-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.34.73",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3320",
+        "asa_interface": "OBV-CAT3DMZ-20-TOPODB-FE-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.34.77",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3321",
+        "asa_interface": "OBV-CAT3DMZ-21-REPO-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.34.81",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3322",
+        "asa_interface": "OBV-CAT3DMZ-22-ZABBIX-MON-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.34.85",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3323",
+        "asa_interface": "OBV-CAT3DMZ-23-MSVC-BE-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.34.89",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3324",
+        "asa_interface": "OBV-CAT3DMZ-24-GA2-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.34.93",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3364",
+        "asa_interface": "OBV-CAT3DMZ-BROKER-DMZ-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.34.253",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3500",
+        "asa_interface": "OBV-CAT3DMZ-05-SZ-MGMT-VXRAIL-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.65.1",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3501",
+        "asa_interface": "OBV-CAT3DMZ-06-SZ-IDRAC-VXRAIL-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.65.5",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3502",
+        "asa_interface": "OBV-CAT3DMZ-07-BROKER-IDRAC-VXRAIL",
+        "security_level": "0",
+        "ip_address": "100.73.65.9",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3511",
+        "asa_interface": "OBV-CAT3DMZ-33-SW-CROSS-FRONTEND",
+        "security_level": "0",
+        "ip_address": "100.73.65.45",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3512",
+        "asa_interface": "OBV-CAT3DMZ-34-SW-WTS",
+        "security_level": "0",
+        "ip_address": "100.73.65.49",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3513",
+        "asa_interface": "OBV-CAT3DMZ-35-SW-CROSS-BACKEND",
+        "security_level": "0",
+        "ip_address": "100.73.65.53",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3514",
+        "asa_interface": "OBV-CAT3DMZ-36-SW-BACKEND",
+        "security_level": "0",
+        "ip_address": "100.73.65.57",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3515",
+        "asa_interface": "OBV-CAT3DMZ-37-SW-REPO",
+        "security_level": "0",
+        "ip_address": "100.73.65.61",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3516",
+        "asa_interface": "OBV-CAT3DMZ-38-SW-OUTGOING-PROXY",
+        "security_level": "0",
+        "ip_address": "100.73.65.65",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3517",
+        "asa_interface": "OBV-CAT3DMZ-39-SW-REVERSE-PROXY",
+        "security_level": "0",
+        "ip_address": "100.73.65.69",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3520",
+        "asa_interface": "OBV-CAT3DMZ-42-SZ-NETFLOW-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.65.81",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3522",
+        "asa_interface": "OBV-CAT3DMZ-44-SW-CRO-MGMT",
+        "security_level": "0",
+        "ip_address": "100.73.65.89",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3523",
+        "asa_interface": "OBV-CAT3DMZ-45-CATALYST-CENTER",
+        "security_level": "0",
+        "ip_address": "100.73.65.93",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3524",
+        "asa_interface": "OBV-CAT3DMZ-46-SW-CITRIX-SVR-ENV",
+        "security_level": "0",
+        "ip_address": "100.73.65.97",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3527",
+        "asa_interface": "OBV-CAT3DMZ-49-NETWORKER-SERVER",
+        "security_level": "0",
+        "ip_address": "100.73.65.109",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3528",
+        "asa_interface": "OBV-CAT3DMZ-50-DATADOMAIN-SERVER",
+        "security_level": "0",
+        "ip_address": "100.73.65.113",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3529",
+        "asa_interface": "OBV-CAT3DMZ-51-TPS-INT-SERVER-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.65.117",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3531",
+        "asa_interface": "OBV-CAT3DMZ-ERTMS-DMZ-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.65.125",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3534",
+        "asa_interface": "OBV-CAT3DMZ-55-MDR-Sensor",
+        "security_level": "0",
+        "ip_address": "100.73.65.137",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel2",
+        "asa_interface": null,
+        "security_level": null,
+        "ip_address": null,
+        "subnet_mask": null,
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel2.2010",
+        "asa_interface": "OBV-CAT3DMZ-TRANSIT-TCCE-CAT2DMZ",
+        "security_level": "0",
+        "ip_address": "100.72.33.14",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel2.2011",
+        "asa_interface": "OBV-CAT3DMZ-TRANSIT-TCCW-CAT2DMZ",
+        "security_level": "0",
+        "ip_address": "100.72.1.18",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel3",
+        "asa_interface": null,
+        "security_level": null,
+        "ip_address": null,
+        "subnet_mask": null,
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel3.3100",
+        "asa_interface": "OBV-CAT3DMZ-TRANSIT-JTTN",
+        "security_level": "0",
+        "ip_address": "100.73.32.1",
+        "subnet_mask": "255.255.255.248",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Port-channel48",
+        "asa_interface": null,
+        "security_level": null,
+        "ip_address": null,
+        "subnet_mask": null,
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "OBV-CAT3-FW1-1",
+        "physical_interface": "Ethernet1/8",
+        "asa_interface": "diagnostic",
+        "security_level": "0",
+        "ip_address": null,
+        "subnet_mask": null,
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1",
+        "asa_interface": null,
+        "security_level": null,
+        "ip_address": null,
+        "subnet_mask": null,
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3001",
+        "asa_interface": "RGDC-CAT3DMZ-00-SPNS2-DEVICE-MGMT-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.1.21",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3301",
+        "asa_interface": "RGDC-CAT3DMZ-01-AAA-DNS-NTP-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.2.1",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3302",
+        "asa_interface": "RGDC-CAT3DMZ-02-MGMT-SERVICES-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.2.5",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3304",
+        "asa_interface": "RGDC-CAT3DMZ-04-MONITORING-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.2.13",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3309",
+        "asa_interface": "RGDC-CAT3DMZ-09-MGMT-JUMPHOST-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.2.33",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3310",
+        "asa_interface": "RGDC-CAT3DMZ-10-API-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.2.37",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3311",
+        "asa_interface": "RGDC-CAT3DMZ-11-COMM-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.2.41",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3312",
+        "asa_interface": "RGDC-CAT3DMZ-12-DWH-FE-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.2.45",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3313",
+        "asa_interface": "RGDC-CAT3DMZ-13-DWH-BE-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.2.49",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3316",
+        "asa_interface": "RGDC-CAT3DMZ-16-GA-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.2.61",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3317",
+        "asa_interface": "RGDC-CAT3DMZ-17-MGMT-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.2.65",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3318",
+        "asa_interface": "RGDC-CAT3DMZ-18-MSVC-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.2.69",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3319",
+        "asa_interface": "RGDC-CAT3DMZ-19-TOPODB-BE-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.2.73",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3320",
+        "asa_interface": "RGDC-CAT3DMZ-20-TOPODB-FE-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.2.77",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3321",
+        "asa_interface": "RGDC-CAT3DMZ-21-REPO-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.2.81",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3322",
+        "asa_interface": "RGDC-CAT3DMZ-22-ZABBIX-MON-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.2.85",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3323",
+        "asa_interface": "RGDC-CAT3DMZ-23-MSVC-BE-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.2.89",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3324",
+        "asa_interface": "RGDC-CAT3DMZ-24-GA2-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.2.93",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3364",
+        "asa_interface": "RGDC-CAT3DMZ-BROKER-DMZ-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.2.253",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3500",
+        "asa_interface": "RGDC-CAT3DMZ-05-SZ-MGMT-VXRAIL-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.64.1",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3501",
+        "asa_interface": "RGDC-CAT3DMZ-06-SZ-IDRAC-VXRAIL-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.64.5",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3502",
+        "asa_interface": "RGDC-CAT3DMZ-07-BROKER-IDRAC-VXRAIL",
+        "security_level": "0",
+        "ip_address": "100.73.64.9",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3511",
+        "asa_interface": "RGDC-CAT3DMZ-33-SW-CROSS-FRONTEND",
+        "security_level": "0",
+        "ip_address": "100.73.64.45",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3512",
+        "asa_interface": "RGDC-CAT3DMZ-34-SW-WTS",
+        "security_level": "0",
+        "ip_address": "100.73.64.49",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3513",
+        "asa_interface": "RGDC-CAT3DMZ-35-SW-CROSS-BACKEND",
+        "security_level": "0",
+        "ip_address": "100.73.64.53",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3514",
+        "asa_interface": "RGDC-CAT3DMZ-36-SW-BACKEND",
+        "security_level": "0",
+        "ip_address": "100.73.64.57",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3515",
+        "asa_interface": "RGDC-CAT3DMZ-37-SW-REPO",
+        "security_level": "0",
+        "ip_address": "100.73.64.61",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3516",
+        "asa_interface": "RGDC-CAT3DMZ-38-SW-OUTGOING-PROXY",
+        "security_level": "0",
+        "ip_address": "100.73.64.65",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3517",
+        "asa_interface": "RGDC-CAT3DMZ-39-SW-REVERSE-PROXY",
+        "security_level": "0",
+        "ip_address": "100.73.64.69",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3520",
+        "asa_interface": "RGDC-CAT3DMZ-42-SZ-NETFLOW-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.64.81",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3522",
+        "asa_interface": "RGDC-CAT3DMZ-44-SW-CRO-MGMT",
+        "security_level": "0",
+        "ip_address": "100.73.64.89",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3523",
+        "asa_interface": "RGDC-CAT3DMZ-45-CATALYST-CENTER",
+        "security_level": "0",
+        "ip_address": "100.73.64.93",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3524",
+        "asa_interface": "RGDC-CAT3DMZ-46-SW-CITRIX-SVR-ENV",
+        "security_level": "0",
+        "ip_address": "100.73.64.97",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3527",
+        "asa_interface": "RGDC-CAT3DMZ-49-NETWORKER-SERVER",
+        "security_level": "0",
+        "ip_address": "100.73.64.109",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3528",
+        "asa_interface": "RGDC-CAT3DMZ-50-DATADOMAIN-SERVER",
+        "security_level": "0",
+        "ip_address": "100.73.64.113",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3529",
+        "asa_interface": "RGDC-CAT3DMZ-51-TPS-INT-SERVER-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.64.117",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3531",
+        "asa_interface": "RGDC-CAT3DMZ-ERTMS-DMZ-LINKNET",
+        "security_level": "0",
+        "ip_address": "100.73.64.125",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel1.3534",
+        "asa_interface": "RGDC-CAT3DMZ-55-MDA-Sensor",
+        "security_level": "0",
+        "ip_address": "100.73.64.137",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel2",
+        "asa_interface": null,
+        "security_level": null,
+        "ip_address": null,
+        "subnet_mask": null,
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel2.2012",
+        "asa_interface": "RGDC-CAT3DMZ-TRANSIT-TCCE-CAT2DMZ",
+        "security_level": "0",
+        "ip_address": "100.72.1.14",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel2.2013",
+        "asa_interface": "RGDC-CAT3DMZ-TRANSIT-TCCW-CAT2DMZ",
+        "security_level": "0",
+        "ip_address": "100.72.33.18",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel3",
+        "asa_interface": null,
+        "security_level": null,
+        "ip_address": null,
+        "subnet_mask": null,
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel3.3100",
+        "asa_interface": "RGDC-CAT3DMZ-TRANSIT-JTTN-PE1",
+        "security_level": "0",
+        "ip_address": "100.73.0.1",
+        "subnet_mask": "255.255.255.248",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel3.3101",
+        "asa_interface": "RGDC-CAT3DMZ-TRANSIT-BANE1",
+        "security_level": "0",
+        "ip_address": "100.73.0.9",
+        "subnet_mask": "255.255.255.248",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel3.3102",
+        "asa_interface": "RGDC-CAT3DMZ-TRANSIT-SIGNAL-PROGRAM",
+        "security_level": "0",
+        "ip_address": "100.73.0.17",
+        "subnet_mask": "255.255.255.248",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Port-channel48",
+        "asa_interface": null,
+        "security_level": null,
+        "ip_address": null,
+        "subnet_mask": null,
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "RGDC-CAT3-FW1-1",
+        "physical_interface": "Ethernet1/8",
+        "asa_interface": "diagnostic",
+        "security_level": "0",
+        "ip_address": null,
+        "subnet_mask": null,
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan1665",
+        "asa_interface": "TEST",
+        "security_level": "50",
+        "ip_address": null,
+        "subnet_mask": null,
+        "standby_ip": null,
+        "shutdown": true
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2001",
+        "asa_interface": "TCCE-CAT2DMZ-00-SPNS2-DEVICE-MGMT-LINKNET",
+        "security_level": "90",
+        "ip_address": "100.72.33.21",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2301",
+        "asa_interface": "TCCE-CAT2DMZ-01-AAA-DNS-NTP-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.34.1",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2302",
+        "asa_interface": "TCCE-CAT2DMZ-02-MGMT-SERVICES-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.34.5",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2304",
+        "asa_interface": "TCCE-CAT2DMZ-04-MONITORING-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.34.13",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2305",
+        "asa_interface": "TCCE-CAT2DMZ-05-MGMT-VXRAIL-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.34.17",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2306",
+        "asa_interface": "TCCE-CAT2DMZ-06-IDRAC-VXRAIL-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.34.21",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2307",
+        "asa_interface": "TCCE-CAT2DMZ-07-BACKUP-VXRAIL-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.34.25",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2308",
+        "asa_interface": null,
+        "security_level": "50",
+        "ip_address": null,
+        "subnet_mask": null,
+        "standby_ip": null,
+        "shutdown": true
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2309",
+        "asa_interface": "TCCE-CAT2DMZ-09-EXT-PROVIDERS-JUMP-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.34.33",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2310",
+        "asa_interface": "TCCE-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.34.37",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2311",
+        "asa_interface": "TCCE-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.34.41",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2312",
+        "asa_interface": "TCCE-CAT2DMZ-12-CAT2-LINUX-REPOSITORY-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.34.45",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2313",
+        "asa_interface": "TCCE-CAT2DMZ-13-CAT2-ANTIVIRUS-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.34.49",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2314",
+        "asa_interface": "TCCE-CAT2DMZ-14-BDK-JUMP-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.34.53",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2315",
+        "asa_interface": "TCCE-CAT2DMZ-15-AEVEN-JUMP-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.34.57",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2318",
+        "asa_interface": "TCCE-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.34.69",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2010",
+        "asa_interface": "TCCE-CAT2DMZ-TRANSIT-OBV-CAT3DMZ",
+        "security_level": "0",
+        "ip_address": "100.72.33.13",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2013",
+        "asa_interface": "TCCE-CAT2DMZ-TRANSIT-RGDC-CAT3DMZ",
+        "security_level": "0",
+        "ip_address": "100.72.33.17",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2100",
+        "asa_interface": "TRANSIT-TCCE-CAT2-NET_MGMT_BDK_CORE_A1",
+        "security_level": "99",
+        "ip_address": "100.72.32.1",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2128",
+        "asa_interface": "TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCE1A",
+        "security_level": "99",
+        "ip_address": "100.72.32.97",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2129",
+        "asa_interface": "TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCE2A",
+        "security_level": "99",
+        "ip_address": "100.72.32.101",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2134",
+        "asa_interface": "TRANSIT-TCCE-CAT2-NET_MGMT_BDK_STTN_A_TCCE1A",
+        "security_level": "99",
+        "ip_address": "100.72.32.121",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2135",
+        "asa_interface": "TRANSIT-TCCE-CAT2-NET_MGMT_BDK_STTN_A_TCCE2A",
+        "security_level": "99",
+        "ip_address": "100.72.32.125",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2200",
+        "asa_interface": "TRANSIT-TCCE-CAT2-NET_MGMT_BDK_CORE_B1",
+        "security_level": "99",
+        "ip_address": "100.72.32.129",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2234",
+        "asa_interface": "TRANSIT-TCCE-CAT2-NET_MGMT_BDK_STTN_B_TCCE1B",
+        "security_level": "99",
+        "ip_address": "100.72.32.249",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2235",
+        "asa_interface": "TRANSIT-TCCE-CAT2-NET_MGMT_BDK_STTN_B_TCCE2B",
+        "security_level": "99",
+        "ip_address": "100.72.32.253",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2753",
+        "asa_interface": "TRANSIT-SPNS1-OBVCORE01",
+        "security_level": "90",
+        "ip_address": "100.75.1.10",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCE-CAT2-FW1",
+        "physical_interface": "vlan2754",
+        "asa_interface": "TRANSIT-SPNS1-OBVCORE02",
+        "security_level": "90",
+        "ip_address": "100.75.1.14",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan1665",
+        "asa_interface": "TEST",
+        "security_level": "50",
+        "ip_address": null,
+        "subnet_mask": null,
+        "standby_ip": null,
+        "shutdown": true
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2001",
+        "asa_interface": "TCCW-CAT2DMZ-00-SPNS2-DEVICE-MGMT-LINKNET",
+        "security_level": "90",
+        "ip_address": "100.72.1.21",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2301",
+        "asa_interface": "TCCW-CAT2DMZ-01-AAA-DNS-NTP-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.2.1",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2302",
+        "asa_interface": "TCCW-CAT2DMZ-02-MGMT-SERVICES-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.2.5",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2304",
+        "asa_interface": "TCCW-CAT2DMZ-04-MONITORING-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.2.13",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2305",
+        "asa_interface": "TCCW-CAT2DMZ-05-MGMT-VXRAIL-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.2.17",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2306",
+        "asa_interface": "TCCW-CAT2DMZ-06-IDRAC-VXRAIL-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.2.21",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2307",
+        "asa_interface": "TCCW-CAT2DMZ-07-BACKUP-VXRAIL-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.2.25",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2308",
+        "asa_interface": null,
+        "security_level": "50",
+        "ip_address": null,
+        "subnet_mask": null,
+        "standby_ip": null,
+        "shutdown": true
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2309",
+        "asa_interface": "TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMP-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.2.33",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2310",
+        "asa_interface": "TCCW-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.2.37",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2311",
+        "asa_interface": "TCCW-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.2.41",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2312",
+        "asa_interface": "TCCW-CAT2DMZ-12-CAT2-LINUX-REPOSITORY-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.2.45",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2313",
+        "asa_interface": "TCCW-CAT2DMZ-13-CAT2-ANTIVIRUS-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.2.49",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2314",
+        "asa_interface": "TCCW-CAT2DMZ-14-BDK-JUMP-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.2.53",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2315",
+        "asa_interface": "TCCW-CAT2DMZ-15-AEVEN-JUMP-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.2.57",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2318",
+        "asa_interface": "TCCW-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER-LINKNET",
+        "security_level": "50",
+        "ip_address": "100.72.2.69",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2011",
+        "asa_interface": "TCCW-CAT2DMZ-TRANSIT-OBV-CAT3DMZ",
+        "security_level": "0",
+        "ip_address": "100.72.1.17",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2012",
+        "asa_interface": "TCCW-CAT2DMZ-TRANSIT-RGDC-CAT3DMZ",
+        "security_level": "0",
+        "ip_address": "100.72.1.13",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2100",
+        "asa_interface": "TRANSIT-TCCW-CAT2-NET_MGMT_BDK_CORE_A1",
+        "security_level": "99",
+        "ip_address": "100.72.0.1",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2128",
+        "asa_interface": "TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCW1A",
+        "security_level": "99",
+        "ip_address": "100.72.0.97",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2129",
+        "asa_interface": "TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCW2A",
+        "security_level": "99",
+        "ip_address": "100.72.0.101",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2134",
+        "asa_interface": "TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_A_TCCW1A",
+        "security_level": "99",
+        "ip_address": "100.72.0.121",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2135",
+        "asa_interface": "TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_A_TCCW2A",
+        "security_level": "99",
+        "ip_address": "100.72.0.125",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2200",
+        "asa_interface": "TRANSIT-TCCW-CAT2-NET_MGMT_BDK_CORE_B1",
+        "security_level": "99",
+        "ip_address": "100.72.0.129",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2234",
+        "asa_interface": "TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_B_TCCW1B",
+        "security_level": "99",
+        "ip_address": "100.72.0.249",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2235",
+        "asa_interface": "TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_B_TCCW2B",
+        "security_level": "99",
+        "ip_address": "100.72.0.253",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2751",
+        "asa_interface": "TRANSIT-SPNS1-TCCWCORE01",
+        "security_level": "90",
+        "ip_address": "100.75.0.10",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
+    },
+    {
+        "context": "TCCW-CAT2-FW1",
+        "physical_interface": "vlan2752",
+        "asa_interface": "TRANSIT-SPNS1-TCCWCORE02",
+        "security_level": "90",
+        "ip_address": "100.75.0.14",
+        "subnet_mask": "255.255.255.252",
+        "standby_ip": null,
+        "shutdown": false
     }
 ]
