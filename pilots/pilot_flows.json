@@ -3,8 +3,8 @@
     "name": "TPS Logging",
     "source": "172.27.210.20",
     "destination": "100.72.36.70",
-    "protocol": "udp",
-    "service": "Windows_Logging",
+    "protocol": "tcp",
+    "service": "1514",
     "expected": {
       "devices": [
         "RGDCPe1",

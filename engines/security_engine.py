@@ -111,7 +111,7 @@ class SecurityEngine:
             if not self._protocol_matches(rule, protocol):
                 continue
 
-            if not self._service_matches(rule, service):
+            if not self._service_matches(rule, service, protocol):
                 continue
 
             source_targets = self._targets(rule.id, "USES_SOURCE")
@@ -155,7 +155,7 @@ class SecurityEngine:
 
         return rule_protocol == requested_protocol
 
-    def _service_matches(self, rule, service):
+    def _service_matches(self, rule, service, protocol=None):
         if not service:
             return True
 
@@ -163,8 +163,7 @@ class SecurityEngine:
         rule_service = rule.properties.get("service")
 
         #
-        # Exact service match:
-        # eq 443
+        # Exact destination service
         #
         if service_type == "eq":
             return (
@@ -173,8 +172,7 @@ class SecurityEngine:
             )
 
         #
-        # Port range:
-        # range 7937 9936
+        # Destination port range
         #
         if service_type == "range":
             start = rule.properties.get("service_start")
@@ -190,23 +188,23 @@ class SecurityEngine:
             return start <= requested <= end
 
         #
-        # Service object-group.
-        # Existing object-group handling remains permissive
-        # until group membership is evaluated explicitly.
+        # ASA service object-group.
         #
         if service_type == "object-group":
-            return bool(rule_service)
+            return self._service_object_group_matches(
+                rule_service,
+                protocol,
+                service
+            )
 
         #
-        # No destination service restriction:
-        # e.g. "permit tcp host A host B"
+        # No destination port restriction.
         #
         if not service_type and not rule_service:
             return True
 
         #
-        # Backward compatibility for rules that only have
-        # the legacy service field.
+        # Legacy exact service representation.
         #
         if rule_service is not None:
             return (
@@ -215,6 +213,120 @@ class SecurityEngine:
             )
 
         return False
+
+    def _service_object_group_matches(
+        self,
+        group_name,
+        protocol,
+        service,
+        visited=None
+    ):
+        if not group_name:
+            return False
+
+        if visited is None:
+            visited = set()
+
+        if group_name in visited:
+            return False
+
+        visited.add(group_name)
+
+        group = self.graph.find(
+            "ObjectGroup",
+            group_name
+        )
+
+        if not group:
+            return False
+
+        requested_protocol = (
+            str(protocol).lower()
+            if protocol
+            else None
+        )
+
+        requested_service = str(service).lower()
+
+        for relation, member in self.graph.neighbors(group.id):
+
+            if relation != "HAS_MEMBER":
+                continue
+
+            raw = str(
+                member.properties.get("value")
+                or member.name
+                or ""
+            ).strip()
+
+            if not raw:
+                continue
+
+            parts = raw.split()
+
+            #
+            # Nested service object-group:
+            # group-object SOME_GROUP
+            #
+            if (
+                len(parts) >= 2
+                and parts[0].lower() == "group-object"
+            ):
+                nested_group = parts[1]
+
+                if self._service_object_group_matches(
+                    nested_group,
+                    protocol,
+                    service,
+                    visited
+                ):
+                    return True
+
+                continue
+
+            #
+            # Typical ASA service-object expansion:
+            #
+            # tcp destination eq 88
+            # udp destination eq domain
+            # tcp destination range 49152 65535
+            #
+            if len(parts) < 4:
+                continue
+
+            member_protocol = parts[0].lower()
+
+            if (
+                requested_protocol
+                and member_protocol != requested_protocol
+            ):
+                continue
+
+            if "eq" in parts:
+                index = parts.index("eq")
+
+                if len(parts) > index + 1:
+                    member_service = parts[index + 1].lower()
+
+                    if member_service == requested_service:
+                        return True
+
+            if "range" in parts:
+                index = parts.index("range")
+
+                if len(parts) > index + 2:
+                    try:
+                        start = int(parts[index + 1])
+                        end = int(parts[index + 2])
+                        requested = int(service)
+                    except (TypeError, ValueError):
+                        continue
+
+                    if start <= requested <= end:
+                        return True
+
+        return False
+
         
     def _targets(self, node_id, relationship_type):
         return [
