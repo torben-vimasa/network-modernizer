@@ -23,7 +23,37 @@ class FirewallRouteExportBuilder:
 
         all_routes = []
 
-        for file in sorted(self.input_dir.glob("*.txt")):
+        input_dirs = [
+            Path("data/contexts"),
+            Path("data/firewalls")
+        ]
+
+        input_files = []
+
+        for input_dir in input_dirs:
+            if input_dir.exists():
+                input_files.extend(
+                    sorted(input_dir.glob("*.txt"))
+                )
+
+        #
+        # Context files are authoritative if the same
+        # device/context exists in both directories.
+        #
+        files_by_stem = {}
+
+        for file in input_files:
+            if file.stem not in files_by_stem:
+                files_by_stem[file.stem] = file
+                continue
+
+            if "contexts" in file.parts:
+                files_by_stem[file.stem] = file
+
+        for file in sorted(
+            files_by_stem.values(),
+            key=lambda p: p.stem
+):
 
             lines = file.read_text(
                 encoding="utf-8",
