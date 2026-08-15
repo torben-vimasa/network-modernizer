@@ -1,0 +1,576 @@
+Pasted code(20260810-182642).py
+Python
+Pasted code(1).json
+File
+Pasted code(20260811-184705).py
+Python
+Pasted code(20260811-193039).py
+Python
+Pasted text(20260811-194703).txt
+Document
+Pasted text(20260811-200437).txt
+Document
+Pasted text(20260812-121712).txt
+Document
+Pasted text(20260812-123845).txt
+Document
+Pasted text(20260812-124252).txt
+Document
+Pasted text(20260812-124724).txt
+Document
+Pasted text(20260812-132207).txt
+Document
+Pasted text(20260812-133828).txt
+Document
+Pasted text(20260812-140912).txt
+Document
+Pasted text(20260814-084521).txt
+Document
+Pasted text(20260814-084709).txt
+Document
+den sidste - send til fil
+Pasted text(20260814-084841).txt
+Document
+Pasted text(20260814-085455).txt
+Document
+Pasted text (2).txt
+Document
+Pasted text (3).txt
+Document
+Pasted text (4).txt
+Document
+Pasted text(20260814-085854).txt
+Document
+Pasted text(20260814-105232).txt
+Document
+Pasted text(20260814-110030).txt
+Document
+Pasted text(20260814-110927).txt
+Document
+yes bgp mellem cat3dmz / cat2dmz / ... 
+Pasted text(20260814-120758).txt
+Document
+Pasted text(20260814-121017).txt
+Document
+Pasted text(20260814-121255).txt
+Document
+> show bgp | include 100.72.36
+> show bgp prefix-list
+Syntax error: The command is not completed
+> show bgp prefix-list
+  WORD  A prefixlist to match on
+
+> show prefix-list
+prefix-list CAT3DMZ-NETWORK-AND-DEFAULT: 10 entries
+   seq 5 permit 100.73.0.0/16 le 32
+   seq 6 permit 172.21.247.0/24
+   seq 7 permit 172.21.248.0/24
+   seq 8 permit 172.21.250.0/24
+   seq 9 permit 172.21.251.0/24
+   seq 10 permit 172.21.254.0/27
+   seq 20 permit 157.250.163.240/29
+   seq 30 permit 10.150.144.0/23 le 32
+   seq 40 permit 10.185.50.85/32
+   seq 100 permit 0.0.0.0/0
+prefix-list DEFAULT: 1 entries
+   seq 1000 permit 0.0.0.0/0
+prefix-list ONLY-CAT3DMZ-NETWORK: 11 entries
+   seq 10 permit 100.73.0.0/16 le 32
+   seq 40 permit 172.21.247.0/24
+   seq 50 permit 172.21.248.0/24
+   seq 60 permit 172.21.250.0/24
+   seq 70 permit 172.21.251.0/24
+   seq 80 permit 172.21.254.0/27
+   seq 90 permit 80.243.122.0/24
+   seq 100 permit 157.250.163.240/29
+   seq 110 permit 172.21.255.64/27
+   seq 120 permit 10.150.144.0/23 le 32
+   seq 130 permit 10.185.50.85/32
+prefix-list PREFIX-CIBICOM-TEST: 1 entries
+   seq 10 permit 157.250.163.240/29
+prefix-list PREFIX-FTSVOIP: 2 entries
+   seq 10 permit 10.150.146.0/24 le 32
+   seq 20 permit 100.76.0.0/16
+prefix-list PREFIX-KONTROL-POSTER: 2 entries
+   seq 10 permit 10.150.144.0/23 le 32
+   seq 20 permit 10.185.50.85/32
+prefix-list SPNS2-NETWORKS: 8 entries
+   seq 10 permit 100.72.0.0/16 le 32
+   seq 20 permit 100.73.0.0/16 le 32
+   seq 40 permit 172.21.247.0/24
+   seq 50 permit 172.21.248.0/24
+   seq 60 permit 172.21.250.0/24
+   seq 70 permit 172.21.251.0/24
+   seq 80 permit 172.21.254.0/27
+   seq 100 permit 172.21.255.64/27
+>
+
+
+Godt — det her bekræfter prefix-policyen, men ikke den aktive route.
+
+SPNS2-NETWORKS tillader klart 100.72.0.0/16 le 32, så 100.72.36.64/27 kan være en gyldig BGP-route på CAT3. Men show prefix-list fortæller kun policy/intention, ikke hvad der faktisk ligger i RIB/BGP-table.
+
+Prøv disse på CAT3-firewallen i stedet:
+
+show route 100.72.36.70
+
+og hvis den ikke virker:
+
+show route | include 100.72.36
+
+Derefter:
+
+show bgp 100.72.36.64
+
+Hvis syntaksen er sær på den platform, så prøv:
+
+show bgp ipv4 unicast 100.72.36.64
+
+eller:
+
+show bgp ipv4 unicast | include 100.72.36
+
+Det vigtigste lige nu er bare at få ét af disse datapunkter frem:
+
+prefix
+next-hop
+best path
+egress/interface
+
+Når vi har det, kan vi koble det direkte tilbage til OBV-CAT3DMZ-TRANSIT-TCCE-CAT2DMZ og lukke den routing-blocker i trace-motoren.
+
+Indsatte text(20260814-123818).txt
+Document
+
+Yes — der er den. Det her er præcis den information, vi manglede.
+
+På OBV-CAT3-FW1-1 ligger destinationen i den aktive RIB:
+
+B  100.72.36.64 255.255.255.224 [20/50]
+   via 100.72.33.13
+
+Og next-hop-nettet er direkte connected:
+
+C 100.72.33.12/30
+  directly connected, OBV-CAT3DMZ-TRANSIT-TCCE-CAT2DMZ
+
+
+L 100.72.33.14/32
+  directly connected, OBV-CAT3DMZ-TRANSIT-TCCE-CAT2DMZ
+
+Så den virkelige forwarding er nu bevist:
+
+100.72.36.70
+     ↓
+100.72.36.64/27
+     ↓ BGP
+next-hop 100.72.33.13
+     ↓
+OBV-CAT3DMZ-TRANSIT-TCCE-CAT2DMZ
+
+Og det passer 100 % med ACL-reglen, vi allerede fandt:
+
+source_ifc:
+OBV-CAT3DMZ-TRANSIT-JTTN
+
+
+destination_ifc:
+OBV-CAT3DMZ-TRANSIT-TCCE-CAT2DMZ
+
+
+permit tcp ... TCP-1514
+Det forklarer vores trace-fejl
+
+Vores Digital Twin sagde:
+
+No firewall route found for 100.72.36.70
+in context OBV-CAT3-FW1-1
+
+Det var ikke netværket, der manglede routen.
+
+Det var vores importer/exporter, fordi firewall_routes.json kun havde de 41 routes, som vores nuværende parser kunne hente — primært connected/static. Den aktive BGP RIB-route:
+
+100.72.36.64/27 via 100.72.33.13
+
+manglede.
+
+Så arkitekturen bør være:
+
+ASA/FTD config
+   ├── connected
+   ├── static
+   └── show route
+          ├── BGP
+          ├── OSPF
+          ├── static
+          ├── connected
+          └── ...
+                ↓
+       firewall_routes.json
+                ↓
+       FirewallRouteEngine
+
+Det er faktisk rigtig godt nyt. SecurityEngine var ikke synderen i CAT3-flowet.
+
+Næste skridt bør være at gøre FirewallRouteParser i stand til at parse show route-output som det, du lige har hentet. Og vi har nu et perfekt real-world testcase:
+
+OBV-CAT3-FW1-1
+100.72.36.64/27
+BGP
+next-hop 100.72.33.13
+egress OBV-CAT3DMZ-TRANSIT-TCCE-CAT2DMZ
+
+Jeg ville ikke hente mere fra udstyret endnu. Det her er nok til at bygge og teste parseren.
+
+Indsatte text(20260814-124056).txt
+Document
+dette er fra Core i zonen CAT3DMZ.. 
+Indsatte text(20260814-124138).txt
+Document
+Indsatte text(20260814-124724).txt
+Document
+
+Enig. Vi fokuserer først på OBV → TCCE, fordi det er den primære path og samtidig den vi allerede har gode reference-data på.
+
+RGDC/TCCW gemmer vi som sekundær regression/HA-validering bagefter. Det er faktisk en fordel: når parseren virker på OBV/TCCE, kan vi teste om samme logik også finder de tilsvarende routes på RGDC/TCCW uden særkode.
+
+Så rækkefølgen bliver:
+
+Implementér parsing af operative firewall-routes (B, C, S, L osv.).
+Regenerér firewall_routes.json.
+Bekræft at OBV-CAT3-FW1-1 nu har 100.72.36.64/27 via 100.72.33.13.
+Kør vores LogPoint trace_packet() igen.
+Når OBV/TCCE er grøn, tester vi samme flow over RGDC/TCCW som redundans-check.
+
+Du behøver ikke hente mere nu. Jeg siger til, hvis vi mangler noget specifikt fra RGDC/TCCW.
+
+skal jeg oploade filerne et sted
+
+Ja — jeg synes vi skal gemme dem i projektet. De er meget værdifulde som reference/testdata, fordi de er live-output fra de faktiske devices.
+
+Jeg ville lave:
+
+data/
+└── live_reference/
+    ├── OBV-CAT3-FW1-1/
+    │   └── show_route.txt
+    ├── OBV-CAT3-CORE1/
+    │   ├── show_run.txt
+    │   └── show_bgp.txt
+    └── TCCE-CAT2-FW/
+        └── show_route.txt
+
+Men lad være med at kopiere noget endnu, hvis de outputs du viste mig allerede ligger i eksisterende device-filer under data/firewalls/ osv.
+
+Det vigtigste er især CAT3-FW og CAT2-FW show route, fordi de skal bruges til at udvikle og regressionsteste den nye RIB-parser.
+
+Hvis de live outputs kun ligger på din PC/terminal lige nu, så ja: gem dem i projektet. Jeg kan give dig de præcise PowerShell-commands og filnavne, så vi får strukturen rigtig fra starten.
+
+de ligger ingen steder pt.. kun paste ind her
+
+Ah ja — så gem dem nu, inden vi går videre. De er gode fixtures til parseren.
+
+Jeg ville lave denne struktur:
+
+New-Item -ItemType Directory -Force .\data\live_reference\OBV-CAT3-FW1-1
+New-Item -ItemType Directory -Force .\data\live_reference\OBV-CAT3-CORE1
+New-Item -ItemType Directory -Force .\data\live_reference\TCCE-CAT2-FW
+
+Gem derefter de outputs, du har hentet, som:
+
+data\live_reference\OBV-CAT3-FW1-1\show_route.txt
+data\live_reference\OBV-CAT3-CORE1\show_run.txt
+data\live_reference\OBV-CAT3-CORE1\show_bgp.txt
+data\live_reference\TCCE-CAT2-FW\show_route.txt
+
+Hvis terminal-outputtet ikke længere er tilgængeligt lokalt, er det ikke noget problem — du har pasted det her, så vi har stadig indholdet i samtalen. Vi behøver ikke hente det igen for at fortsætte udviklingen.
+
+Men fremover: når du tager live-output fra OBV/TCCE, så gem det direkte under live_reference. Det giver os et rigtig godt regression-datasæt.
+
+Og commit ikke live_reference endnu. Vi skal lige beslutte, om live device-output skal ligge i Git eller .gitignore pga. produktionsdata.
+
+Når mapperne er lavet, går vi videre med FirewallRouteParser.
+
+show route
+
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+E1 - OSPF external type 1, E2 - OSPF external type 2, V - VPN
+i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+ia - IS-IS inter area, * - candidate default, U - per-user static route
+o - ODR, P - periodic downloaded static route, + - replicated route
+SI - Static InterVRF, BI - BGP InterVRF
+Gateway of last resort is 100.73.32.2 to network 0.0.0.0
+
+B* 0.0.0.0 0.0.0.0 [20/0] via 100.73.32.2, 7w0d
+B 10.8.0.0 255.248.0.0 [20/50] via 100.72.33.13, 7w0d
+B 10.24.0.0 255.255.0.0 [20/50] via 100.72.33.13, 7w0d
+B 10.25.0.0 255.255.0.0 [20/50] via 100.72.33.13, 7w0d
+B 10.26.0.0 255.255.0.0 [20/50] via 100.72.33.13, 7w0d
+B 10.125.0.0 255.255.255.0 [20/50] via 100.72.33.13, 7w0d
+B 10.125.1.0 255.255.255.192 [20/50] via 100.72.33.13, 7w0d
+B 10.125.2.0 255.255.255.192 [20/50] via 100.72.33.13, 7w0d
+B 10.125.3.0 255.255.255.0 [20/50] via 100.72.33.13, 7w0d
+B 10.150.0.0 255.255.0.0 [20/50] via 100.72.33.13, 7w0d
+B 10.150.146.0 255.255.255.128 [20/50] via 100.72.33.13, 7w0d
+B 10.150.146.128 255.255.255.128 [20/50] via 100.72.33.13, 7w0d
+B 10.255.255.160 255.255.255.240 [20/0] via 100.73.32.2, 7w0d
+B 80.243.122.0 255.255.255.0 [200/0] via 100.73.34.254, 6w0d
+C 100.72.1.16 255.255.255.252
+is directly connected, OBV-CAT3DMZ-TRANSIT-TCCW-CAT2DMZ
+L 100.72.1.18 255.255.255.255
+is directly connected, OBV-CAT3DMZ-TRANSIT-TCCW-CAT2DMZ
+B 100.72.1.128 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.2.12 255.255.255.252 [20/50] via 100.72.33.13, 7w0d
+B 100.72.3.0 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.3.32 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.3.96 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.3.128 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.3.160 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.3.192 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.4.0 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.4.11 255.255.255.255 [20/50] via 100.72.33.13, 7w0d
+B 100.72.4.12 255.255.255.255 [20/50] via 100.72.33.13, 7w0d
+B 100.72.4.32 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.4.64 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.4.96 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.4.128 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.4.160 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.4.192 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+C 100.72.33.12 255.255.255.252
+is directly connected, OBV-CAT3DMZ-TRANSIT-TCCE-CAT2DMZ
+L 100.72.33.14 255.255.255.255
+is directly connected, OBV-CAT3DMZ-TRANSIT-TCCE-CAT2DMZ
+B 100.72.33.128 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.34.0 255.255.255.252 [20/50] via 100.72.33.13, 7w0d
+B 100.72.34.12 255.255.255.252 [20/50] via 100.72.33.13, 7w0d
+B 100.72.35.0 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.35.32 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.35.96 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.35.128 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.35.160 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.35.192 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.36.0 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.36.11 255.255.255.255 [20/50] via 100.72.33.13, 7w0d
+B 100.72.36.12 255.255.255.255 [20/50] via 100.72.33.13, 7w0d
+B 100.72.36.32 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.36.64 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.36.96 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.36.128 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.36.160 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.36.192 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.72.37.32 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+B 100.73.1.128 255.255.255.224 [200/0] via 100.73.33.22, 6w0d
+B 100.73.3.32 255.255.255.224 [200/0] via 100.73.34.6, 6w0d
+B 100.73.3.96 255.255.255.224 [200/0] via 100.73.34.14, 6w0d
+B 100.73.4.0 255.255.255.224 [200/0] via 100.73.34.34, 6w0d
+C 100.73.32.0 255.255.255.248
+is directly connected, OBV-CAT3DMZ-TRANSIT-JTTN
+L 100.73.32.1 255.255.255.255
+is directly connected, OBV-CAT3DMZ-TRANSIT-JTTN
+C 100.73.32.8 255.255.255.248
+is directly connected, OBV-CAT3DMZ-TRANSIT-BANE1
+L 100.73.32.9 255.255.255.255
+is directly connected, OBV-CAT3DMZ-TRANSIT-BANE1
+C 100.73.32.16 255.255.255.248
+is directly connected, OBV-CAT3DMZ-TRANSIT-SIGNAL-PROGRAM
+L 100.73.32.17 255.255.255.255
+is directly connected, OBV-CAT3DMZ-TRANSIT-SIGNAL-PROGRAM
+C 100.73.33.20 255.255.255.252
+is directly connected, OBV-CAT3DMZ-00-SPNS2-DEVICE-MGMT-LINKNET
+L 100.73.33.21 255.255.255.255
+is directly connected, OBV-CAT3DMZ-00-SPNS2-DEVICE-MGMT-LINKNET
+B 100.73.33.128 255.255.255.224 [200/0] via 100.73.33.22, 6w0d
+C 100.73.34.0 255.255.255.252
+is directly connected, OBV-CAT3DMZ-01-AAA-DNS-NTP-LINKNET
+L 100.73.34.1 255.255.255.255
+is directly connected, OBV-CAT3DMZ-01-AAA-DNS-NTP-LINKNET
+C 100.73.34.4 255.255.255.252
+is directly connected, OBV-CAT3DMZ-02-MGMT-SERVICES-LINKNET
+L 100.73.34.5 255.255.255.255
+is directly connected, OBV-CAT3DMZ-02-MGMT-SERVICES-LINKNET
+C 100.73.34.12 255.255.255.252
+is directly connected, OBV-CAT3DMZ-04-MONITORING-LINKNET
+L 100.73.34.13 255.255.255.255
+is directly connected, OBV-CAT3DMZ-04-MONITORING-LINKNET
+C 100.73.34.32 255.255.255.252
+is directly connected, OBV-CAT3DMZ-09-MGMT-JUMPHOST-LINKNET
+L 100.73.34.33 255.255.255.255
+is directly connected, OBV-CAT3DMZ-09-MGMT-JUMPHOST-LINKNET
+C 100.73.34.36 255.255.255.252
+is directly connected, OBV-CAT3DMZ-10-API-LINKNET
+L 100.73.34.37 255.255.255.255
+is directly connected, OBV-CAT3DMZ-10-API-LINKNET
+C 100.73.34.40 255.255.255.252
+is directly connected, OBV-CAT3DMZ-11-COMM-LINKNET
+L 100.73.34.41 255.255.255.255
+is directly connected, OBV-CAT3DMZ-11-COMM-LINKNET
+C 100.73.34.44 255.255.255.252
+is directly connected, OBV-CAT3DMZ-12-DWH-FE-LINKNET
+L 100.73.34.45 255.255.255.255
+is directly connected, OBV-CAT3DMZ-12-DWH-FE-LINKNET
+C 100.73.34.48 255.255.255.252
+is directly connected, OBV-CAT3DMZ-13-DWH-BE-LINKNET
+L 100.73.34.49 255.255.255.255
+is directly connected, OBV-CAT3DMZ-13-DWH-BE-LINKNET
+C 100.73.34.60 255.255.255.252
+is directly connected, OBV-CAT3DMZ-16-GA-LINKNET
+L 100.73.34.61 255.255.255.255
+is directly connected, OBV-CAT3DMZ-16-GA-LINKNET
+C 100.73.34.64 255.255.255.252
+is directly connected, OBV-CAT3DMZ-17-MGMT-LINKNET
+L 100.73.34.65 255.255.255.255
+is directly connected, OBV-CAT3DMZ-17-MGMT-LINKNET
+C 100.73.34.68 255.255.255.252
+is directly connected, OBV-CAT3DMZ-18-MSVC-LINKNET
+L 100.73.34.69 255.255.255.255
+is directly connected, OBV-CAT3DMZ-18-MSVC-LINKNET
+C 100.73.34.72 255.255.255.252
+is directly connected, OBV-CAT3DMZ-19-TOPODB-BE-LINKNET
+L 100.73.34.73 255.255.255.255
+is directly connected, OBV-CAT3DMZ-19-TOPODB-BE-LINKNET
+C 100.73.34.76 255.255.255.252
+is directly connected, OBV-CAT3DMZ-20-TOPODB-FE-LINKNET
+L 100.73.34.77 255.255.255.255
+is directly connected, OBV-CAT3DMZ-20-TOPODB-FE-LINKNET
+C 100.73.34.80 255.255.255.252
+is directly connected, OBV-CAT3DMZ-21-REPO-LINKNET
+L 100.73.34.81 255.255.255.255
+is directly connected, OBV-CAT3DMZ-21-REPO-LINKNET
+C 100.73.34.84 255.255.255.252
+is directly connected, OBV-CAT3DMZ-22-ZABBIX-MON-LINKNET
+L 100.73.34.85 255.255.255.255
+is directly connected, OBV-CAT3DMZ-22-ZABBIX-MON-LINKNET
+C 100.73.34.88 255.255.255.252
+is directly connected, OBV-CAT3DMZ-23-MSVC-BE-LINKNET
+L 100.73.34.89 255.255.255.255
+is directly connected, OBV-CAT3DMZ-23-MSVC-BE-LINKNET
+C 100.73.34.92 255.255.255.252
+is directly connected, OBV-CAT3DMZ-24-GA2-LINKNET
+L 100.73.34.93 255.255.255.255
+is directly connected, OBV-CAT3DMZ-24-GA2-LINKNET
+C 100.73.34.252 255.255.255.252
+is directly connected, OBV-CAT3DMZ-BROKER-DMZ-LINKNET
+L 100.73.34.253 255.255.255.255
+is directly connected, OBV-CAT3DMZ-BROKER-DMZ-LINKNET
+B 100.73.35.32 255.255.255.224 [200/0] via 100.73.34.6, 6w0d
+B 100.73.35.40 255.255.255.255 [20/0] via 100.73.32.2, 7w0d
+B 100.73.36.0 255.255.255.224 [200/0] via 100.73.34.34, 6w0d
+B 100.73.36.32 255.255.255.224 [200/0] via 100.73.34.38, 6w0d
+B 100.73.36.64 255.255.255.224 [200/0] via 100.73.34.42, 6w0d
+B 100.73.36.96 255.255.255.224 [200/0] via 100.73.34.46, 6w0d
+B 100.73.36.128 255.255.255.224 [200/0] via 100.73.34.50, 6w0d
+B 100.73.37.0 255.255.255.224 [200/0] via 100.73.34.66, 6w0d
+B 100.73.37.32 255.255.255.224 [200/0] via 100.73.34.70, 6w0d
+B 100.73.37.64 255.255.255.224 [200/0] via 100.73.34.74, 6w0d
+B 100.73.37.96 255.255.255.224 [200/0] via 100.73.34.78, 6w0d
+B 100.73.37.128 255.255.255.224 [200/0] via 100.73.34.82, 6w0d
+B 100.73.37.160 255.255.255.224 [200/0] via 100.73.34.86, 6w0d
+B 100.73.37.192 255.255.255.224 [200/0] via 100.73.34.90, 6w0d
+B 100.73.37.224 255.255.255.224 [200/0] via 100.73.34.94, 6w0d
+C 100.73.65.0 255.255.255.252
+is directly connected, OBV-CAT3DMZ-05-SZ-MGMT-VXRAIL-LINKNET
+L 100.73.65.1 255.255.255.255
+is directly connected, OBV-CAT3DMZ-05-SZ-MGMT-VXRAIL-LINKNET
+C 100.73.65.4 255.255.255.252
+is directly connected, OBV-CAT3DMZ-06-SZ-IDRAC-VXRAIL-LINKNET
+L 100.73.65.5 255.255.255.255
+is directly connected, OBV-CAT3DMZ-06-SZ-IDRAC-VXRAIL-LINKNET
+C 100.73.65.8 255.255.255.252
+is directly connected, OBV-CAT3DMZ-07-BROKER-IDRAC-VXRAIL
+L 100.73.65.9 255.255.255.255
+is directly connected, OBV-CAT3DMZ-07-BROKER-IDRAC-VXRAIL
+C 100.73.65.44 255.255.255.252
+is directly connected, OBV-CAT3DMZ-33-SW-CROSS-FRONTEND
+L 100.73.65.45 255.255.255.255
+is directly connected, OBV-CAT3DMZ-33-SW-CROSS-FRONTEND
+C 100.73.65.48 255.255.255.252
+is directly connected, OBV-CAT3DMZ-34-SW-WTS
+L 100.73.65.49 255.255.255.255
+is directly connected, OBV-CAT3DMZ-34-SW-WTS
+C 100.73.65.52 255.255.255.252
+is directly connected, OBV-CAT3DMZ-35-SW-CROSS-BACKEND
+L 100.73.65.53 255.255.255.255
+is directly connected, OBV-CAT3DMZ-35-SW-CROSS-BACKEND
+C 100.73.65.56 255.255.255.252
+is directly connected, OBV-CAT3DMZ-36-SW-BACKEND
+L 100.73.65.57 255.255.255.255
+is directly connected, OBV-CAT3DMZ-36-SW-BACKEND
+C 100.73.65.60 255.255.255.252
+is directly connected, OBV-CAT3DMZ-37-SW-REPO
+L 100.73.65.61 255.255.255.255
+is directly connected, OBV-CAT3DMZ-37-SW-REPO
+C 100.73.65.64 255.255.255.252
+is directly connected, OBV-CAT3DMZ-38-SW-OUTGOING-PROXY
+L 100.73.65.65 255.255.255.255
+is directly connected, OBV-CAT3DMZ-38-SW-OUTGOING-PROXY
+C 100.73.65.68 255.255.255.252
+is directly connected, OBV-CAT3DMZ-39-SW-REVERSE-PROXY
+L 100.73.65.69 255.255.255.255
+is directly connected, OBV-CAT3DMZ-39-SW-REVERSE-PROXY
+C 100.73.65.80 255.255.255.252
+is directly connected, OBV-CAT3DMZ-42-SZ-NETFLOW-LINKNET
+L 100.73.65.81 255.255.255.255
+is directly connected, OBV-CAT3DMZ-42-SZ-NETFLOW-LINKNET
+C 100.73.65.88 255.255.255.252
+is directly connected, OBV-CAT3DMZ-44-SW-CRO-MGMT
+L 100.73.65.89 255.255.255.255
+is directly connected, OBV-CAT3DMZ-44-SW-CRO-MGMT
+C 100.73.65.92 255.255.255.252
+is directly connected, OBV-CAT3DMZ-45-CATALYST-CENTER
+L 100.73.65.93 255.255.255.255
+is directly connected, OBV-CAT3DMZ-45-CATALYST-CENTER
+C 100.73.65.96 255.255.255.252
+is directly connected, OBV-CAT3DMZ-46-SW-CITRIX-SVR-ENV
+L 100.73.65.97 255.255.255.255
+is directly connected, OBV-CAT3DMZ-46-SW-CITRIX-SVR-ENV
+C 100.73.65.108 255.255.255.252
+is directly connected, OBV-CAT3DMZ-49-NETWORKER-SERVER
+L 100.73.65.109 255.255.255.255
+is directly connected, OBV-CAT3DMZ-49-NETWORKER-SERVER
+C 100.73.65.112 255.255.255.252
+is directly connected, OBV-CAT3DMZ-50-DATADOMAIN-SERVER
+L 100.73.65.113 255.255.255.255
+is directly connected, OBV-CAT3DMZ-50-DATADOMAIN-SERVER
+C 100.73.65.116 255.255.255.252
+is directly connected, OBV-CAT3DMZ-51-TPS-INT-SERVER-LINKNET
+L 100.73.65.117 255.255.255.255
+is directly connected, OBV-CAT3DMZ-51-TPS-INT-SERVER-LINKNET
+C 100.73.65.124 255.255.255.252
+is directly connected, OBV-CAT3DMZ-ERTMS-DMZ-LINKNET
+L 100.73.65.125 255.255.255.255
+is directly connected, OBV-CAT3DMZ-ERTMS-DMZ-LINKNET
+C 100.73.65.136 255.255.255.252
+is directly connected, OBV-CAT3DMZ-55-MDR-Sensor
+L 100.73.65.137 255.255.255.255
+is directly connected, OBV-CAT3DMZ-55-MDR-Sensor
+B 100.73.66.0 255.255.255.224 [200/0] via 100.73.65.2, 6w0d
+B 100.73.66.32 255.255.255.224 [200/0] via 100.73.65.6, 6w0d
+B 100.73.66.64 255.255.255.224 [200/0] via 100.73.65.10, 6w0d
+B 100.73.67.96 255.255.255.224 [200/0] via 100.73.65.46, 6w0d
+B 100.73.67.128 255.255.255.224 [200/0] via 100.73.65.50, 6w0d
+B 100.73.67.160 255.255.255.224 [200/0] via 100.73.65.54, 6w0d
+B 100.73.67.192 255.255.255.224 [200/0] via 100.73.65.58, 6w0d
+B 100.73.67.224 255.255.255.224 [200/0] via 100.73.65.62, 6w0d
+B 100.73.68.0 255.255.255.224 [200/0] via 100.73.65.66, 6w0d
+B 100.73.68.32 255.255.255.224 [200/0] via 100.73.65.70, 6w0d
+B 100.73.68.128 255.255.255.224 [200/0] via 100.73.65.82, 6w0d
+B 100.73.68.192 255.255.255.224 [200/0] via 100.73.65.90, 6w0d
+B 100.73.68.224 255.255.255.224 [200/0] via 100.73.65.94, 6w0d
+B 100.73.69.0 255.255.255.224 [200/0] via 100.73.65.98, 6w0d
+B 100.73.69.96 255.255.255.224 [200/0] via 100.73.65.110, 6w0d
+B 100.73.69.128 255.255.255.224 [200/0] via 100.73.65.114, 6w0d
+B 100.73.69.160 255.255.255.224 [200/0] via 100.73.65.118, 6w0d
+B 100.73.69.192 255.255.255.224 [200/0] via 100.73.65.2, 6w0d
+B 100.73.70.64 255.255.255.224 [200/0] via 100.73.65.138, 6w0d
+B 100.76.0.0 255.255.0.0 [20/50] via 100.72.33.13, 5w2d
+B 157.250.163.240 255.255.255.248 [20/0] via 100.73.32.10, 7w0d
+B 172.21.247.0 255.255.255.0 [200/0] via 100.73.34.254, 6w0d
+B 172.21.248.0 255.255.255.0 [200/0] via 100.73.34.254, 6w0d
+B 172.21.250.0 255.255.255.0 [200/0] via 100.73.34.254, 6w0d
+B 172.21.251.0 255.255.255.0 [200/0] via 100.73.34.254, 6w0d
+B 172.21.254.0 255.255.255.224 [200/0] via 100.73.34.254, 6w0d
+B 172.21.255.64 255.255.255.224 [200/0] via 100.73.34.254, 6w0d
+
+Close

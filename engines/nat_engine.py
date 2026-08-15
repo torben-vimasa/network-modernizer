@@ -11,11 +11,19 @@ class NATEngine:
         self.rules = self._sort_rules(rules or [])
         self.graph = graph
 
-    def translate(self, packet):
+    def translate(
+        self,
+        packet,
+        context=None,
+        ingress_interface=None,
+        egress_interface=None
+    ):
 
         translated = deepcopy(packet)
 
         for rule in self.rules:
+            if context and rule.context and rule.context != context:
+                continue
 
             if (
                 self._matches_source(rule, translated.source)

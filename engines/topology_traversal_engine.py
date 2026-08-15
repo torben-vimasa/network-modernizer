@@ -111,14 +111,33 @@ class TopologyTraversalEngine:
 
     def _find_interface_vrf(self, interface_node):
 
+        #
+        # ASA/FTD interfaces belong to a firewall context,
+        # not a router VRF.
+        #
+        if interface_node.type == "ASAInterface":
+            context = interface_node.properties.get("context")
+
+            if context:
+                return context
+
+        #
+        # Router interfaces may carry VRF directly.
+        #
         vrf = interface_node.properties.get("vrf")
 
         if vrf:
             return vrf
 
+        #
+        # Or VRF may be represented through the graph.
+        #
         for relation, neighbor in self.graph.neighbors(interface_node.id):
 
-            if relation == "BELONGS_TO_VRF" and neighbor.type == "VRF":
+            if (
+                relation == "BELONGS_TO_VRF"
+                and neighbor.type == "VRF"
+            ):
                 return neighbor.name
 
         return None

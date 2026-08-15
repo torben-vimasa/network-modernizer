@@ -12,6 +12,8 @@ tests = [
         "destination": "SPNS2_Logpoint_100.72.36.70",
         "protocol": "object-group",
         "service": "Windows_Logging",
+        "context": "BDK-Mgmt",
+        "ingress_interface": "Bane1",
     },
     {
         "name": "ObjectGroup destination match",
@@ -19,6 +21,8 @@ tests = [
         "destination": "172.21.255.2",
         "protocol": "tcp",
         "service": "ssh",
+        "context": "BDK-Mgmt",
+        "ingress_interface": "CS",
     },
 ]
 
@@ -35,7 +39,9 @@ for test in tests:
         test["source"],
         test["destination"],
         protocol=test["protocol"],
-        service=test["service"]
+        service=test["service"],
+        context=test["context"],
+        ingress_interface=test["ingress_interface"]
     )
 
     print(result.reason)

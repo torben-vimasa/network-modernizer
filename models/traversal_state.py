@@ -14,6 +14,7 @@ class TraversalState:
 
     ingress_interface: str | None = None
     phase: str = "routing"
+    pending_firewall: dict | None = None
 
     #
     # Packet and trace state

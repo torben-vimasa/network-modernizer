@@ -26,6 +26,16 @@ class FirewallTraversalEngine:
         result.source_before = packet.source
         result.destination_before = packet.destination
 
+        #
+        # ---------------------------------------------------------
+        # 1. Initial security check
+        #
+        # Classic ASA interface ACLs can be evaluated immediately.
+        #
+        # FTD global ACLs may require destination_ifc, so their
+        # evaluation is deferred until routing resolves egress.
+        # ---------------------------------------------------------
+        #
         security = self.twin.security.is_permitted(
             packet.source,
             packet.destination,
@@ -40,15 +50,30 @@ class FirewallTraversalEngine:
 
         if not security.permitted:
             result.output_packet = packet
+            result.permitted = False
             result.reason = security.reason
             return result
 
-        translated_packet, nat = self.twin.nat.translate(packet)
+        #
+        # ---------------------------------------------------------
+        # 2. NAT
+        # ---------------------------------------------------------
+        #
+        translated_packet, nat = self.twin.nat.translate(
+        packet,
+        context=result.context,
+        ingress_interface=result.ingress_interface
+        )
 
         result.nat = nat
         result.source_after = translated_packet.source
         result.destination_after = translated_packet.destination
 
+        #
+        # ---------------------------------------------------------
+        # 3. Firewall routing lookup
+        # ---------------------------------------------------------
+        #
         route_result = FirewallRouteEngine(
             self.routes
         ).lookup(
@@ -77,11 +102,18 @@ class FirewallTraversalEngine:
         translated_packet.next_hop = route_result.next_hop
 
         #
-        # Resolve firewall egress interface
+        # ---------------------------------------------------------
+        # 4. Resolve firewall egress interface
+        # ---------------------------------------------------------
         #
         if route_result.egress_interface:
-            result.egress_interface = route_result.egress_interface
+
+            result.egress_interface = (
+                route_result.egress_interface
+            )
+
         else:
+
             interface = InterfaceResolutionEngine(
                 self.interfaces
             ).resolve_egress(
@@ -89,27 +121,54 @@ class FirewallTraversalEngine:
             )
 
             if interface:
+
                 result.egress_interface = (
                     interface.get("nameif")
                     or interface.get("name")
                     or interface.get("interface")
                 )
 
-            #
-            # Final context-aware security evaluation.
-            #
-            # FTD global ACL rules may specify both source_ifc
-            # and destination_ifc. destination_ifc can only be
-            # validated after firewall routing has resolved egress.
-            #
+        #
+        # ---------------------------------------------------------
+        # 5. Final security evaluation
+        #
+        # ONLY for FTD/global ACL.
+        #
+        # Classic ASA interface ACLs were already evaluated above
+        # using ingress_interface and must NOT be evaluated again.
+        # ---------------------------------------------------------
+        #
+        firewall = self.twin.graph.find(
+            "Firewall",
+            result.context
+        )
+
+        has_global_acl = False
+
+        if firewall:
+
+            for relation, neighbor in self.twin.graph.neighbors(
+                firewall.id
+            ):
+
+                if (
+                    relation == "USES_GLOBAL_ACL"
+                    and neighbor.type == "ACL"
+                ):
+                    has_global_acl = True
+                    break
+
+        if has_global_acl:
+
             final_security = self.twin.security.is_permitted(
-                packet.source,
-                packet.destination,
-                packet.protocol,
-                packet.service,
+                translated_packet.source,
+                translated_packet.destination,
+                translated_packet.protocol,
+                translated_packet.service,
                 context=result.context,
                 ingress_interface=result.ingress_interface,
-                egress_interface=result.egress_interface
+                egress_interface=result.egress_interface,
+                defer_global_acl=False
             )
 
             result.security = final_security
@@ -120,10 +179,10 @@ class FirewallTraversalEngine:
                 result.reason = final_security.reason
                 return result
 
-
-                #
-        # A route with an egress interface but no next hop
-        # represents direct Layer-2 delivery on a connected network.
+        #
+        # ---------------------------------------------------------
+        # 6. Directly connected destination
+        # ---------------------------------------------------------
         #
         if (
             route_result.next_hop is None
@@ -132,62 +191,104 @@ class FirewallTraversalEngine:
             result.destination_reached = True
             result.permitted = True
             result.output_packet = translated_packet
+
             result.reason = (
                 "Destination reached through directly connected "
                 f"interface {result.egress_interface}"
             )
+
             return result
 
         result.destination_reached = False
 
+        #
+        # ---------------------------------------------------------
+        # 7. Topology-based continuation
+        # ---------------------------------------------------------
+        #
         topology_result = None
 
-        
         if result.egress_interface:
-            topology_result = self.topology.find_connected_device(
-                context=result.context,
-                interface_name=result.egress_interface
+
+            topology_result = (
+                self.topology.find_connected_device(
+                    context=result.context,
+                    interface_name=result.egress_interface
+                )
             )
 
-        if topology_result and topology_result.get("found"):
+        if (
+            topology_result
+            and topology_result.get("found")
+        ):
+
             result.next_device = {
                 "resolved": True,
                 "method": "topology_connected_to",
                 "router": topology_result.get("router"),
-                "vrf": topology_result.get("connected_vrf"),
-                "interface": topology_result.get("connected_interface"),
+                "vrf": topology_result.get(
+                    "connected_vrf"
+                ),
+                "interface": topology_result.get(
+                    "connected_interface"
+                ),
                 "reason": topology_result.get("reason"),
                 "confidence": "high",
                 "references": []
             }
 
-            result.target = topology_result.get("target")
+            result.target = topology_result.get(
+                "target"
+            )
 
             result.output_packet = translated_packet
             result.permitted = True
-            result.reason = "ACL + NAT + firewall route + egress + next-device completed"
+
+            result.reason = (
+                "ACL + NAT + firewall route + "
+                "egress + next-device completed"
+            )
+
             return result
 
+        #
+        # ---------------------------------------------------------
+        # 8. Resolve next-hop from inventory
+        # ---------------------------------------------------------
+        #
         result.next_device = self.resolver.resolve_ip(
             route_result.next_hop
         )
 
+        #
+        # Unresolved next-hop = inventory boundary,
+        # not a security deny.
+        #
         if (
             result.next_device
             and not result.next_device.get("resolved")
-            and result.egress_interface
         ):
-            result.next_device["method"] = "inventory_boundary"
-            result.next_device["inventory_boundary"] = True
-            result.next_device["reason"] = (
-                f"Next-hop {route_result.next_hop} is reachable via firewall "
-                f"egress interface {result.egress_interface}, but no managed "
-                f"device interface owns that IP in the current inventory"
-            )
-            result.next_device["confidence"] = "medium"
 
+            result.output_packet = translated_packet
+            result.permitted = True
+
+            result.reason = (
+                "ACL + NAT + firewall route completed; "
+                f"next-hop {route_result.next_hop} "
+                "could not be resolved in inventory"
+            )
+
+            return result
+
+        #
+        # Successful next-hop resolution
+        #
         result.output_packet = translated_packet
         result.permitted = True
-        result.reason = "ACL + NAT + firewall route + egress + next-device completed"
+
+        result.reason = (
+            "ACL + NAT + firewall route + "
+            "egress + next-device completed"
+        )
 
         return result

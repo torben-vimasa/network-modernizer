@@ -5,6 +5,7 @@ from graph.graph import KnowledgeGraph
 from inventory.inventory import Inventory
 from parsers.acl_rule_parser import ACLRuleParser
 from parsers.router_inventory_parser import RouterInventoryParser
+from utils.firewall_context import detect_firewall_context
 
 
 class GraphBuilder:
@@ -489,7 +490,7 @@ class GraphBuilder:
                 f'{interface["device"]}:{interface_name}',
                 {
                     "device": interface["device"],
-                    "context": interface["device"],
+                    "context": interface.get("context") or interface["device"],
                     "interface": interface["interface"],
                     "nameif": interface.get("nameif"),
                     "vlan": interface.get("vlan"),
@@ -847,10 +848,23 @@ class GraphBuilder:
             if not interface:
                 continue
 
-            interface_node = graph.find(
-                "ASAInterface",
-                f"{context}:{interface}"
-            )
+            interface_node = None
+
+            for node in graph.nodes.values():
+
+                if node.type != "ASAInterface":
+                    continue
+
+                if node.properties.get("context") != context:
+                    continue
+
+                if (
+                    node.properties.get("nameif") == interface
+                    or
+                    node.properties.get("interface") == interface
+                ):
+                    interface_node = node
+                    break
 
             if not interface_node:
                 continue

@@ -244,6 +244,84 @@ class TraceWorkflow:
             if state.finished:
                 break
 
+                        #
+            # Pending firewall target.
+            #
+            # Used for Firewall -> Firewall traversal so the next
+            # firewall is not incorrectly processed as a router.
+            #
+            if state.pending_firewall:
+
+                resolution = state.pending_firewall
+                state.pending_firewall = None
+
+                traversal = self._trace_firewall(
+                    resolution=resolution,
+                    source=state.packet.source,
+                    route_destination=state.destination,
+                    protocol=state.packet.protocol,
+                    service=state.packet.service,
+                    firewall_hops=state.firewall_hops,
+                    network_hops=state.network_hops,
+                    explanation=explanation
+                )
+
+                if traversal.security:
+                    state.security = traversal.security
+
+                if traversal.output_packet:
+                    state.packet = traversal.output_packet
+
+                if not traversal.permitted:
+
+                    reason = (
+                        traversal.reason
+                        or "Firewall denied traffic"
+                    )
+
+                    explanation.add(
+                        f"Trace stopped: {reason}"
+                    )
+
+                    state.mark_finished(reason)
+                    break
+
+                if (
+                    stop_on_destination
+                    and traversal.destination_reached
+                ):
+
+                    reason = (
+                        f"Destination reached via firewall "
+                        f"route {traversal.route}"
+                    )
+
+                    explanation.add(reason)
+
+                    state.mark_finished(
+                        reason=reason,
+                        destination_reached=True
+                    )
+
+                    break
+
+                if self._continue_from_firewall_target(
+                    state=state,
+                    traversal=traversal,
+                    fallback_vrf=state.vrf,
+                    explanation=explanation
+                ):
+                    continue
+
+                reason = (
+                    "Trace stopped after firewall traversal: "
+                    "missing next-device inventory"
+                )
+
+                explanation.add(reason)
+                state.mark_finished(reason)
+                break
+
             if not state.has_valid_routing_start():
                 reason = (
                     "Trace stopped: missing router, "
@@ -824,6 +902,48 @@ class TraceWorkflow:
         )
 
         if target and target.resolved:
+
+            #
+            # Firewall -> Firewall continuation
+            #
+            if target.device_type == "Firewall":
+
+                interface_name = target.interface
+
+                if (
+                    interface_name
+                    and ":" in interface_name
+                ):
+                    interface_name = interface_name.split(
+                        ":",
+                        1
+                    )[1]
+
+                state.pending_firewall = {
+                    "resolved": True,
+                    "method": "asa_interface",
+                    "firewall": target.device_name,
+                    "context": target.vrf,
+                    "interface": interface_name,
+                    "ip": traversal.next_hop,
+                    "subnet": None,
+                    "reason": target.reason,
+                    "confidence": target.confidence
+                }
+
+                state.phase = "firewall"
+
+                explanation.add(
+                    f"Trace continues to Firewall "
+                    f"{target.device_name} "
+                    f"context {target.vrf}"
+                )
+
+                return True
+
+            #
+            # Firewall -> Router continuation
+            #
             state.set_router_target(
                 router=target.device_name,
                 vrf=target.vrf or fallback_vrf,
@@ -857,12 +977,14 @@ class TraceWorkflow:
                 reason=reason,
                 inventory_boundary=True
             )
+
             return True
 
         if (
             next_device
             and next_device.get("resolved")
         ):
+
             method = next_device.get("method")
 
             if method in [
@@ -871,6 +993,7 @@ class TraceWorkflow:
                 "hsrp_priority",
                 "hsrp_active"
             ]:
+
                 state.set_router_target(
                     router=next_device.get("router"),
                     vrf=(

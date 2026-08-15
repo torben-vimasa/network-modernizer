@@ -6,7 +6,7 @@
     "objects": 7354,
     "access_lists": 108023,
     "any_any_rules": 289,
-    "acl_count": 201,
+    "acl_count": 180,
     "top_acls": {
         "BDK-Teknik:acc_in_inside": 22018,
         "Site2Site-VPN:CSM_FW_ACL_KMD_DMZ": 14400,
@@ -101,7 +101,7 @@
             "any_any_rules": 4
         },
         {
-            "context": "TCCE-CAT2-FW1",
+            "context": "CAT2-DMZ",
             "names": 0,
             "objects": 357,
             "access_lists": 417,
@@ -111,7 +111,7 @@
             "any_any_rules": 7
         },
         {
-            "context": "TCCW-CAT2-FW1",
+            "context": "CAT2-DMZ",
             "names": 0,
             "objects": 354,
             "access_lists": 418,

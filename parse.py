@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 from parsers.object_group_parser import ObjectParser
+from utils.firewall_context import detect_firewall_context
 
 
 CONTEXTS_DIR = Path("data/contexts")
@@ -9,7 +10,7 @@ OUTPUT_DIR = Path("output")
 
 
 def parse_context_file(context_file: Path) -> dict:
-    context_name = context_file.stem
+    context_name = detect_firewall_context(context_file)
 
     with open(
         context_file,
@@ -203,22 +204,7 @@ def parse_context_file(context_file: Path) -> dict:
     if current_interface is not None:
         interfaces.append(current_interface)
 
-    #
-    # Map interface ACLs onto rules where possible.
-    #
-    # Global ACLs intentionally remain asa_interface=None.
-    #
-    acl_to_interface = {
-        access_group["acl"]: access_group["asa_interface"]
-        for access_group in access_groups
-        if access_group.get("direction") != "global"
-    }
-
-    for rule in rules:
-        rule["asa_interface"] = acl_to_interface.get(
-            rule["acl"]
-        )
-
+    
     return {
         "context": context_name,
         "names": name_count,

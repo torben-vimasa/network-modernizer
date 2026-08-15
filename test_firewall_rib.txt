@@ -1,0 +1,6 @@
+hostname OBV-CAT3-FW1-1
+B        100.72.36.64 255.255.255.224 [20/50] via 100.72.33.13, 7w0d
+C        100.72.33.12 255.255.255.252
+           is directly connected, OBV-CAT3DMZ-TRANSIT-TCCE-CAT2DMZ
+L        100.72.33.14 255.255.255.255
+           is directly connected, OBV-CAT3DMZ-TRANSIT-TCCE-CAT2DMZ

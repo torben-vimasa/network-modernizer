@@ -5,6 +5,7 @@ from pathlib import Path
 from models.route_entry import RouteEntry
 from parsers.firewall_interface_parser import FirewallInterfaceParser
 from parsers.firewall_route_parser import FirewallRouteParser
+from utils.firewall_context import detect_firewall_context
 
 
 class FirewallRouteExportBuilder:
@@ -60,15 +61,26 @@ class FirewallRouteExportBuilder:
                 errors="ignore"
             ).splitlines()
 
-            context = file.stem
+            context = detect_firewall_context(file)
 
             #
-            # Configured routes
+            # Parse interfaces first so we can determine
+            # the physical firewall/device hostname.
+            #
+            interfaces = self.interface_parser.parse(lines)
+
+            device = context
+
+            if interfaces:
+                device = interfaces[0].device
+
+            #
+            # Configured and operative routes
             #
             routes = self.route_parser.parse(lines)
 
             for route in routes:
-                route.router = context
+                route.router = device
                 route.vrf = context
 
             all_routes.extend(routes)
@@ -76,8 +88,6 @@ class FirewallRouteExportBuilder:
             #
             # Connected routes derived from L3 interfaces
             #
-            interfaces = self.interface_parser.parse(lines)
-
             for interface in interfaces:
 
                 if not interface.ip or not interface.mask:
@@ -92,7 +102,7 @@ class FirewallRouteExportBuilder:
                     continue
 
                 connected_route = RouteEntry(
-                    router=context,
+                    router=device,
                     vrf=context,
                     prefix=str(network),
                     next_hop=None,
@@ -106,7 +116,6 @@ class FirewallRouteExportBuilder:
                 connected_route.ingress_interface = None
 
                 all_routes.append(connected_route)
-
         rows = []
 
         for route in all_routes:

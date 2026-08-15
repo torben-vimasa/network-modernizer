@@ -2070,7 +2070,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan1665",
         "asa_interface": "TEST",
         "security_level": "50",
@@ -2080,7 +2080,7 @@
         "shutdown": true
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2001",
         "asa_interface": "TCCE-CAT2DMZ-00-SPNS2-DEVICE-MGMT-LINKNET",
         "security_level": "90",
@@ -2090,7 +2090,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2301",
         "asa_interface": "TCCE-CAT2DMZ-01-AAA-DNS-NTP-LINKNET",
         "security_level": "50",
@@ -2100,7 +2100,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2302",
         "asa_interface": "TCCE-CAT2DMZ-02-MGMT-SERVICES-LINKNET",
         "security_level": "50",
@@ -2110,7 +2110,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2304",
         "asa_interface": "TCCE-CAT2DMZ-04-MONITORING-LINKNET",
         "security_level": "50",
@@ -2120,7 +2120,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2305",
         "asa_interface": "TCCE-CAT2DMZ-05-MGMT-VXRAIL-LINKNET",
         "security_level": "50",
@@ -2130,7 +2130,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2306",
         "asa_interface": "TCCE-CAT2DMZ-06-IDRAC-VXRAIL-LINKNET",
         "security_level": "50",
@@ -2140,7 +2140,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2307",
         "asa_interface": "TCCE-CAT2DMZ-07-BACKUP-VXRAIL-LINKNET",
         "security_level": "50",
@@ -2150,7 +2150,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2308",
         "asa_interface": null,
         "security_level": "50",
@@ -2160,7 +2160,7 @@
         "shutdown": true
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2309",
         "asa_interface": "TCCE-CAT2DMZ-09-EXT-PROVIDERS-JUMP-LINKNET",
         "security_level": "50",
@@ -2170,7 +2170,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2310",
         "asa_interface": "TCCE-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN-LINKNET",
         "security_level": "50",
@@ -2180,7 +2180,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2311",
         "asa_interface": "TCCE-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET",
         "security_level": "50",
@@ -2190,7 +2190,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2312",
         "asa_interface": "TCCE-CAT2DMZ-12-CAT2-LINUX-REPOSITORY-LINKNET",
         "security_level": "50",
@@ -2200,7 +2200,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2313",
         "asa_interface": "TCCE-CAT2DMZ-13-CAT2-ANTIVIRUS-LINKNET",
         "security_level": "50",
@@ -2210,7 +2210,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2314",
         "asa_interface": "TCCE-CAT2DMZ-14-BDK-JUMP-LINKNET",
         "security_level": "50",
@@ -2220,7 +2220,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2315",
         "asa_interface": "TCCE-CAT2DMZ-15-AEVEN-JUMP-LINKNET",
         "security_level": "50",
@@ -2230,7 +2230,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2318",
         "asa_interface": "TCCE-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER-LINKNET",
         "security_level": "50",
@@ -2240,7 +2240,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2010",
         "asa_interface": "TCCE-CAT2DMZ-TRANSIT-OBV-CAT3DMZ",
         "security_level": "0",
@@ -2250,7 +2250,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2013",
         "asa_interface": "TCCE-CAT2DMZ-TRANSIT-RGDC-CAT3DMZ",
         "security_level": "0",
@@ -2260,7 +2260,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2100",
         "asa_interface": "TRANSIT-TCCE-CAT2-NET_MGMT_BDK_CORE_A1",
         "security_level": "99",
@@ -2270,7 +2270,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2128",
         "asa_interface": "TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCE1A",
         "security_level": "99",
@@ -2280,7 +2280,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2129",
         "asa_interface": "TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCE2A",
         "security_level": "99",
@@ -2290,7 +2290,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2134",
         "asa_interface": "TRANSIT-TCCE-CAT2-NET_MGMT_BDK_STTN_A_TCCE1A",
         "security_level": "99",
@@ -2300,7 +2300,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2135",
         "asa_interface": "TRANSIT-TCCE-CAT2-NET_MGMT_BDK_STTN_A_TCCE2A",
         "security_level": "99",
@@ -2310,7 +2310,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2200",
         "asa_interface": "TRANSIT-TCCE-CAT2-NET_MGMT_BDK_CORE_B1",
         "security_level": "99",
@@ -2320,7 +2320,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2234",
         "asa_interface": "TRANSIT-TCCE-CAT2-NET_MGMT_BDK_STTN_B_TCCE1B",
         "security_level": "99",
@@ -2330,7 +2330,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2235",
         "asa_interface": "TRANSIT-TCCE-CAT2-NET_MGMT_BDK_STTN_B_TCCE2B",
         "security_level": "99",
@@ -2340,7 +2340,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2753",
         "asa_interface": "TRANSIT-SPNS1-OBVCORE01",
         "security_level": "90",
@@ -2350,7 +2350,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCE-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2754",
         "asa_interface": "TRANSIT-SPNS1-OBVCORE02",
         "security_level": "90",
@@ -2360,7 +2360,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan1665",
         "asa_interface": "TEST",
         "security_level": "50",
@@ -2370,7 +2370,7 @@
         "shutdown": true
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2001",
         "asa_interface": "TCCW-CAT2DMZ-00-SPNS2-DEVICE-MGMT-LINKNET",
         "security_level": "90",
@@ -2380,7 +2380,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2301",
         "asa_interface": "TCCW-CAT2DMZ-01-AAA-DNS-NTP-LINKNET",
         "security_level": "50",
@@ -2390,7 +2390,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2302",
         "asa_interface": "TCCW-CAT2DMZ-02-MGMT-SERVICES-LINKNET",
         "security_level": "50",
@@ -2400,7 +2400,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2304",
         "asa_interface": "TCCW-CAT2DMZ-04-MONITORING-LINKNET",
         "security_level": "50",
@@ -2410,7 +2410,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2305",
         "asa_interface": "TCCW-CAT2DMZ-05-MGMT-VXRAIL-LINKNET",
         "security_level": "50",
@@ -2420,7 +2420,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2306",
         "asa_interface": "TCCW-CAT2DMZ-06-IDRAC-VXRAIL-LINKNET",
         "security_level": "50",
@@ -2430,7 +2430,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2307",
         "asa_interface": "TCCW-CAT2DMZ-07-BACKUP-VXRAIL-LINKNET",
         "security_level": "50",
@@ -2440,7 +2440,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2308",
         "asa_interface": null,
         "security_level": "50",
@@ -2450,7 +2450,7 @@
         "shutdown": true
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2309",
         "asa_interface": "TCCW-CAT2DMZ-09-EXT-PROVIDERS-JUMP-LINKNET",
         "security_level": "50",
@@ -2460,7 +2460,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2310",
         "asa_interface": "TCCW-CAT2DMZ-10-CAT2-LOGPOINT-ADMIN-LINKNET",
         "security_level": "50",
@@ -2470,7 +2470,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2311",
         "asa_interface": "TCCW-CAT2DMZ-11-CAT2-LOGPOINT-SYSLOG-LINKNET",
         "security_level": "50",
@@ -2480,7 +2480,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2312",
         "asa_interface": "TCCW-CAT2DMZ-12-CAT2-LINUX-REPOSITORY-LINKNET",
         "security_level": "50",
@@ -2490,7 +2490,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2313",
         "asa_interface": "TCCW-CAT2DMZ-13-CAT2-ANTIVIRUS-LINKNET",
         "security_level": "50",
@@ -2500,7 +2500,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2314",
         "asa_interface": "TCCW-CAT2DMZ-14-BDK-JUMP-LINKNET",
         "security_level": "50",
@@ -2510,7 +2510,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2315",
         "asa_interface": "TCCW-CAT2DMZ-15-AEVEN-JUMP-LINKNET",
         "security_level": "50",
@@ -2520,7 +2520,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2318",
         "asa_interface": "TCCW-CAT2DMZ-18-CAT2-CAT-CENTER-ENTER-LINKNET",
         "security_level": "50",
@@ -2530,7 +2530,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2011",
         "asa_interface": "TCCW-CAT2DMZ-TRANSIT-OBV-CAT3DMZ",
         "security_level": "0",
@@ -2540,7 +2540,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2012",
         "asa_interface": "TCCW-CAT2DMZ-TRANSIT-RGDC-CAT3DMZ",
         "security_level": "0",
@@ -2550,7 +2550,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2100",
         "asa_interface": "TRANSIT-TCCW-CAT2-NET_MGMT_BDK_CORE_A1",
         "security_level": "99",
@@ -2560,7 +2560,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2128",
         "asa_interface": "TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCW1A",
         "security_level": "99",
@@ -2570,7 +2570,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2129",
         "asa_interface": "TRANSIT-TCCE-CAT2-FTSVOIP_A_TCCW2A",
         "security_level": "99",
@@ -2580,7 +2580,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2134",
         "asa_interface": "TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_A_TCCW1A",
         "security_level": "99",
@@ -2590,7 +2590,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2135",
         "asa_interface": "TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_A_TCCW2A",
         "security_level": "99",
@@ -2600,7 +2600,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2200",
         "asa_interface": "TRANSIT-TCCW-CAT2-NET_MGMT_BDK_CORE_B1",
         "security_level": "99",
@@ -2610,7 +2610,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2234",
         "asa_interface": "TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_B_TCCW1B",
         "security_level": "99",
@@ -2620,7 +2620,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2235",
         "asa_interface": "TRANSIT-TCCW-CAT2-NET_MGMT_BDK_STTN_B_TCCW2B",
         "security_level": "99",
@@ -2630,7 +2630,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2751",
         "asa_interface": "TRANSIT-SPNS1-TCCWCORE01",
         "security_level": "90",
@@ -2640,7 +2640,7 @@
         "shutdown": false
     },
     {
-        "context": "TCCW-CAT2-FW1",
+        "context": "CAT2-DMZ",
         "physical_interface": "vlan2752",
         "asa_interface": "TRANSIT-SPNS1-TCCWCORE02",
         "security_level": "90",

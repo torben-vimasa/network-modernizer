@@ -6,6 +6,8 @@ class NATRule:
 
     name: str | None = None
 
+    context: str | None = None
+
     source_original: str | None = None
     source_translated: str | None = None
 

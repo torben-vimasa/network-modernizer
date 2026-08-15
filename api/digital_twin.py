@@ -44,12 +44,12 @@ class DigitalTwin:
 
         self.imported_config = self.asa_importer.import_config(asa_config_file)
 
-        self.nat_rules = self.imported_config.nat_rules
+        self.nat_rules = self._load_nat_rules()
 
         self.nat = NATEngine(
             self.nat_rules,
             graph=self.graph
-        )
+)
 
         self.trace = TraceWorkflow(self)
 
@@ -337,3 +337,37 @@ class DigitalTwin:
         return self.security.evaluate_context(
             security_context
         )
+
+    def _load_nat_rules(self):
+
+        file = Path("output/nat_rules.json")
+
+        if not file.exists():
+            return []
+
+        with open(file, encoding="utf-8") as f:
+            rows = json.load(f)
+
+        rules = []
+
+        from models.nat_rule import NATRule
+
+        for row in rows:
+            rules.append(
+                NATRule(
+                    name=row.get("name"),
+                    context=row.get("context"),
+                    source_original=row.get("source_original"),
+                    source_translated=row.get("source_translated"),
+                    destination_original=row.get("destination_original"),
+                    destination_translated=row.get("destination_translated"),
+                    service_original=row.get("service_original"),
+                    service_translated=row.get("service_translated"),
+                    direction=row.get("direction"),
+                    section=row.get("section"),
+                    reason=row.get("reason"),
+                    raw=row.get("raw")
+                )
+            )
+
+        return rules

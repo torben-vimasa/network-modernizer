@@ -1,0 +1,2504 @@
+Pasted code(20260810-182642).py
+Python
+Pasted code(1).json
+File
+Pasted code(20260811-184705).py
+Python
+Pasted code(20260811-193039).py
+Python
+Pasted text(20260811-194703).txt
+Document
+Pasted text(20260811-200437).txt
+Document
+Pasted text(20260812-121712).txt
+Document
+Pasted text(20260812-123845).txt
+Document
+Pasted text(20260812-124252).txt
+Document
+Pasted text(20260812-124724).txt
+Document
+Pasted text(20260812-132207).txt
+Document
+Pasted text(20260812-133828).txt
+Document
+Pasted text(20260812-140912).txt
+Document
+Pasted text(20260814-084521).txt
+Document
+Pasted text(20260814-084709).txt
+Document
+den sidste - send til fil
+Pasted text(20260814-084841).txt
+Document
+Pasted text(20260814-085455).txt
+Document
+Pasted text (2).txt
+Document
+Pasted text (3).txt
+Document
+Pasted text (4).txt
+Document
+Pasted text(20260814-085854).txt
+Document
+Pasted text(20260814-105232).txt
+Document
+Pasted text(20260814-110030).txt
+Document
+Pasted text(20260814-110927).txt
+Document
+yes bgp mellem cat3dmz / cat2dmz / ... 
+Pasted text(20260814-120758).txt
+Document
+Pasted text(20260814-121017).txt
+Document
+Pasted text(20260814-121255).txt
+Document
+Indsatte text(20260814-123818).txt
+Document
+okay - skal jeg hente noget fra CAT3DMZ core router
+
+Ja — nu hvor du har adgang, ville jeg hente lidt fra CAT3DMZ core-routeren, fordi det giver os en stærk reference til at validere hele pathen. Men vi behøver ikke et kæmpe dump.
+
+På OBvDCPe1 vil jeg have disse:
+
+show route vrf SPNS2-TRANSIT-JTTN 100.72.36.70
+
+og:
+
+show bgp vrf SPNS2-TRANSIT-JTTN 100.72.36.64/27
+
+Hvis det er IOS-XR og syntaksen driller:
+
+show route vrf SPNS2-TRANSIT-JTTN 100.72.36.70 detail
+show bgp vrf SPNS2-TRANSIT-JTTN ipv4 unicast 100.72.36.64/27
+
+Derudover vil jeg meget gerne have BGP-sessionen mod CAT3-firewallen, fordi vi allerede ved, at CAT3-FW har 100.72.36.64/27 via 100.72.33.13, mens dens JTTN-side er 100.73.32.1.
+
+Så:
+
+show bgp vrf SPNS2-TRANSIT-JTTN summary
+
+Det er nok.
+
+Vi prøver dermed at bevise:
+
+RGDCPe1
+   ↓
+OBvDCPe1
+   ↓
+100.73.32.1  CAT3-FW
+   ↓
+CAT3-FW BGP route 100.72.36.64/27
+   ↓
+100.72.33.13  CAT2-side
+
+Gem gerne outputtet, især show route/show bgp. Det bliver nyttigt som reference-data til Network Modernizer, ikke kun til denne ene fejl.
+
+Indsatte text(20260814-124056).txt
+Document
+dette er fra Core i zonen CAT3DMZ.. 
+
+Ja — det her er den rigtige CAT3DMZ core (OBV-CAT3-CORE1), og configen er meget værdifuld for modellen.
+
+Vi kan bl.a. se, at core’en har alle CAT3DMZ-zonerne som separate VRF’er med egne RT’er, fx CAT3DMZ-51-TPS-INT-SERVER med RT 65330:35029. Core’en har også det konkrete linknet til TPS INT på Vlan3529, IP 100.73.65.118/30.
+
+Samtidig ser vi den fysiske/L2-forbindelse til firewall-clusteret via Port-channel1, som trunker alle de relevante CAT3DMZ link-VLANs til OBV-CAT3-FW1.
+
+Det betyder, at vores topologimodel kan blive meget stærkere:
+
+OBV-CAT3-FW1
+   │
+Port-channel1 trunk
+   │
+OBV-CAT3-CORE1
+   ├─ VRF CAT3DMZ-11-COMM
+   ├─ VRF CAT3DMZ-46-SW-CITRIX-SVR-ENV
+   ├─ VRF CAT3DMZ-51-TPS-INT-SERVER
+   └─ ...
+
+Og for eksempel CAT3DMZ-11-COMM har firewall/core-linket på Vlan3311 med core-IP 100.73.34.42/30.
+
+Det interessante er dog: den route vi lige arbejder med — 100.72.36.64/27 — findes på CAT3-firewallen mod CAT2DMZ, ikke i en CAT3DMZ server-VRF på denne core. Så til den konkrete trace-blocker har firewallens show route allerede givet os det afgørende datapunkt.
+
+Jeg ville derfor ikke hente hele routing-tabellen fra core’en nu. Men mens du har adgang, vil jeg meget gerne have to små outputs, fordi de bliver perfekte validationsdata til Network Modernizer:
+
+show ip route vrf CAT3DMZ-11-COMM
+
+og
+
+show ip route vrf CAT3DMZ-51-TPS-INT-SERVER
+
+De vil vise os den anden halvdel af modellen: hvordan en CAT3 firewall-zone faktisk fortsætter fra firewall → core → server-subnet.
+
+Så bagefter har vi begge retninger dækket:
+
+CAT2 destination:
+CAT3-FW → BGP → CAT2DMZ
+
+
+CAT3 server destination:
+CAT3-FW → linknet → CAT3-CORE VRF → server subnet
+
+Det er meget værdifuldt til regressionstests senere.
+
+Indsatte text(20260814-124138).txt
+Document
+Indsatte text(20260814-124724).txt
+Document
+
+Enig. Vi fokuserer først på OBV → TCCE, fordi det er den primære path og samtidig den vi allerede har gode reference-data på.
+
+RGDC/TCCW gemmer vi som sekundær regression/HA-validering bagefter. Det er faktisk en fordel: når parseren virker på OBV/TCCE, kan vi teste om samme logik også finder de tilsvarende routes på RGDC/TCCW uden særkode.
+
+Så rækkefølgen bliver:
+
+Implementér parsing af operative firewall-routes (B, C, S, L osv.).
+Regenerér firewall_routes.json.
+Bekræft at OBV-CAT3-FW1-1 nu har 100.72.36.64/27 via 100.72.33.13.
+Kør vores LogPoint trace_packet() igen.
+Når OBV/TCCE er grøn, tester vi samme flow over RGDC/TCCW som redundans-check.
+
+Du behøver ikke hente mere nu. Jeg siger til, hvis vi mangler noget specifikt fra RGDC/TCCW.
+
+skal jeg oploade filerne et sted
+
+Ja — jeg synes vi skal gemme dem i projektet. De er meget værdifulde som reference/testdata, fordi de er live-output fra de faktiske devices.
+
+Jeg ville lave:
+
+data/
+└── live_reference/
+    ├── OBV-CAT3-FW1-1/
+    │   └── show_route.txt
+    ├── OBV-CAT3-CORE1/
+    │   ├── show_run.txt
+    │   └── show_bgp.txt
+    └── TCCE-CAT2-FW/
+        └── show_route.txt
+
+Men lad være med at kopiere noget endnu, hvis de outputs du viste mig allerede ligger i eksisterende device-filer under data/firewalls/ osv.
+
+Det vigtigste er især CAT3-FW og CAT2-FW show route, fordi de skal bruges til at udvikle og regressionsteste den nye RIB-parser.
+
+Hvis de live outputs kun ligger på din PC/terminal lige nu, så ja: gem dem i projektet. Jeg kan give dig de præcise PowerShell-commands og filnavne, så vi får strukturen rigtig fra starten.
+
+de ligger ingen steder pt.. kun paste ind her
+
+Ah ja — så gem dem nu, inden vi går videre. De er gode fixtures til parseren.
+
+Jeg ville lave denne struktur:
+
+New-Item -ItemType Directory -Force .\data\live_reference\OBV-CAT3-FW1-1
+New-Item -ItemType Directory -Force .\data\live_reference\OBV-CAT3-CORE1
+New-Item -ItemType Directory -Force .\data\live_reference\TCCE-CAT2-FW
+
+Gem derefter de outputs, du har hentet, som:
+
+data\live_reference\OBV-CAT3-FW1-1\show_route.txt
+data\live_reference\OBV-CAT3-CORE1\show_run.txt
+data\live_reference\OBV-CAT3-CORE1\show_bgp.txt
+data\live_reference\TCCE-CAT2-FW\show_route.txt
+
+Hvis terminal-outputtet ikke længere er tilgængeligt lokalt, er det ikke noget problem — du har pasted det her, så vi har stadig indholdet i samtalen. Vi behøver ikke hente det igen for at fortsætte udviklingen.
+
+Men fremover: når du tager live-output fra OBV/TCCE, så gem det direkte under live_reference. Det giver os et rigtig godt regression-datasæt.
+
+Og commit ikke live_reference endnu. Vi skal lige beslutte, om live device-output skal ligge i Git eller .gitignore pga. produktionsdata.
+
+Når mapperne er lavet, går vi videre med FirewallRouteParser.
+
+OBV-CAT3-CORE1#show run
+Building configuration...
+
+Current configuration : 64592 bytes
+!
+! Last configuration change at 16:16:21 CEST Thu May 21 2026 by T1OT-AEVN-ELSO
+! NVRAM config last updated at 16:16:21 CEST Thu May 21 2026 by T1OT-AEVN-ELSO
+!
+version 17.9
+service timestamps debug datetime msec localtime
+service timestamps log datetime msec localtime
+service password-encryption
+service call-home
+service unsupported-transceiver
+no platform punt-keepalive disable-kernel-core
+!
+hostname OBV-CAT3-CORE1
+!
+!
+vrf definition BROKER-DMZ
+rd 65000:400
+!
+address-family ipv4
+route-target export 65000:400
+route-target import 65000:400
+exit-address-family
+!
+vrf definition CAT3DMZ-00-SPNS2-DEVICE-MGMT
+rd 100.73.33.2:30302
+!
+address-family ipv4
+route-target export 65330:30302
+route-target import 65330:30302
+exit-address-family
+!
+vrf definition CAT3DMZ-01-AAA-DNS-NTP
+rd 100.73.33.2:30101
+!
+address-family ipv4
+route-target export 65330:30101
+route-target import 65330:30101
+exit-address-family
+!
+vrf definition CAT3DMZ-02-MGMT-SERVICES
+rd 100.73.33.2:30102
+!
+address-family ipv4
+route-target export 65330:30102
+route-target import 65330:30102
+exit-address-family
+!
+vrf definition CAT3DMZ-04-MONITORING
+rd 100.73.33.2:30104
+!
+address-family ipv4
+route-target export 65330:30104
+route-target import 65330:30104
+exit-address-family
+!
+vrf definition CAT3DMZ-05-SZ-MGMT-VXRAIL
+rd 100.73.255.255:35000
+!
+address-family ipv4
+route-target export 65330:35000
+route-target import 65330:35000
+exit-address-family
+!
+vrf definition CAT3DMZ-06-SZ-IDRAC-VXRAIL
+rd 100.73.255.255:35001
+!
+address-family ipv4
+route-target export 65330:35001
+route-target import 65330:35001
+exit-address-family
+!
+vrf definition CAT3DMZ-07-BROKER-IDRAC-VXRAIL
+rd 100.73.255.255:35002
+!
+address-family ipv4
+route-target export 65330:35002
+route-target import 65330:35002
+exit-address-family
+!
+vrf definition CAT3DMZ-09-MGMT-JUMPHOST
+rd 100.73.33.2:30109
+!
+address-family ipv4
+route-target export 65330:30109
+route-target import 65330:30109
+exit-address-family
+!
+vrf definition CAT3DMZ-10-API
+rd 100.73.255.255:30110
+!
+address-family ipv4
+route-target export 65330:30110
+route-target import 65330:30110
+exit-address-family
+!
+vrf definition CAT3DMZ-11-COMM
+rd 100.73.255.255:30111
+!
+address-family ipv4
+route-target export 65330:30111
+route-target import 65330:30111
+exit-address-family
+!
+vrf definition CAT3DMZ-12-DWH-FE
+rd 100.73.255.255:30112
+!
+address-family ipv4
+route-target export 65330:30112
+route-target import 65330:30112
+exit-address-family
+!
+vrf definition CAT3DMZ-13-DWH-BE
+rd 100.73.255.255:30113
+!
+address-family ipv4
+route-target export 65330:30113
+route-target import 65330:30113
+exit-address-family
+!
+vrf definition CAT3DMZ-16-GA
+rd 100.73.255.255:30116
+!
+address-family ipv4
+route-target export 65330:30116
+route-target import 65330:30116
+exit-address-family
+!
+vrf definition CAT3DMZ-17-MGMT
+rd 100.73.255.255:30117
+!
+address-family ipv4
+route-target export 65330:30117
+route-target import 65330:30117
+exit-address-family
+!
+vrf definition CAT3DMZ-18-MSVC
+rd 100.73.255.255:30118
+!
+address-family ipv4
+route-target export 65330:30118
+route-target import 65330:30118
+exit-address-family
+!
+vrf definition CAT3DMZ-19-TOPODB-BE
+rd 100.73.255.255:30119
+!
+address-family ipv4
+route-target export 65330:30119
+route-target import 65330:30119
+exit-address-family
+!
+vrf definition CAT3DMZ-20-TOPODB-FE
+rd 100.73.255.255:30120
+!
+address-family ipv4
+route-target export 65330:30120
+route-target import 65330:30120
+exit-address-family
+!
+vrf definition CAT3DMZ-21-REPO
+rd 100.73.255.255:30121
+!
+address-family ipv4
+route-target export 65330:30121
+route-target import 65330:30121
+exit-address-family
+!
+vrf definition CAT3DMZ-22-ZABBIX-MON
+description FIT network - Zabbix monitoring
+rd 100.73.255.255:30122
+!
+address-family ipv4
+route-target export 65330:30122
+route-target import 65330:30122
+exit-address-family
+!
+vrf definition CAT3DMZ-23-MSVC-BE
+rd 100.73.255.255:30123
+!
+address-family ipv4
+route-target export 65330:30123
+route-target import 65330:30123
+exit-address-family
+!
+vrf definition CAT3DMZ-24-GA2
+rd 100.73.255.255:30124
+!
+address-family ipv4
+route-target export 65330:30124
+route-target import 65330:30124
+exit-address-family
+!
+vrf definition CAT3DMZ-33-SW-CROSS-FRONTEND
+rd 100.73.255.255:35011
+!
+address-family ipv4
+route-target export 65330:35011
+route-target import 65330:35011
+exit-address-family
+!
+vrf definition CAT3DMZ-34-SW-WTS
+rd 100.73.255.255:35012
+!
+address-family ipv4
+route-target export 65330:35012
+route-target import 65330:35012
+exit-address-family
+!
+vrf definition CAT3DMZ-35-SW-CROSS-BACKEND
+rd 100.73.255.255:35013
+!
+address-family ipv4
+route-target export 65330:35013
+route-target import 65330:35013
+exit-address-family
+!
+vrf definition CAT3DMZ-36-SW-BACKEND
+rd 100.73.255.255:35014
+!
+address-family ipv4
+route-target export 65330:35014
+route-target import 65330:35014
+exit-address-family
+!
+vrf definition CAT3DMZ-37-SW-REPO
+rd 100.73.255.255:35015
+!
+address-family ipv4
+route-target export 65330:35015
+route-target import 65330:35015
+exit-address-family
+!
+vrf definition CAT3DMZ-38-SW-OUTGOING-PROXY
+rd 100.73.255.255:35016
+!
+address-family ipv4
+route-target export 65330:35016
+route-target import 65330:35016
+exit-address-family
+!
+vrf definition CAT3DMZ-39-SW-REVERSE-PROXY
+rd 100.73.255.255:35017
+!
+address-family ipv4
+route-target export 65330:35017
+route-target import 65330:35017
+exit-address-family
+!
+vrf definition CAT3DMZ-42-SZ-NETFLOW
+rd 100.73.255.255:35020
+!
+address-family ipv4
+route-target export 65330:35020
+route-target import 65330:35020
+exit-address-family
+!
+vrf definition CAT3DMZ-44-SW-CRO-MGMT
+rd 100.73.255.255:35022
+!
+address-family ipv4
+route-target export 65330:35022
+route-target import 65330:35022
+exit-address-family
+!
+vrf definition CAT3DMZ-45-CATALYST-CENTER
+rd 100.73.255.255:35023
+!
+address-family ipv4
+route-target export 65330:35023
+route-target import 65330:35023
+exit-address-family
+!
+vrf definition CAT3DMZ-46-SW-CITRIX-SVR-ENV
+rd 100.73.255.255:35024
+!
+address-family ipv4
+route-target export 65330:35024
+route-target import 65330:35024
+exit-address-family
+!
+vrf definition CAT3DMZ-49-NETWORKER-SERVER
+rd 100.73.255.255:35027
+!
+address-family ipv4
+route-target export 65330:35027
+route-target import 65330:35027
+exit-address-family
+!
+vrf definition CAT3DMZ-50-DATADOMAIN-SERVER
+rd 100.73.255.255:35028
+!
+address-family ipv4
+route-target export 65330:35028
+route-target import 65330:35028
+exit-address-family
+!
+vrf definition CAT3DMZ-51-TPS-INT-SERVER
+rd 100.73.255.255:35029
+!
+address-family ipv4
+route-target export 65330:35029
+route-target import 65330:35029
+exit-address-family
+!
+vrf definition CAT3DMZ-55-MDR-Sensor
+rd 100.73.255.255:35034
+!
+address-family ipv4
+route-target export 65330:35034
+route-target import 65330:35034
+exit-address-family
+!
+vrf definition ERTMS-DMZ
+rd 65000:200
+!
+address-family ipv4
+route-target export 65000:200
+route-target import 65000:200
+exit-address-family
+!
+vrf definition Mgmt-vrf
+rd 1:1
+!
+address-family ipv4
+exit-address-family
+!
+address-family ipv6
+exit-address-family
+!
+logging count
+logging userinfo
+logging buffered 20000
+aaa new-model
+!
+!
+aaa group server tacacs+ TACACSGROUP
+server-private 100.72.3.15 key 7 062416761A7C0814104F514807017F7E
+server-private 100.72.35.15 key 7 062416761A7C0814104F514807017F7E
+ip vrf forwarding CAT3DMZ-00-SPNS2-DEVICE-MGMT
+!
+aaa authentication login default group TACACSGROUP local
+aaa authentication login SSHLOGIN group TACACSGROUP local
+aaa authentication enable default group TACACSGROUP enable
+aaa authorization console
+aaa authorization config-commands
+aaa authorization exec default group TACACSGROUP local
+aaa authorization commands 0 default group TACACSGROUP none
+aaa authorization commands 1 default group TACACSGROUP none
+aaa authorization commands 15 default group TACACSGROUP none
+aaa accounting exec default start-stop group TACACSGROUP
+aaa accounting commands 1 default start-stop group TACACSGROUP
+aaa accounting commands 15 default start-stop group TACACSGROUP
+!
+!
+aaa session-id common
+clock timezone CET 1 0
+clock summer-time CEST recurring last Sun Mar 2:00 last Sun Oct 3:00
+boot system switch all flash.conf
+switch 1 provision c9500-16x
+switch 2 provision c9500-16x
+!
+!
+!
+!
+ip routing
+!
+!
+!
+!
+!
+ip domain name bane.dk
+!
+!
+!
+login on-failure log
+login on-success log
+vtp version 1
+!
+shutdown vlan 999
+!
+!
+!
+!
+!
+!
+!
+stackwise-virtual
+domain 30
+!
+!
+key chain BFD
+key 1
+key-string 7 030E4F07
+key chain BGP
+key 1
+key-string 7 01191208
+key chain ISIS
+key 1
+key-string 7 000E070A
+!
+crypto pki trustpoint SLA-TrustPoint
+enrollment terminal
+revocation-check crl
+!
+crypto pki trustpoint TP-self-signed-3617397155
+enrollment selfsigned
+subject-name cn=IOS-Self-Signed-Certificate-3617397155
+revocation-check none
+rsakeypair TP-self-signed-3617397155
+!
+!
+crypto pki certificate chain SLA-TrustPoint
+certificate ca 01
+30820321 30820209 A0030201 02020101 300D0609 2A864886 F70D0101 0B050030
+32310E30 0C060355 040A1305 43697363 6F312030 1E060355 04031317 43697363
+6F204C69 63656E73 696E6720 526F6F74 20434130 1E170D31 33303533 30313934
+3834375A 170D3338 30353330 31393438 34375A30 32310E30 0C060355 040A1305
+43697363 6F312030 1E060355 04031317 43697363 6F204C69 63656E73 696E6720
+526F6F74 20434130 82012230 0D06092A 864886F7 0D010101 05000382 010F0030
+82010A02 82010100 A6BCBD96 131E05F7 145EA72C 2CD686E6 17222EA1 F1EFF64D
+CBB4C798 212AA147 C655D8D7 9471380D 8711441E 1AAF071A 9CAE6388 8A38E520
+1C394D78 462EF239 C659F715 B98C0A59 5BBB5CBD 0CFEBEA3 700A8BF7 D8F256EE
+4AA4E80D DB6FD1C9 60B1FD18 FFC69C96 6FA68957 A2617DE7 104FDC5F EA2956AC
+7390A3EB 2B5436AD C847A2C5 DAB553EB 69A9A535 58E9F3E3 C0BD23CF 58BD7188
+68E69491 20F320E7 948E71D7 AE3BCC84 F10684C7 4BC8E00F 539BA42B 42C68BB7
+C7479096 B4CB2D62 EA2F505D C7B062A4 6811D95B E8250FC4 5D5D5FB8 8F27D191
+C55F0D76 61F9A4CD 3D992327 A8BB03BD 4E6D7069 7CBADF8B DF5F4368 95135E44
+DFC7C6CF 04DD7FD1 02030100 01A34230 40300E06 03551D0F 0101FF04 04030201
+06300F06 03551D13 0101FF04 05300301 01FF301D 0603551D 0E041604 1449DC85
+4B3D31E5 1B3E6A17 606AF333 3D3B4C73 E8300D06 092A8648 86F70D01 010B0500
+03820101 00507F24 D3932A66 86025D9F E838AE5C 6D4DF6B0 49631C78 240DA905
+604EDCDE FF4FED2B 77FC460E CD636FDB DD44681E 3A5673AB 9093D3B1 6C9E3D8B
+D98987BF E40CBD9E 1AECA0C2 2189BB5C 8FA85686 CD98B646 5575B146 8DFC66A8
+467A3DF4 4D565700 6ADF0F0D CF835015 3C04FF7C 21E878AC 11BA9CD2 55A9232C
+7CA7B7E6 C1AF74F6 152E99B7 B1FCF9BB E973DE7F 5BDDEB86 C71E3B49 1765308B
+5FB0DA06 B92AFE7F 494E8A9E 07B85737 F3A58BE1 1A48A229 C37C1E69 39F08678
+80DDCD16 D6BACECA EEBC7CF9 8428787B 35202CDC 60E4616A B623CDBD 230E3AFB
+418616A9 4093E049 4D10AB75 27E86F73 932E35B5 8862FDAE 0275156F 719BB2F0
+D697DF7F 28
+quit
+crypto pki certificate chain TP-self-signed-3617397155
+certificate self-signed 01
+30820330 30820218 A0030201 02020101 300D0609 2A864886 F70D0101 05050030
+31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274
+69666963 6174652D 33363137 33393731 3535301E 170D3231 30353235 31323139
+32305A17 0D333030 31303130 30303030 305A3031 312F302D 06035504 03132649
+4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D33 36313733
+39373135 35308201 22300D06 092A8648 86F70D01 01010500 0382010F 00308201
+0A028201 01008F5B 34AD99C3 4FE25F0F 64BE07C1 8F3FD76F B0E2DC61 A721BFD6
+239ABE29 D78D9E0B 5EF6A102 482541D5 31E12160 F137CE6B F77B67AA 02179796
+D4E9EAE5 E037F002 7312CB87 2E8EF6DA D9AE762F F1EB4015 7F0057F2 CEC536C1
+E50A8E1F 173C90A8 4B56778E 03B2D768 CF95E00D 815C81B0 89EEBD07 43089287
+D9AF89A4 AAC24A2B AA16B5EC 579D37B0 6CF2FCFF E8F4E147 155DAB58 53D0E9B2
+C911F9ED 5459D886 04280323 56EF0B96 AEB03F2A C06429DA 894640D5 ACFE4F0D
+F6656264 100E8993 4A2D60F0 CB539302 B3182CD5 5E3547C7 4E052327 7477D0D0
+8A44E04F 4E24FBCE F80CC689 24F804F2 AB81E2BF 2082D014 8DC992DE BC4C1017
+2DD2DEC0 98DF0203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF
+301F0603 551D2304 18301680 14479AA0 A23E4DE5 609FC85A 3DA6CB17 E65B2CF3
+1A301D06 03551D0E 04160414 479AA0A2 3E4DE560 9FC85A3D A6CB17E6 5B2CF31A
+300D0609 2A864886 F70D0101 05050003 82010100 078E174F 7C3EA172 393584A2
+0AB3F7F8 303DF102 44B48455 43BCC9B8 940B19D6 87FCDCFA 5040BA30 262AC398
+5B5F743A 6818F293 139897E3 A6D1307A A0B15359 FE5947F2 772AEF50 FD4A90F2
+51CA63DF 48BD3390 2FF14FB1 51048C59 D5F02741 51652F7C CACF6FA5 D19FA44E
+C577AF5C E8790BF4 DDEAD80E 8DDAAFB3 D136F390 A68615D9 BF4592E8 D451AAF4
+D95EBEEB 485B7418 B779E0D1 6EFBE433 5CC801B5 3E093278 F32F4F5E AFE4030F
+823C9CB9 0485C1BA 0EE46A79 350B81D8 4842F1CA E4CA1D98 896B5EDF 730D69DA
+24962BBB 9BAF5B81 8C1C9B4B E7BA6929 FDAEF969 6F61720F 7A634556 5235E048
+5B7599D9 18D5329E 282B85EE 59F050C3 69E92D53
+quit
+!
+!
+license boot level network-advantage addon dna-advantage
+license smart url cslu https://CAT3-SSM/cslu/v1/pi/JTTN-SSM-1
+memory free low-watermark processor 134344
+!
+system mtu 9198
+diagnostic bootup level minimal
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+spanning-tree vlan 1-2541,2543-4093 priority 0
+spanning-tree vlan 2542 priority 61440
+!
+!
+no errdisable detect cause gbic-invalid
+errdisable recovery cause udld
+errdisable recovery cause bpduguard
+errdisable recovery cause security-violation
+errdisable recovery cause channel-misconfig
+errdisable recovery cause pagp-flap
+errdisable recovery cause dtp-flap
+errdisable recovery cause link-flap
+errdisable recovery cause sfp-config-mismatch
+errdisable recovery cause gbic-invalid
+errdisable recovery cause l2ptguard
+errdisable recovery cause psecure-violation
+errdisable recovery cause port-mode-failure
+errdisable recovery cause dhcp-rate-limit
+errdisable recovery cause pppoe-ia-rate-limit
+errdisable recovery cause mac-limit
+errdisable recovery cause storm-control
+errdisable recovery cause inline-power
+errdisable recovery cause arp-inspection
+errdisable recovery cause link-monitor-failure
+errdisable recovery cause oam-remote-failure
+errdisable recovery cause loopback
+errdisable recovery cause psp
+errdisable recovery cause mrp-miscabling
+errdisable recovery interval 1200
+!
+!
+username admin privilege 15 secret 9 $9$pS9RqUdMwWR.yU$GFpcqH2a7iwoHB.5JCLuUp1Dz5Kqkgq7OiCSX2EVTFs
+!
+redundancy
+mode sso
+bfd fast-timers-on-slow-interface
+bfd-template single-hop ISIS
+interval min-tx 100 min-rx 100 multiplier 3
+authentication md5 keychain BFD
+!
+bfd-template single-hop MULTI-HOP_IBGP
+interval min-tx 150 min-rx 150 multiplier 3
+authentication md5 keychain BFD
+!
+bfd-template single-hop SINGLE-HOP_IBGP
+interval min-tx 9999 min-rx 9999 multiplier 3
+!
+crypto engine compliance shield disable
+!
+!
+!
+!
+!
+transceiver type all
+monitoring
+!
+vlan 2541
+name STR-CAT3DMZ-BROKER-DMZ-P-BASE-R
+!
+vlan 2556
+name STR-CAT3DMZ-BROKER-VPROXY-SRV
+!
+vlan 3001
+name OBV-CAT3DMZ-00-LINK
+!
+vlan 3002
+name OBV-CAT3DMZ-00-SPNS2-DEVICE
+!
+vlan 3301
+name OBV-CAT3DMZ-01-LINK
+!
+vlan 3302
+name OBV-CAT3DMZ-02-LINK
+!
+vlan 3304
+name OBV-CAT3DMZ-04-LINK
+!
+vlan 3309
+name OBVC-CAT3DMZ-09-LINK
+!
+vlan 3310
+name OBV-CAT3DMZ-10-LINK
+!
+vlan 3311
+name OBV-CAT3DMZ-11-LINK
+!
+vlan 3312
+name OBV-CAT3DMZ-12-LINK
+!
+vlan 3313
+name OBV-CAT3DMZ-13-LINK
+!
+vlan 3316
+name OBV-CAT3DMZ-16-LINK
+!
+vlan 3317
+name OBV-CAT3DMZ-17-LINK
+!
+vlan 3318
+name OBV-CAT3DMZ-18-LINK
+!
+vlan 3319
+name OBV-CAT3DMZ-19-LINK
+!
+vlan 3320
+name OBV-CAT3DMZ-20-LINK
+!
+vlan 3321
+name OBV-CAT3DMZ-21-LINK
+!
+vlan 3322
+name OBV-CAT3DMZ-22-LINK
+!
+vlan 3323
+name OBV-CAT3DMZ-23-LINK
+!
+vlan 3324
+name OBV-CAT3DMZ-24-LINK
+!
+vlan 3364
+name BROKER-DMZ-LINK
+!
+vlan 3401
+name OBV-CAT3DMZ-01-AAA-DNS-NTP
+!
+vlan 3402
+name OBV-CAT3DMZ-02-MGMT-SERVICES
+!
+vlan 3404
+name OBV-CAT3DMZ-04-MONITORING
+!
+vlan 3409
+name OBV-CAT3DMZ-09-MGMT-JUMPHOST
+!
+vlan 3410
+name STR-CAT3DMZ-10-API
+!
+vlan 3411
+name STR-CAT3DMZ-11-COMM
+!
+vlan 3412
+name STR-CAT3DMZ-12-DWH-FE
+!
+vlan 3413
+name STR-CAT3DMZ-13-DWH-BE
+!
+vlan 3416
+name STR-CAT3DMZ-16-GA
+!
+vlan 3417
+name STR-CAT3DMZ-17-MGMT
+!
+vlan 3418
+name STR-CAT3DMZ-18-MSVC
+!
+vlan 3419
+name STR-CAT3DMZ-19-TOPODB-BE
+!
+vlan 3420
+name STR-CAT3DMZ-20-TOPODB-FE
+!
+vlan 3421
+name STR-CAT3DMZ-21-REPO
+!
+vlan 3422
+name STR-CAT3DMZ-22-ZABBIX-MON
+!
+vlan 3423
+name STR-CAT3DMZ-23-MSVC-BE
+!
+vlan 3424
+name STR-CAT3DMZ-24-GA2
+!
+vlan 3500
+name OBV-CAT3DMZ-05-LINK
+!
+vlan 3501
+name OBV-CAT3DMZ-06-LINK
+!
+vlan 3502
+name OBV-CAT3DMZ-07-LINK
+!
+vlan 3511
+name OBV-CAT3DMZ-33-LINK
+!
+vlan 3512
+name OBV-CAT3DMZ-34-LINK
+!
+vlan 3513
+name OBV-CAT3DMZ-35-LINK
+!
+vlan 3514
+name OBV-CAT3DMZ-36-LINK
+!
+vlan 3515
+name OBV-CAT3DMZ-37-LINK
+!
+vlan 3516
+name OBV-CAT3DMZ-38-LINK
+!
+vlan 3517
+name OBV-CAT3DMZ-39-LINK
+!
+vlan 3520
+name OBV-CAT3DMZ-42-LINK
+!
+vlan 3522
+name OBV-CAT3DMZ-44-LINK
+!
+vlan 3523
+name RGDC-CAT3DMZ-45-LINK
+!
+vlan 3524
+name OBV-CAT3DMZ-46-SW-CITRIX-LINK
+!
+vlan 3527
+name OBV-CAT3DMZ-49-LINK
+!
+vlan 3528
+name OBV-CAT3DMZ-50-LINK
+!
+vlan 3529
+name OBV-CAT3DMZ-51-LINK
+!
+vlan 3531
+name OBV-CAT3DMZ-ERTMS-DMZ-LINK
+!
+vlan 3534
+!
+vlan 3600
+name STR-CAT3DMZ-05-SZ-MGMT-VXRAIL
+!
+vlan 3601
+name STR-CAT3DMZ-06-SZ-IDRAC-VXRAIL
+!
+vlan 3602
+name STR-CAT3DMZ-07-BR-IDRAC-VXRAIL
+!
+vlan 3611
+name STR-CAT3DMZ-33-SW-CROSS-FRONTEND
+!
+vlan 3612
+name STR-CAT3DMZ-34-SW-WTS
+!
+vlan 3613
+name STR-CAT3DMZ-35-SW-CROSS-BACKEND
+!
+vlan 3614
+name STR-CAT3DMZ-36-SW-BACKEND
+!
+vlan 3615
+name STR-CAT3DMZ-37-SW-REPO
+!
+vlan 3616
+name STR-CAT3DMZ-38-SW-OUTGOING-PROXY
+!
+vlan 3617
+name STR-CAT3DMZ-39-SW-REVERSE-PROXY
+!
+vlan 3620
+name STR-CAT3DMZ-42-SZ-NETFLOW
+!
+vlan 3622
+name STR-CAT3DMZ-44-SW-CRO-MGMT
+!
+vlan 3623
+name STR-CAT3DMZ-45-CATALYST-CENTER
+!
+vlan 3624
+name STR-CAT3DMZ-46-SW-CITRIX-SVR-ENV
+!
+vlan 3627
+name STR-CAT3DMZ-49-NETWORKER-SERVER
+!
+vlan 3628
+name STR-CAT3DMZ-50-DATADOMAIN-SERVER
+!
+vlan 3629
+name STR-CAT3DMZ-51-TPS-INT-SERVER
+!
+vlan 3630
+name STR-CAT3DMZ-05-SZ-VPROXY-SERVERS
+!
+vlan 3634
+name STR-CAT3DMZ-55-MDR-Sensor
+!
+!
+class-map match-any system-cpp-police-ewlc-control
+description EWLC Control
+class-map match-any system-cpp-police-topology-control
+description Topology control
+class-map match-any system-cpp-police-sw-forward
+description Sw forwarding, L2 LVX data packets, LOGGING, Transit Traffic
+class-map match-any system-cpp-default
+description EWLC Data, Inter FED Traffic
+class-map match-any system-cpp-police-sys-data
+description Openflow, Exception, EGR Exception, NFL Sampled Data, RPF Failed
+class-map match-any system-cpp-police-punt-webauth
+description Punt Webauth
+class-map match-any system-cpp-police-l2lvx-control
+description L2 LVX control packets
+class-map match-any system-cpp-police-forus
+description Forus Address resolution and Forus traffic
+class-map match-any system-cpp-police-multicast-end-station
+description MCAST END STATION
+class-map match-any system-cpp-police-high-rate-app
+description High Rate Applications
+class-map match-any system-cpp-police-multicast
+description MCAST Data
+class-map match-any system-cpp-police-l2-control
+description L2 control
+class-map match-any system-cpp-police-dot1x-auth
+description DOT1X Auth
+class-map match-any system-cpp-police-data
+description ICMP redirect, ICMP_GEN and BROADCAST
+class-map match-any system-cpp-police-stackwise-virt-control
+description Stackwise Virtual OOB
+class-map match-any non-client-nrt-class
+class-map match-any system-cpp-police-routing-control
+description Routing control and Low Latency
+class-map match-any system-cpp-police-protocol-snooping
+description Protocol snooping
+class-map match-any system-cpp-police-dhcp-snooping
+description DHCP snooping
+class-map match-any system-cpp-police-ios-routing
+description L2 control, Topology control, Routing control, Low Latency
+class-map match-any system-cpp-police-system-critical
+description System Critical and Gold Pkt
+class-map match-any system-cpp-police-ios-feature
+description ICMPGEN,BROADCAST,ICMP,L2LVXCntrl,ProtoSnoop,PuntWebauth,MCASTData,Transit,DOT1XAuth,Swfwd,LOGGING,L2LVXData,ForusTraffic,ForusARP,McastEndStn,Openflow,Exception,EGRExcption,NflSampled,RpfFailed
+!
+policy-map system-cpp-policy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+description SYSTEM-ID
+ip address 100.73.33.2 255.255.255.255
+!
+interface Loopback3402
+vrf forwarding CAT3DMZ-02-MGMT-SERVICES
+ip address 100.73.35.34 255.255.255.224
+shutdown
+!
+interface Port-channel1
+description OBV-CAT3-CORE01-PORTCHANNEL1-OBV-CAT3-FW1
+switchport trunk native vlan 999
+switchport trunk allowed vlan 333,3001,3301-3313,3316-3324,3364,3500-3502
+switchport trunk allowed vlan add 3511-3517,3520,3522-3524,3527-3529,3531,3534
+switchport mode trunk
+spanning-tree portfast trunk
+!
+interface Port-channel3
+description OBV-CAT3-CORE1-PORTCHANNEL3-RGDC-CAT3-CORE01
+no switchport
+ip address 100.73.1.7 255.255.255.254
+no ip redirects
+no ip proxy-arp
+load-interval 60
+mpls bgp forwarding
+bfd template SINGLE-HOP_IBGP
+!
+interface Port-channel10
+description OBV-CAT3-CORE01-PORTCHANNEL10-OBV-CAT3-AccessSw01
+switchport trunk native vlan 999
+switchport trunk allowed vlan 333,3001,3002,3401,3402,3405,3409,3417
+switchport mode trunk
+!
+interface Port-channel11
+description desc OBV-CAT3-CORE01-PORTCHANNEL11-OBV-CAT3DMZ-AccSW2
+switchport trunk native vlan 999
+switchport trunk allowed vlan 2542,2550,2553,3002,3402,3410-3413,3416-3424
+switchport trunk allowed vlan add 3527,3600-3602,3611-3617,3620,3622,3623,3628
+switchport trunk allowed vlan add 3630,3634
+switchport mode trunk
+!
+interface Port-channel12
+description desc OBV-CAT3-CORE01-PORTCHANNEL12-OBV-CAT3DMZ-AccSW3
+switchport trunk native vlan 999
+switchport trunk allowed vlan 247,248,250,251,2541,2556,3002,3602,3624,3629
+switchport mode trunk
+!
+interface GigabitEthernet0/0
+description NOT-IN-USE
+vrf forwarding Mgmt-vrf
+no ip address
+shutdown
+negotiation auto
+!
+interface TenGigabitEthernet1/0/1
+stackwise-virtual link 1
+description STACKWISE-VIRTUAL LINK
+!
+interface TenGigabitEthernet1/0/2
+stackwise-virtual link 1
+description STACKWISE-VIRTUAL LINK
+!
+interface TenGigabitEthernet1/0/3
+description OBV-CAT3-FW1-1-ETH1/5
+switchport trunk native vlan 999
+switchport trunk allowed vlan 333,3001,3301-3313,3316-3324,3364,3500-3502
+switchport trunk allowed vlan add 3511-3517,3520,3522-3524,3527-3529,3531,3534
+switchport mode trunk
+channel-group 1 mode active
+lacp rate fast
+!
+interface TenGigabitEthernet1/0/4
+description OBV-CAT3-FW1-2-ETH1/5
+switchport trunk native vlan 999
+switchport trunk allowed vlan 333,3001,3301-3313,3316-3324,3364,3500-3502
+switchport trunk allowed vlan add 3511-3517,3520,3522-3524,3527-3529,3531,3534
+switchport mode trunk
+channel-group 1 mode active
+lacp rate fast
+!
+interface TenGigabitEthernet1/0/5
+description RGDC-CAT3-CORE01-TE1/0/5
+no switchport
+no ip address
+no ip redirects
+no ip proxy-arp
+load-interval 60
+bfd template SINGLE-HOP_IBGP
+channel-group 3 mode active
+!
+interface TenGigabitEthernet1/0/6
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet1/0/7
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet1/0/8
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet1/0/9
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet1/0/10
+description NOT-IN-USE
+switchport access vlan 3402
+shutdown
+!
+interface TenGigabitEthernet1/0/11
+description SPNS1 OBVCORE01-T1-0-1
+no switchport
+vrf forwarding BROKER-DMZ
+ip address 100.75.1.2 255.255.255.252
+!
+interface TenGigabitEthernet1/0/12
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet1/0/13
+description NOT-IN-USE
+switchport access vlan 333
+switchport mode access
+shutdown
+!
+interface TenGigabitEthernet1/0/14
+description OBV-CAT3DMZ-AccessSw3-G1/0/1
+switchport trunk native vlan 999
+switchport trunk allowed vlan 247,248,250,251,2541,2556,3002,3602,3624,3629
+switchport mode trunk
+channel-group 12 mode active
+!
+interface TenGigabitEthernet1/0/15
+description OBV-CAT3DMZ-AccessSw2-G1/0/1
+switchport trunk native vlan 999
+switchport trunk allowed vlan 2542,2550,2553,3002,3402,3410-3413,3416-3424
+switchport trunk allowed vlan add 3527,3600-3602,3611-3617,3620,3622,3623,3628
+switchport trunk allowed vlan add 3630,3634
+switchport mode trunk
+channel-group 11 mode active
+spanning-tree portfast trunk
+!
+interface TenGigabitEthernet1/0/16
+description OBV-CAT3-AccessSw1-1-G1/1/1
+switchport trunk native vlan 999
+switchport trunk allowed vlan 333,3001,3002,3401,3402,3405,3409,3417
+switchport mode trunk
+channel-group 10 mode active
+spanning-tree portfast trunk
+!
+interface TenGigabitEthernet1/1/1
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet1/1/2
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet1/1/3
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet1/1/4
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet1/1/5
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet1/1/6
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet1/1/7
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet1/1/8
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface FortyGigabitEthernet1/1/1
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface FortyGigabitEthernet1/1/2
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet2/0/1
+stackwise-virtual link 1
+description STACKWISE-VIRTUAL LINK
+!
+interface TenGigabitEthernet2/0/2
+stackwise-virtual link 1
+description STACKWISE-VIRTUAL LINK
+!
+interface TenGigabitEthernet2/0/3
+description OBV-CAT3-FW1-1-ETH1/6
+switchport trunk native vlan 999
+switchport trunk allowed vlan 333,3001,3301-3313,3316-3324,3364,3500-3502
+switchport trunk allowed vlan add 3511-3517,3520,3522-3524,3527-3529,3531,3534
+switchport mode trunk
+channel-group 1 mode active
+lacp rate fast
+!
+interface TenGigabitEthernet2/0/4
+description OBV-CAT3-FW1-2-ETH1/6
+switchport trunk native vlan 999
+switchport trunk allowed vlan 333,3001,3301-3313,3316-3324,3364,3500-3502
+switchport trunk allowed vlan add 3511-3517,3520,3522-3524,3527-3529,3531,3534
+switchport mode trunk
+channel-group 1 mode active
+lacp rate fast
+!
+interface TenGigabitEthernet2/0/5
+description RGDC-CAT3-CORE01-TE2/0/5
+no switchport
+no ip address
+no ip redirects
+no ip proxy-arp
+load-interval 60
+bfd template SINGLE-HOP_IBGP
+channel-group 3 mode active
+!
+interface TenGigabitEthernet2/0/6
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet2/0/7
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet2/0/8
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet2/0/9
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet2/0/10
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet2/0/11
+description SPNS1 OBVCORE02-T1-0-1
+no switchport
+vrf forwarding BROKER-DMZ
+ip address 100.75.1.6 255.255.255.252
+!
+interface TenGigabitEthernet2/0/12
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet2/0/13
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet2/0/14
+description OBV-CAT3DMZ-AccessSw3-G2/0/1
+switchport trunk native vlan 999
+switchport trunk allowed vlan 247,248,250,251,2541,2556,3002,3602,3624,3629
+switchport mode trunk
+channel-group 12 mode active
+!
+interface TenGigabitEthernet2/0/15
+description OBV-CAT3DMZ-AccessSw2-G2/0/1
+switchport trunk native vlan 999
+switchport trunk allowed vlan 2542,2550,2553,3002,3402,3410-3413,3416-3424
+switchport trunk allowed vlan add 3527,3600-3602,3611-3617,3620,3622,3623,3628
+switchport trunk allowed vlan add 3630,3634
+switchport mode trunk
+channel-group 11 mode active
+spanning-tree portfast trunk
+!
+interface TenGigabitEthernet2/0/16
+description OBV-CAT3-AccessSw1-2-G1/1/1
+switchport trunk native vlan 999
+switchport trunk allowed vlan 333,3001,3002,3401,3402,3405,3409,3417
+switchport mode trunk
+channel-group 10 mode active
+spanning-tree portfast trunk
+!
+interface TenGigabitEthernet2/1/1
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet2/1/2
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet2/1/3
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet2/1/4
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet2/1/5
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet2/1/6
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet2/1/7
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface TenGigabitEthernet2/1/8
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface FortyGigabitEthernet2/1/1
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface FortyGigabitEthernet2/1/2
+description NOT-IN-USE
+switchport access vlan 999
+shutdown
+!
+interface Vlan1
+description NOT-IN-USE
+no ip address
+shutdown
+!
+interface Vlan247
+description CITRIX-Data
+vrf forwarding BROKER-DMZ
+ip address 172.21.247.2 255.255.255.0
+standby version 2
+standby 247 ip 172.21.247.1
+standby 247 priority 110
+standby 247 preempt
+standby 247 authentication tw3t5FAw
+!
+interface Vlan248
+description to Management IP VM-Ware
+vrf forwarding BROKER-DMZ
+ip address 172.21.248.2 255.255.255.0
+standby version 2
+standby 248 ip 172.21.248.1
+standby 248 priority 110
+standby 248 preempt
+standby 248 authentication tw3t5FAw
+!
+interface Vlan250
+description to PROD1
+vrf forwarding BROKER-DMZ
+ip address 172.21.250.2 255.255.255.0
+ip helper-address 172.27.2.22
+ip helper-address 172.20.3.19
+standby version 2
+standby 250 ip 172.21.250.1
+standby 250 priority 110
+standby 250 preempt
+standby 250 authentication tw3t5FAw
+!
+interface Vlan251
+description to PROD2
+vrf forwarding BROKER-DMZ
+ip address 172.21.251.2 255.255.255.0
+standby version 2
+standby 251 ip 172.21.251.1
+standby 251 priority 110
+standby 251 preempt
+standby 251 authentication tw3t5FAw
+!
+interface Vlan2541
+description P-base_replacement
+vrf forwarding BROKER-DMZ
+ip address 172.21.254.2 255.255.255.224
+standby version 2
+standby 2541 ip 172.21.254.1
+standby 2541 priority 110
+standby 2541 preempt
+standby 2541 authentication tw3t5FAw
+!
+interface Vlan2556
+description STR-CAT3DMZ-BROKER-DMZ-VPROXY-SERVERS
+vrf forwarding BROKER-DMZ
+ip address 172.21.255.66 255.255.255.224
+standby version 2
+standby 2556 ip 172.21.255.65
+standby 2556 priority 110
+standby 2556 preempt
+standby 2556 authentication tw3t5FAw
+!
+interface Vlan3001
+description OBV-CAT3DMZ-00-SPNS2-DEVICE-MGMT-LINKNET
+vrf forwarding CAT3DMZ-00-SPNS2-DEVICE-MGMT
+ip address 100.73.33.22 255.255.255.252
+!
+interface Vlan3002
+description OBV-CAT3DMZ-00-SPNS2-DEVICE-MGMT
+vrf forwarding CAT3DMZ-00-SPNS2-DEVICE-MGMT
+ip address 100.73.33.129 255.255.255.224
+!
+interface Vlan3301
+description OBV-CAT3DMZ-01-AAA-DNS-NTP-LINKNET
+vrf forwarding CAT3DMZ-01-AAA-DNS-NTP
+ip address 100.73.34.2 255.255.255.252
+!
+interface Vlan3302
+description OBV-CAT3DMZ-02-MGMT-SERVICES-LINKNET
+vrf forwarding CAT3DMZ-02-MGMT-SERVICES
+ip address 100.73.34.6 255.255.255.252
+!
+interface Vlan3304
+description OBV-CAT3DMZ-04-MONITORING-LINKNET
+vrf forwarding CAT3DMZ-04-MONITORING
+ip address 100.73.34.14 255.255.255.252
+!
+interface Vlan3309
+description OBV-CAT3DMZ-09-MGMT-JUMPHOST
+vrf forwarding CAT3DMZ-09-MGMT-JUMPHOST
+ip address 100.73.34.34 255.255.255.252
+!
+interface Vlan3310
+description OBV-CAT3DMZ-10-API-LINKNET
+vrf forwarding CAT3DMZ-10-API
+ip address 100.73.34.38 255.255.255.252
+!
+interface Vlan3311
+description OBV-CAT3DMZ-11-COMM-LINKNET
+vrf forwarding CAT3DMZ-11-COMM
+ip address 100.73.34.42 255.255.255.252
+!
+interface Vlan3312
+description OBV-CAT3DMZ-12-DWH-FE-LINKNET
+vrf forwarding CAT3DMZ-12-DWH-FE
+ip address 100.73.34.46 255.255.255.252
+!
+interface Vlan3313
+description OBV-CAT3DMZ-13-DWH-BE-LINKNET
+vrf forwarding CAT3DMZ-13-DWH-BE
+ip address 100.73.34.50 255.255.255.252
+!
+interface Vlan3316
+description OBV-CAT3DMZ-16-GA-LINKNET
+vrf forwarding CAT3DMZ-16-GA
+ip address 100.73.34.62 255.255.255.252
+!
+interface Vlan3317
+description OBV-CAT3DMZ-17-MGMT-LINKNET
+vrf forwarding CAT3DMZ-17-MGMT
+ip address 100.73.34.66 255.255.255.252
+!
+interface Vlan3318
+description OBV-CAT3DMZ-18-MSVC-LINKNET
+vrf forwarding CAT3DMZ-18-MSVC
+ip address 100.73.34.70 255.255.255.252
+!
+interface Vlan3319
+description OBV-CAT3DMZ-19-TOPODB-BE-LINKNET
+vrf forwarding CAT3DMZ-19-TOPODB-BE
+ip address 100.73.34.74 255.255.255.252
+!
+interface Vlan3320
+description OBV-CAT3DMZ-20-TOPODB-FE-LINKNET
+vrf forwarding CAT3DMZ-20-TOPODB-FE
+ip address 100.73.34.78 255.255.255.252
+!
+interface Vlan3321
+description OBV-CAT3DMZ-21-REPO-LINKNET
+vrf forwarding CAT3DMZ-21-REPO
+ip address 100.73.34.82 255.255.255.252
+!
+interface Vlan3322
+description OBV-CAT3DMZ-22-ZABBIX-MON-LINKNET
+vrf forwarding CAT3DMZ-22-ZABBIX-MON
+ip address 100.73.34.86 255.255.255.252
+!
+interface Vlan3323
+description OBV-CAT3DMZ-23-MSVC-BE-LINKNET
+vrf forwarding CAT3DMZ-23-MSVC-BE
+ip address 100.73.34.90 255.255.255.252
+!
+interface Vlan3324
+description OBV-CAT3DMZ-24-GA2-LINKNET
+vrf forwarding CAT3DMZ-24-GA2
+ip address 100.73.34.94 255.255.255.252
+!
+interface Vlan3364
+description BROKER-DMZ
+vrf forwarding BROKER-DMZ
+ip address 100.73.34.254 255.255.255.252
+!
+interface Vlan3401
+description OBV-CAT3DMZ-01-AAA-DNS-NTP
+vrf forwarding CAT3DMZ-01-AAA-DNS-NTP
+ip address 100.73.35.1 255.255.255.224
+shutdown
+!
+interface Vlan3402
+description OBV-CAT3DMZ-02-MGMT-SERVICES
+vrf forwarding CAT3DMZ-02-MGMT-SERVICES
+ip address 100.73.35.33 255.255.255.224
+!
+interface Vlan3404
+description OBV-CAT3DMZ-04-MONITORING
+vrf forwarding CAT3DMZ-04-MONITORING
+ip address 100.73.35.97 255.255.255.224
+!
+interface Vlan3409
+description OBV-CAT3DMZ-09-MGMT-JUMPHOST
+vrf forwarding CAT3DMZ-09-MGMT-JUMPHOST
+ip address 100.73.36.2 255.255.255.224
+!
+interface Vlan3410
+description STR-CAT3DMZ-10-API
+vrf forwarding CAT3DMZ-10-API
+ip address 100.73.36.34 255.255.255.224
+standby version 2
+standby 3410 ip 100.73.36.33
+standby 3410 priority 110
+standby 3410 preempt
+standby 3410 authentication tw3t5FAw
+!
+interface Vlan3411
+description STR-CAT3DMZ-11-COMM
+vrf forwarding CAT3DMZ-11-COMM
+ip address 100.73.36.66 255.255.255.224
+standby version 2
+standby 3411 ip 100.73.36.65
+standby 3411 priority 110
+standby 3411 preempt
+standby 3411 authentication tw3t5FAw
+!
+interface Vlan3412
+description STR-CAT3DMZ-12-DWH-FE
+vrf forwarding CAT3DMZ-12-DWH-FE
+ip address 100.73.36.98 255.255.255.224
+standby version 2
+standby 3412 ip 100.73.36.97
+standby 3412 priority 110
+standby 3412 preempt
+standby 3412 authentication tw3t5FAw
+!
+interface Vlan3413
+description STR-CAT3DMZ-13-DWH-BE
+vrf forwarding CAT3DMZ-13-DWH-BE
+ip address 100.73.36.130 255.255.255.224
+standby version 2
+standby 3413 ip 100.73.36.129
+standby 3413 priority 110
+standby 3413 preempt
+standby 3413 authentication tw3t5FAw
+!
+interface Vlan3416
+description STR-CAT3DMZ-16-GA
+vrf forwarding CAT3DMZ-16-GA
+ip address 100.73.36.130 255.255.255.224
+standby version 2
+standby 3416 ip 100.73.36.129
+standby 3416 priority 110
+standby 3416 preempt
+standby 3416 authentication tw3t5FAw
+!
+interface Vlan3417
+description STR-CAT3DMZ-17-MGMT
+vrf forwarding CAT3DMZ-17-MGMT
+ip address 100.73.37.2 255.255.255.224
+standby version 2
+standby 3417 ip 100.73.37.1
+standby 3417 priority 110
+standby 3417 preempt
+standby 3417 authentication tw3t5FAw
+!
+interface Vlan3418
+description STR-CAT3DMZ-18-MSVC
+vrf forwarding CAT3DMZ-18-MSVC
+ip address 100.73.37.34 255.255.255.224
+standby version 2
+standby 3418 ip 100.73.37.33
+standby 3418 priority 110
+standby 3418 preempt
+standby 3418 authentication tw3t5FAw
+!
+interface Vlan3419
+description STR-CAT3DMZ-19-TOPODB-BE
+vrf forwarding CAT3DMZ-19-TOPODB-BE
+ip address 100.73.37.66 255.255.255.224
+standby version 2
+standby 3419 ip 100.73.37.65
+standby 3419 priority 110
+standby 3419 preempt
+standby 3419 authentication tw3t5FAw
+!
+interface Vlan3420
+description STR-CAT3DMZ-20-TOPODB-FE
+vrf forwarding CAT3DMZ-20-TOPODB-FE
+ip address 100.73.37.98 255.255.255.224
+standby version 2
+standby 3420 ip 100.73.37.97
+standby 3420 priority 110
+standby 3420 preempt
+standby 3420 authentication tw3t5FAw
+!
+interface Vlan3421
+description STR-CAT3DMZ-21-REPO
+vrf forwarding CAT3DMZ-21-REPO
+ip address 100.73.37.130 255.255.255.224
+standby version 2
+standby 3421 ip 100.73.37.129
+standby 3421 priority 110
+standby 3421 preempt
+standby 3421 authentication tw3t5FAw
+!
+interface Vlan3422
+description STR-CAT3DMZ-22-ZABBIX-MON
+vrf forwarding CAT3DMZ-22-ZABBIX-MON
+ip address 100.73.37.162 255.255.255.224
+standby version 2
+standby 3422 ip 100.73.37.161
+standby 3422 priority 110
+standby 3422 preempt
+standby 3422 authentication tw3t5FAw
+!
+interface Vlan3423
+description STR-CAT3DMZ-23-MSVC-BE
+vrf forwarding CAT3DMZ-23-MSVC-BE
+ip address 100.73.37.194 255.255.255.224
+standby version 2
+standby 3423 ip 100.73.37.193
+standby 3423 priority 110
+standby 3423 preempt
+standby 3423 authentication tw3t5FAw
+!
+interface Vlan3424
+description STR-CAT3DMZ-24-GA2
+vrf forwarding CAT3DMZ-24-GA2
+ip address 100.73.37.226 255.255.255.224
+standby version 2
+standby 3424 ip 100.73.37.225
+standby 3424 priority 110
+standby 3424 preempt
+standby 3424 authentication tw3t5FAw
+!
+interface Vlan3500
+description OBV-CAT3DMZ-05-SZ-MGMT-VXRAIL-LINKNET
+vrf forwarding CAT3DMZ-05-SZ-MGMT-VXRAIL
+ip address 100.73.65.2 255.255.255.252
+!
+interface Vlan3501
+description OBV-CAT3DMZ-06-SZ-IDRAC-VXRAIL-LINKNET
+vrf forwarding CAT3DMZ-06-SZ-IDRAC-VXRAIL
+ip address 100.73.65.6 255.255.255.252
+!
+interface Vlan3502
+description OBV-CAT3DMZ-07-BROKER-IDRAC-VXRAIL-LINKNET
+vrf forwarding CAT3DMZ-07-BROKER-IDRAC-VXRAIL
+ip address 100.73.65.10 255.255.255.252
+!
+interface Vlan3511
+description OBV-CAT3DMZ-33-SW-CROSS-FRONTEND-LINKNET
+vrf forwarding CAT3DMZ-33-SW-CROSS-FRONTEND
+ip address 100.73.65.46 255.255.255.252
+!
+interface Vlan3512
+description OBV-CAT3DMZ-34-SW-WTS-LINKNET
+vrf forwarding CAT3DMZ-34-SW-WTS
+ip address 100.73.65.50 255.255.255.252
+!
+interface Vlan3513
+description OBV-CAT3DMZ-35-SW-CROSS-BACKEND-LINKNET
+vrf forwarding CAT3DMZ-35-SW-CROSS-BACKEND
+ip address 100.73.65.54 255.255.255.252
+!
+interface Vlan3514
+description OBV-CAT3DMZ-36-SW-BACKEND-LINKNET
+vrf forwarding CAT3DMZ-36-SW-BACKEND
+ip address 100.73.65.58 255.255.255.252
+!
+interface Vlan3515
+description OBV-CAT3DMZ-37-SW-REPO-LINKNET
+vrf forwarding CAT3DMZ-37-SW-REPO
+ip address 100.73.65.62 255.255.255.252
+!
+interface Vlan3516
+description OBV-CAT3DMZ-38-SW-OUTGOING-PROXY-LINKNET
+vrf forwarding CAT3DMZ-38-SW-OUTGOING-PROXY
+ip address 100.73.65.66 255.255.255.252
+!
+interface Vlan3517
+description OBV-CAT3DMZ-39-SW-REVERSE-PROXY-LINKNET
+vrf forwarding CAT3DMZ-39-SW-REVERSE-PROXY
+ip address 100.73.65.70 255.255.255.252
+!
+interface Vlan3520
+description OBV-CAT3DMZ-42-SZ-NETFLOW-LINKNET
+vrf forwarding CAT3DMZ-42-SZ-NETFLOW
+ip address 100.73.65.82 255.255.255.252
+!
+interface Vlan3522
+description OBV-CAT3DMZ-44-SW-CRO-MGMT-LINKNET
+vrf forwarding CAT3DMZ-44-SW-CRO-MGMT
+ip address 100.73.65.90 255.255.255.252
+!
+interface Vlan3523
+description CAT3DMZ-45-CATALYST-CENTER-LINKNET
+vrf forwarding CAT3DMZ-45-CATALYST-CENTER
+ip address 100.73.65.94 255.255.255.252
+!
+interface Vlan3524
+description OBV-CAT3DMZ-46-SW-CITRIX-SVR-ENV-LINKNET
+vrf forwarding CAT3DMZ-46-SW-CITRIX-SVR-ENV
+ip address 100.73.65.98 255.255.255.252
+!
+interface Vlan3527
+description OBV-CAT3DMZ-49-NETWORKER-SERVER-LINKNET
+vrf forwarding CAT3DMZ-49-NETWORKER-SERVER
+ip address 100.73.65.110 255.255.255.252
+!
+interface Vlan3528
+description OBV-CAT3DMZ-50-DATADOMAIN-SERVER-LINKNET
+vrf forwarding CAT3DMZ-50-DATADOMAIN-SERVER
+ip address 100.73.65.114 255.255.255.252
+!
+interface Vlan3529
+description OBV-CAT3DMZ-51-TPS-INT-SERVER-LINKNET
+vrf forwarding CAT3DMZ-51-TPS-INT-SERVER
+ip address 100.73.65.118 255.255.255.252
+!
+interface Vlan3531
+description ERTMS-DMZ
+vrf forwarding ERTMS-DMZ
+ip address 100.73.65.126 255.255.255.252
+!
+interface Vlan3534
+description OBV-CAT3DMZ-55-MDR-Sensor-LINKNET
+vrf forwarding CAT3DMZ-55-MDR-Sensor
+ip address 100.73.65.138 255.255.255.252
+!
+interface Vlan3600
+description STR-CAT3DMZ-05-SZ-MGMT-VXRAIL
+vrf forwarding CAT3DMZ-05-SZ-MGMT-VXRAIL
+ip address 100.73.66.2 255.255.255.224
+standby version 2
+standby 3600 ip 100.73.66.1
+standby 3600 priority 110
+standby 3600 preempt
+standby 3600 authentication tw3t5FAw
+!
+interface Vlan3601
+description STR-CAT3DMZ-06-SZ-IDRAC-VXRAIL
+vrf forwarding CAT3DMZ-06-SZ-IDRAC-VXRAIL
+ip address 100.73.66.34 255.255.255.224
+standby version 2
+standby 3601 ip 100.73.66.33
+standby 3601 priority 110
+standby 3601 preempt
+standby 3601 authentication tw3t5FAw
+!
+interface Vlan3602
+description STR-CAT3DMZ-07-BROKER-IDRAC-VXRAIL
+vrf forwarding CAT3DMZ-07-BROKER-IDRAC-VXRAIL
+ip address 100.73.66.66 255.255.255.224
+standby version 2
+standby 3602 ip 100.73.66.65
+standby 3602 priority 110
+standby 3602 preempt
+standby 3602 authentication tw3t5FAw
+!
+interface Vlan3611
+description STR-CAT3DMZ-33-SW-CROSS-FRONTEND
+vrf forwarding CAT3DMZ-33-SW-CROSS-FRONTEND
+ip address 100.73.67.98 255.255.255.224
+standby version 2
+standby 3611 ip 100.73.67.97
+standby 3611 priority 110
+standby 3611 preempt
+standby 3611 authentication tw3t5FAw
+!
+interface Vlan3612
+description STR-CAT3DMZ-34-SW-WTS
+vrf forwarding CAT3DMZ-34-SW-WTS
+ip address 100.73.67.130 255.255.255.224
+standby version 2
+standby 3612 ip 100.73.67.129
+standby 3612 priority 110
+standby 3612 preempt
+standby 3612 authentication tw3t5FAw
+!
+interface Vlan3613
+description STR-CAT3DMZ-35-SW-CROSS-BACKEND
+vrf forwarding CAT3DMZ-35-SW-CROSS-BACKEND
+ip address 100.73.67.162 255.255.255.224
+standby version 2
+standby 3613 ip 100.73.67.161
+standby 3613 priority 110
+standby 3613 preempt
+standby 3613 authentication tw3t5FAw
+!
+interface Vlan3614
+description STR-CAT3DMZ-36-SW-BACKEND
+vrf forwarding CAT3DMZ-36-SW-BACKEND
+ip address 100.73.67.194 255.255.255.224
+standby version 2
+standby 3614 ip 100.73.67.193
+standby 3614 priority 110
+standby 3614 preempt
+standby 3614 authentication tw3t5FAw
+!
+interface Vlan3615
+description STR-CAT3DMZ-37-SW-REPO
+vrf forwarding CAT3DMZ-37-SW-REPO
+ip address 100.73.67.226 255.255.255.224
+standby version 2
+standby 3615 ip 100.73.67.225
+standby 3615 priority 110
+standby 3615 preempt
+standby 3615 authentication tw3t5FAw
+!
+interface Vlan3616
+description STR-CAT3DMZ-38-SW-OUTGOING-PROXY
+vrf forwarding CAT3DMZ-38-SW-OUTGOING-PROXY
+ip address 100.73.68.2 255.255.255.224
+standby version 2
+standby 3616 ip 100.73.68.1
+standby 3616 priority 110
+standby 3616 preempt
+standby 3616 authentication tw3t5FAw
+!
+interface Vlan3617
+description STR-CAT3DMZ-39-SW-REVERSE-PROXY
+vrf forwarding CAT3DMZ-39-SW-REVERSE-PROXY
+ip address 100.73.68.34 255.255.255.224
+standby version 2
+standby 3617 ip 100.73.68.33
+standby 3617 priority 110
+standby 3617 preempt
+standby 3617 authentication tw3t5FAw
+!
+interface Vlan3620
+description STR-CAT3DMZ-42-SZ-NETFLOW
+vrf forwarding CAT3DMZ-42-SZ-NETFLOW
+ip address 100.73.68.130 255.255.255.224
+standby version 2
+standby 3620 ip 100.73.68.129
+standby 3620 priority 110
+standby 3620 preempt
+standby 3620 authentication tw3t5FAw
+!
+interface Vlan3622
+description STR-CAT3DMZ-44-SW-CRO-MGMT
+vrf forwarding CAT3DMZ-44-SW-CRO-MGMT
+ip address 100.73.68.194 255.255.255.224
+standby version 2
+standby 3622 ip 100.73.68.193
+standby 3622 priority 110
+standby 3622 preempt
+standby 3622 authentication tw3t5FAw
+!
+interface Vlan3623
+description STR-CAT3DMZ-45-CATALYST-CENTER
+vrf forwarding CAT3DMZ-45-CATALYST-CENTER
+ip address 100.73.68.226 255.255.255.224
+standby version 2
+standby 3623 ip 100.73.68.225
+standby 3623 priority 110
+standby 3623 preempt
+standby 3623 authentication tw3t5FAw
+!
+interface Vlan3624
+description STR-CAT3DMZ-46-SW-CITRIX-SVR-ENV
+vrf forwarding CAT3DMZ-46-SW-CITRIX-SVR-ENV
+ip address 100.73.69.2 255.255.255.224
+ip helper-address 172.21.247.11
+ip helper-address 172.21.247.10
+standby version 2
+standby 3624 ip 100.73.69.1
+standby 3624 priority 110
+standby 3624 preempt
+standby 3624 authentication tw3t5FAw
+!
+interface Vlan3627
+description STR-CAT3DMZ-49-NETWORKER-SERVER
+vrf forwarding CAT3DMZ-49-NETWORKER-SERVER
+ip address 100.73.69.98 255.255.255.224
+standby version 2
+standby 3627 ip 100.73.69.97
+standby 3627 priority 110
+standby 3627 preempt
+standby 3627 authentication tw3t5FAw
+!
+interface Vlan3628
+description STR-CAT3DMZ-50-DATADOMAIN-SERVER
+vrf forwarding CAT3DMZ-50-DATADOMAIN-SERVER
+ip address 100.73.69.130 255.255.255.224
+standby version 2
+standby 3628 ip 100.73.69.129
+standby 3628 priority 110
+standby 3628 preempt
+standby 3628 authentication tw3t5FAw
+!
+interface Vlan3629
+description STR-CAT3DMZ-51-TPS-INT-SERVER
+vrf forwarding CAT3DMZ-51-TPS-INT-SERVER
+ip address 100.73.69.162 255.255.255.224
+standby version 2
+standby 3629 ip 100.73.69.161
+standby 3629 priority 110
+standby 3629 preempt
+standby 3629 authentication tw3t5FAw
+!
+interface Vlan3630
+description STR-CAT3DMZ-05-SZ-VPROXY-SERVERS
+vrf forwarding CAT3DMZ-05-SZ-MGMT-VXRAIL
+ip address 100.73.69.194 255.255.255.224
+standby version 2
+standby 3630 ip 100.73.69.193
+standby 3630 priority 110
+standby 3630 preempt
+standby 3630 authentication tw3t5FAw
+!
+interface Vlan3634
+description STR-CAT3DMZ-55-MDR-Sensor
+vrf forwarding CAT3DMZ-55-MDR-Sensor
+ip address 100.73.70.66 255.255.255.224
+standby version 2
+standby 3634 ip 100.73.70.65
+standby 3634 priority 110
+standby 3634 preempt
+standby 3634 authentication tw3t5FAw
+!
+router bgp 4203000000
+template peer-policy CAT3_DMZ-VPNV4
+next-hop-self all
+send-community both
+additional-paths send receive
+advertise additional-paths best 2
+exit-peer-policy
+!
+template peer-policy CAT3_DMZ-SERVICE
+route-reflector-client
+next-hop-self all
+send-community both
+additional-paths send receive
+exit-peer-policy
+!
+template peer-session CAT3_DMZ-VPNV4
+remote-as 4203000000
+password 7 1413401815023D2E0E7A0A1D712B2F11150E00775066570137
+fall-over bfd single-hop
+exit-peer-session
+!
+template peer-session CAT3_DMZ-SERVICE
+remote-as 4203000000
+timers 5 20
+exit-peer-session
+!
+bgp router-id 100.73.33.2
+bgp log-neighbor-changes
+bgp graceful-restart
+no bgp default ipv4-unicast
+neighbor 100.73.1.6 inherit peer-session CAT3_DMZ-VPNV4
+neighbor 100.73.1.6 fall-over bfd
+neighbor 100.73.65.61 inherit peer-session CAT3_DMZ-SERVICE
+!
+address-family ipv4
+bgp additional-paths select all
+network 100.73.67.224 mask 255.255.255.224
+exit-address-family
+!
+address-family vpnv4
+bgp additional-paths select backup
+neighbor 100.73.1.6 activate
+neighbor 100.73.1.6 send-community both
+neighbor 100.73.1.6 inherit peer-policy CAT3_DMZ-VPNV4
+exit-address-family
+!
+address-family ipv4 vrf BROKER-DMZ
+network 172.21.247.0 mask 255.255.255.0
+network 172.21.248.0 mask 255.255.255.0
+network 172.21.250.0 mask 255.255.255.0
+network 172.21.251.0 mask 255.255.255.0
+network 172.21.254.0 mask 255.255.255.224
+network 172.21.255.64 mask 255.255.255.224
+neighbor 100.73.34.253 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.34.253 activate
+neighbor 100.73.34.253 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.34.253 route-map CAT3DMZ out
+neighbor 100.75.1.1 remote-as 65000
+neighbor 100.75.1.1 activate
+neighbor 100.75.1.1 send-community both
+neighbor 100.75.1.1 next-hop-self
+neighbor 100.75.1.1 route-map OBVCORE01-IN in
+neighbor 100.75.1.1 route-map OBVCORE01-OUT out
+neighbor 100.75.1.5 remote-as 65000
+neighbor 100.75.1.5 activate
+neighbor 100.75.1.5 send-community both
+neighbor 100.75.1.5 next-hop-self
+neighbor 100.75.1.5 route-map OBVCORE02-IN in
+neighbor 100.75.1.5 route-map OBVCORE02-OUT out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-00-SPNS2-DEVICE-MGMT
+network 100.73.33.128 mask 255.255.255.224
+neighbor 100.73.33.21 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.33.21 activate
+neighbor 100.73.33.21 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.33.21 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-01-AAA-DNS-NTP
+network 100.73.35.0 mask 255.255.255.224
+neighbor 100.73.34.1 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.34.1 activate
+neighbor 100.73.34.1 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.34.1 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-02-MGMT-SERVICES
+network 100.73.35.32 mask 255.255.255.224
+neighbor 100.73.34.5 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.34.5 activate
+neighbor 100.73.34.5 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.34.5 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-04-MONITORING
+network 100.73.35.96 mask 255.255.255.224
+neighbor 100.73.34.13 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.34.13 activate
+neighbor 100.73.34.13 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.34.13 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-05-SZ-MGMT-VXRAIL
+network 100.73.66.0 mask 255.255.255.224
+network 100.73.69.192 mask 255.255.255.224
+neighbor 100.73.65.1 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.65.1 activate
+neighbor 100.73.65.1 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.65.1 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-06-SZ-IDRAC-VXRAIL
+network 100.73.66.32 mask 255.255.255.224
+neighbor 100.73.65.5 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.65.5 activate
+neighbor 100.73.65.5 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.65.5 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-07-BROKER-IDRAC-VXRAIL
+network 100.73.66.64 mask 255.255.255.224
+neighbor 100.73.65.9 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.65.9 activate
+neighbor 100.73.65.9 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.65.9 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-09-MGMT-JUMPHOST
+network 100.73.36.0 mask 255.255.255.224
+neighbor 100.73.34.33 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.34.33 activate
+neighbor 100.73.34.33 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.34.33 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-10-API
+network 100.73.36.32 mask 255.255.255.224
+neighbor 100.73.34.37 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.34.37 activate
+neighbor 100.73.34.37 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.34.37 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-11-COMM
+network 100.73.36.64 mask 255.255.255.224
+neighbor 100.73.34.41 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.34.41 activate
+neighbor 100.73.34.41 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.34.41 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-12-DWH-FE
+network 100.73.36.96 mask 255.255.255.224
+neighbor 100.73.34.45 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.34.45 activate
+neighbor 100.73.34.45 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.34.45 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-13-DWH-BE
+network 100.73.36.128 mask 255.255.255.224
+neighbor 100.73.34.49 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.34.49 activate
+neighbor 100.73.34.49 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.34.49 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-16-GA
+network 100.73.36.128 mask 255.255.255.224
+neighbor 100.73.34.61 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.34.61 activate
+neighbor 100.73.34.61 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.34.61 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-17-MGMT
+network 100.73.37.0 mask 255.255.255.224
+neighbor 100.73.34.65 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.34.65 activate
+neighbor 100.73.34.65 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.34.65 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-18-MSVC
+network 100.73.37.32 mask 255.255.255.224
+neighbor 100.73.34.69 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.34.69 activate
+neighbor 100.73.34.69 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.34.69 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-19-TOPODB-BE
+network 100.73.37.64 mask 255.255.255.224
+neighbor 100.73.34.73 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.34.73 activate
+neighbor 100.73.34.73 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.34.73 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-20-TOPODB-FE
+network 100.73.37.96 mask 255.255.255.224
+neighbor 100.73.34.77 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.34.77 activate
+neighbor 100.73.34.77 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.34.77 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-21-REPO
+network 100.73.37.128 mask 255.255.255.224
+neighbor 100.73.34.81 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.34.81 activate
+neighbor 100.73.34.81 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.34.81 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-22-ZABBIX-MON
+network 100.73.37.160 mask 255.255.255.224
+neighbor 100.73.34.85 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.34.85 activate
+neighbor 100.73.34.85 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.34.85 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-23-MSVC-BE
+network 100.73.37.192 mask 255.255.255.224
+neighbor 100.73.34.89 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.34.89 activate
+neighbor 100.73.34.89 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.34.89 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-24-GA2
+network 100.73.37.224 mask 255.255.255.224
+neighbor 100.73.34.93 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.34.93 activate
+neighbor 100.73.34.93 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.34.93 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-33-SW-CROSS-FRONTEND
+network 100.73.67.96 mask 255.255.255.224
+neighbor 100.73.65.45 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.65.45 activate
+neighbor 100.73.65.45 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.65.45 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-34-SW-WTS
+network 100.73.67.128 mask 255.255.255.224
+neighbor 100.73.65.49 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.65.49 activate
+neighbor 100.73.65.49 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.65.49 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-35-SW-CROSS-BACKEND
+network 100.73.67.160 mask 255.255.255.224
+neighbor 100.73.65.53 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.65.53 activate
+neighbor 100.73.65.53 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.65.53 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-36-SW-BACKEND
+network 100.73.67.192 mask 255.255.255.224
+neighbor 100.73.65.57 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.65.57 activate
+neighbor 100.73.65.57 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.65.57 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-37-SW-REPO
+network 100.73.67.224 mask 255.255.255.224
+neighbor 100.73.65.61 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.65.61 activate
+neighbor 100.73.65.61 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.65.61 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-38-SW-OUTGOING-PROXY
+network 100.73.68.0 mask 255.255.255.224
+neighbor 100.73.65.65 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.65.65 activate
+neighbor 100.73.65.65 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.65.65 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-39-SW-REVERSE-PROXY
+network 100.73.68.32 mask 255.255.255.224
+neighbor 100.73.65.69 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.65.69 activate
+neighbor 100.73.65.69 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.65.69 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-42-SZ-NETFLOW
+network 100.73.68.128 mask 255.255.255.224
+neighbor 100.73.65.81 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.65.81 activate
+neighbor 100.73.65.81 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.65.81 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-44-SW-CRO-MGMT
+network 100.73.68.192 mask 255.255.255.224
+neighbor 100.73.65.89 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.65.89 activate
+neighbor 100.73.65.89 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.65.89 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-45-CATALYST-CENTER
+network 100.73.68.224 mask 255.255.255.224
+neighbor 100.73.65.93 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.65.93 activate
+neighbor 100.73.65.93 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.65.93 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-46-SW-CITRIX-SVR-ENV
+network 100.73.69.0 mask 255.255.255.224
+neighbor 100.73.65.97 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.65.97 activate
+neighbor 100.73.65.97 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.65.97 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-49-NETWORKER-SERVER
+network 100.73.69.96 mask 255.255.255.224
+neighbor 100.73.65.109 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.65.109 activate
+neighbor 100.73.65.109 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.65.109 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-50-DATADOMAIN-SERVER
+network 100.73.69.128 mask 255.255.255.224
+neighbor 100.73.65.113 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.65.113 activate
+neighbor 100.73.65.113 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.65.113 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-51-TPS-INT-SERVER
+network 100.73.69.160 mask 255.255.255.224
+neighbor 100.73.65.117 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.65.117 activate
+neighbor 100.73.65.117 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.65.117 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf CAT3DMZ-55-MDR-Sensor
+network 100.73.70.64 mask 255.255.255.224
+neighbor 100.73.65.137 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.65.137 activate
+neighbor 100.73.65.137 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.65.137 route-map CAT3DMZ out
+exit-address-family
+!
+address-family ipv4 vrf ERTMS-DMZ
+neighbor 100.73.65.125 inherit peer-session CAT3_DMZ-SERVICE
+neighbor 100.73.65.125 activate
+neighbor 100.73.65.125 inherit peer-policy CAT3_DMZ-SERVICE
+neighbor 100.73.65.125 route-map CAT3DMZ out
+exit-address-family
+!
+ip forward-protocol nd
+ip http server
+ip http authentication aaa
+ip http secure-server
+ip http timeout-policy idle 600 life 180 requests 1
+ip http client source-interface Vlan3402
+ip tftp source-interface Vlan3002
+ip tacacs source-interface Vlan3002 vrf CAT3DMZ-00-SPNS2-DEVICE-MGMT
+ip ssh source-interface Vlan3409
+ip ssh logging events
+ip scp server enable
+!
+ip bgp-community new-format
+!
+ip access-list extended PCAP
+30 permit icmp any any
+!
+!
+ip prefix-list CAT3DMZ seq 5 permit 100.73.0.0/16 le 32
+ip prefix-list CAT3DMZ seq 40 permit 172.21.247.0/24 le 32
+ip prefix-list CAT3DMZ seq 50 permit 172.21.248.0/24 le 32
+ip prefix-list CAT3DMZ seq 60 permit 172.21.250.0/24 le 32
+ip prefix-list CAT3DMZ seq 70 permit 172.21.251.0/24 le 32
+ip prefix-list CAT3DMZ seq 80 permit 172.21.254.0/27 le 32
+ip prefix-list CAT3DMZ seq 90 permit 80.243.122.0/24 le 32
+ip prefix-list CAT3DMZ seq 100 permit 172.21.255.64/27 le 32
+ip prefix-list CAT3DMZ seq 1000 deny 0.0.0.0/0 le 32
+!
+ip prefix-list DEFAULT seq 10 permit 0.0.0.0/0
+!
+ip prefix-list ESB seq 10 permit 80.243.122.0/24 le 32
+!
+ip prefix-list POC-SOURCE seq 10 permit 100.75.173.173/32
+ip prefix-list POC-SOURCE seq 20 permit 172.27.210.65/32
+ip prefix-list POC-SOURCE seq 30 permit 100.75.172.172/32
+ip prefix-list POC-SOURCE seq 40 permit 100.126.255.1/32
+ip prefix-list POC-SOURCE seq 50 permit 172.21.249.1/32
+!
+ip prefix-list SPNS1 seq 10 permit 100.126.255.58/32
+ip prefix-list SPNS1 seq 20 permit 100.126.255.59/32
+ip prefix-list SPNS1 seq 30 permit 172.21.249.178/32
+ip prefix-list SPNS1 seq 40 permit 172.21.249.180/32
+ip prefix-list SPNS1 seq 50 permit 80.243.122.0/24
+!
+ip prefix-list SPNS2 seq 10 permit 172.21.254.0/27 le 32
+!
+ip prefix-list SPNS2-BROKER-DMZ seq 40 permit 172.21.247.0/24 le 32
+ip prefix-list SPNS2-BROKER-DMZ seq 50 permit 172.21.248.0/24 le 32
+ip prefix-list SPNS2-BROKER-DMZ seq 60 permit 172.21.250.0/24 le 32
+ip prefix-list SPNS2-BROKER-DMZ seq 70 permit 172.21.251.0/24 le 32
+ip prefix-list SPNS2-BROKER-DMZ seq 80 permit 172.21.254.0/27 le 32
+ip prefix-list SPNS2-BROKER-DMZ seq 90 permit 0.0.0.0/0
+!
+ip prefix-list SPNS2-POC seq 10 permit 172.21.255.0/27 le 32
+ip prefix-list SPNS2-POC seq 20 permit 172.21.255.32/27 le 32
+logging history informational
+logging origin-id hostname
+logging source-interface Vlan3002 vrf CAT3DMZ-00-SPNS2-DEVICE-MGMT
+logging host 100.72.36.70 vrf CAT3DMZ-00-SPNS2-DEVICE-MGMT
+ip access-list standard 20
+10 permit 10.23.240.155
+!
+route-map OBVCORE02-OUT permit 10
+match ip address prefix-list SPNS2 SPNS2-BROKER-DMZ
+!
+route-map OBVCORE02-OUT deny 1000
+!
+route-map OBVCORE01-OUT permit 10
+match ip address prefix-list SPNS2 SPNS2-BROKER-DMZ
+!
+route-map OBVCORE01-OUT deny 1000
+!
+route-map CAT3DMZ permit 10
+match ip address prefix-list CAT3DMZ
+!
+route-map OBVCORE02-IN deny 10
+match ip address prefix-list DEFAULT
+!
+route-map OBVCORE02-IN permit 1000
+match ip address prefix-list SPNS1 ESB
+!
+route-map OBVCORE01-IN deny 10
+match ip address prefix-list DEFAULT
+!
+route-map OBVCORE01-IN permit 1000
+match ip address prefix-list SPNS1 ESB
+!
+snmp-server community JTL RO 20
+snmp-server community SPNS2-READ RO
+!
+!
+!
+!
+control-plane
+service-policy input system-cpp-policy
+!
+!
+line con 0
+stopbits 1
+line vty 0 4
+login authentication SSHLOGIN
+length 0
+transport input ssh
+line vty 5 15
+login authentication SSHLOGIN
+transport input ssh
+!
+call-home
+! If contact email address in call-home is configured as sch-smart-licensing@cisco.com
+! the email address configured in Cisco Smart License Portal will be used as contact email address to send SCH notifications.
+contact-email-addr sch-smart-licensing@cisco.com
+source-interface Vlan3402
+vrf CAT3-DMZ-02
+no http secure server-identity-check
+profile "CiscoTAC-1"
+destination transport-method http
+profile "On-Prem-Call-Home"
+reporting smart-licensing-data
+destination transport-method http
+destination address http http://100.73.35.40:80/Transportgateway/services/DeviceRequestHandler
+ntp source Vlan3002
+ntp server vrf CAT3DMZ-00-SPNS2-DEVICE-MGMT 100.72.35.11 prefer
+ntp server vrf CAT3DMZ-00-SPNS2-DEVICE-MGMT 100.72.3.11
+!
+!
+!
+!
+!
+!
+end
+
+
+
+
+Close
