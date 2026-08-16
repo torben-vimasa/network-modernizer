@@ -68,6 +68,17 @@ class RouterInventoryParser:
                 current_interface.vrf = current_vrf
                 continue
 
+            if stripped.startswith("vrf forwarding "):
+
+                current_vrf = stripped.replace(
+                    "vrf forwarding ",
+                    "",
+                    1
+                )
+
+                current_interface.vrf = current_vrf
+                continue
+
             if stripped.startswith("vrf "):
 
                 current_vrf = stripped.replace(

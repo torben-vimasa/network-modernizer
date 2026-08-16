@@ -586,13 +586,38 @@ class SecurityEngine:
             if not interface_matches:
                 continue
 
-            for relation, neighbor in self.graph.neighbors(node.id):
-                if (
-                    relation == "USES_ACL"
-                    and neighbor.type == "ACL"
-                    and neighbor.name == acl_name
-                ):
-                    return True
+            acl_node = self.graph.find(
+                "ACL",
+                acl_name
+            )
+
+            if not acl_node:
+                continue
+
+            for relationship in self.graph.relationships:
+
+                if relationship.type != "USES_ACL":
+                    continue
+
+                if relationship.source != node.id:
+                    continue
+
+                if relationship.target != acl_node.id:
+                    continue
+
+                direction = relationship.properties.get(
+                    "direction"
+                )
+
+                #
+                # We are evaluating traffic arriving on
+                # ingress_interface, so only an inbound ACL
+                # on that interface applies here.
+                #
+                if direction and direction.lower() != "in":
+                    continue
+
+                return True
 
         #
         # FTD global ACL

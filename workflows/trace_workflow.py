@@ -402,7 +402,10 @@ class TraceWorkflow:
                 )
                 explanation.add(reason)
 
-                state.mark_finished(reason)
+                state.mark_finished(
+                    reason=reason,
+                    destination_reached=True
+                )
                 break
 
             next_device, resolution = (

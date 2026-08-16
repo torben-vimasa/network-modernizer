@@ -391,10 +391,12 @@ class GraphBuilder:
 
             for interface in router.interfaces:
                 interface_node = graph.add_node(
-                    "Interface",
+                    "RouterInterface",
                     f"{router.name}:{interface.name}",
                     {
                         "vrf": interface.vrf,
+                        "ip": interface.ip,
+                        "prefix": interface.prefix,
                         "description": interface.description
                     }
                 )
@@ -877,5 +879,8 @@ class GraphBuilder:
             graph.add_relationship(
                 interface_node.id,
                 acl_node,
-                "USES_ACL"
+                "USES_ACL",
+                {
+                    "direction": direction
+                }
             )
