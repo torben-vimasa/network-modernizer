@@ -377,8 +377,14 @@ class GraphBuilder:
         if not router_dir.exists():
             return
 
-        for router_file in router_dir.rglob("*section interface*.txt"):
-            with open(router_file, encoding="utf-8", errors="ignore") as f:
+        for router_file in router_dir.rglob(
+            "*section interface*.txt"
+        ):
+            with open(
+                router_file,
+                encoding="utf-8",
+                errors="ignore"
+            ) as f:
                 router = self.router_parser.parse(
                     router_file.parent.name,
                     f.readlines()
@@ -485,14 +491,27 @@ class GraphBuilder:
                 interface["device"]
             )
 
-            interface_name = interface.get("nameif") or interface["interface"]
+            context_name = (
+                interface.get("context")
+                or interface["device"]
+            )
+
+            context_node = graph.add_node(
+                "Context",
+                context_name
+            )
+
+            interface_name = (
+                interface.get("nameif")
+                or interface["interface"]
+            )
 
             interface_node = graph.add_node(
                 "ASAInterface",
                 f'{interface["device"]}:{interface_name}',
                 {
                     "device": interface["device"],
-                    "context": interface.get("context") or interface["device"],
+                    "context": context_name,
                     "interface": interface["interface"],
                     "nameif": interface.get("nameif"),
                     "vlan": interface.get("vlan"),
@@ -503,12 +522,48 @@ class GraphBuilder:
                 }
             )
 
+            #
+            # Firewall -> Context
+            #
+            if not any(
+                rel.source == firewall_node
+                and rel.target == context_node
+                and rel.type == "HAS_CONTEXT"
+                for rel in graph.relationships
+            ):
+                graph.add_relationship(
+                    firewall_node,
+                    context_node,
+                    "HAS_CONTEXT"
+                )
+
+            #
+            # Context -> ASA interface
+            #
+            if not any(
+                rel.source == context_node
+                and rel.target == interface_node
+                and rel.type == "HAS_INTERFACE"
+                for rel in graph.relationships
+            ):
+                graph.add_relationship(
+                    context_node,
+                    interface_node,
+                    "HAS_INTERFACE"
+                )
+
+            #
+            # Keep legacy Firewall -> ASAInterface relationship.
+            #
             graph.add_relationship(
                 firewall_node,
                 interface_node,
                 "HAS_INTERFACE"
             )
 
+            #
+            # Interface subnet
+            #
             if interface.get("ip") and interface.get("mask"):
                 subnet = self._to_prefix(
                     interface["ip"],
