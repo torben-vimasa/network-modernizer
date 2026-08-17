@@ -52,7 +52,7 @@ class RouterRouteTableExportBuilder:
         if self.router_raw_dir.exists():
 
             for file in sorted(
-                self.router_raw_dir.glob("*.txt")
+                self.router_raw_dir.rglob("*section interface*.txt")
             ):
 
                 lines = file.read_text(
@@ -61,7 +61,7 @@ class RouterRouteTableExportBuilder:
                 ).splitlines()
 
                 router = self.inventory_parser.parse(
-                    file.stem,
+                    file.parent.name,
                     lines
                 )
 

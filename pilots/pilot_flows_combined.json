@@ -88,7 +88,17 @@
       "line": 150,
       "hitcnt": 518
     },
-    "expected": {},
+    "expected": {
+      "status": "reachable",
+      "devices": [
+        "Site2Site-VPN",
+        "RGDCPe1",
+        "BDK-Teknik"
+      ],
+      "acl_rules": [
+        "acc_in_inside:18572"
+      ]
+    },
     "start": {
       "type": "firewall",
       "context": "Site2Site-VPN",
@@ -108,7 +118,17 @@
       "line": 150,
       "hitcnt": 3297
     },
-    "expected": {},
+    "expected": {
+      "status": "reachable",
+      "devices": [
+        "Site2Site-VPN",
+        "RGDCPe1",
+        "BDK-Teknik"
+      ],
+      "acl_rules": [
+        "acc_in_inside:18572"
+      ]
+    },
     "start": {
       "type": "firewall",
       "context": "Site2Site-VPN",
@@ -127,7 +147,15 @@
       "line": 6,
       "hitcnt": 863
     },
-    "expected": {},
+    "expected": {
+      "status": "reachable",
+      "devices": [
+        "BDK-Teknik"
+      ],
+      "acl_rules": [
+        "NokiaJumphosts_in:19557"
+      ]
+    },
     "start": {
       "type": "firewall",
       "context": "BDK-Teknik",
@@ -146,7 +174,15 @@
       "line": 6,
       "hitcnt": 3014
     },
-    "expected": {},
+    "expected": {
+      "status": "reachable",
+      "devices": [
+        "BDK-Teknik"
+      ],
+      "acl_rules": [
+        "NokiaJumphosts_in:19557"
+      ]
+    },
     "start": {
       "type": "firewall",
       "context": "BDK-Teknik",
@@ -165,7 +201,16 @@
       "line": 113,
       "hitcnt": 421248
     },
-    "expected": {},
+    "expected": {
+      "status": "reachable",
+      "devices": [
+        "BDK-Teknik",
+        "RGDCPe1"
+      ],
+      "acl_rules": [
+        "acc_in_esb:17392"
+      ]
+    },
     "start": {
       "type": "firewall",
       "context": "BDK-Teknik",
@@ -184,7 +229,15 @@
       "line": 19,
       "hitcnt": 23887
     },
-    "expected": {},
+    "expected": {
+      "status": "reachable",
+      "devices": [
+        "BDK-Teknik"
+      ],
+      "acl_rules": [
+        "acc_in_Priveledged_Remote_Access_PoC:17424"
+      ]
+    },
     "start": {
       "type": "firewall",
       "context": "BDK-Teknik",
@@ -203,7 +256,15 @@
       "line": 194,
       "hitcnt": 17736
     },
-    "expected": {},
+    "expected": {
+      "status": "reachable",
+      "devices": [
+        "BDK-Teknik"
+      ],
+      "acl_rules": [
+        "acc_in_inside:29037"
+      ]
+    },
     "start": {
       "type": "firewall",
       "context": "BDK-Teknik",
@@ -222,7 +283,15 @@
       "line": 261,
       "hitcnt": 912271
     },
-    "expected": {},
+    "expected": {
+      "status": "reachable",
+      "devices": [
+        "BDK-Teknik"
+      ],
+      "acl_rules": [
+        "Aevenjumphost_in:19194"
+      ]
+    },
     "start": {
       "type": "firewall",
       "context": "BDK-Teknik",
@@ -241,7 +310,15 @@
       "line": 261,
       "hitcnt": 58469
     },
-    "expected": {},
+    "expected": {
+      "status": "reachable",
+      "devices": [
+        "BDK-Teknik"
+      ],
+      "acl_rules": [
+        "Aevenjumphost_in:19194"
+      ]
+    },
     "start": {
       "type": "firewall",
       "context": "BDK-Teknik",
@@ -261,7 +338,15 @@
       "hitcnt": 13587,
       "note": "Representative external source used for any4; replace with a known real source if desired."
     },
-    "expected": {},
+    "expected": {
+      "status": "reachable",
+      "devices": [
+        "BDK-Teknik"
+      ],
+      "acl_rules": [
+        "acc_in_outside:47711"
+      ]
+    },
     "start": {
       "type": "firewall",
       "context": "BDK-Teknik",

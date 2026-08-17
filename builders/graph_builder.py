@@ -377,10 +377,10 @@ class GraphBuilder:
         if not router_dir.exists():
             return
 
-        for router_file in router_dir.glob("*.txt"):
+        for router_file in router_dir.rglob("*section interface*.txt"):
             with open(router_file, encoding="utf-8", errors="ignore") as f:
                 router = self.router_parser.parse(
-                    router_file.stem,
+                    router_file.parent.name,
                     f.readlines()
                 )
 
