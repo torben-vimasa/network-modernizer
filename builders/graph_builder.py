@@ -89,11 +89,20 @@ class GraphBuilder:
                     firewall_name
                 )
 
-                graph.add_relationship(
-                    firewall_node,
-                    context_node,
-                    "HAS_CONTEXT"
-                )
+                #
+                # Firewall -> Context
+                #
+                if not any(
+                    rel.source == firewall_node
+                    and rel.target == context_node
+                    and rel.type == "HAS_CONTEXT"
+                    for rel in graph.relationships
+                ):
+                    graph.add_relationship(
+                        firewall_node,
+                        context_node,
+                        "HAS_CONTEXT"
+                    )
 
                 asa_interface_node = graph.add_node(
                     "ASAInterface",
@@ -106,15 +115,49 @@ class GraphBuilder:
                     }
                 )
 
-                graph.add_relationship(context_node, asa_interface_node, "HAS_INTERFACE")
-                graph.add_relationship(asa_interface_node, vrf_node, "BELONGS_TO_VRF")
+                #
+                # Context -> ASA interface
+                #
+                if not any(
+                    rel.source == context_node
+                    and rel.target == asa_interface_node
+                    and rel.type == "HAS_INTERFACE"
+                    for rel in graph.relationships
+                ):
+                    graph.add_relationship(
+                        context_node,
+                        asa_interface_node,
+                        "HAS_INTERFACE"
+                    )
+
+                graph.add_relationship(
+                    asa_interface_node,
+                    vrf_node,
+                    "BELONGS_TO_VRF"
+                )
 
                 if link["asa_access_group"]:
-                    acl_node = graph.add_node("ACL", link["asa_access_group"])
-                    graph.add_relationship(asa_interface_node, acl_node, "USES_ACL")
-                    graph.add_relationship(acl_node, vrf_node, "PROTECTS")
+                    acl_node = graph.add_node(
+                        "ACL",
+                        link["asa_access_group"]
+                    )
 
-                router_node = graph.add_node("Router", link["router"])
+                    graph.add_relationship(
+                        asa_interface_node,
+                        acl_node,
+                        "USES_ACL"
+                    )
+
+                    graph.add_relationship(
+                        acl_node,
+                        vrf_node,
+                        "PROTECTS"
+                    )
+
+                router_node = graph.add_node(
+                    "Router",
+                    link["router"]
+                )
 
                 router_interface_node = graph.add_node(
                     "RouterInterface",
@@ -126,8 +169,17 @@ class GraphBuilder:
                     }
                 )
 
-                graph.add_relationship(router_node, router_interface_node, "HAS_INTERFACE")
-                graph.add_relationship(router_interface_node, vrf_node, "BELONGS_TO_VRF")
+                graph.add_relationship(
+                    router_node,
+                    router_interface_node,
+                    "HAS_INTERFACE"
+                )
+
+                graph.add_relationship(
+                    router_interface_node,
+                    vrf_node,
+                    "BELONGS_TO_VRF"
+                )
 
                 graph.add_relationship(
                     asa_interface_node,
@@ -553,7 +605,7 @@ class GraphBuilder:
                 )
 
             #
-            # Keep legacy Firewall -> ASAInterface relationship.
+            # Keep legacy Firewall -> ASAInterface relationship
             #
             graph.add_relationship(
                 firewall_node,
