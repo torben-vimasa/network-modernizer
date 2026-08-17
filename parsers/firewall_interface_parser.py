@@ -30,7 +30,10 @@ class FirewallInterfaceParser:
             if not current:
                 continue
 
-            if stripped.startswith("description "):
+            if stripped == "shutdown":
+                current.shutdown = True
+
+            elif stripped.startswith("description "):
                 current.description = stripped.split(maxsplit=1)[1]
 
             elif stripped.startswith("vlan "):

@@ -12,3 +12,4 @@ class FirewallInterface:
     mask: str | None = None
     description: str | None = None
     security_level: int | None = None
+    shutdown: bool = False

@@ -570,7 +570,8 @@ class GraphBuilder:
                     "ip": interface.get("ip"),
                     "mask": interface.get("mask"),
                     "description": interface.get("description"),
-                    "security_level": interface.get("security_level")
+                    "security_level": interface.get("security_level"),
+                    "shutdown": interface.get("shutdown", False)
                 }
             )
 
