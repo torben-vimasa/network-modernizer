@@ -98,12 +98,13 @@ class ApplicationPresenter:
 
         lines.append("")
 
-        domain_order = [
-            "SCADA",
-            "monitoring",
-            "management",
-            "printing"
-        ]
+        ordered_domains = sorted(
+            groups.keys(),
+            key=lambda domain: (
+                domain.lower() == "unclassified",
+                domain.lower()
+            )
+        )
 
         ordered_domains = []
 

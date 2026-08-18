@@ -33,7 +33,9 @@ class CommunicationModelEngine:
             "communication_pairs"
         ]:
 
-            context = pair.get("context")
+            context = pair.get(
+                "context"
+            )
 
             source = self._resolve_side(
                 pair.get("source"),
@@ -66,10 +68,10 @@ class CommunicationModelEngine:
                 )
             }
 
-            communication["classification"] = (
-                self.classifier.classify(
-                    communication
-                )
+            communication[
+                "classification"
+            ] = self.classifier.classify(
+                communication
             )
 
             communication[
@@ -96,13 +98,15 @@ class CommunicationModelEngine:
                 ),
                 "resolved_sources": sum(
                     1
-                    for x in communications
-                    if x["source"]["resolved"]
+                    for item in communications
+                    if item["source"]["resolved"]
                 ),
                 "resolved_destinations": sum(
                     1
-                    for x in communications
-                    if x["destination"]["resolved"]
+                    for item in communications
+                    if item[
+                        "destination"
+                    ]["resolved"]
                 )
             },
             "communications": communications,
@@ -130,9 +134,10 @@ class CommunicationModelEngine:
         #
         # Resolve concrete hosts.
         #
-        for host in object_result[
-            "hosts"
-        ]:
+        for host in object_result.get(
+            "hosts",
+            []
+        ):
 
             endpoints.append(
                 self._resolve_endpoint(
@@ -145,9 +150,10 @@ class CommunicationModelEngine:
         #
         networks = []
 
-        for network in object_result[
-            "networks"
-        ]:
+        for network in object_result.get(
+            "networks",
+            []
+        ):
 
             try:
 
@@ -173,22 +179,27 @@ class CommunicationModelEngine:
 
         return {
             "reference": value,
-            "resolved": object_result[
-                "resolved"
-            ],
-            "hosts": object_result[
-                "hosts"
-            ],
+            "resolved": object_result.get(
+                "resolved",
+                False
+            ),
+            "hosts": object_result.get(
+                "hosts",
+                []
+            ),
             "networks": networks,
-            "groups": object_result[
-                "groups"
-            ],
-            "objects": object_result[
-                "objects"
-            ],
-            "unresolved": object_result[
-                "unresolved"
-            ],
+            "groups": object_result.get(
+                "groups",
+                []
+            ),
+            "objects": object_result.get(
+                "objects",
+                []
+            ),
+            "unresolved": object_result.get(
+                "unresolved",
+                []
+            ),
             "endpoints": endpoints
         }
 
@@ -296,6 +307,7 @@ class CommunicationModelEngine:
             )
         }
 
+
     def _new_dependency_bucket(self):
 
         return {
@@ -306,6 +318,7 @@ class CommunicationModelEngine:
             "interfaces": set(),
             "redundancy_groups": [],
             "route_owners": set(),
+            "infrastructure_relations": [],
             "source_evidence": [],
             "destination_evidence": []
         }
@@ -339,6 +352,14 @@ class CommunicationModelEngine:
         )
 
         target[
+            "infrastructure_relations"
+        ].extend(
+            source[
+                "infrastructure_relations"
+            ]
+        )
+
+        target[
             "source_evidence"
         ].extend(
             source[
@@ -361,7 +382,7 @@ class CommunicationModelEngine:
     ):
 
         unique_redundancy = []
-        seen = set()
+        seen_redundancy = set()
 
         for group in result[
             "redundancy_groups"
@@ -388,13 +409,45 @@ class CommunicationModelEngine:
                 members
             )
 
-            if key in seen:
+            if key in seen_redundancy:
                 continue
 
-            seen.add(key)
+            seen_redundancy.add(
+                key
+            )
 
             unique_redundancy.append(
                 group
+            )
+
+        unique_relations = []
+        seen_relations = set()
+
+        for relation in result[
+            "infrastructure_relations"
+        ]:
+
+            key = (
+                relation.get("device"),
+                relation.get("device_type"),
+                relation.get("interface"),
+                relation.get("vrf"),
+                relation.get("context"),
+                relation.get("subnet"),
+                relation.get("protocol"),
+                relation.get("next_hop"),
+                relation.get("relation_source")
+            )
+
+            if key in seen_relations:
+                continue
+
+            seen_relations.add(
+                key
+            )
+
+            unique_relations.append(
+                relation
             )
 
         return {
@@ -419,11 +472,16 @@ class CommunicationModelEngine:
             "redundancy_groups": (
                 unique_redundancy
             ),
+            "infrastructure_relations": (
+                unique_relations
+            ),
             "source_evidence": (
                 result["source_evidence"]
             ),
             "destination_evidence": (
-                result["destination_evidence"]
+                result[
+                    "destination_evidence"
+                ]
             )
         }
 
@@ -443,6 +501,10 @@ class CommunicationModelEngine:
             []
         ):
 
+            endpoint_ip = endpoint.get(
+                "endpoint"
+            )
+
             dependency = endpoint.get(
                 "dependency"
             ) or {}
@@ -452,13 +514,34 @@ class CommunicationModelEngine:
                 []
             ):
 
-                #
-                # Route owner.
-                #
                 owner = path.get(
                     "route_owner"
                 )
 
+                path_vrf = path.get(
+                    "vrf"
+                )
+
+                path_contexts = path.get(
+                    "contexts",
+                    []
+                )
+
+                prefix = path.get(
+                    "prefix"
+                )
+
+                protocol = path.get(
+                    "protocol"
+                )
+
+                next_hop = path.get(
+                    "next_hop"
+                )
+
+                #
+                # Route owner.
+                #
                 if owner:
 
                     result[
@@ -475,7 +558,7 @@ class CommunicationModelEngine:
                 #
                 self._add_vrf(
                     result,
-                    path.get("vrf")
+                    path_vrf
                 )
 
                 #
@@ -494,10 +577,7 @@ class CommunicationModelEngine:
                 #
                 # Contexts.
                 #
-                for context in path.get(
-                    "contexts",
-                    []
-                ):
+                for context in path_contexts:
 
                     if context:
 
@@ -513,46 +593,164 @@ class CommunicationModelEngine:
                     []
                 ):
 
-                    name = interface.get(
+                    interface_name = (
+                        interface.get(
+                            "interface"
+                        )
+                        or interface.get(
+                            "name"
+                        )
+                    )
+
+                    graph_name = interface.get(
                         "name"
                     )
 
-                    if name:
+                    if graph_name:
 
                         result[
                             "interfaces"
-                        ].add(name)
+                        ].add(
+                            graph_name
+                        )
 
-                    for device in interface.get(
-                        "devices",
-                        []
-                    ):
+                    interface_devices = (
+                        interface.get(
+                            "devices",
+                            []
+                        )
+                    )
+
+                    interface_vrfs = (
+                        interface.get(
+                            "vrfs",
+                            []
+                        )
+                    )
+
+                    interface_contexts = (
+                        interface.get(
+                            "contexts",
+                            []
+                        )
+                    )
+
+                    #
+                    # Devices owning interface.
+                    #
+                    for device in interface_devices:
 
                         self._add_device(
                             result,
                             device
                         )
 
-                    for interface_vrf in interface.get(
-                        "vrfs",
-                        []
-                    ):
+                    #
+                    # Interface VRFs.
+                    #
+                    for interface_vrf in interface_vrfs:
 
                         self._add_vrf(
                             result,
                             interface_vrf
                         )
 
-                    for context in interface.get(
-                        "contexts",
-                        []
-                    ):
+                    #
+                    # Interface contexts.
+                    #
+                    for context in interface_contexts:
 
                         if context:
 
                             result[
                                 "contexts"
                             ].add(context)
+
+                    #
+                    # Preserve explicit device/interface
+                    # relationship while evidence is intact.
+                    #
+                    relation_vrfs = (
+                        interface_vrfs
+                        or (
+                            [path_vrf]
+                            if path_vrf
+                            else [None]
+                        )
+                    )
+
+                    relation_contexts = (
+                        interface_contexts
+                        or path_contexts
+                        or [None]
+                    )
+
+                    for device in interface_devices:
+
+                        device_type = (
+                            self._device_type(
+                                device
+                            )
+                        )
+
+                        for relation_vrf in relation_vrfs:
+
+                            for relation_context in (
+                                relation_contexts
+                            ):
+
+                                self._add_infrastructure_relation(
+                                    result,
+                                    device=device,
+                                    device_type=device_type,
+                                    interface=interface_name,
+                                    vrf=relation_vrf,
+                                    context=relation_context,
+                                    subnet=prefix,
+                                    protocol=protocol,
+                                    next_hop=next_hop,
+                                    endpoint=endpoint_ip,
+                                    relation_source=(
+                                        "dependency_path_interface"
+                                    )
+                                )
+
+                #
+                # If route owner exists but no explicit
+                # interface relation was available, preserve
+                # the route-level relation.
+                #
+                if (
+                    owner
+                    and not path.get(
+                        "interfaces",
+                        []
+                    )
+                ):
+
+                    self._add_infrastructure_relation(
+                        result,
+                        device=owner,
+                        device_type=(
+                            self._device_type(
+                                owner
+                            )
+                        ),
+                        interface=None,
+                        vrf=path_vrf,
+                        context=(
+                            path_contexts[0]
+                            if path_contexts
+                            else None
+                        ),
+                        subnet=prefix,
+                        protocol=protocol,
+                        next_hop=next_hop,
+                        endpoint=endpoint_ip,
+                        relation_source=(
+                            "dependency_path_route"
+                        )
+                    )
 
                 #
                 # Redundancy / HSRP evidence.
@@ -565,9 +763,7 @@ class CommunicationModelEngine:
                 if redundancy:
 
                     group = {
-                        "virtual_ip": path.get(
-                            "next_hop"
-                        ),
+                        "virtual_ip": next_hop,
                         "members": []
                     }
 
@@ -601,6 +797,14 @@ class CommunicationModelEngine:
                             "router"
                         )
 
+                        member_vrf = member.get(
+                            "vrf"
+                        )
+
+                        interface_name = member.get(
+                            "interface"
+                        )
+
                         self._add_device(
                             result,
                             router
@@ -608,11 +812,7 @@ class CommunicationModelEngine:
 
                         self._add_vrf(
                             result,
-                            member.get("vrf")
-                        )
-
-                        interface_name = member.get(
-                            "interface"
+                            member_vrf
                         )
 
                         if (
@@ -623,8 +823,33 @@ class CommunicationModelEngine:
                             result[
                                 "interfaces"
                             ].add(
-                                f"{router}:{interface_name}"
+                                f"{router}:"
+                                f"{interface_name}"
                             )
+
+                        #
+                        # Preserve router/interface/VRF
+                        # relationship from HSRP evidence.
+                        #
+                        self._add_infrastructure_relation(
+                            result,
+                            device=router,
+                            device_type=(
+                                self._device_type(
+                                    router
+                                )
+                            ),
+                            interface=interface_name,
+                            vrf=member_vrf,
+                            context=None,
+                            subnet=prefix,
+                            protocol="redundancy",
+                            next_hop=next_hop,
+                            endpoint=endpoint_ip,
+                            relation_source=(
+                                "redundancy_member"
+                            )
+                        )
 
                     result[
                         "redundancy_groups"
@@ -633,15 +858,47 @@ class CommunicationModelEngine:
                     )
 
             #
+            # Direct endpoint infrastructure can contain
+            # additional explicit evidence even if dependency
+            # resolver returned no routed path.
+            #
+            endpoint_resolution = endpoint.get(
+                "resolution"
+            ) or {}
+
+            for infra in endpoint_resolution.get(
+                "infrastructure",
+                []
+            ):
+
+                self._collect_infrastructure_relation(
+                    result,
+                    infra,
+                    subnet=endpoint_resolution.get(
+                        "subnet"
+                    ),
+                    protocol=(
+                        "connected"
+                        if endpoint_resolution.get(
+                            "method"
+                        ) == "direct_subnet"
+                        else None
+                    ),
+                    next_hop=None,
+                    endpoint=endpoint_ip,
+                    relation_source=(
+                        "endpoint_infrastructure"
+                    )
+                )
+
+            #
             # Endpoint evidence summary.
             #
             result[
                 evidence_key
             ].append({
                 "type": "host",
-                "endpoint": endpoint.get(
-                    "endpoint"
-                ),
+                "endpoint": endpoint_ip,
                 "confidence": dependency.get(
                     "confidence"
                 ),
@@ -718,6 +975,21 @@ class CommunicationModelEngine:
                             "contexts"
                         ].add(context)
 
+                #
+                # Preserve explicit infrastructure relation.
+                #
+                self._collect_infrastructure_relation(
+                    result,
+                    infra,
+                    subnet=network,
+                    protocol="connected",
+                    next_hop=None,
+                    endpoint=None,
+                    relation_source=(
+                        "network_infrastructure"
+                    )
+                )
+
             #
             # Exact routing evidence.
             #
@@ -775,6 +1047,38 @@ class CommunicationModelEngine:
                         f"{owner}:{egress}"
                     )
 
+                #
+                # Preserve route-level relationship.
+                #
+                self._add_infrastructure_relation(
+                    result,
+                    device=owner,
+                    device_type=(
+                        self._device_type(
+                            owner
+                        )
+                    ),
+                    interface=egress,
+                    vrf=vrf,
+                    context=route.get(
+                        "context"
+                    ),
+                    subnet=route.get(
+                        "prefix",
+                        network
+                    ),
+                    protocol=route.get(
+                        "protocol"
+                    ),
+                    next_hop=route.get(
+                        "next_hop"
+                    ),
+                    endpoint=None,
+                    relation_source=(
+                        "exact_route"
+                    )
+                )
+
             #
             # Network evidence summary.
             #
@@ -799,6 +1103,209 @@ class CommunicationModelEngine:
                     )
                 )
             })
+
+
+    def _collect_infrastructure_relation(
+        self,
+        result,
+        infrastructure,
+        subnet=None,
+        protocol=None,
+        next_hop=None,
+        endpoint=None,
+        relation_source=None
+    ):
+
+        interface_name = (
+            infrastructure.get(
+                "interface"
+            )
+            or infrastructure.get(
+                "nameif"
+            )
+            or infrastructure.get(
+                "name"
+            )
+        )
+
+        devices = infrastructure.get(
+            "devices",
+            []
+        )
+
+        vrfs = infrastructure.get(
+            "vrfs",
+            []
+        )
+
+        contexts = infrastructure.get(
+            "contexts",
+            []
+        )
+
+        #
+        # Some infrastructure dictionaries expose
+        # the owner in their properties rather than
+        # in the normalized devices list.
+        #
+        properties = infrastructure.get(
+            "properties",
+            {}
+        )
+
+        property_device = (
+            properties.get("device")
+            or properties.get("router")
+        )
+
+        if (
+            property_device
+            and property_device not in devices
+        ):
+            devices = (
+                list(devices)
+                + [property_device]
+            )
+
+        property_vrf = properties.get(
+            "vrf"
+        )
+
+        if (
+            property_vrf
+            and property_vrf not in vrfs
+        ):
+            vrfs = (
+                list(vrfs)
+                + [property_vrf]
+            )
+
+        property_context = properties.get(
+            "context"
+        )
+
+        if (
+            property_context
+            and property_context not in contexts
+        ):
+            contexts = (
+                list(contexts)
+                + [property_context]
+            )
+
+        if not vrfs:
+            vrfs = [None]
+
+        if not contexts:
+            contexts = [None]
+
+        for device in devices:
+
+            self._add_device(
+                result,
+                device
+            )
+
+            device_type = (
+                self._device_type(
+                    device
+                )
+            )
+
+            for vrf in vrfs:
+
+                self._add_vrf(
+                    result,
+                    vrf
+                )
+
+                for context in contexts:
+
+                    if context:
+
+                        result[
+                            "contexts"
+                        ].add(context)
+
+                    self._add_infrastructure_relation(
+                        result,
+                        device=device,
+                        device_type=device_type,
+                        interface=interface_name,
+                        vrf=vrf,
+                        context=context,
+                        subnet=subnet,
+                        protocol=protocol,
+                        next_hop=next_hop,
+                        endpoint=endpoint,
+                        relation_source=(
+                            relation_source
+                        )
+                    )
+
+
+    def _add_infrastructure_relation(
+        self,
+        result,
+        device,
+        device_type=None,
+        interface=None,
+        vrf=None,
+        context=None,
+        subnet=None,
+        protocol=None,
+        next_hop=None,
+        endpoint=None,
+        relation_source=None
+    ):
+
+        if not device:
+            return
+
+        result[
+            "infrastructure_relations"
+        ].append({
+            "device": device,
+            "device_type": (
+                device_type
+                or self._device_type(
+                    device
+                )
+            ),
+            "interface": interface,
+            "vrf": vrf,
+            "context": context,
+            "subnet": subnet,
+            "protocol": protocol,
+            "next_hop": next_hop,
+            "endpoint": endpoint,
+            "relation_source": (
+                relation_source
+            )
+        })
+
+
+    def _device_type(
+        self,
+        name
+    ):
+
+        if not name:
+            return None
+
+        if self.graph.find(
+            "Router",
+            name
+        ):
+            return "router"
+
+        if self.graph.find(
+            "Firewall",
+            name
+        ):
+            return "firewall"
+
+        return None
 
 
     def _add_vrf(
