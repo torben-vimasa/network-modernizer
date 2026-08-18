@@ -1,0 +1,50 @@
+[
+    {
+        "protocol": "tcp",
+        "ports": ["2404"],
+        "service_names": [],
+        "classification": {
+            "service": "IEC 60870-5-104",
+            "domain": "SCADA",
+            "category": "industrial_control"
+        },
+        "confidence": "high",
+        "source": "service_semantics"
+    },
+    {
+        "protocol": "tcp",
+        "ports": ["22"],
+        "service_names": ["ssh"],
+        "classification": {
+            "service": "SSH",
+            "domain": "management",
+            "category": "remote_access"
+        },
+        "confidence": "high",
+        "source": "service_semantics"
+    },
+    {
+        "protocol": "udp",
+        "ports": ["514"],
+        "service_names": ["syslog"],
+        "classification": {
+            "service": "Syslog",
+            "domain": "monitoring",
+            "category": "logging"
+        },
+        "confidence": "high",
+        "source": "service_semantics"
+    },
+    {
+        "protocol": "tcp",
+        "ports": ["631"],
+        "service_names": ["tcp_631"],
+        "classification": {
+            "service": "IPP",
+            "domain": "printing",
+            "category": "printing"
+        },
+        "confidence": "medium",
+        "source": "service_semantics"
+    }
+]

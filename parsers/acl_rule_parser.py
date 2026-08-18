@@ -192,6 +192,21 @@ class ACLRuleParser:
             return token, None, index + 1
 
         #
+        # ASA service/protocol object:
+        #
+        # permit object SERVICE_OBJECT ...
+        #
+        if (
+            token == "object"
+            and len(parts) > index + 1
+        ):
+            return (
+                "object",
+                parts[index + 1],
+                index + 2
+            )
+
+        #
         # ASA service/protocol object-group:
         #
         # permit object-group SERVICE_GROUP ...

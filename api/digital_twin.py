@@ -20,6 +20,15 @@ from models.application_trace_result import ApplicationTraceResult
 from workflows.trace_workflow import TraceWorkflow
 from models.security_context import SecurityContext
 
+from engines.endpoint_resolver import EndpointResolver
+from engines.dependency_resolver import DependencyResolver
+
+from engines.application_view_engine import ApplicationViewEngine
+from engines.object_resolver import ObjectResolver
+
+from engines.communication_model_engine import CommunicationModelEngine
+from engines.application_model_engine import ApplicationModelEngine
+
 
 class DigitalTwin:
 
@@ -33,7 +42,64 @@ class DigitalTwin:
 
         self.security = SecurityEngine(self.graph)
         self.route = RouteEngine()
+
         self.firewall_routes = self._load_firewall_routes()
+
+        self.endpoint = EndpointResolver(
+            self.graph,
+            routes=(
+                self.route.routes
+                + [
+                    {
+                        "router": r.router,
+                        "vrf": r.vrf,
+                        "prefix": r.prefix,
+                        "next_hop": r.next_hop,
+                        "protocol": r.protocol,
+                        "interface": getattr(
+                            r,
+                            "interface",
+                            None
+                        ),
+                        "egress_interface": getattr(
+                            r,
+                            "egress_interface",
+                            None
+                        )
+                    }
+                    for r in self.firewall_routes
+                ]
+            )
+        )
+
+        self.dependency = DependencyResolver(
+            self.graph,
+            self.endpoint
+        )
+
+        self.object_resolver = ObjectResolver(
+            self.graph
+        )
+
+        self.application_view = ApplicationViewEngine(
+                    self.graph,
+                    self.endpoint,
+                    self.dependency
+                )
+                
+        self.communication_model = CommunicationModelEngine(
+            graph=self.graph,
+            object_resolver=self.object_resolver,
+            endpoint_resolver=self.endpoint,
+            dependency_resolver=self.dependency
+        )
+
+        self.application_model = ApplicationModelEngine(
+            application_view=self.application_view,
+            communication_model=self.communication_model
+        )
+
+        
         self.firewall_interfaces = self._load_firewall_interfaces()
         self.application = ApplicationEngine(self.graph)
 
