@@ -20,6 +20,7 @@ class FlowTraceEngine:
         self.forwarding_engine = forwarding_engine
         self.firewall_routes = firewall_routes or []
         self.dependency_resolver = dependency_resolver
+        self._trace_cache = {}
 
 
     def trace(
@@ -27,6 +28,16 @@ class FlowTraceEngine:
         source,
         destination
     ):
+
+        cache_key = (
+            source,
+            destination
+        )
+
+        if cache_key in self._trace_cache:
+            return self._trace_cache[
+                cache_key
+            ]
 
         source_resolution = (
             self.endpoint_resolver.resolve(
@@ -105,7 +116,7 @@ class FlowTraceEngine:
         #
         if not paths:
 
-            return {
+            result = {
                 "found": False,
                 "path_resolved": False,
                 "destination_reached": False,
@@ -152,6 +163,12 @@ class FlowTraceEngine:
                     "could be resolved."
                 )
             }
+
+            return self._cache_result(
+                source,
+                destination,
+                result
+            )
 
         successful_paths = [
             path
@@ -221,7 +238,7 @@ class FlowTraceEngine:
             for path in paths
         )
 
-        return {
+        result = {
             #
             # "found" remains for compatibility,
             # but now means that a source-anchored
@@ -296,6 +313,13 @@ class FlowTraceEngine:
                 paths
             )
         }
+
+        return self._cache_result(
+            source,
+            destination,
+            result
+        )
+
 
     def _trace_from_start(
         self,
@@ -1569,5 +1593,22 @@ class FlowTraceEngine:
 
             seen.add(value)
             result.append(value)
+
+        return result
+
+
+    def _cache_result(
+        self,
+        source,
+        destination,
+        result
+    ):
+
+        self._trace_cache[
+            (
+                source,
+                destination
+            )
+        ] = result
 
         return result

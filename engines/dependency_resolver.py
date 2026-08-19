@@ -4,8 +4,27 @@ class DependencyResolver:
         self.graph = graph
         self.endpoint_resolver = endpoint_resolver
 
+        #
+        # In-memory cache for this DigitalTwin instance.
+        #
+        self._endpoint_cache = {}
+
 
     def resolve_endpoint(self, endpoint):
+
+        cache_key = str(endpoint)
+
+        if cache_key in self._endpoint_cache:
+            return self._endpoint_cache[cache_key]
+
+        result = self._resolve_endpoint_uncached(endpoint)
+
+        self._endpoint_cache[cache_key] = result
+
+        return result
+
+
+    def _resolve_endpoint_uncached(self, endpoint):
 
         endpoint_result = self.endpoint_resolver.resolve(
             endpoint

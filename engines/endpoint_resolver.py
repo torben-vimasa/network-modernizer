@@ -7,8 +7,28 @@ class EndpointResolver:
         self.graph = graph
         self.routes = routes or []
 
+        #
+        # In-memory caches for this DigitalTwin instance.
+        #
+        self._resolve_cache = {}
+        self._network_cache = {}
+
 
     def resolve(self, endpoint):
+
+        cache_key = str(endpoint)
+
+        if cache_key in self._resolve_cache:
+            return self._resolve_cache[cache_key]
+
+        result = self._resolve_uncached(endpoint)
+
+        self._resolve_cache[cache_key] = result
+
+        return result
+
+
+    def _resolve_uncached(self, endpoint):
 
         try:
             ip = ipaddress.ip_address(endpoint)
@@ -583,6 +603,20 @@ class EndpointResolver:
         }
 
     def resolve_network(self, prefix):
+
+        cache_key = str(prefix)
+
+        if cache_key in self._network_cache:
+            return self._network_cache[cache_key]
+
+        result = self._resolve_network_uncached(prefix)
+
+        self._network_cache[cache_key] = result
+
+        return result
+
+
+    def _resolve_network_uncached(self, prefix):
 
         try:
             network = ipaddress.ip_network(
