@@ -12,6 +12,124 @@ class EndpointResolver:
         #
         self._resolve_cache = {}
         self._network_cache = {}
+        self._subnet_infrastructure_cache = {}
+        self._route_infrastructure_cache = {}
+
+        #
+        # Pre-built indexes.
+        #
+        self._exact_object_index = {}
+        self._subnet_index = []
+        self._route_index = []
+        self._exact_route_index = {}
+        self._interface_nodes = []
+
+        self._build_indexes()
+
+
+    def _build_indexes(self):
+
+        #
+        # Graph indexes.
+        #
+        for node in self.graph.nodes.values():
+
+            if node.type in [
+                "NetworkObject",
+                "IPAddress"
+            ]:
+
+                value = (
+                    node.properties.get("value")
+                    or node.properties.get("ip")
+                    or node.name
+                )
+
+                key = str(value)
+
+                self._exact_object_index.setdefault(
+                    key,
+                    []
+                ).append(node)
+
+            if node.type == "Subnet":
+
+                prefix = (
+                    node.properties.get("prefix")
+                    or node.name
+                )
+
+                try:
+                    network = ipaddress.ip_network(
+                        prefix,
+                        strict=False
+                    )
+                except ValueError:
+                    continue
+
+                self._subnet_index.append(
+                    (
+                        network.prefixlen,
+                        network,
+                        node
+                    )
+                )
+
+            if node.type in [
+                "Interface",
+                "ASAInterface",
+                "RouterInterface"
+            ]:
+                self._interface_nodes.append(
+                    node
+                )
+
+        #
+        # Longest prefix match can now stop
+        # at the first matching subnet.
+        #
+        self._subnet_index.sort(
+            key=lambda item: item[0],
+            reverse=True
+        )
+
+        #
+        # Route indexes.
+        #
+        for route in self.routes:
+
+            prefix = route.get("prefix")
+
+            if not prefix:
+                continue
+
+            try:
+                network = ipaddress.ip_network(
+                    prefix,
+                    strict=False
+                )
+            except ValueError:
+                continue
+
+            self._route_index.append(
+                (
+                    network.prefixlen,
+                    network,
+                    route
+                )
+            )
+
+            normalized = str(network)
+
+            self._exact_route_index.setdefault(
+                normalized,
+                []
+            ).append(route)
+
+        self._route_index.sort(
+            key=lambda item: item[0],
+            reverse=True
+        )
 
 
     def resolve(self, endpoint):
@@ -176,22 +294,10 @@ class EndpointResolver:
 
         matches = []
 
-        for node in self.graph.nodes.values():
-
-            if node.type not in [
-                "NetworkObject",
-                "IPAddress"
-            ]:
-                continue
-
-            value = (
-                node.properties.get("value")
-                or node.properties.get("ip")
-                or node.name
-            )
-
-            if str(value) != str(endpoint):
-                continue
+        for node in self._exact_object_index.get(
+            str(endpoint),
+            []
+        ):
 
             matches.append({
                 "type": node.type,
@@ -205,94 +311,47 @@ class EndpointResolver:
 
     def _find_best_subnet(self, ip):
 
-        matches = []
+        for prefixlen, network, node in self._subnet_index:
 
-        for node in self.graph.nodes.values():
+            if ip in network:
+                return node
 
-            if node.type != "Subnet":
-                continue
-
-            prefix = (
-                node.properties.get("prefix")
-                or node.name
-            )
-
-            try:
-                network = ipaddress.ip_network(
-                    prefix,
-                    strict=False
-                )
-            except ValueError:
-                continue
-
-            if ip not in network:
-                continue
-
-            matches.append(
-                (
-                    network.prefixlen,
-                    node
-                )
-            )
-
-        if not matches:
-            return None
-
-        matches.sort(
-            key=lambda item: item[0],
-            reverse=True
-        )
-
-        return matches[0][1]
+        return None
 
 
     def _find_best_routes(self, ip):
 
         matches = []
+        best_prefixlen = None
 
-        for route in self.routes:
+        for prefixlen, network, route in self._route_index:
 
-            prefix = route.get("prefix")
-
-            if not prefix:
-                continue
-
-            try:
-                network = ipaddress.ip_network(
-                    prefix,
-                    strict=False
-                )
-            except ValueError:
-                continue
+            #
+            # Because the index is sorted longest
+            # prefix first, stop once we move below
+            # the best matching prefix length.
+            #
+            if (
+                best_prefixlen is not None
+                and prefixlen < best_prefixlen
+            ):
+                break
 
             if ip not in network:
                 continue
 
-            matches.append(
-                (
-                    network.prefixlen,
-                    route
-                )
-            )
+            if best_prefixlen is None:
+                best_prefixlen = prefixlen
+
+            matches.append(route)
 
         if not matches:
             return []
 
-        #
-        # Longest prefix length wins.
-        #
-        best_prefixlen = max(
-            prefixlen
-            for prefixlen, route in matches
-        )
-
         best_routes = []
         seen = set()
 
-        for prefixlen, route in matches:
-
-            if prefixlen != best_prefixlen:
-                continue
+        for route in matches:
 
             key = (
                 route.get("router"),
@@ -318,6 +377,13 @@ class EndpointResolver:
         self,
         subnet_node
     ):
+
+        cache_key = subnet_node.id
+
+        if cache_key in self._subnet_infrastructure_cache:
+            return self._subnet_infrastructure_cache[
+                cache_key
+            ]
 
         results = []
         seen = set()
@@ -345,6 +411,10 @@ class EndpointResolver:
                 self._describe_interface(interface)
             )
 
+        self._subnet_infrastructure_cache[
+            cache_key
+        ] = results
+
         return results
 
 
@@ -352,6 +422,24 @@ class EndpointResolver:
         self,
         route
     ):
+
+        cache_key = (
+            route.get("router")
+            or route.get("device"),
+            route.get("vrf")
+            or route.get("context"),
+            route.get("prefix"),
+            route.get("next_hop"),
+            route.get("protocol"),
+            route.get("egress_interface")
+            or route.get("interface")
+            or route.get("exit_interface")
+        )
+
+        if cache_key in self._route_infrastructure_cache:
+            return self._route_infrastructure_cache[
+                cache_key
+            ]
 
         results = []
 
@@ -374,24 +462,24 @@ class EndpointResolver:
         next_hop = route.get("next_hop")
 
         #
-        # First resolve exact route owner / egress interface.
+        # Resolve exact route owner / egress
+        # interface using the pre-built interface
+        # node index instead of scanning the graph.
         #
-        for node in self.graph.nodes.values():
-
-            if node.type not in [
-                "ASAInterface",
-                "RouterInterface",
-                "Interface"
-            ]:
-                continue
+        for node in self._interface_nodes:
 
             node_device = (
                 node.properties.get("device")
                 or node.properties.get("router")
             )
 
-            node_context = node.properties.get("context")
-            node_vrf = node.properties.get("vrf")
+            node_context = node.properties.get(
+                "context"
+            )
+
+            node_vrf = node.properties.get(
+                "vrf"
+            )
 
             node_interface = (
                 node.properties.get("nameif")
@@ -399,29 +487,29 @@ class EndpointResolver:
                 or node.properties.get("name")
             )
 
-            #
-            # Device/context match
-            #
             owner_match = False
 
-            if router_name and node_device == router_name:
+            if (
+                router_name
+                and node_device == router_name
+            ):
                 owner_match = True
 
-            if router_name and node_context == router_name:
+            if (
+                router_name
+                and node_context == router_name
+            ):
                 owner_match = True
 
-            #
-            # VRF/context match can also identify ASA context.
-            #
-            if vrf and node_context == vrf:
+            if (
+                vrf
+                and node_context == vrf
+            ):
                 owner_match = True
 
             if not owner_match:
                 continue
-            #
-            # If route has an explicit VRF, a router interface
-            # must belong to that VRF.
-            #
+
             if (
                 vrf
                 and node.type == "RouterInterface"
@@ -429,11 +517,6 @@ class EndpointResolver:
             ):
                 continue
 
-
-            #
-            # If route has explicit egress interface,
-            # require interface match.
-            #
             if egress:
 
                 if (
@@ -445,25 +528,19 @@ class EndpointResolver:
                 ):
                     continue
 
-
-            #
-            # Without an explicit egress interface we cannot
-            # identify a specific ASA interface from owner alone.
-            # The next-hop resolution below will determine it.
-            #
             if (
                 node.type == "ASAInterface"
                 and not egress
             ):
                 continue
 
-
             results.append(
                 self._describe_interface(node)
             )
 
         #
-        # Resolve next-hop into a connected subnet/interface.
+        # Resolve next-hop into connected
+        # subnet/interface using subnet index.
         #
         if next_hop:
 
@@ -493,13 +570,12 @@ class EndpointResolver:
                     for item in nh_infra:
 
                         item = dict(item)
-                        item["role"] = "next_hop_subnet"
+                        item["role"] = (
+                            "next_hop_subnet"
+                        )
 
                         results.append(item)
 
-        #
-        # De-duplicate result dictionaries
-        #
         unique = []
         seen = set()
 
@@ -516,6 +592,10 @@ class EndpointResolver:
 
             seen.add(key)
             unique.append(item)
+
+        self._route_infrastructure_cache[
+            cache_key
+        ] = unique
 
         return unique
 
@@ -651,45 +731,35 @@ class EndpointResolver:
             )
 
         #
-        # Routing evidence.
+        # Routing evidence from pre-parsed index.
         #
-        exact_routes = []
+        exact_routes = list(
+            self._exact_route_index.get(
+                normalized,
+                []
+            )
+        )
+
         covering_routes = []
 
-        for route in self.routes:
+        for prefixlen, route_network, route in (
+            self._route_index
+        ):
 
-            route_prefix = route.get("prefix")
-
-            if not route_prefix:
-                continue
-
-            try:
-                route_network = ipaddress.ip_network(
-                    route_prefix,
-                    strict=False
-                )
-            except ValueError:
-                continue
-
-            #
-            # Exact route to this network.
-            #
             if route_network == network:
-                exact_routes.append(route)
                 continue
 
-            #
-            # Route summary covering this network.
-            #
             if (
-                route_network.version == network.version
-                and network.subnet_of(route_network)
+                route_network.version
+                == network.version
+                and network.subnet_of(
+                    route_network
+                )
             ):
-                covering_routes.append(route)
+                covering_routes.append(
+                    route
+                )
 
-        #
-        # De-duplicate route evidence.
-        #
         exact_routes = self._deduplicate_routes(
             exact_routes
         )
