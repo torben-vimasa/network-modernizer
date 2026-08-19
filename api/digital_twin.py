@@ -28,6 +28,8 @@ from engines.object_resolver import ObjectResolver
 
 from engines.communication_model_engine import CommunicationModelEngine
 from engines.application_model_engine import ApplicationModelEngine
+from engines.forwarding_engine import ForwardingEngine
+from engines.flow_trace_engine import FlowTraceEngine
 
 
 class DigitalTwin:
@@ -75,6 +77,19 @@ class DigitalTwin:
         self.dependency = DependencyResolver(
             self.graph,
             self.endpoint
+        )
+
+        self.forwarding = ForwardingEngine(
+    self.graph
+)
+
+        self.flow_trace_engine = FlowTraceEngine(
+            graph=self.graph,
+            endpoint_resolver=self.endpoint,
+            route_engine=self.route,
+            forwarding_engine=self.forwarding,
+            firewall_routes=self.firewall_routes,
+            dependency_resolver=self.dependency
         )
 
         self.object_resolver = ObjectResolver(
@@ -437,3 +452,14 @@ class DigitalTwin:
             )
 
         return rules
+
+    def trace_flow(
+        self,
+        source,
+        destination
+    ):
+
+        return self.flow_trace_engine.trace(
+            source,
+            destination
+        )
