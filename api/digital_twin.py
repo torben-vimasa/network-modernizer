@@ -31,6 +31,8 @@ from engines.application_model_engine import ApplicationModelEngine
 from engines.forwarding_engine import ForwardingEngine
 from engines.flow_trace_engine import FlowTraceEngine
 
+from graph.graph_cache import GraphCache
+
 
 class DigitalTwin:
 
@@ -38,7 +40,11 @@ class DigitalTwin:
 
         print("Loading Knowledge Graph...")
 
-        self.graph = GraphBuilder().build_from_vrf_inventory()
+        graph_builder = GraphBuilder()
+
+        self.graph = GraphCache(
+            graph_builder
+        ).load_or_build()
 
         print("Knowledge Graph loaded")
 
