@@ -75,7 +75,7 @@ class FlowTraceEngine:
                 destination_dependency = None
 
         source_attachments = (
-            self._direct_attachments(
+            self._source_attachments(
                 source_resolution
             )
         )
@@ -515,16 +515,12 @@ class FlowTraceEngine:
 
                 break
 
-            forwarding = (
-                self.forwarding_engine.resolve_next_hop(
-                    current_device,
-                    next_hop
-                )
-            )
-
             forwarding_data = (
-                self._forwarding_to_dict(
-                    forwarding
+                self._resolve_forwarding_data(
+                    current_device=current_device,
+                    current_scope=current_scope,
+                    next_hop=next_hop,
+                    route_protocol=protocol
                 )
             )
 
@@ -605,9 +601,12 @@ class FlowTraceEngine:
             # scope for the next hop.
             #
             next_scope = (
-                self._interface_scope(
-                    next_device,
-                    next_interface
+                self._next_forwarding_scope(
+                    current_scope=current_scope,
+                    route_protocol=protocol,
+                    next_device=next_device,
+                    next_interface=next_interface,
+                    destination=destination
                 )
             )
 
@@ -648,6 +647,641 @@ class FlowTraceEngine:
             ),
             "reason": stop_reason
         }
+
+
+    def _resolve_forwarding_data(
+        self,
+        current_device,
+        current_scope,
+        next_hop,
+        route_protocol
+    ):
+
+        #
+        # First use normal topology resolution.
+        #
+        direct = (
+            self.forwarding_engine.resolve_next_hop(
+                current_device,
+                next_hop
+            )
+        )
+
+        direct_data = (
+            self._forwarding_to_dict(
+                direct
+            )
+        )
+
+        if (
+            direct_data.get("resolved")
+            or direct_data.get(
+                "inventory_boundary"
+            )
+        ):
+            return direct_data
+
+        #
+        # Recursive next-hop resolution is mainly
+        # required for BGP-learned routes where
+        # the BGP next-hop is not itself a directly
+        # connected forwarding adjacency.
+        #
+        if route_protocol not in [
+            "bgp",
+            "ebgp",
+            "ibgp"
+        ]:
+            return direct_data
+
+        recursive = (
+            self._resolve_recursive_next_hop(
+                current_device=current_device,
+                current_scope=current_scope,
+                target=next_hop,
+                visited=set(),
+                depth=0
+            )
+        )
+
+        if recursive:
+            return recursive
+
+        return direct_data
+
+
+    def _resolve_recursive_next_hop(
+        self,
+        current_device,
+        current_scope,
+        target,
+        visited,
+        depth
+    ):
+
+        MAX_RECURSION = 6
+
+        if depth >= MAX_RECURSION:
+            return None
+
+        state = (
+            current_device,
+            current_scope,
+            target
+        )
+
+        if state in visited:
+            return None
+
+        visited.add(state)
+
+        #
+        # The target may become directly resolvable
+        # during recursion.
+        #
+        direct = (
+            self.forwarding_engine.resolve_next_hop(
+                current_device,
+                target
+            )
+        )
+
+        direct_data = (
+            self._forwarding_to_dict(
+                direct
+            )
+        )
+
+        if (
+            direct_data.get("resolved")
+            or direct_data.get(
+                "inventory_boundary"
+            )
+        ):
+            direct_data[
+                "recursive_target"
+            ] = target
+
+            return direct_data
+
+        recursive_route = (
+            self._recursive_route_for_next_hop(
+                current_device,
+                current_scope,
+                target
+            )
+        )
+
+        if not recursive_route:
+            return None
+
+        route = recursive_route[
+            "route"
+        ]
+
+        route_scope = (
+            recursive_route.get(
+                "scope"
+            )
+        )
+
+        protocol = str(
+            route.get(
+                "protocol"
+            )
+            or ""
+        ).lower()
+
+        recursive_next_hop = (
+            route.get(
+                "next_hop"
+            )
+        )
+
+        #
+        # A connected route proves that the target
+        # is locally reachable, but ForwardingEngine
+        # must still identify the managed neighbor.
+        #
+        if protocol in [
+            "connected",
+            "direct",
+            "local"
+        ]:
+
+            resolved = (
+                self.forwarding_engine.resolve_next_hop(
+                    current_device,
+                    target
+                )
+            )
+
+            resolved_data = (
+                self._forwarding_to_dict(
+                    resolved
+                )
+            )
+
+            if (
+                resolved_data.get("resolved")
+                or resolved_data.get(
+                    "inventory_boundary"
+                )
+            ):
+
+                original_method = (
+                    resolved_data.get(
+                        "method"
+                    )
+                )
+
+                resolved_data[
+                    "method"
+                ] = (
+                    "recursive_route"
+                    if not original_method
+                    else (
+                        "recursive_route:"
+                        f"{original_method}"
+                    )
+                )
+
+                resolved_data[
+                    "recursive_target"
+                ] = target
+
+                resolved_data[
+                    "recursive_route"
+                ] = route
+
+                resolved_data[
+                    "recursive_scope"
+                ] = route_scope
+
+                return resolved_data
+
+            return None
+
+        #
+        # Self-referential BGP next-hop entries such
+        # as X/32 via X do not provide forwarding
+        # information and must not recurse forever.
+        #
+        if (
+            not recursive_next_hop
+            or recursive_next_hop == target
+        ):
+            return None
+
+        #
+        # Resolve the next-hop used to reach the
+        # original BGP next-hop.
+        #
+        forwarding = (
+            self.forwarding_engine.resolve_next_hop(
+                current_device,
+                recursive_next_hop
+            )
+        )
+
+        forwarding_data = (
+            self._forwarding_to_dict(
+                forwarding
+            )
+        )
+
+        if (
+            forwarding_data.get("resolved")
+            or forwarding_data.get(
+                "inventory_boundary"
+            )
+        ):
+
+            original_method = (
+                forwarding_data.get(
+                    "method"
+                )
+            )
+
+            forwarding_data[
+                "method"
+            ] = (
+                "recursive_route"
+                if not original_method
+                else (
+                    "recursive_route:"
+                    f"{original_method}"
+                )
+            )
+
+            forwarding_data[
+                "recursive_target"
+            ] = target
+
+            forwarding_data[
+                "recursive_next_hop"
+            ] = recursive_next_hop
+
+            forwarding_data[
+                "recursive_route"
+            ] = route
+
+            forwarding_data[
+                "recursive_scope"
+            ] = route_scope
+
+            forwarding_data[
+                "reason"
+            ] = (
+                f"Recursive resolution of "
+                f"{target} used "
+                f"{route.get('prefix')} "
+                f"in scope {route_scope}, "
+                f"next-hop "
+                f"{recursive_next_hop}. "
+                f"{forwarding_data.get('reason') or ''}"
+            ).strip()
+
+            return forwarding_data
+
+        #
+        # The recursive next-hop may itself require
+        # another routing lookup.
+        #
+        deeper = (
+            self._resolve_recursive_next_hop(
+                current_device=(
+                    current_device
+                ),
+                current_scope=(
+                    route_scope
+                    or current_scope
+                ),
+                target=recursive_next_hop,
+                visited=visited,
+                depth=depth + 1
+            )
+        )
+
+        if not deeper:
+            return None
+
+        deeper[
+            "recursive_target"
+        ] = target
+
+        deeper.setdefault(
+            "recursive_chain",
+            []
+        )
+
+        deeper[
+            "recursive_chain"
+        ].insert(
+            0,
+            {
+                "target": target,
+                "scope": route_scope,
+                "route": route,
+                "next_hop": (
+                    recursive_next_hop
+                )
+            }
+        )
+
+        original_method = (
+            deeper.get(
+                "method"
+            )
+        )
+
+        if (
+            original_method
+            and not str(
+                original_method
+            ).startswith(
+                "recursive_route"
+            )
+        ):
+            deeper[
+                "method"
+            ] = (
+                "recursive_route:"
+                f"{original_method}"
+            )
+
+        return deeper
+
+
+    def _recursive_route_for_next_hop(
+        self,
+        device,
+        current_scope,
+        target
+    ):
+
+        scopes = []
+
+        #
+        # First preserve the current VRF/context.
+        #
+        if current_scope:
+            scopes.append(
+                current_scope
+            )
+
+        #
+        # BGP VPN next-hops are frequently resolved
+        # through the router's global/default table.
+        #
+        if (
+            self._device_type(
+                device
+            ) == "router"
+            and "default" not in scopes
+        ):
+            scopes.append(
+                "default"
+            )
+
+        #
+        # ASA contexts often use the context/device
+        # name as routing-table scope.
+        #
+        if device not in scopes:
+            scopes.append(
+                device
+            )
+
+        for scope in scopes:
+
+            route = (
+                self._lookup_route_exact(
+                    device,
+                    scope,
+                    target
+                )
+            )
+
+            if not route:
+                continue
+
+            if self._recursive_route_is_usable(
+                route,
+                target
+            ):
+                return {
+                    "scope": scope,
+                    "route": route
+                }
+
+        #
+        # Last conservative fallback: inspect all
+        # route tables on the same device. Only use
+        # the result if normal route selection can
+        # identify one unambiguous logical route.
+        #
+        candidates = (
+            self._routes_for_device(
+                device,
+                target
+            )
+        )
+
+        candidates = [
+            item
+            for item in candidates
+            if self._recursive_route_is_usable(
+                item["route"],
+                target
+            )
+        ]
+
+        if not candidates:
+            return None
+
+        best_prefix = max(
+            item["prefix_length"]
+            for item in candidates
+        )
+
+        candidates = [
+            item
+            for item in candidates
+            if item[
+                "prefix_length"
+            ] == best_prefix
+        ]
+
+        best_ad = min(
+            item["admin_distance"]
+            for item in candidates
+        )
+
+        candidates = [
+            item
+            for item in candidates
+            if item[
+                "admin_distance"
+            ] == best_ad
+        ]
+
+        best_metric = min(
+            item["metric"]
+            for item in candidates
+        )
+
+        candidates = [
+            item
+            for item in candidates
+            if item[
+                "metric"
+            ] == best_metric
+        ]
+
+        unique = {}
+
+        for item in candidates:
+
+            route = item[
+                "route"
+            ]
+
+            key = (
+                item.get(
+                    "scope"
+                ),
+                route.get(
+                    "prefix"
+                ),
+                route.get(
+                    "next_hop"
+                ),
+                route.get(
+                    "protocol"
+                )
+            )
+
+            unique[
+                key
+            ] = item
+
+        if len(unique) != 1:
+            return None
+
+        return list(
+            unique.values()
+        )[0]
+
+
+    def _recursive_route_is_usable(
+        self,
+        route,
+        target
+    ):
+
+        if not route:
+            return False
+
+        protocol = str(
+            route.get(
+                "protocol"
+            )
+            or ""
+        ).lower()
+
+        if protocol in [
+            "connected",
+            "direct",
+            "local"
+        ]:
+            return True
+
+        next_hop = route.get(
+            "next_hop"
+        )
+
+        if not next_hop:
+            return False
+
+        #
+        # Ignore X/32 via X and equivalent
+        # self-referential control-plane entries.
+        #
+        if next_hop == target:
+            return False
+
+        return True
+
+
+    def _next_forwarding_scope(
+        self,
+        current_scope,
+        route_protocol,
+        next_device,
+        next_interface,
+        destination
+    ):
+
+        interface_scope = (
+            self._interface_scope(
+                next_device,
+                next_interface
+            )
+        )
+
+        protocol = str(
+            route_protocol
+            or ""
+        ).lower()
+
+        #
+        # MP-BGP / VPN forwarding:
+        #
+        # A BGP next-hop may resolve to a PE loopback
+        # in the global/default routing table.
+        #
+        # The loopback identifies the remote PE;
+        # it does NOT imply that the payload flow
+        # changes VRF.
+        #
+        # Preserve the current VRF when the remote
+        # router has a valid destination route in
+        # the same routing scope.
+        #
+        if (
+            protocol
+            in [
+                "bgp",
+                "ibgp",
+                "ebgp"
+            ]
+            and current_scope
+        ):
+
+            route = (
+                self._lookup_route_exact(
+                    next_device,
+                    current_scope,
+                    destination
+                )
+            )
+
+            if route:
+
+                return current_scope
+
+        #
+        # Normal routed adjacency:
+        # receiving interface determines scope.
+        #
+        if interface_scope:
+            return interface_scope
+
+        #
+        # Conservative fallback.
+        #
+        return current_scope
 
 
     def _lookup_route(
@@ -1115,6 +1749,164 @@ class FlowTraceEngine:
             255
         )
 
+
+    def _source_attachments(
+        self,
+        resolution
+    ):
+
+        #
+        # Start with the existing deterministic
+        # directly attached infrastructure.
+        #
+        result = list(
+            self._direct_attachments(
+                resolution
+            )
+        )
+
+        seen = set()
+
+        for attachment in result:
+
+            key = (
+                tuple(
+                    attachment.get(
+                        "devices",
+                        []
+                    )
+                ),
+                tuple(
+                    attachment.get(
+                        "vrfs",
+                        []
+                    )
+                ),
+                tuple(
+                    attachment.get(
+                        "contexts",
+                        []
+                    )
+                ),
+                attachment.get(
+                    "interface"
+                ),
+                attachment.get(
+                    "ip"
+                )
+            )
+
+            seen.add(key)
+
+        #
+        # EndpointResolver can return several
+        # equal longest-prefix route candidates.
+        #
+        # A firewall may own an exact route back
+        # towards the source endpoint even though
+        # its source-facing interface is represented
+        # as "next_hop_subnet", not "direct".
+        #
+        # Such a firewall is a valid source ingress
+        # candidate and should be evaluated as an
+        # additional trace start point.
+        #
+        for candidate in resolution.get(
+            "route_candidates",
+            []
+        ):
+
+            route = (
+                candidate.get(
+                    "route"
+                )
+                or {}
+            )
+
+            route_owner = (
+                route.get(
+                    "router"
+                )
+            )
+
+            if not route_owner:
+                continue
+
+            for infrastructure in candidate.get(
+                "infrastructure",
+                []
+            ):
+
+                if infrastructure.get(
+                    "type"
+                ) != "ASAInterface":
+                    continue
+
+                devices = infrastructure.get(
+                    "devices",
+                    []
+                )
+
+                #
+                # Important:
+                #
+                # Only use the firewall interface
+                # when the firewall itself owns
+                # this exact route candidate.
+                #
+                # This prevents BDK-Teknik from
+                # becoming an anchor merely because
+                # it appears as the next-hop of an
+                # RGDCPe route.
+                #
+                if route_owner not in devices:
+                    continue
+
+                attachment = dict(
+                    infrastructure
+                )
+
+                attachment[
+                    "role"
+                ] = "source_route_owner"
+
+                key = (
+                    tuple(
+                        attachment.get(
+                            "devices",
+                            []
+                        )
+                    ),
+                    tuple(
+                        attachment.get(
+                            "vrfs",
+                            []
+                        )
+                    ),
+                    tuple(
+                        attachment.get(
+                            "contexts",
+                            []
+                        )
+                    ),
+                    attachment.get(
+                        "interface"
+                    ),
+                    attachment.get(
+                        "ip"
+                    )
+                )
+
+                if key in seen:
+                    continue
+
+                seen.add(key)
+
+                result.append(
+                    attachment
+                )
+
+        return result
 
     def _direct_attachments(
         self,

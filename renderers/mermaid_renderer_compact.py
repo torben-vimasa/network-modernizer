@@ -23,14 +23,8 @@ class MermaidRenderer:
         mode="auto"
     ):
 
-        application = (
-            diagram.get("application")
-            or "Unknown"
-        )
-
         lines = [
-            "flowchart LR",
-            f"    %% Application: {self._escape(application)}"
+            "flowchart LR"
         ]
 
         diagram_nodes = diagram.get(
@@ -523,22 +517,17 @@ class MermaidRenderer:
                     target
                 )
 
-        if mode not in [
-            "forwarding",
-            "forwarding_compact"
-        ]:
+        for node in nodes:
 
-            for node in nodes:
+            if node.get(
+                "type"
+            ) == "application":
 
-                if node.get(
-                    "type"
-                ) == "application":
-
-                    result.add(
-                        node.get(
-                            "id"
-                        )
+                result.add(
+                    node.get(
+                        "id"
                     )
+                )
 
         if mode == "communications":
 

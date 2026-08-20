@@ -3,7 +3,8 @@ class DependencyDiagramBuilder:
     def __init__(
         self,
         flow_trace_engine=None,
-        max_trace_pairs=16
+        max_trace_pairs=16,
+        aggregate_paths=True
     ):
         self.flow_trace_engine = (
             flow_trace_engine
@@ -11,6 +12,10 @@ class DependencyDiagramBuilder:
 
         self.max_trace_pairs = (
             max_trace_pairs
+        )
+
+        self.aggregate_paths = (
+            aggregate_paths
         )
 
 
@@ -46,7 +51,8 @@ class DependencyDiagramBuilder:
             "successful": 0,
             "inventory_boundaries": 0,
             "skipped_no_hosts": 0,
-            "skipped_expansion_limit": 0
+            "skipped_expansion_limit": 0,
+            "path_families": 0
         }
 
         app_id = (
@@ -58,6 +64,8 @@ class DependencyDiagramBuilder:
             "type": "application",
             "label": application
         }
+
+        trace_records = []
 
         for communication in communications:
 
@@ -87,18 +95,61 @@ class DependencyDiagramBuilder:
                 combined
             )
 
-            #
-            # Source-anchored forwarding paths.
-            #
-            if self.flow_trace_engine:
+            if not self.flow_trace_engine:
+                continue
 
-                self._add_forwarding_paths(
-                    nodes=nodes,
-                    edges=edges,
-                    app_id=app_id,
+            records = (
+                self._collect_forwarding_traces(
                     communication=communication,
                     trace_stats=trace_stats
                 )
+            )
+
+            trace_records.extend(
+                records
+            )
+
+        path_families = []
+
+        if self.flow_trace_engine:
+
+            if self.aggregate_paths:
+
+                path_families = (
+                    self._add_path_families(
+                        nodes=nodes,
+                        edges=edges,
+                        trace_records=trace_records
+                    )
+                )
+
+            else:
+
+                for record in trace_records:
+
+                    self._add_trace(
+                        nodes=nodes,
+                        edges=edges,
+                        app_id=app_id,
+                        source_ip=record[
+                            "source"
+                        ],
+                        destination_ip=record[
+                            "destination"
+                        ],
+                        trace=record[
+                            "trace"
+                        ],
+                        communication=record[
+                            "communication"
+                        ]
+                    )
+
+        trace_stats[
+            "path_families"
+        ] = len(
+            path_families
+        )
 
         return {
             "application": application,
@@ -121,10 +172,17 @@ class DependencyDiagramBuilder:
                     trace_stats[
                         "inventory_boundaries"
                     ]
+                ),
+                "path_families": len(
+                    path_families
                 )
             },
 
             "trace_stats": trace_stats,
+
+            "path_families": (
+                path_families
+            ),
 
             "nodes": list(
                 nodes.values()
@@ -134,11 +192,8 @@ class DependencyDiagramBuilder:
         }
 
 
-    def _add_forwarding_paths(
+    def _collect_forwarding_traces(
         self,
-        nodes,
-        edges,
-        app_id,
         communication,
         trace_stats
     ):
@@ -165,11 +220,6 @@ class DependencyDiagramBuilder:
             )
         )
 
-        #
-        # FlowTrace requires concrete IP
-        # endpoints. Do not invent hosts from
-        # networks or object groups.
-        #
         if (
             not source_hosts
             or not destination_hosts
@@ -179,7 +229,7 @@ class DependencyDiagramBuilder:
                 "skipped_no_hosts"
             ] += 1
 
-            return
+            return []
 
         pair_count = (
             len(source_hosts)
@@ -190,17 +240,15 @@ class DependencyDiagramBuilder:
             "traceable"
         ] += 1
 
-        #
-        # Avoid exploding large object groups
-        # into hundreds/thousands of traces.
-        #
         if pair_count > self.max_trace_pairs:
 
             trace_stats[
                 "skipped_expansion_limit"
             ] += 1
 
-            return
+            return []
+
+        result = []
 
         for source_ip in source_hosts:
 
@@ -219,10 +267,6 @@ class DependencyDiagramBuilder:
 
                 except Exception:
 
-                    #
-                    # Diagram generation must not
-                    # break the application model.
-                    #
                     continue
 
                 trace_stats[
@@ -245,17 +289,854 @@ class DependencyDiagramBuilder:
                         "inventory_boundaries"
                     ] += 1
 
-                self._add_trace(
-                    nodes=nodes,
-                    edges=edges,
-                    app_id=app_id,
-                    source_ip=source_ip,
-                    destination_ip=destination_ip,
-                    trace=trace,
-                    communication=communication
+                result.append({
+                    "source": source_ip,
+                    "destination": (
+                        destination_ip
+                    ),
+                    "trace": trace,
+                    "communication": (
+                        communication
+                    )
+                })
+
+        return result
+
+
+    def _add_path_families(
+        self,
+        nodes,
+        edges,
+        trace_records
+    ):
+
+        grouped = {}
+
+        for record in trace_records:
+
+            trace = record.get(
+                "trace",
+                {}
+            )
+
+            paths = trace.get(
+                "paths",
+                []
+            )
+
+            for path in paths:
+
+                signature = (
+                    self._path_signature(
+                        path
+                    )
                 )
 
+                if not signature:
+                    continue
 
+                grouped.setdefault(
+                    signature,
+                    []
+                ).append({
+                    "source": record[
+                        "source"
+                    ],
+                    "destination": record[
+                        "destination"
+                    ],
+                    "trace": trace,
+                    "path": path,
+                    "communication": (
+                        record[
+                            "communication"
+                        ]
+                    )
+                })
+
+        families = []
+
+        ordered_groups = sorted(
+            grouped.items(),
+            key=lambda item: (
+                -len(item[1]),
+                str(item[0])
+            )
+        )
+
+        for index, (
+            signature,
+            records
+        ) in enumerate(
+            ordered_groups,
+            start=1
+        ):
+
+            family = (
+                self._build_family(
+                    family_index=index,
+                    signature=signature,
+                    records=records
+                )
+            )
+
+            families.append(
+                family
+            )
+
+            self._add_family_nodes_and_edges(
+                nodes=nodes,
+                edges=edges,
+                family=family,
+                records=records
+            )
+
+        return families
+
+
+    def _path_signature(
+        self,
+        path
+    ):
+
+        hops = path.get(
+            "hops",
+            []
+        )
+
+        if not hops:
+            return None
+
+        signature = []
+
+        for hop in hops:
+
+            route = (
+                hop.get(
+                    "route"
+                )
+                or {}
+            )
+
+            forwarding = (
+                hop.get(
+                    "forwarding"
+                )
+                or {}
+            )
+
+            signature.append(
+                (
+                    hop.get(
+                        "device"
+                    ),
+                    hop.get(
+                        "device_type"
+                    ),
+                    hop.get(
+                        "vrf"
+                    ),
+                    route.get(
+                        "protocol"
+                    ),
+                    route.get(
+                        "next_hop"
+                    ),
+                    forwarding.get(
+                        "device"
+                    ),
+                    forwarding.get(
+                        "method"
+                    ),
+                    bool(
+                        forwarding.get(
+                            "inventory_boundary"
+                        )
+                    ),
+                    hop.get(
+                        "status"
+                    )
+                )
+            )
+
+        if path.get(
+            "inventory_boundary"
+        ):
+
+            terminal = (
+                "inventory_boundary",
+                self._boundary_next_hop(
+                    path
+                )
+            )
+
+        elif path.get(
+            "destination_reached"
+        ):
+
+            terminal = (
+                "destination_reached",
+            )
+
+        else:
+
+            terminal = (
+                "unresolved",
+                path.get(
+                    "reason"
+                )
+            )
+
+        return (
+            tuple(signature),
+            terminal
+        )
+
+
+    def _build_family(
+        self,
+        family_index,
+        signature,
+        records
+    ):
+
+        sources = sorted(
+            {
+                record[
+                    "source"
+                ]
+                for record in records
+            }
+        )
+
+        destinations = sorted(
+            {
+                record[
+                    "destination"
+                ]
+                for record in records
+            }
+        )
+
+        firewalls = sorted(
+            {
+                firewall
+                for record in records
+                for firewall in record[
+                    "path"
+                ].get(
+                    "firewalls",
+                    []
+                )
+            }
+        )
+
+        routers = sorted(
+            {
+                router
+                for record in records
+                for router in record[
+                    "path"
+                ].get(
+                    "routers",
+                    []
+                )
+            }
+        )
+
+        vrfs = sorted(
+            {
+                vrf
+                for record in records
+                for vrf in record[
+                    "path"
+                ].get(
+                    "vrfs",
+                    []
+                )
+            }
+        )
+
+        confidences = sorted(
+            {
+                record[
+                    "trace"
+                ].get(
+                    "confidence"
+                )
+                for record in records
+                if record[
+                    "trace"
+                ].get(
+                    "confidence"
+                )
+            }
+        )
+
+        path = records[0][
+            "path"
+        ]
+
+        terminal = (
+            "inventory_boundary"
+            if path.get(
+                "inventory_boundary"
+            )
+            else (
+                "destination_reached"
+                if path.get(
+                    "destination_reached"
+                )
+                else "unresolved"
+            )
+        )
+
+        return {
+            "id": (
+                f"path_family:{family_index}"
+            ),
+            "index": family_index,
+            "flow_count": len(records),
+            "source_count": len(
+                sources
+            ),
+            "destination_count": len(
+                destinations
+            ),
+            "sources": sources,
+            "destinations": (
+                destinations
+            ),
+            "firewalls": firewalls,
+            "routers": routers,
+            "vrfs": vrfs,
+            "confidence": confidences,
+            "terminal": terminal,
+            "signature": signature
+        }
+
+
+    def _add_family_nodes_and_edges(
+        self,
+        nodes,
+        edges,
+        family,
+        records
+    ):
+
+        family_index = family[
+            "index"
+        ]
+
+        source_id = (
+            f"path_family:{family_index}:sources"
+        )
+
+        destination_id = (
+            f"path_family:{family_index}:destinations"
+        )
+
+        nodes[source_id] = {
+            "id": source_id,
+            "type": "source_family",
+            "label": self._family_endpoint_label(
+                family[
+                    "sources"
+                ],
+                "source"
+            ),
+            "member_count": (
+                family[
+                    "source_count"
+                ]
+            ),
+            "members": (
+                family[
+                    "sources"
+                ]
+            ),
+            "path_family": (
+                family[
+                    "id"
+                ]
+            )
+        }
+
+        nodes[destination_id] = {
+            "id": destination_id,
+            "type": "destination_family",
+            "label": self._family_endpoint_label(
+                family[
+                    "destinations"
+                ],
+                "destination"
+            ),
+            "member_count": (
+                family[
+                    "destination_count"
+                ]
+            ),
+            "members": (
+                family[
+                    "destinations"
+                ]
+            ),
+            "path_family": (
+                family[
+                    "id"
+                ]
+            )
+        }
+
+        representative = records[0][
+            "path"
+        ]
+
+        hops = representative.get(
+            "hops",
+            []
+        )
+
+        previous_id = (
+            source_id
+        )
+
+        for hop_index, hop in enumerate(
+            hops,
+            start=1
+        ):
+
+            device = hop.get(
+                "device"
+            )
+
+            if not device:
+                continue
+
+            device_type = (
+                hop.get(
+                    "device_type"
+                )
+                or "device"
+            )
+
+            device_id = (
+                f"{device_type}:"
+                f"{device}"
+            )
+
+            nodes.setdefault(
+                device_id,
+                {
+                    "id": device_id,
+                    "type": device_type,
+                    "label": device
+                }
+            )
+
+            aggregate = (
+                self._aggregate_hop(
+                    records,
+                    hop_index - 1
+                )
+            )
+
+            properties = {
+                "path_family": (
+                    family[
+                        "id"
+                    ]
+                ),
+                "flow_count": (
+                    family[
+                        "flow_count"
+                    ]
+                ),
+                "vrf": aggregate.get(
+                    "vrf"
+                ),
+                "prefixes": aggregate.get(
+                    "prefixes",
+                    []
+                ),
+                "protocols": aggregate.get(
+                    "protocols",
+                    []
+                ),
+                "next_hop": aggregate.get(
+                    "next_hop"
+                ),
+                "forwarding_method": (
+                    aggregate.get(
+                        "forwarding_method"
+                    )
+                ),
+                "status": aggregate.get(
+                    "status"
+                )
+            }
+
+            self._add_edge(
+                edges,
+                previous_id,
+                device_id,
+                "forwarding_path",
+                properties=properties
+            )
+
+            previous_id = (
+                device_id
+            )
+
+        if representative.get(
+            "inventory_boundary"
+        ):
+
+            next_hop = (
+                self._boundary_next_hop(
+                    representative
+                )
+                or "unknown"
+            )
+
+            boundary_id = (
+                "inventory_boundary:"
+                f"{family_index}:"
+                f"{next_hop}"
+            )
+
+            nodes[boundary_id] = {
+                "id": boundary_id,
+                "type": (
+                    "inventory_boundary"
+                ),
+                "label": (
+                    "Inventory boundary"
+                    f"<br/>{next_hop}"
+                ),
+                "next_hop": next_hop,
+                "path_family": (
+                    family[
+                        "id"
+                    ]
+                )
+            }
+
+            self._add_edge(
+                edges,
+                previous_id,
+                boundary_id,
+                "inventory_boundary",
+                properties={
+                    "path_family": (
+                        family[
+                            "id"
+                        ]
+                    ),
+                    "flow_count": (
+                        family[
+                            "flow_count"
+                        ]
+                    ),
+                    "next_hop": (
+                        next_hop
+                    )
+                }
+            )
+
+            self._add_edge(
+                edges,
+                boundary_id,
+                destination_id,
+                "external_destination",
+                properties={
+                    "path_family": (
+                        family[
+                            "id"
+                        ]
+                    ),
+                    "flow_count": (
+                        family[
+                            "flow_count"
+                        ]
+                    ),
+                    "confidence": (
+                        self._family_confidence(
+                            records
+                        )
+                    )
+                }
+            )
+
+        elif representative.get(
+            "destination_reached"
+        ):
+
+            self._add_edge(
+                edges,
+                previous_id,
+                destination_id,
+                "destination_reached",
+                properties={
+                    "path_family": (
+                        family[
+                            "id"
+                        ]
+                    ),
+                    "flow_count": (
+                        family[
+                            "flow_count"
+                        ]
+                    ),
+                    "confidence": (
+                        self._family_confidence(
+                            records
+                        )
+                    )
+                }
+            )
+
+
+    def _aggregate_hop(
+        self,
+        records,
+        hop_index
+    ):
+
+        vrfs = set()
+        prefixes = set()
+        protocols = set()
+        next_hops = set()
+        methods = set()
+        statuses = set()
+
+        for record in records:
+
+            hops = record[
+                "path"
+            ].get(
+                "hops",
+                []
+            )
+
+            if hop_index >= len(hops):
+                continue
+
+            hop = hops[
+                hop_index
+            ]
+
+            route = (
+                hop.get(
+                    "route"
+                )
+                or {}
+            )
+
+            forwarding = (
+                hop.get(
+                    "forwarding"
+                )
+                or {}
+            )
+
+            if hop.get(
+                "vrf"
+            ):
+                vrfs.add(
+                    hop.get(
+                        "vrf"
+                    )
+                )
+
+            if route.get(
+                "prefix"
+            ):
+                prefixes.add(
+                    route.get(
+                        "prefix"
+                    )
+                )
+
+            if route.get(
+                "protocol"
+            ):
+                protocols.add(
+                    route.get(
+                        "protocol"
+                    )
+                )
+
+            if route.get(
+                "next_hop"
+            ):
+                next_hops.add(
+                    route.get(
+                        "next_hop"
+                    )
+                )
+
+            if forwarding.get(
+                "method"
+            ):
+                methods.add(
+                    forwarding.get(
+                        "method"
+                    )
+                )
+
+            if hop.get(
+                "status"
+            ):
+                statuses.add(
+                    hop.get(
+                        "status"
+                    )
+                )
+
+        return {
+            "vrf": (
+                next(iter(vrfs))
+                if len(vrfs) == 1
+                else None
+            ),
+            "prefixes": sorted(
+                prefixes
+            ),
+            "protocols": sorted(
+                protocols
+            ),
+            "next_hop": (
+                next(iter(next_hops))
+                if len(next_hops) == 1
+                else None
+            ),
+            "forwarding_method": (
+                next(iter(methods))
+                if len(methods) == 1
+                else None
+            ),
+            "status": (
+                next(iter(statuses))
+                if len(statuses) == 1
+                else None
+            )
+        }
+
+
+    def _boundary_next_hop(
+        self,
+        path
+    ):
+
+        for hop in reversed(
+            path.get(
+                "hops",
+                []
+            )
+        ):
+
+            forwarding = (
+                hop.get(
+                    "forwarding"
+                )
+                or {}
+            )
+
+            if forwarding.get(
+                "inventory_boundary"
+            ):
+
+                route = (
+                    hop.get(
+                        "route"
+                    )
+                    or {}
+                )
+
+                return route.get(
+                    "next_hop"
+                )
+
+        return None
+
+
+    def _family_endpoint_label(
+        self,
+        members,
+        role
+    ):
+
+        count = len(
+            members
+        )
+
+        if count == 1:
+
+            return (
+                f"{members[0]}"
+                f"<br/>{role}"
+            )
+
+        preview = members[
+            :3
+        ]
+
+        label = (
+            f"{count} {role}s"
+        )
+
+        for member in preview:
+
+            label += (
+                f"<br/>{member}"
+            )
+
+        if count > len(preview):
+
+            label += (
+                f"<br/>+{count-len(preview)} more"
+            )
+
+        return label
+
+
+    def _family_confidence(
+        self,
+        records
+    ):
+
+        values = [
+            record[
+                "trace"
+            ].get(
+                "confidence"
+            )
+            for record in records
+        ]
+
+        if values and all(
+            value == "high"
+            for value in values
+        ):
+            return "high"
+
+        if any(
+            value in [
+                "high",
+                "medium"
+            ]
+            for value in values
+        ):
+            return "medium"
+
+        return "low"
+
+
+    #
+    # Legacy per-trace rendering is retained
+    # for troubleshooting and regression use.
+    #
     def _add_trace(
         self,
         nodes,
@@ -295,9 +1176,6 @@ class DependencyDiagramBuilder:
             }
         )
 
-        #
-        # Application owns the communication.
-        #
         self._add_edge(
             edges,
             app_id,
@@ -354,10 +1232,6 @@ class DependencyDiagramBuilder:
                     }
                 )
 
-                #
-                # Preserve actual route evidence
-                # on the edge.
-                #
                 route = (
                     hop.get(
                         "route"
@@ -406,44 +1280,10 @@ class DependencyDiagramBuilder:
                     }
                 )
 
-                #
-                # Explicit VRF/context relation
-                # from the actual hop.
-                #
-                vrf = hop.get(
-                    "vrf"
-                )
-
-                if vrf:
-
-                    vrf_id = (
-                        f"vrf:{vrf}"
-                    )
-
-                    nodes.setdefault(
-                        vrf_id,
-                        {
-                            "id": vrf_id,
-                            "type": "vrf",
-                            "label": vrf
-                        }
-                    )
-
-                    self._add_edge(
-                        edges,
-                        device_id,
-                        vrf_id,
-                        "forwarding_vrf"
-                    )
-
                 previous_id = (
                     device_id
                 )
 
-                #
-                # Inventory boundary is a real
-                # terminal state in the trace.
-                #
                 if (
                     forwarding.get(
                         "inventory_boundary"
@@ -503,11 +1343,6 @@ class DependencyDiagramBuilder:
                         boundary_id
                     )
 
-            #
-            # Only connect to the destination
-            # when FlowTrace actually reached
-            # the destination network.
-            #
             if path.get(
                 "destination_reached"
             ):
@@ -530,12 +1365,6 @@ class DependencyDiagramBuilder:
                     }
                 )
 
-            #
-            # If inventory boundary was reached,
-            # destination remains logically known
-            # but is NOT represented as managed
-            # forwarding adjacency.
-            #
             elif path.get(
                 "inventory_boundary"
             ):
@@ -566,9 +1395,6 @@ class DependencyDiagramBuilder:
 
         result = []
 
-        #
-        # ObjectResolver host results.
-        #
         for host in side.get(
             "hosts",
             []
@@ -579,9 +1405,6 @@ class DependencyDiagramBuilder:
                     str(host)
                 )
 
-        #
-        # EndpointResolver results.
-        #
         for endpoint in side.get(
             "endpoints",
             []
@@ -609,14 +1432,9 @@ class DependencyDiagramBuilder:
         dependencies
     ):
 
-        firewall_ids = []
-        router_ids = []
         vrf_ids = []
         interface_ids = []
 
-        #
-        # Firewalls
-        #
         for name in dependencies.get(
             "firewalls",
             []
@@ -632,10 +1450,6 @@ class DependencyDiagramBuilder:
                 "label": name
             }
 
-            firewall_ids.append(
-                node_id
-            )
-
             self._add_edge(
                 edges,
                 app_id,
@@ -643,9 +1457,6 @@ class DependencyDiagramBuilder:
                 "depends_on"
             )
 
-        #
-        # Routers
-        #
         for name in dependencies.get(
             "routers",
             []
@@ -661,10 +1472,6 @@ class DependencyDiagramBuilder:
                 "label": name
             }
 
-            router_ids.append(
-                node_id
-            )
-
             self._add_edge(
                 edges,
                 app_id,
@@ -672,9 +1479,6 @@ class DependencyDiagramBuilder:
                 "depends_on"
             )
 
-        #
-        # VRFs
-        #
         for name in dependencies.get(
             "vrfs",
             []
@@ -694,9 +1498,6 @@ class DependencyDiagramBuilder:
                 node_id
             )
 
-        #
-        # Interfaces
-        #
         for name in dependencies.get(
             "interfaces",
             []
@@ -716,9 +1517,6 @@ class DependencyDiagramBuilder:
                 node_id
             )
 
-        #
-        # Redundancy groups
-        #
         for group in dependencies.get(
             "redundancy_groups",
             []
@@ -814,9 +1612,6 @@ class DependencyDiagramBuilder:
                         "via_interface"
                     )
 
-        #
-        # VRF dependency footprint.
-        #
         for vrf_id in vrf_ids:
 
             self._add_edge(
@@ -826,9 +1621,6 @@ class DependencyDiagramBuilder:
                 "depends_on"
             )
 
-        #
-        # Device/interface ownership.
-        #
         for interface_id in (
             interface_ids
         ):
@@ -903,9 +1695,6 @@ class DependencyDiagramBuilder:
             or {}
         )
 
-        #
-        # Structural identity.
-        #
         key = (
             source,
             target,
@@ -918,6 +1707,9 @@ class DependencyDiagramBuilder:
             ),
             properties.get(
                 "destination"
+            ),
+            properties.get(
+                "path_family"
             )
         )
 
@@ -948,6 +1740,9 @@ class DependencyDiagramBuilder:
                 ),
                 existing_properties.get(
                     "destination"
+                ),
+                existing_properties.get(
+                    "path_family"
                 )
             )
 

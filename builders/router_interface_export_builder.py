@@ -1,8 +1,10 @@
 import json
+
 from dataclasses import asdict
 from pathlib import Path
 
 from parsers.router_interface_parser import RouterInterfaceParser
+from parsers.router_inventory_parser import RouterInventoryParser
 
 
 class RouterInterfaceExportBuilder:
@@ -10,32 +12,156 @@ class RouterInterfaceExportBuilder:
     def __init__(
         self,
         input_dir=Path("data/router_raw_clean"),
+        router_raw_dir=Path("data/router_raw"),
         output_file=Path("output/router_interfaces.json")
     ):
         self.input_dir = Path(input_dir)
+        self.router_raw_dir = Path(router_raw_dir)
         self.output_file = Path(output_file)
+
         self.parser = RouterInterfaceParser()
+        self.inventory_parser = RouterInventoryParser()
+
 
     def build(self):
 
         all_interfaces = []
 
-        for file in sorted(self.input_dir.glob("*.txt")):
-            device = file.stem.split("-")[0]
+        #
+        # Existing normalized interface data.
+        #
+        # Preserve the existing schema exactly.
+        #
+        if self.input_dir.exists():
 
-            with open(file, encoding="utf-8", errors="ignore") as f:
-                interfaces = self.parser.parse(
-                    f.readlines(),
-                    device=device
+            for file in sorted(
+                self.input_dir.glob("*.txt")
+            ):
+
+                device = file.stem.split("-")[0]
+
+                with open(
+                    file,
+                    encoding="utf-8",
+                    errors="ignore"
+                ) as f:
+
+                    interfaces = self.parser.parse(
+                        f.readlines(),
+                        device=device
+                    )
+
+                for interface in interfaces:
+
+                    all_interfaces.append(
+                        asdict(interface)
+                    )
+
+        #
+        # Raw router inventory.
+        #
+        if self.router_raw_dir.exists():
+
+            raw_files = []
+
+            raw_files.extend(
+                self.router_raw_dir.rglob(
+                    "*section interface*.txt"
+                )
+            )
+
+            raw_files.extend(
+                self.router_raw_dir.rglob(
+                    "*show running-config.txt"
+                )
+            )
+
+            raw_files = sorted(
+                set(raw_files)
+            )
+
+            for file in raw_files:
+
+                lines = file.read_text(
+                    encoding="utf-8",
+                    errors="ignore"
+                ).splitlines()
+
+                router = self.inventory_parser.parse(
+                    file.parent.name,
+                    lines
                 )
 
-            all_interfaces.extend(interfaces)
+                for interface in router.interfaces:
 
-        self.output_file.parent.mkdir(parents=True, exist_ok=True)
+                    #
+                    # Convert RouterInventoryParser output
+                    # to the existing router_interfaces.json
+                    # schema.
+                    #
+                    mask = None
 
-        with open(self.output_file, "w", encoding="utf-8") as f:
+                    if interface.prefix:
+
+                        try:
+                            mask = interface.prefix.split(
+                                "/",
+                                1
+                            )[1]
+                        except IndexError:
+                            mask = None
+
+                    all_interfaces.append(
+                        {
+                            "device": router.name,
+                            "interface": interface.name,
+                            "vrf": interface.vrf,
+                            "ip": interface.ip,
+                            "mask": mask,
+                            "hsrp_virtual_ip": None,
+                            "hsrp_state": None,
+                            "hsrp_priority": None
+                        }
+                    )
+
+        #
+        # Remove exact duplicates.
+        #
+        unique = {}
+
+        for interface in all_interfaces:
+
+            key = (
+                interface.get("device"),
+                interface.get("interface"),
+                interface.get("vrf"),
+                interface.get("ip"),
+                interface.get("mask"),
+                interface.get("hsrp_virtual_ip")
+            )
+
+            unique[key] = interface
+
+        all_interfaces = list(
+            unique.values()
+        )
+
+        #
+        # Write normalized export.
+        #
+        self.output_file.parent.mkdir(
+            parents=True,
+            exist_ok=True
+        )
+
+        with open(
+            self.output_file,
+            "w",
+            encoding="utf-8"
+        ) as f:
+
             json.dump(
-                [asdict(i) for i in all_interfaces],
+                all_interfaces,
                 f,
                 indent=4
             )

@@ -1,4 +1,5 @@
 import json
+
 from dataclasses import asdict
 from pathlib import Path
 
@@ -47,12 +48,46 @@ class RouterRouteTableExportBuilder:
                 all_routes.extend(routes)
 
         #
+        # Runtime / operational route tables stored
+        # together with raw router inventory.
+        #
+        # Example:
+        #
+        # data/router_raw/OBvDCR1/
+        #   OBvDCR1 - show ip route vrf bane1.txt
+        #
+        if self.router_raw_dir.exists():
+
+            for file in sorted(
+                self.router_raw_dir.rglob(
+                    "*show ip route*.txt"
+                )
+            ):
+
+                if not file.is_file():
+                    continue
+
+                router_name = file.parent.name
+
+                routes = self.parser.parse_route_table(
+                    router_name=router_name,
+                    lines=file.read_text(
+                        encoding="utf-8",
+                        errors="ignore"
+                    ).splitlines()
+                )
+
+                all_routes.extend(routes)
+
+        #
         # Connected routes derived from router L3 interfaces
         #
         if self.router_raw_dir.exists():
 
             for file in sorted(
-                self.router_raw_dir.rglob("*section interface*.txt")
+                self.router_raw_dir.rglob(
+                    "*section interface*.txt"
+                )
             ):
 
                 lines = file.read_text(
@@ -121,7 +156,10 @@ class RouterRouteTableExportBuilder:
         ) as f:
 
             json.dump(
-                [asdict(route) for route in all_routes],
+                [
+                    asdict(route)
+                    for route in all_routes
+                ],
                 f,
                 indent=4
             )

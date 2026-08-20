@@ -311,20 +311,112 @@ class ResolverEngine:
 
                 if len(vrfs) == 1:
 
-                    selected = sorted(
-                        router_matches,
-                        key=lambda match: match.get("router") or ""
-                    )[0]
+                    ranked = []
 
-                    selected = dict(selected)
+                    for match in router_matches:
 
-                    selected["method"] = "source_router_redundant"
-                    selected["confidence"] = "medium"
-                    selected["candidates"] = router_matches
+                        interface_name = match.get(
+                            "interface"
+                        )
+
+                        node = None
+
+                        if interface_name:
+                            node = self.graph.nodes.get(
+                                f"RouterInterface:{interface_name}"
+                            )
+
+                        properties = (
+                            node.properties
+                            if node
+                            else {}
+                        )
+
+                        hsrp_state = (
+                            properties.get(
+                                "hsrp_state"
+                            )
+                        )
+
+                        hsrp_priority = (
+                            properties.get(
+                                "hsrp_priority"
+                            )
+                        )
+
+                        hsrp_virtual_ip = (
+                            properties.get(
+                                "hsrp_virtual_ip"
+                            )
+                        )
+
+                        #
+                        # Ranking:
+                        #
+                        # 1. Explicit HSRP Active state
+                        # 2. Highest HSRP priority
+                        # 3. Candidate participating in HSRP
+                        # 4. Deterministic router-name fallback
+                        #
+                        active_rank = (
+                            1
+                            if str(hsrp_state).lower() == "active"
+                            else 0
+                        )
+
+                        priority_rank = (
+                            hsrp_priority
+                            if hsrp_priority is not None
+                            else -1
+                        )
+
+                        hsrp_rank = (
+                            1
+                            if hsrp_virtual_ip
+                            else 0
+                        )
+
+                        ranked.append(
+                            (
+                                active_rank,
+                                priority_rank,
+                                hsrp_rank,
+                                match
+                            )
+                        )
+
+                    ranked.sort(
+                        key=lambda item: (
+                            -item[0],
+                            -item[1],
+                            -item[2],
+                            item[3].get("router") or ""
+                        )
+                    )
+
+                    selected = dict(
+                        ranked[0][3]
+                    )
+
+                    selected["method"] = (
+                        "source_router_redundant"
+                    )
+
+                    selected["confidence"] = (
+                        "high"
+                        if ranked[0][0] == 1
+                        else "medium"
+                    )
+
+                    selected["candidates"] = (
+                        router_matches
+                    )
+
                     selected["reason"] = (
                         f"Source {source_ip} matched "
                         f"{len(router_matches)} redundant router interfaces; "
-                        f"selected {selected.get('router')} deterministically"
+                        f"selected {selected.get('router')} "
+                        f"using gateway redundancy evidence"
                     )
 
                     return selected
