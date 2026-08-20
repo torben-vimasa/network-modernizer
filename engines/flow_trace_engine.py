@@ -2084,6 +2084,55 @@ class FlowTraceEngine:
         interface_node
     ):
 
+        #
+        # ASA interfaces can belong to both:
+        #
+        #   Context <context-name>
+        #   Firewall <device-name>
+        #
+        # The forwarding owner is the physical/logical
+        # firewall identified by the normalized
+        # "device" property.
+        #
+        if interface_node.type == "ASAInterface":
+
+            device_name = (
+                interface_node.properties.get(
+                    "device"
+                )
+            )
+
+            if device_name:
+
+                for relation, neighbor in (
+                    self.graph.neighbors(
+                        interface_node.id
+                    )
+                ):
+
+                    if relation != "HAS_INTERFACE":
+                        continue
+
+                    if (
+                        neighbor.type == "Firewall"
+                        and neighbor.name == device_name
+                    ):
+                        return neighbor
+
+        #
+        # Generic fallback.
+        #
+        # Prefer Firewall/Router/Switch before Context.
+        #
+        preferred_types = [
+            "Firewall",
+            "Router",
+            "Switch",
+            "Context"
+        ]
+
+        neighbors = []
+
         for relation, neighbor in (
             self.graph.neighbors(
                 interface_node.id
@@ -2093,13 +2142,16 @@ class FlowTraceEngine:
             if relation != "HAS_INTERFACE":
                 continue
 
-            if neighbor.type in [
-                "Router",
-                "Firewall",
-                "Switch",
-                "Context"
-            ]:
-                return neighbor
+            neighbors.append(
+                neighbor
+            )
+
+        for preferred_type in preferred_types:
+
+            for neighbor in neighbors:
+
+                if neighbor.type == preferred_type:
+                    return neighbor
 
         return None
 

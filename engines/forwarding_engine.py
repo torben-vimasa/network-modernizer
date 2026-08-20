@@ -290,33 +290,77 @@ class ForwardingEngine:
 
         return None
 
-    def _find_parent_device(self, interface_node):
+    def _find_parent_device(
+        self,
+        interface_node
+    ):
 
         #
-        # RouterInterface
-        #      |
-        # HAS_INTERFACE
-        #      |
-        # Router
+        # ASA interfaces can belong to both a
+        # firewall device and a firewall context.
         #
-        # ASAInterface
-        #      |
-        # HAS_INTERFACE
-        #      |
-        # Context
+        # The normalized "device" property identifies
+        # the forwarding owner. The context is a
+        # routing/security scope, not the next device.
         #
+        if interface_node.type == "ASAInterface":
 
-        for relation, neighbor in self.graph.neighbors(interface_node.id):
+            device_name = (
+                interface_node.properties.get(
+                    "device"
+                )
+            )
+
+            if device_name:
+
+                for relation, neighbor in (
+                    self.graph.neighbors(
+                        interface_node.id
+                    )
+                ):
+
+                    if relation != "HAS_INTERFACE":
+                        continue
+
+                    if (
+                        neighbor.type == "Firewall"
+                        and neighbor.name == device_name
+                    ):
+                        return neighbor
+
+        #
+        # Generic fallback.
+        #
+        # Prefer actual forwarding devices before
+        # logical contexts.
+        #
+        preferred_types = [
+            "Firewall",
+            "Router",
+            "Switch",
+            "Context"
+        ]
+
+        neighbors = []
+
+        for relation, neighbor in (
+            self.graph.neighbors(
+                interface_node.id
+            )
+        ):
 
             if relation != "HAS_INTERFACE":
                 continue
 
-            if neighbor.type in [
-                "Router",
-                "Firewall",
-                "Switch",
-                "Context"
-            ]:
-                return neighbor
+            neighbors.append(
+                neighbor
+            )
 
-        return None        
+        for preferred_type in preferred_types:
+
+            for neighbor in neighbors:
+
+                if neighbor.type == preferred_type:
+                    return neighbor
+
+        return None
