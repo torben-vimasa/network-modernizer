@@ -26,12 +26,20 @@ class FlowTraceEngine:
     def trace(
         self,
         source,
-        destination
+        destination,
+        start=None
     ):
 
         cache_key = (
             source,
-            destination
+            destination,
+            (
+                start.get("device"),
+                start.get("scope"),
+                start.get("interface")
+            )
+            if start
+            else None
         )
 
         if cache_key in self._trace_cache:
@@ -90,11 +98,14 @@ class FlowTraceEngine:
         # We must start from infrastructure
         # directly attached to the source.
         #
-        start_points = (
-            self._build_start_points(
-                source_attachments
+        if start:
+            start_points = [start]
+        else:
+            start_points = (
+                self._build_start_points(
+                    source_attachments
+                )
             )
-        )
 
         paths = []
 
@@ -167,7 +178,8 @@ class FlowTraceEngine:
             return self._cache_result(
                 source,
                 destination,
-                result
+                result,
+                start=start
             )
 
         successful_paths = [
@@ -317,7 +329,8 @@ class FlowTraceEngine:
         return self._cache_result(
             source,
             destination,
-            result
+            result,
+            start=start
         )
 
 
@@ -628,23 +641,55 @@ class FlowTraceEngine:
         return {
             "source": source,
             "destination": destination,
+
             "start": start,
+
+            "gateway_role": (
+                start.get(
+                    "gateway_role"
+                )
+            ),
+
+            "hsrp_virtual_ip": (
+                start.get(
+                    "hsrp_virtual_ip"
+                )
+            ),
+
+            "hsrp_priority": (
+                start.get(
+                    "hsrp_priority"
+                )
+            ),
+
+            "hsrp_state": (
+                start.get(
+                    "hsrp_state"
+                )
+            ),
+
             "hops": hops,
+
             "destination_reached": (
                 destination_reached
             ),
+
             "inventory_boundary": (
                 inventory_boundary
             ),
+
             "firewalls": self._unique(
                 firewalls
             ),
+
             "routers": self._unique(
                 routers
             ),
+
             "vrfs": self._unique(
                 vrfs
             ),
+
             "reason": stop_reason
         }
 
@@ -1613,6 +1658,48 @@ class FlowTraceEngine:
             if destination_ip not in network:
                 continue
 
+            priority = properties.get(
+                "hsrp_priority"
+            )
+
+            gateway_role = None
+
+            if hsrp_attachments:
+
+                priorities = [
+                    (
+                        item.get(
+                            "properties"
+                        )
+                        or {}
+                    ).get(
+                        "hsrp_priority"
+                    )
+                    for item in selected_attachments
+                ]
+
+                priorities = [
+                    value
+                    for value in priorities
+                    if value is not None
+                ]
+
+                if (
+                    priority is not None
+                    and priorities
+                ):
+
+                    if priority == max(
+                        priorities
+                    ):
+                        gateway_role = (
+                            "preferred_candidate"
+                        )
+                    else:
+                        gateway_role = (
+                            "alternate_candidate"
+                        )
+
             result.append({
                 "scope": route.get(
                     "vrf"
@@ -1940,10 +2027,105 @@ class FlowTraceEngine:
         attachments
     ):
 
+        #
+        # Prefer first-hop redundancy members when the
+        # source subnet contains an HSRP gateway group.
+        #
+        hsrp_attachments = []
+
+        for attachment in attachments:
+
+            properties = (
+                attachment.get(
+                    "properties"
+                )
+                or {}
+            )
+
+            hsrp_virtual_ip = (
+                properties.get(
+                    "hsrp_virtual_ip"
+                )
+            )
+
+            if hsrp_virtual_ip:
+                hsrp_attachments.append(
+                    attachment
+                )
+
+        if hsrp_attachments:
+
+            #
+            # Group HSRP members by virtual IP.
+            #
+            groups = {}
+
+            for attachment in hsrp_attachments:
+
+                properties = (
+                    attachment.get(
+                        "properties"
+                    )
+                    or {}
+                )
+
+                vip = properties.get(
+                    "hsrp_virtual_ip"
+                )
+
+                groups.setdefault(
+                    vip,
+                    []
+                ).append(
+                    attachment
+                )
+
+            #
+            # Keep the largest HSRP group.
+            #
+            selected_attachments = max(
+                groups.values(),
+                key=len
+            )
+
+        else:
+
+            selected_attachments = attachments
+
+        #
+        # Determine highest HSRP priority among
+        # selected gateway candidates.
+        #
+        hsrp_priorities = []
+
+        for attachment in selected_attachments:
+
+            properties = (
+                attachment.get(
+                    "properties"
+                )
+                or {}
+            )
+
+            priority = properties.get(
+                "hsrp_priority"
+            )
+
+            if priority is not None:
+                hsrp_priorities.append(
+                    priority
+                )
+
+        highest_hsrp_priority = (
+            max(hsrp_priorities)
+            if hsrp_priorities
+            else None
+        )
+
         result = []
         seen = set()
 
-        for attachment in attachments:
+        for attachment in selected_attachments:
 
             devices = attachment.get(
                 "devices",
@@ -1960,6 +2142,43 @@ class FlowTraceEngine:
                     []
                 )
             )
+
+            properties = (
+                attachment.get(
+                    "properties"
+                )
+                or {}
+            )
+
+            priority = properties.get(
+                "hsrp_priority"
+            )
+
+            hsrp_virtual_ip = (
+                properties.get(
+                    "hsrp_virtual_ip"
+                )
+            )
+
+            gateway_role = None
+
+            if (
+                hsrp_virtual_ip
+                and priority is not None
+                and highest_hsrp_priority is not None
+            ):
+
+                if (
+                    priority
+                    == highest_hsrp_priority
+                ):
+                    gateway_role = (
+                        "preferred_candidate"
+                    )
+                else:
+                    gateway_role = (
+                        "alternate_candidate"
+                    )
 
             for device in devices:
 
@@ -1985,7 +2204,9 @@ class FlowTraceEngine:
                     if key in seen:
                         continue
 
-                    seen.add(key)
+                    seen.add(
+                        key
+                    )
 
                     result.append({
                         "device": device,
@@ -2000,6 +2221,20 @@ class FlowTraceEngine:
                         ),
                         "type": attachment.get(
                             "type"
+                        ),
+                        "hsrp_virtual_ip": (
+                            hsrp_virtual_ip
+                        ),
+                        "hsrp_state": (
+                            properties.get(
+                                "hsrp_state"
+                            )
+                        ),
+                        "hsrp_priority": (
+                            priority
+                        ),
+                        "gateway_role": (
+                            gateway_role
                         )
                     })
 
@@ -2445,14 +2680,24 @@ class FlowTraceEngine:
         self,
         source,
         destination,
-        result
+        result,
+        start=None
     ):
 
-        self._trace_cache[
+        cache_key = (
+            source,
+            destination,
             (
-                source,
-                destination
+                start.get("device"),
+                start.get("scope"),
+                start.get("interface")
             )
+            if start
+            else None
+        )
+
+        self._trace_cache[
+            cache_key
         ] = result
 
         return result

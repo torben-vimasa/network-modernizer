@@ -166,7 +166,78 @@ def v2_all_devices(paths):
     return devices
 
 
-def path_has_common_device(
+def devices_equivalent(
+    twin,
+    workflow_device,
+    v2_device
+):
+
+    if workflow_device == v2_device:
+        return True
+
+    #
+    # Legacy TraceWorkflow may represent a firewall hop
+    # using the physical firewall/chassis, while V2 may
+    # represent the same hop using the ASA context.
+    #
+    firewall_node = twin.graph.find(
+        "Firewall",
+        workflow_device
+    )
+
+    context_node = twin.graph.find(
+        "Context",
+        v2_device
+    )
+
+    if (
+        firewall_node
+        and context_node
+    ):
+
+        for relation, node in twin.graph.neighbors(
+            firewall_node.id
+        ):
+
+            if (
+                relation == "HAS_CONTEXT"
+                and node.id == context_node.id
+            ):
+                return True
+
+    #
+    # Also support the reverse direction.
+    #
+    firewall_node = twin.graph.find(
+        "Firewall",
+        v2_device
+    )
+
+    context_node = twin.graph.find(
+        "Context",
+        workflow_device
+    )
+
+    if (
+        firewall_node
+        and context_node
+    ):
+
+        for relation, node in twin.graph.neighbors(
+            firewall_node.id
+        ):
+
+            if (
+                relation == "HAS_CONTEXT"
+                and node.id == context_node.id
+            ):
+                return True
+
+    return False
+
+
+def path_has_ordered_workflow(
+    twin,
     workflow_devices_list,
     v2_path_list
 ):
@@ -181,9 +252,68 @@ def path_has_common_device(
             []
         )
 
-        if any(
-            device in devices
-            for device in workflow_devices_list
+        position = 0
+
+        for device in devices:
+
+            if position >= len(
+                workflow_devices_list
+            ):
+                break
+
+            workflow_device = (
+                workflow_devices_list[
+                    position
+                ]
+            )
+
+            if devices_equivalent(
+                twin,
+                workflow_device,
+                device
+            ):
+                position += 1
+
+        if position == len(
+            workflow_devices_list
+        ):
+            return True
+
+    return False
+
+
+def path_has_exact_ordered_workflow(
+    workflow_devices_list,
+    v2_path_list
+):
+
+    if not workflow_devices_list:
+        return True
+
+    for path in v2_path_list:
+
+        devices = path.get(
+            "devices",
+            []
+        )
+
+        position = 0
+
+        for device in devices:
+
+            if (
+                position < len(
+                    workflow_devices_list
+                )
+                and device
+                == workflow_devices_list[
+                    position
+                ]
+            ):
+                position += 1
+
+        if position == len(
+            workflow_devices_list
         ):
             return True
 
@@ -202,7 +332,8 @@ def main():
 
     output = []
 
-    differences = 0
+    forwarding_differences = 0
+    representation_differences = 0
     compared = 0
     skipped = 0
 
@@ -224,13 +355,75 @@ def main():
             f"{source} -> {destination}"
         )
 
-        if pilot.get("start"):
+        start = pilot.get(
+            "start"
+        )
 
-            skipped += 1
-            continue
+        v2_start = None
+
+        #
+        # Resolve explicit ingress/start using the same
+        # resolver as the legacy TraceWorkflow.
+        #
+        if start:
+
+            start_resolution = (
+                twin.trace.resolver.resolve_start(
+                    start=start,
+                    source_ip=source
+                )
+            )
+
+            if start_resolution.get(
+                "resolved"
+            ):
+
+                v2_start = {
+                    "device": (
+                        start_resolution.get(
+                            "device"
+                        )
+                    ),
+                    "scope": (
+                        start_resolution.get(
+                            "context"
+                        )
+                        or start_resolution.get(
+                            "vrf"
+                        )
+                    ),
+                    "interface": (
+                        start_resolution.get(
+                            "interface"
+                        )
+                    ),
+                    "ip": (
+                        start_resolution.get(
+                            "ip"
+                        )
+                    )
+                }
+
+            else:
+
+                skipped += 1
+
+                print(
+                    "SKIPPED explicit start:",
+                    name,
+                    "-",
+                    start_resolution.get(
+                        "reason"
+                    )
+                )
+
+                continue
 
         compared += 1
 
+        #
+        # Legacy TraceWorkflow
+        #
         workflow = twin.trace.trace(
             source=source,
             destination=destination,
@@ -239,12 +432,17 @@ def main():
             ),
             service=pilot.get(
                 "service"
-            )
+            ),
+            start=start
         )
 
+        #
+        # Flow Trace V2
+        #
         v2 = twin.trace_flow(
             source,
-            destination
+            destination,
+            start=v2_start
         )
 
         w_reached = workflow_reached(
@@ -273,22 +471,43 @@ def main():
             w_reached == v_reached
         )
 
-        common_path = (
-            path_has_common_device(
+        exact_ordered_path = (
+            path_has_exact_ordered_workflow(
                 w_devices,
                 v_paths
             )
         )
 
-        differing = (
-            not same_reachability
-            or not common_path
+        equivalent_ordered_path = (
+            path_has_ordered_workflow(
+                twin,
+                w_devices,
+                v_paths
+            )
         )
 
-        if not differing:
+        forwarding_difference = (
+            not same_reachability
+            or not equivalent_ordered_path
+        )
+
+        representation_difference = (
+            same_reachability
+            and equivalent_ordered_path
+            and not exact_ordered_path
+        )
+
+        if (
+            not forwarding_difference
+            and not representation_difference
+        ):
             continue
 
-        differences += 1
+        if forwarding_difference:
+            forwarding_differences += 1
+
+        if representation_difference:
+            representation_differences += 1
 
         output.append(
             "=" * 100
@@ -303,6 +522,18 @@ def main():
         )
 
         output.append("")
+
+        if start:
+
+            output.append(
+                f"EXPLICIT START : {start}"
+            )
+
+            output.append(
+                f"V2 START       : {v2_start}"
+            )
+
+            output.append("")
 
         output.append(
             "TRACE WORKFLOW"
@@ -400,13 +631,28 @@ def main():
         )
 
         output.append(
-            f"  same reachability : "
+            f"  same reachability        : "
             f"{same_reachability}"
         )
 
         output.append(
-            f"  common V2 path    : "
-            f"{common_path}"
+            f"  exact ordered path       : "
+            f"{exact_ordered_path}"
+        )
+
+        output.append(
+            f"  equivalent ordered path  : "
+            f"{equivalent_ordered_path}"
+        )
+
+        output.append(
+            f"  forwarding difference    : "
+            f"{forwarding_difference}"
+        )
+
+        output.append(
+            f"  representation difference: "
+            f"{representation_difference}"
         )
 
         output.append("")
@@ -424,19 +670,25 @@ def main():
     )
 
     output.append(
-        f"Pilots total : {len(pilots)}"
+        f"Pilots total              : {len(pilots)}"
     )
 
     output.append(
-        f"Compared     : {compared}"
+        f"Compared                  : {compared}"
     )
 
     output.append(
-        f"Skipped      : {skipped}"
+        f"Skipped                   : {skipped}"
     )
 
     output.append(
-        f"Differences  : {differences}"
+        f"Forwarding differences    : "
+        f"{forwarding_differences}"
+    )
+
+    output.append(
+        f"Representation differences: "
+        f"{representation_differences}"
     )
 
     OUTPUT_FILE.parent.mkdir(
@@ -465,8 +717,13 @@ def main():
     )
 
     print(
-        "Differences:",
-        differences
+        "Forwarding differences:",
+        forwarding_differences
+    )
+
+    print(
+        "Representation differences:",
+        representation_differences
     )
 
 

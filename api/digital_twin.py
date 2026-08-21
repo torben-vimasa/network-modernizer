@@ -462,10 +462,12 @@ class DigitalTwin:
     def trace_flow(
         self,
         source,
-        destination
+        destination,
+        start=None
     ):
 
         return self.flow_trace_engine.trace(
             source,
-            destination
+            destination,
+            start=start
         )
