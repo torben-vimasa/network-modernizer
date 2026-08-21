@@ -707,6 +707,18 @@ class FlowTraceEngine:
 
             "hops": hops,
 
+            "device_path": (
+                self._device_path(
+                    hops
+                )
+            ),
+
+            "logical_path": (
+                self._logical_path(
+                    hops
+                )
+            ),
+
             "destination_reached": (
                 destination_reached
             ),
@@ -2690,6 +2702,72 @@ class FlowTraceEngine:
             "reached the destination."
         )
 
+    def _logical_path(
+        self,
+        hops
+    ):
+
+        result = []
+
+        for hop in hops:
+
+            device = hop.get(
+                "device"
+            )
+
+            scope = hop.get(
+                "vrf"
+            )
+
+            if not device:
+                continue
+
+            entry = {
+                "device": device,
+                "scope": scope
+            }
+
+            if (
+                result
+                and result[-1] == entry
+            ):
+                continue
+
+            result.append(
+                entry
+            )
+
+        return result
+
+
+
+    def _device_path(
+        self,
+        hops
+    ):
+
+        result = []
+
+        for hop in hops:
+
+            device = hop.get(
+                "device"
+            )
+
+            if not device:
+                continue
+
+            if (
+                result
+                and result[-1] == device
+            ):
+                continue
+
+            result.append(
+                device
+            )
+
+        return result
 
     def _unique(
         self,
