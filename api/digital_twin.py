@@ -138,6 +138,17 @@ class DigitalTwin:
             graph=self.graph
 )
 
+        from engines.firewall_traversal_engine import (
+            FirewallTraversalEngine
+        )
+
+        self.flow_trace_engine.firewall_traversal_engine = (
+            FirewallTraversalEngine(
+                twin=self,
+                routes=self.firewall_routes,
+                interfaces=self.firewall_interfaces
+            )
+        )
         self.trace = TraceWorkflow(self)
 
     def load_router(self, filename):
@@ -463,11 +474,15 @@ class DigitalTwin:
         self,
         source,
         destination,
+        protocol=None,
+        service=None,
         start=None
     ):
 
         return self.flow_trace_engine.trace(
             source,
             destination,
+            protocol=protocol,
+            service=service,
             start=start
         )

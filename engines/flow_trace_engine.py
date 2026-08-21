@@ -12,7 +12,8 @@ class FlowTraceEngine:
         route_engine,
         forwarding_engine,
         firewall_routes=None,
-        dependency_resolver=None
+        dependency_resolver=None,
+        firewall_traversal_engine=None
     ):
         self.graph = graph
         self.endpoint_resolver = endpoint_resolver
@@ -20,19 +21,25 @@ class FlowTraceEngine:
         self.forwarding_engine = forwarding_engine
         self.firewall_routes = firewall_routes or []
         self.dependency_resolver = dependency_resolver
+        self.firewall_traversal_engine = firewall_traversal_engine
         self._trace_cache = {}
 
 
+    
     def trace(
         self,
         source,
         destination,
+        protocol=None,
+        service=None,
         start=None
     ):
 
         cache_key = (
             source,
             destination,
+            protocol,
+            service,
             (
                 start.get("device"),
                 start.get("scope"),
@@ -114,6 +121,8 @@ class FlowTraceEngine:
             path = self._trace_from_start(
                 source=source,
                 destination=destination,
+                protocol=protocol,
+                service=service,
                 start=start,
                 destination_attachments=(
                     destination_attachments
@@ -375,9 +384,14 @@ class FlowTraceEngine:
         self,
         source,
         destination,
+        protocol,
+        service,
         start,
         destination_attachments
     ):
+
+        from models.firewall_hop import FirewallHop
+        from models.packet import Packet
 
         current_device = start.get(
             "device"
@@ -386,6 +400,23 @@ class FlowTraceEngine:
         current_scope = start.get(
             "scope"
         )
+
+        current_ingress_interface = (
+            start.get(
+                "interface"
+            )
+        )
+
+        #
+        # Current packet state.
+        #
+        # NAT may change source/destination while
+        # the original flow remains unchanged.
+        #
+        current_source = source
+        current_destination = destination
+        current_protocol = protocol
+        current_service = service
 
         hops = []
 
@@ -406,7 +437,8 @@ class FlowTraceEngine:
 
             state = (
                 current_device,
-                current_scope
+                current_scope,
+                current_destination
             )
 
             if state in visited:
@@ -440,15 +472,463 @@ class FlowTraceEngine:
                 )
 
             if current_scope:
+
                 vrfs.append(
                     current_scope
                 )
 
+            #
+            # ---------------------------------------------------------
+            # FIREWALL TRAVERSAL
+            # ---------------------------------------------------------
+            #
+            if (
+                device_type == "firewall"
+                and self.firewall_traversal_engine
+            ):
+
+                firewall_ingress_interface = (
+                    self._normalize_firewall_ingress_interface(
+                        current_device,
+                        current_ingress_interface
+                    )
+                )
+
+                firewall_hop = FirewallHop(
+                    firewall=current_device,
+                    context=(
+                        current_scope
+                        or current_device
+                    ),
+                    ingress_interface=(
+                        firewall_ingress_interface
+                    ),
+                    reason=(
+                        "Flow Trace V2 firewall traversal"
+                    )
+                )
+
+                packet = Packet(
+                    source=current_source,
+                    destination=current_destination,
+                    protocol=current_protocol,
+                    service=current_service
+                )
+
+                traversal = (
+                    self.firewall_traversal_engine.traverse(
+                        firewall_hop,
+                        packet
+                    )
+                )
+
+                #
+                # Security metadata.
+                #
+                security_rule = None
+
+                if (
+                    traversal.security
+                    and traversal.security.rule
+                ):
+
+                    security_rule = getattr(
+                        traversal.security.rule,
+                        "name",
+                        None
+                    )
+
+                security_data = {
+                    "permitted": (
+                        traversal.security.permitted
+                        if traversal.security
+                        else None
+                    ),
+                    "reason": (
+                        traversal.security.reason
+                        if traversal.security
+                        else None
+                    ),
+                    "rule": security_rule
+                }
+
+                #
+                # NAT metadata.
+                #
+                nat_rule = None
+
+                if (
+                    traversal.nat
+                    and traversal.nat.rule
+                ):
+
+                    nat_rule = getattr(
+                        traversal.nat.rule,
+                        "name",
+                        None
+                    )
+
+                nat_data = {
+                    "rule": nat_rule,
+
+                    "source_before": (
+                        traversal.source_before
+                    ),
+
+                    "source_after": (
+                        traversal.source_after
+                    ),
+
+                    "destination_before": (
+                        traversal.destination_before
+                    ),
+
+                    "destination_after": (
+                        traversal.destination_after
+                    )
+                }
+
+                #
+                # Preferred generic traversal target.
+                #
+                target = traversal.target
+
+                target_resolved = False
+                target_device = None
+                target_scope = None
+                target_interface = None
+                target_method = None
+                target_confidence = None
+
+                if target:
+
+                    target_resolved = bool(
+                        target.resolved
+                    )
+
+                    target_device = (
+                        target.device_name
+                    )
+
+                    target_scope = (
+                        target.vrf
+                    )
+
+                    target_interface = (
+                        target.interface
+                    )
+
+                    target_method = (
+                        target.method
+                    )
+
+                    target_confidence = (
+                        target.confidence
+                    )
+
+                #
+                # Temporary compatibility with
+                # FirewallTraversalResult.next_device.
+                #
+                elif (
+                    traversal.next_device
+                    and traversal.next_device.get(
+                        "resolved"
+                    )
+                ):
+
+                    legacy_target = (
+                        traversal.next_device
+                    )
+
+                    target_resolved = True
+
+                    target_device = (
+                        legacy_target.get(
+                            "device"
+                        )
+                        or legacy_target.get(
+                            "router"
+                        )
+                        or legacy_target.get(
+                            "firewall"
+                        )
+                        or legacy_target.get(
+                            "context"
+                        )
+                    )
+
+                    target_scope = (
+                        legacy_target.get(
+                            "context"
+                        )
+                        or legacy_target.get(
+                            "vrf"
+                        )
+                    )
+
+                    target_interface = (
+                        legacy_target.get(
+                            "interface"
+                        )
+                    )
+
+                    target_method = (
+                        legacy_target.get(
+                            "method"
+                        )
+                        or "legacy_next_device"
+                    )
+
+                    target_confidence = (
+                        legacy_target.get(
+                            "confidence"
+                        )
+                    )
+
+                forwarding_data = {
+                    "resolved": (
+                        target_resolved
+                    ),
+                    "device": (
+                        target_device
+                    ),
+                    "scope": (
+                        target_scope
+                    ),
+                    "interface": (
+                        target_interface
+                    ),
+                    "method": (
+                        target_method
+                    ),
+                    "confidence": (
+                        target_confidence
+                    ),
+                    "reason": (
+                        traversal.reason
+                    )
+                }
+
+                #
+                # Firewall hop status.
+                #
+                if not traversal.permitted:
+
+                    hop_status = (
+                        "security_denied"
+                    )
+
+                elif traversal.destination_reached:
+
+                    hop_status = (
+                        "destination_network_reached"
+                    )
+
+                elif target_resolved:
+
+                    hop_status = (
+                        "forward"
+                    )
+
+                elif (
+                    traversal.next_device
+                    and not traversal.next_device.get(
+                        "resolved"
+                    )
+                ):
+
+                    hop_status = (
+                        "inventory_boundary"
+                    )
+
+                else:
+
+                    hop_status = (
+                        "unresolved_next_hop"
+                    )
+
+                route_data = None
+
+                if traversal.route:
+
+                    route_data = {
+                        "prefix": (
+                            traversal.route
+                        ),
+                        "next_hop": (
+                            traversal.next_hop
+                        ),
+                        "protocol": (
+                            "firewall"
+                        ),
+                        "egress_interface": (
+                            traversal.egress_interface
+                        )
+                    }
+
+                hops.append({
+                    "hop": hop_number,
+
+                    "device": (
+                        current_device
+                    ),
+
+                    "device_type": (
+                        device_type
+                    ),
+
+                    "vrf": (
+                        current_scope
+                    ),
+
+                    "ingress_interface": (
+                        firewall_ingress_interface
+                    ),
+
+                    "egress_interface": (
+                        traversal.egress_interface
+                    ),
+
+                    "route": (
+                        route_data
+                    ),
+
+                    "forwarding": (
+                        forwarding_data
+                    ),
+
+                    "security": (
+                        security_data
+                    ),
+
+                    "nat": (
+                        nat_data
+                    ),
+
+                    "status": (
+                        hop_status
+                    )
+                })
+
+                #
+                # Security deny is terminal.
+                #
+                if not traversal.permitted:
+
+                    stop_reason = (
+                        traversal.reason
+                        or "Firewall denied traffic"
+                    )
+
+                    break
+
+                #
+                # Destination directly connected
+                # through firewall.
+                #
+                if traversal.destination_reached:
+
+                    destination_reached = True
+
+                    stop_reason = (
+                        traversal.reason
+                        or (
+                            "Destination reached "
+                            "through firewall"
+                        )
+                    )
+
+                    break
+
+                #
+                # NAT may change packet state.
+                #
+                if traversal.output_packet:
+
+                    current_source = (
+                        traversal.output_packet.source
+                    )
+
+                    current_destination = (
+                        traversal.output_packet.destination
+                    )
+
+                    current_protocol = (
+                        traversal.output_packet.protocol
+                    )
+
+                    current_service = (
+                        traversal.output_packet.service
+                    )
+
+                #
+                # Continue to resolved target.
+                #
+                if (
+                    target_resolved
+                    and target_device
+                ):
+
+                    current_device = (
+                        target_device
+                    )
+
+                    current_scope = (
+                        target_scope
+                        or current_scope
+                    )
+
+                    current_ingress_interface = (
+                        target_interface
+                    )
+
+                    continue
+
+                #
+                # Unresolved firewall next-hop means
+                # inventory boundary, not security deny.
+                #
+                if (
+                    traversal.next_device
+                    and not traversal.next_device.get(
+                        "resolved"
+                    )
+                ):
+
+                    inventory_boundary = True
+
+                    stop_reason = (
+                        traversal.reason
+                        or (
+                            "Firewall forwarding completed "
+                            "to an inventory boundary."
+                        )
+                    )
+
+                    break
+
+                stop_reason = (
+                    traversal.reason
+                    or (
+                        "Firewall traversal completed "
+                        "without a resolvable continuation "
+                        "target."
+                    )
+                )
+
+                break
+
+            #
+            # ---------------------------------------------------------
+            # ROUTER / GENERIC FORWARDING
+            # ---------------------------------------------------------
+            #
             route_result = (
                 self._lookup_route(
                     current_device,
                     current_scope,
-                    destination
+                    current_destination
                 )
             )
 
@@ -456,11 +936,15 @@ class FlowTraceEngine:
 
                 hops.append({
                     "hop": hop_number,
-                    "device": current_device,
+                    "device": (
+                        current_device
+                    ),
                     "device_type": (
                         device_type
                     ),
-                    "vrf": current_scope,
+                    "vrf": (
+                        current_scope
+                    ),
                     "route": None,
                     "forwarding": None,
                     "status": "no_route"
@@ -468,7 +952,7 @@ class FlowTraceEngine:
 
                 stop_reason = (
                     "No route to destination "
-                    f"{destination} on "
+                    f"{current_destination} on "
                     f"{current_device} "
                     f"scope={current_scope}"
                 )
@@ -484,6 +968,7 @@ class FlowTraceEngine:
             )
 
             if route_scope:
+
                 current_scope = (
                     route_scope
                 )
@@ -492,7 +977,11 @@ class FlowTraceEngine:
                     route_scope
                 )
 
-            protocol = str(
+            #
+            # Flow protocol is protocol.
+            # Routing protocol is route_protocol.
+            #
+            route_protocol = str(
                 route.get(
                     "protocol"
                 )
@@ -508,10 +997,10 @@ class FlowTraceEngine:
             )
 
             #
-            # Connected/direct/local means the
-            # destination network has been reached.
+            # Connected/direct/local means destination
+            # network has been reached.
             #
-            if protocol in [
+            if route_protocol in [
                 "connected",
                 "direct",
                 "local"
@@ -519,12 +1008,18 @@ class FlowTraceEngine:
 
                 hops.append({
                     "hop": hop_number,
-                    "device": current_device,
+                    "device": (
+                        current_device
+                    ),
                     "device_type": (
                         device_type
                     ),
-                    "vrf": current_scope,
-                    "route": route,
+                    "vrf": (
+                        current_scope
+                    ),
+                    "route": (
+                        route
+                    ),
                     "forwarding": None,
                     "status": (
                         "destination_network_reached"
@@ -542,20 +1037,28 @@ class FlowTraceEngine:
                 break
 
             #
-            # No next-hop on a non-connected route.
+            # Route without resolvable next-hop.
             #
             if not next_hop:
 
                 hops.append({
                     "hop": hop_number,
-                    "device": current_device,
+                    "device": (
+                        current_device
+                    ),
                     "device_type": (
                         device_type
                     ),
-                    "vrf": current_scope,
-                    "route": route,
+                    "vrf": (
+                        current_scope
+                    ),
+                    "route": (
+                        route
+                    ),
                     "forwarding": None,
-                    "status": "no_next_hop"
+                    "status": (
+                        "no_next_hop"
+                    )
                 })
 
                 stop_reason = (
@@ -570,18 +1073,24 @@ class FlowTraceEngine:
                     current_device=current_device,
                     current_scope=current_scope,
                     next_hop=next_hop,
-                    route_protocol=protocol
+                    route_protocol=route_protocol
                 )
             )
 
             hops.append({
                 "hop": hop_number,
-                "device": current_device,
+                "device": (
+                    current_device
+                ),
                 "device_type": (
                     device_type
                 ),
-                "vrf": current_scope,
-                "route": route,
+                "vrf": (
+                    current_scope
+                ),
+                "route": (
+                    route
+                ),
                 "forwarding": (
                     forwarding_data
                 ),
@@ -646,17 +1155,16 @@ class FlowTraceEngine:
                 break
 
             #
-            # VRF/context of the receiving
-            # interface becomes the routing
-            # scope for the next hop.
+            # Receiving interface determines routing
+            # scope on the next managed device.
             #
             next_scope = (
                 self._next_forwarding_scope(
                     current_scope=current_scope,
-                    route_protocol=protocol,
+                    route_protocol=route_protocol,
                     next_device=next_device,
                     next_interface=next_interface,
-                    destination=destination
+                    destination=current_destination
                 )
             )
 
@@ -666,6 +1174,10 @@ class FlowTraceEngine:
 
             current_scope = (
                 next_scope
+            )
+
+            current_ingress_interface = (
+                next_interface
             )
 
         else:
@@ -678,6 +1190,9 @@ class FlowTraceEngine:
         return {
             "source": source,
             "destination": destination,
+
+            "protocol": protocol,
+            "service": service,
 
             "start": start,
 
@@ -705,7 +1220,9 @@ class FlowTraceEngine:
                 )
             ),
 
-            "hops": hops,
+            "hops": (
+                hops
+            ),
 
             "device_path": (
                 self._device_path(
@@ -739,9 +1256,10 @@ class FlowTraceEngine:
                 vrfs
             ),
 
-            "reason": stop_reason
+            "reason": (
+                stop_reason
+            )
         }
-
 
     def _resolve_forwarding_data(
         self,
@@ -2702,6 +3220,71 @@ class FlowTraceEngine:
             "reached the destination."
         )
 
+    def _normalize_firewall_ingress_interface(
+        self,
+        device,
+        interface
+    ):
+
+        if not interface:
+            return None
+
+        #
+        # Direct match against ASA interface
+        # node name, nameif or physical interface.
+        #
+        for node in self.graph.nodes.values():
+
+            if node.type != "ASAInterface":
+                continue
+
+            node_context = (
+                node.properties.get("context")
+                or node.properties.get("device")
+            )
+
+            if node_context != device:
+                continue
+
+            node_nameif = (
+                node.properties.get("nameif")
+            )
+
+            node_interface = (
+                node.properties.get("interface")
+            )
+
+            if (
+                node.name == interface
+                or node_nameif == interface
+                or node_interface == interface
+            ):
+
+                return (
+                    node_nameif
+                    or node_interface
+                    or interface
+                )
+
+        #
+        # Graph node names are commonly:
+        #
+        #   Context:nameif
+        #
+        # If no graph match was found, use the
+        # suffix as conservative fallback.
+        #
+        if ":" in str(interface):
+
+            return str(interface).split(
+                ":",
+                1
+            )[1]
+
+        return interface
+
+
+
     def _logical_path(
         self,
         hops
@@ -2796,12 +3379,16 @@ class FlowTraceEngine:
         source,
         destination,
         result,
+        protocol=None,
+        service=None,
         start=None
     ):
 
         cache_key = (
             source,
             destination,
+            protocol,
+            service,
             (
                 start.get("device"),
                 start.get("scope"),

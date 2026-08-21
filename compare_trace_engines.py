@@ -442,6 +442,12 @@ def main():
         v2 = twin.trace_flow(
             source,
             destination,
+            protocol=pilot.get(
+                "protocol"
+            ),
+            service=pilot.get(
+                "service"
+            ),
             start=v2_start
         )
 
