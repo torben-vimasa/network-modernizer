@@ -219,9 +219,43 @@ class FlowTraceEngine:
         )
 
         selected_candidate = None
+        selection_reason = None
 
         if len(successful_paths) == 1:
-            selected_candidate = 1
+
+            selected_candidate = (
+                paths.index(
+                    successful_paths[0]
+                )
+                + 1
+            )
+
+            selection_reason = (
+                "Only successful path."
+            )
+
+        elif len(successful_paths) > 1:
+
+            preferred_paths = [
+                path
+                for path in successful_paths
+                if path.get(
+                    "gateway_role"
+                ) == "preferred_candidate"
+            ]
+
+            if len(preferred_paths) == 1:
+
+                selected_candidate = (
+                    paths.index(
+                        preferred_paths[0]
+                    )
+                    + 1
+                )
+
+                selection_reason = (
+                    "Preferred HSRP gateway candidate."
+                )
 
         confidence = (
             self._confidence(
@@ -306,6 +340,9 @@ class FlowTraceEngine:
 
             "selected_candidate": (
                 selected_candidate
+            ),
+            "selection_reason": (
+                selection_reason
             ),
 
             "firewalls": firewalls,
