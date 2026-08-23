@@ -13,7 +13,8 @@ class FlowTraceEngine:
         forwarding_engine,
         firewall_routes=None,
         dependency_resolver=None,
-        firewall_traversal_engine=None
+        firewall_traversal_engine=None,
+        security_engine=None
     ):
         self.graph = graph
         self.endpoint_resolver = endpoint_resolver
@@ -22,8 +23,8 @@ class FlowTraceEngine:
         self.firewall_routes = firewall_routes or []
         self.dependency_resolver = dependency_resolver
         self.firewall_traversal_engine = firewall_traversal_engine
+        self.security_engine = security_engine
         self._trace_cache = {}
-
 
     
     def trace(
@@ -129,7 +130,19 @@ class FlowTraceEngine:
                 )
             )
 
-            paths.append(path)
+            path[
+                "security_assessment"
+            ] = self._build_security_assessment(
+                source=source,
+                destination=destination,
+                protocol=protocol,
+                service=service,
+                path=path
+            )
+
+            paths.append(
+                path
+            )
 
         #
         # No managed source attachment.
@@ -170,6 +183,9 @@ class FlowTraceEngine:
                 "candidate_paths": [],
 
                 "selected_candidate": None,
+                "selection_reason": None,
+
+                "security_assessment": None,
 
                 "firewalls": [],
                 "common_firewalls": [],
@@ -227,6 +243,9 @@ class FlowTraceEngine:
             )
         )
 
+        #
+        # Select deterministic candidate.
+        #
         selected_candidate = None
         selection_reason = None
 
@@ -265,6 +284,18 @@ class FlowTraceEngine:
                 selection_reason = (
                     "Preferred HSRP gateway candidate."
                 )
+
+        #
+        # Phase 4:
+        # Aggregate path-level security semantics
+        # into one flow-level assessment.
+        #
+        security_assessment = (
+            self._aggregate_security_assessment(
+                paths,
+                selected_candidate
+            )
+        )
 
         confidence = (
             self._confidence(
@@ -350,8 +381,16 @@ class FlowTraceEngine:
             "selected_candidate": (
                 selected_candidate
             ),
+
             "selection_reason": (
                 selection_reason
+            ),
+
+            #
+            # Phase 4 semantic security verdict.
+            #
+            "security_assessment": (
+                security_assessment
             ),
 
             "firewalls": firewalls,
@@ -3283,6 +3322,369 @@ class FlowTraceEngine:
 
         return interface
 
+    def _build_security_assessment(
+        self,
+        source,
+        destination,
+        protocol,
+        service,
+        path
+    ):
+
+        if not self.security_engine:
+            return None
+
+        from models.security_context import SecurityContext
+
+        firewall_hops = [
+            hop
+            for hop in path.get(
+                "hops",
+                []
+            )
+            if hop.get(
+                "device_type"
+            ) == "firewall"
+        ]
+
+        if not firewall_hops:
+            return None
+
+        last_firewall = (
+            firewall_hops[-1]
+        )
+
+        security_data = (
+            last_firewall.get(
+                "security"
+            )
+            or {}
+        )
+
+        forwarding_data = (
+            last_firewall.get(
+                "forwarding"
+            )
+            or {}
+        )
+
+        route_data = (
+            last_firewall.get(
+                "route"
+            )
+            or {}
+        )
+
+        acl_permitted = (
+            security_data.get(
+                "permitted"
+            )
+        )
+
+        acl_rule = (
+            security_data.get(
+                "rule"
+            )
+        )
+
+        security_reason = (
+            security_data.get(
+                "reason"
+            )
+        )
+
+        trace_status = None
+
+        if acl_permitted is False:
+            trace_status = "denied"
+
+        elif path.get(
+            "destination_reached"
+        ):
+            trace_status = "reachable"
+
+        elif path.get(
+            "inventory_boundary"
+        ):
+            trace_status = (
+                "inventory_boundary"
+            )
+
+        security_context = SecurityContext(
+            source=source,
+            destination=destination,
+            protocol=protocol,
+            service=service,
+
+            trace_status=trace_status,
+
+            ingress_device=(
+                last_firewall.get(
+                    "device"
+                )
+            ),
+
+            ingress_interface=(
+                last_firewall.get(
+                    "ingress_interface"
+                )
+            ),
+
+            egress_device=(
+                forwarding_data.get(
+                    "device"
+                )
+                or last_firewall.get(
+                    "device"
+                )
+            ),
+
+            egress_interface=(
+                last_firewall.get(
+                    "egress_interface"
+                )
+            ),
+
+            next_hop=(
+                route_data.get(
+                    "next_hop"
+                )
+            ),
+
+            firewall_traversed=True,
+
+            acl_permitted=(
+                acl_permitted
+            ),
+
+            nat_evaluated=bool(
+                (
+                    last_firewall.get(
+                        "nat"
+                    )
+                    or {}
+                ).get(
+                    "rule"
+                )
+            ),
+
+            inventory_boundary=bool(
+                path.get(
+                    "inventory_boundary"
+                )
+            ),
+
+            forwarding_complete=bool(
+                (
+                    last_firewall.get(
+                        "egress_interface"
+                    )
+                )
+                and (
+                    route_data.get(
+                        "next_hop"
+                    )
+                )
+            ),
+
+            acl_rule=(
+                acl_rule
+            ),
+
+            security_reason=(
+                security_reason
+            )
+        )
+
+        assessment = (
+            self.security_engine.evaluate_context(
+                security_context
+            )
+        )
+
+        return {
+            "classification": (
+                assessment.classification
+            ),
+            "disposition": (
+                assessment.disposition
+            ),
+            "confidence": (
+                assessment.confidence
+            ),
+            "message": (
+                assessment.message
+            ),
+            "device": (
+                assessment.device
+            ),
+            "interface": (
+                assessment.interface
+            ),
+            "next_hop": (
+                assessment.next_hop
+            ),
+            "evidence": (
+                assessment.evidence
+            )
+        }
+
+    def _aggregate_security_assessment(
+        self,
+        paths,
+        selected_candidate
+    ):
+
+        if not paths:
+            return None
+
+        #
+        # Preferred behavior:
+        # follow the path selected by the
+        # deterministic path-selection logic.
+        #
+        if selected_candidate:
+
+            index = (
+                selected_candidate - 1
+            )
+
+            if (
+                0 <= index < len(paths)
+            ):
+
+                assessment = (
+                    paths[index].get(
+                        "security_assessment"
+                    )
+                )
+
+                if assessment:
+
+                    return {
+                        **assessment,
+                        "source": (
+                            "selected_candidate"
+                        ),
+                        "path": (
+                            selected_candidate
+                        )
+                    }
+
+        #
+        # Fallback when no deterministic candidate
+        # could be selected.
+        #
+        assessments = []
+
+        for index, path in enumerate(
+            paths,
+            start=1
+        ):
+
+            assessment = (
+                path.get(
+                    "security_assessment"
+                )
+            )
+
+            if not assessment:
+                continue
+
+            assessments.append(
+                (
+                    index,
+                    path,
+                    assessment
+                )
+            )
+
+        if not assessments:
+            return None
+
+        #
+        # Successful permitted path.
+        #
+        allowed = [
+            item
+            for item in assessments
+            if (
+                item[1].get(
+                    "destination_reached"
+                )
+                and item[2].get(
+                    "disposition"
+                ) == "allow"
+            )
+        ]
+
+        if allowed:
+
+            index, path, assessment = (
+                allowed[0]
+            )
+
+            return {
+                **assessment,
+                "source": (
+                    "successful_path_fallback"
+                ),
+                "path": index
+            }
+
+        #
+        # All evaluated paths explicitly deny.
+        #
+        if all(
+            assessment.get(
+                "disposition"
+            ) == "deny"
+            for _, _, assessment
+            in assessments
+        ):
+
+            index, path, assessment = (
+                assessments[0]
+            )
+
+            return {
+                **assessment,
+                "source": (
+                    "all_paths_denied"
+                ),
+                "path": index
+            }
+
+        #
+        # Otherwise preserve an observe/
+        # unresolved assessment rather than
+        # inventing a stronger verdict.
+        #
+        for index, path, assessment in assessments:
+
+            if assessment.get(
+                "disposition"
+            ) == "observe":
+
+                return {
+                    **assessment,
+                    "source": (
+                        "observe_fallback"
+                    ),
+                    "path": index
+                }
+
+        index, path, assessment = (
+            assessments[0]
+        )
+
+        return {
+            **assessment,
+            "source": (
+                "unclassified_fallback"
+            ),
+            "path": index
+        }
 
 
     def _logical_path(

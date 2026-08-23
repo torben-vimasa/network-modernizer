@@ -95,7 +95,8 @@ class DigitalTwin:
             route_engine=self.route,
             forwarding_engine=self.forwarding,
             firewall_routes=self.firewall_routes,
-            dependency_resolver=self.dependency
+            dependency_resolver=self.dependency,
+            security_engine=self.security
         )
 
         self.object_resolver = ObjectResolver(
