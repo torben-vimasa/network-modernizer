@@ -18,6 +18,10 @@
         "OBvDCPe1",
         "OBV-CAT3-FW1-1"
       ]
+    },
+    "expected_security": {
+      "disposition": "allow",
+      "classification": "permitted_by_policy"
     }
   },
   {
@@ -48,6 +52,10 @@
       "note": "Destination is a candidate host inside 157.250.163.240/29; validate active SIP peer."
     },
     "expected": {},
+    "expected_security": {
+      "disposition": "observe",
+      "classification": "permitted_to_inventory_boundary"
+    },
     "start": {
       "type": "firewall",
       "context": "Site2Site-VPN",
@@ -69,6 +77,10 @@
       "note": "Destination is a candidate host inside 157.250.163.240/29; validate active SIP peer."
     },
     "expected": {},
+    "expected_security": {
+      "disposition": "observe",
+      "classification": "permitted_to_inventory_boundary"
+    },
     "start": {
       "type": "firewall",
       "context": "Site2Site-VPN",

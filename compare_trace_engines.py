@@ -334,6 +334,13 @@ def main():
 
     forwarding_differences = 0
     representation_differences = 0
+
+    #
+    # Phase 4 security regression counters.
+    #
+    security_checked = 0
+    security_differences = 0
+
     compared = 0
     skipped = 0
 
@@ -422,7 +429,9 @@ def main():
         compared += 1
 
         #
-        # Legacy TraceWorkflow
+        # ---------------------------------------------------------
+        # LEGACY TRACE WORKFLOW
+        # ---------------------------------------------------------
         #
         workflow = twin.trace.trace(
             source=source,
@@ -437,7 +446,9 @@ def main():
         )
 
         #
-        # Flow Trace V2
+        # ---------------------------------------------------------
+        # FLOW TRACE V2
+        # ---------------------------------------------------------
         #
         v2 = twin.trace_flow(
             source,
@@ -451,6 +462,11 @@ def main():
             start=v2_start
         )
 
+        #
+        # ---------------------------------------------------------
+        # FORWARDING COMPARISON
+        # ---------------------------------------------------------
+        #
         w_reached = workflow_reached(
             workflow
         )
@@ -503,9 +519,91 @@ def main():
             and not exact_ordered_path
         )
 
+        #
+        # ---------------------------------------------------------
+        # PHASE 4 SECURITY REGRESSION
+        # ---------------------------------------------------------
+        #
+        # Security regression is intentionally opt-in.
+        #
+        # Existing pilots remain forwarding-only unless they
+        # contain an "expected_security" object.
+        #
+        expected_security = (
+            pilot.get(
+                "expected_security"
+            )
+        )
+
+        actual_security = (
+            v2.get(
+                "security_assessment"
+            )
+            or {}
+        )
+
+        security_difference = False
+        security_match = None
+
+        if expected_security is not None:
+
+            security_checked += 1
+
+            expected_disposition = (
+                expected_security.get(
+                    "disposition"
+                )
+            )
+
+            expected_classification = (
+                expected_security.get(
+                    "classification"
+                )
+            )
+
+            actual_disposition = (
+                actual_security.get(
+                    "disposition"
+                )
+            )
+
+            actual_classification = (
+                actual_security.get(
+                    "classification"
+                )
+            )
+
+            #
+            # An omitted expected value acts as a wildcard.
+            #
+            disposition_match = (
+                expected_disposition is None
+                or expected_disposition
+                == actual_disposition
+            )
+
+            classification_match = (
+                expected_classification is None
+                or expected_classification
+                == actual_classification
+            )
+
+            security_match = (
+                disposition_match
+                and classification_match
+            )
+
+            security_difference = (
+                not security_match
+            )
+
+        #
+        # Nothing interesting to report.
+        #
         if (
             not forwarding_difference
             and not representation_difference
+            and not security_difference
         ):
             continue
 
@@ -515,6 +613,14 @@ def main():
         if representation_difference:
             representation_differences += 1
 
+        if security_difference:
+            security_differences += 1
+
+        #
+        # ---------------------------------------------------------
+        # DIFFERENCE REPORT
+        # ---------------------------------------------------------
+        #
         output.append(
             "=" * 100
         )
@@ -541,6 +647,9 @@ def main():
 
             output.append("")
 
+        #
+        # Legacy result.
+        #
         output.append(
             "TRACE WORKFLOW"
         )
@@ -565,6 +674,9 @@ def main():
 
         output.append("")
 
+        #
+        # V2 result.
+        #
         output.append(
             "FLOW TRACE V2"
         )
@@ -599,8 +711,29 @@ def main():
             f"{v2.get('reason')}"
         )
 
+        #
+        # Phase 4 top-level security semantics.
+        #
+        output.append(
+            f"  security           : "
+            f"{actual_security.get('disposition')}"
+        )
+
+        output.append(
+            f"  classification     : "
+            f"{actual_security.get('classification')}"
+        )
+
+        output.append(
+            f"  security confidence: "
+            f"{actual_security.get('confidence')}"
+        )
+
         output.append("")
 
+        #
+        # Candidate paths.
+        #
         for path_index, path in enumerate(
             v_paths,
             start=1
@@ -632,6 +765,9 @@ def main():
 
         output.append("")
 
+        #
+        # Comparison.
+        #
         output.append(
             "COMPARISON"
         )
@@ -661,8 +797,50 @@ def main():
             f"{representation_difference}"
         )
 
+        output.append(
+            f"  security checked         : "
+            f"{expected_security is not None}"
+        )
+
+        output.append(
+            f"  security match           : "
+            f"{security_match}"
+        )
+
+        output.append(
+            f"  security difference      : "
+            f"{security_difference}"
+        )
+
+        if expected_security is not None:
+
+            output.append(
+                f"  expected disposition     : "
+                f"{expected_security.get('disposition')}"
+            )
+
+            output.append(
+                f"  actual disposition       : "
+                f"{actual_security.get('disposition')}"
+            )
+
+            output.append(
+                f"  expected classification  : "
+                f"{expected_security.get('classification')}"
+            )
+
+            output.append(
+                f"  actual classification    : "
+                f"{actual_security.get('classification')}"
+            )
+
         output.append("")
 
+    #
+    # -------------------------------------------------------------
+    # SUMMARY
+    # -------------------------------------------------------------
+    #
     output.append(
         "=" * 100
     )
@@ -697,6 +875,19 @@ def main():
         f"{representation_differences}"
     )
 
+    output.append(
+        f"Security pilots checked   : "
+        f"{security_checked}"
+    )
+
+    output.append(
+        f"Security differences      : "
+        f"{security_differences}"
+    )
+
+    #
+    # Write comparison report.
+    #
     OUTPUT_FILE.parent.mkdir(
         parents=True,
         exist_ok=True
@@ -730,6 +921,16 @@ def main():
     print(
         "Representation differences:",
         representation_differences
+    )
+
+    print(
+        "Security pilots checked:",
+        security_checked
+    )
+
+    print(
+        "Security differences:",
+        security_differences
     )
 
 
