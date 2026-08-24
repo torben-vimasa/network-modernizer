@@ -50,6 +50,7 @@ class ImpactEngine:
         candidate_firewalls = []
         candidate_routers = []
         candidate_vrfs = []
+        candidate_routes = []
 
         for path in paths:
 
@@ -84,6 +85,13 @@ class ImpactEngine:
                 )
             )
 
+            self._extend_unique(
+                candidate_routes,
+                self._path_routes(
+                    path
+                )
+            )
+
         #
         # ---------------------------------------------------------
         # PRIMARY / SELECTED PATH
@@ -106,10 +114,9 @@ class ImpactEngine:
             ]
 
         #
-        # If no candidate was selected, use a deterministic
-        # fallback:
+        # If no deterministic candidate was selected:
         #
-        # 1. first successful path
+        # 1. use first successful path
         # 2. otherwise first available path
         #
         if primary_path is None:
@@ -135,10 +142,14 @@ class ImpactEngine:
             primary_path = paths[0]
             primary_path_index = 1
 
+        #
+        # Primary impact collections.
+        #
         affected_devices = []
         affected_firewalls = []
         affected_routers = []
         affected_vrfs = []
+        primary_routes = []
 
         if primary_path:
 
@@ -169,6 +180,17 @@ class ImpactEngine:
                 )
             )
 
+            primary_routes = (
+                self._path_routes(
+                    primary_path
+                )
+            )
+
+        #
+        # ---------------------------------------------------------
+        # RESULT
+        # ---------------------------------------------------------
+        #
         return ImpactResult(
             source=source,
             destination=destination,
@@ -205,6 +227,9 @@ class ImpactEngine:
                 paths
             ),
 
+            #
+            # Primary impact.
+            #
             affected_devices=(
                 affected_devices
             ),
@@ -221,6 +246,13 @@ class ImpactEngine:
                 affected_vrfs
             ),
 
+            primary_routes=(
+                primary_routes
+            ),
+
+            #
+            # Candidate / potential impact.
+            #
             candidate_devices=(
                 candidate_devices
             ),
@@ -237,6 +269,13 @@ class ImpactEngine:
                 candidate_vrfs
             ),
 
+            candidate_routes=(
+                candidate_routes
+            ),
+
+            #
+            # Security semantics inherited from Flow Trace V2.
+            #
             security_disposition=(
                 security.get(
                     "disposition"
@@ -284,11 +323,90 @@ class ImpactEngine:
                 device
                 and device not in devices
             ):
+
                 devices.append(
                     device
                 )
 
         return devices
+
+    def _path_routes(
+        self,
+        path
+    ):
+
+        routes = []
+
+        for hop in path.get(
+            "hops",
+            []
+        ):
+
+            route = (
+                hop.get(
+                    "route"
+                )
+                or {}
+            )
+
+            if not route:
+                continue
+
+            forwarding = (
+                hop.get(
+                    "forwarding"
+                )
+                or {}
+            )
+
+            route_item = {
+                "device": (
+                    hop.get(
+                        "device"
+                    )
+                ),
+
+                "scope": (
+                    hop.get(
+                        "vrf"
+                    )
+                ),
+
+                "prefix": (
+                    route.get(
+                        "prefix"
+                    )
+                ),
+
+                "protocol": (
+                    route.get(
+                        "protocol"
+                    )
+                ),
+
+                "next_hop": (
+                    route.get(
+                        "next_hop"
+                    )
+                ),
+
+                "egress_interface": (
+                    hop.get(
+                        "egress_interface"
+                    )
+                    or forwarding.get(
+                        "interface"
+                    )
+                )
+            }
+
+            if route_item not in routes:
+
+                routes.append(
+                    route_item
+                )
+
+        return routes
 
     def _extend_unique(
         self,
@@ -302,6 +420,7 @@ class ImpactEngine:
                 value
                 and value not in target
             ):
+
                 target.append(
                     value
                 )

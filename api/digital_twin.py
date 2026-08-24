@@ -33,6 +33,7 @@ from engines.flow_trace_engine import FlowTraceEngine
 
 from graph.graph_cache import GraphCache
 from engines.impact_engine import ImpactEngine
+from engines.change_analysis_engine import ChangeAnalysisEngine
 
 
 class DigitalTwin:
@@ -101,6 +102,7 @@ class DigitalTwin:
         )
 
         self.impact = ImpactEngine()
+        self.change_analysis = ChangeAnalysisEngine()
         self.object_resolver = ObjectResolver(
             self.graph
         )
@@ -513,4 +515,27 @@ class DigitalTwin:
             destination=destination,
             protocol=protocol,
             service=service
+        )
+
+    def analyze_change(
+        self,
+        source,
+        destination,
+        change,
+        protocol=None,
+        service=None,
+        start=None
+    ):
+
+        current_impact = self.analyze_impact(
+            source=source,
+            destination=destination,
+            protocol=protocol,
+            service=service,
+            start=start
+        )
+
+        return self.change_analysis.analyze(
+            current_impact=current_impact,
+            change=change
         )

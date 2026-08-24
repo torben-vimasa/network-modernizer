@@ -37,6 +37,10 @@ class ImpactResult:
         default_factory=list
     )
 
+    primary_routes: list[dict] = field(
+        default_factory=list
+    )
+
     #
     # All candidate paths / potential impact.
     #
@@ -56,6 +60,13 @@ class ImpactResult:
         default_factory=list
     )
 
+    candidate_routes: list[dict] = field(
+        default_factory=list
+    )
+
+    #
+    # Security / confidence.
+    #
     security_disposition: str | None = None
     security_classification: str | None = None
     security_confidence: str | None = None
