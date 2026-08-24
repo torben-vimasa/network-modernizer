@@ -32,6 +32,7 @@ from engines.forwarding_engine import ForwardingEngine
 from engines.flow_trace_engine import FlowTraceEngine
 
 from graph.graph_cache import GraphCache
+from engines.impact_engine import ImpactEngine
 
 
 class DigitalTwin:
@@ -99,6 +100,7 @@ class DigitalTwin:
             security_engine=self.security
         )
 
+        self.impact = ImpactEngine()
         self.object_resolver = ObjectResolver(
             self.graph
         )
@@ -486,4 +488,29 @@ class DigitalTwin:
             protocol=protocol,
             service=service,
             start=start
+        )
+
+    def analyze_impact(
+        self,
+        source,
+        destination,
+        protocol=None,
+        service=None,
+        start=None
+    ):
+
+        trace = self.trace_flow(
+            source,
+            destination,
+            protocol=protocol,
+            service=service,
+            start=start
+        )
+
+        return self.impact.analyze(
+            trace=trace,
+            source=source,
+            destination=destination,
+            protocol=protocol,
+            service=service
         )
