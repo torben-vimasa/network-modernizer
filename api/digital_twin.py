@@ -34,7 +34,23 @@ from engines.flow_trace_engine import FlowTraceEngine
 from graph.graph_cache import GraphCache
 from engines.impact_engine import ImpactEngine
 from engines.change_analysis_engine import ChangeAnalysisEngine
-
+from engines.visualization_engine import VisualizationEngine
+from engines.endpoint_aggregation_engine import (
+    EndpointAggregationEngine
+)
+from engines.endpoint_classification_engine import (
+    EndpointClassificationEngine
+)
+from engines.classification_data_engine import (
+    ClassificationDataEngine
+)
+from engines.dependency_aggregation_engine import (
+    DependencyAggregationEngine
+)
+from engines.dependency_hint_engine import (
+    DependencyHintEngine
+)
+from engines.firewall_route_engine import FirewallRouteEngine
 
 class DigitalTwin:
 
@@ -54,6 +70,9 @@ class DigitalTwin:
         self.route = RouteEngine()
 
         self.firewall_routes = self._load_firewall_routes()
+        self.firewall_route_engine = FirewallRouteEngine(
+            self.firewall_routes
+        )
 
         self.endpoint = EndpointResolver(
             self.graph,
@@ -103,10 +122,40 @@ class DigitalTwin:
 
         self.impact = ImpactEngine()
         self.change_analysis = ChangeAnalysisEngine()
+        self.visualization = VisualizationEngine(
+            self
+        )
         self.object_resolver = ObjectResolver(
             self.graph
         )
 
+        self.endpoint_aggregation = (
+            EndpointAggregationEngine(
+                object_resolver=self.object_resolver
+            )
+        )
+
+        self.classification_data = (
+            ClassificationDataEngine()
+        )
+
+        self.endpoint_classification = (
+            EndpointClassificationEngine(
+                classification_data=self.classification_data
+            )
+        )
+
+        self.dependency_aggregation = (
+            DependencyAggregationEngine(
+                classification_data=self.classification_data
+            )
+        )
+
+        self.dependency_hint_engine = (
+            DependencyHintEngine(
+                self
+            )
+        )
         self.application_view = ApplicationViewEngine(
                     self.graph,
                     self.endpoint,
@@ -538,4 +587,166 @@ class DigitalTwin:
         return self.change_analysis.analyze(
             current_impact=current_impact,
             change=change
+        )
+
+    def map_network(
+        self,
+        network
+    ):
+
+        return self.visualization.map_network(
+            network
+        )
+
+
+    def visualize_network(
+        self,
+        network
+    ):
+
+        network_map = self.map_network(
+            network
+        )
+
+        return self.visualization.render_mermaid(
+            network_map
+        )
+
+    def aggregate_endpoints(
+        self,
+        network,
+        direction="both",
+        service=None,
+        action="permit"
+    ):
+
+        network_map = self.map_network(
+            network
+        )
+
+        return self.endpoint_aggregation.aggregate(
+            network_map=network_map,
+            direction=direction,
+            service=service,
+            action=action
+        )
+
+
+    def top_services(
+        self,
+        network,
+        direction="both",
+        top=10,
+        active_only=False,
+        action="permit"
+    ):
+
+        return self.visualization.top_services(
+            network=network,
+            direction=direction,
+            top=top,
+            active_only=active_only,
+            action=action
+        )
+
+    def map_service(
+        self,
+        network,
+        service,
+        direction="both",
+        action="permit"
+    ):
+
+        return self.visualization.map_service(
+            network=network,
+            service=service,
+            direction=direction,
+            action=action
+        )
+
+
+    def visualize_service(
+        self,
+        network,
+        service,
+        direction="both",
+        action="permit",
+        top=10
+    ):
+
+        service_map = self.map_service(
+            network=network,
+            service=service,
+            direction=direction,
+            action=action
+        )
+
+        return self.visualization.render_service_mermaid(
+            service_map,
+            top=top
+        )
+        
+    def classify_endpoints(
+        self,
+        network,
+        direction="both",
+        service=None,
+        action="permit"
+    ):
+
+        endpoints = self.aggregate_endpoints(
+            network=network,
+            direction=direction,
+            service=service,
+            action=action
+        )
+
+        return self.endpoint_classification.classify(
+            endpoints
+        )
+
+    def dependencies(
+        self,
+        network,
+        direction="both",
+        service=None,
+        action="permit"
+    ):
+
+        endpoints = self.aggregate_endpoints(
+            network=network,
+            direction=direction,
+            service=service,
+            action=action
+        )
+
+        classifications = (
+            self.endpoint_classification.classify(
+                endpoints
+            )
+        )
+
+        return self.dependency_aggregation.aggregate(
+            endpoints=endpoints,
+            classifications=classifications
+        )
+
+    def dependency_hints(
+        self,
+        network,
+        direction="both",
+        service=None,
+        action="permit"
+    ):
+
+        dependencies = self.dependencies(
+            network=network,
+            direction=direction,
+            service=service,
+            action=action
+        )
+
+        return self.dependency_hint_engine.enrich(
+            dependencies=dependencies,
+            source_network=network
         )

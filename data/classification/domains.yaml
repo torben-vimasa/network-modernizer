@@ -1,0 +1,25 @@
+domains:
+
+  internet:
+    display_name: Internet
+    description: Public Internet and externally hosted Internet services
+
+  aeven:
+    display_name: Aeven
+    description: Services hosted or delivered by Aeven outside OT/BHASA
+
+  dtc:
+    display_name: DTC
+    description: Services delivered through or hosted in DTC
+
+  ot:
+    display_name: OT
+    description: Operational Technology services
+
+  shared:
+    display_name: Shared
+    description: Shared services used across administrative or technical domains
+
+  unknown:
+    display_name: Unknown
+    description: Ownership or service domain has not yet been established

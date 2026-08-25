@@ -1,0 +1,17 @@
+services:
+
+  - name: Office-365
+    aliases:
+      - Office 365
+      - Microsoft 365
+
+    domain: internet
+    provider: Microsoft
+
+    confidence: high
+
+    evidence:
+      - type: firewall-object-group
+        value: Office-365
+
+    description: Microsoft cloud service accessed from AdmIT
