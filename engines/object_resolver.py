@@ -154,6 +154,9 @@ class ObjectResolver:
                 "properties": node.properties
             })
 
+            #
+            # Plain network object.
+            #
             if node.type == "NetworkObject":
 
                 result["objects"].append(
@@ -167,87 +170,85 @@ class ObjectResolver:
 
                 continue
 
-            if node.type == "ObjectGroup":
+            #
+            # Object-group.
+            #
+            if node.type != "ObjectGroup":
+                continue
 
-                result["groups"].append(
-                    node.name
+            result["groups"].append(
+                node.name
+            )
+
+            #
+            # Follow:
+            #
+            # ObjectGroup -> HAS_MEMBER -> member
+            #
+            for relationship in self.graph.relationships:
+
+                source = getattr(
+                    relationship.source,
+                    "id",
+                    relationship.source
                 )
 
-                for relationship in self.graph.relationships:
+                target = getattr(
+                    relationship.target,
+                    "id",
+                    relationship.target
+                )
 
-                    source = getattr(
-                        relationship.source,
-                        "id",
-                        relationship.source
-                    )
+                if relationship.type != "HAS_MEMBER":
+                    continue
 
-                    target = getattr(
-                        relationship.target,
-                        "id",
-                        relationship.target
-                    )
+                if source != node.id:
+                    continue
 
-                    if relationship.type != "HAS_MEMBER":
+                member = self.graph.nodes.get(
+                    target
+                )
+
+                if not member:
+                    continue
+
+                if member.type == "NetworkObject":
+
+                    if member.id in visited:
                         continue
 
-                    #
-                    # Follow membership only in the forward direction:
-                    #
-                    # ObjectGroup -> member
-                    #
-                    if source != node.id:
-                        continue
-
-                    member = self.graph.nodes.get(
-                        target
+                    visited.add(
+                        member.id
                     )
 
-                    if not member:
-                        continue
+                    result["evidence"].append({
+                        "type": member.type,
+                        "name": member.name,
+                        "properties": member.properties,
+                        "parent_group": node.name
+                    })
 
-                    if member.type == "NetworkObject":
+                    result["objects"].append(
+                        member.name
+                    )
 
-                        result["objects"].append(
-                            member.name
-                        )
+                    self._consume_network_object(
+                        member,
+                        result
+                    )
 
-                        self._consume_network_object(
-                            member,
-                            result
-                        )
+                    continue
 
-                    elif member.type == "ObjectGroup":
+                if member.type == "ObjectGroup":
 
-                        self._resolve_reference(
-                            value=member.name,
-                            context=context,
-                            depth=depth + 1,
-                            max_depth=max_depth,
-                            visited=visited,
-                            result=result
-                        )
-
-                    if member.type == "NetworkObject":
-
-                        result["objects"].append(
-                            member.name
-                        )
-
-                        self._consume_network_object(
-                            member,
-                            result
-                        )
-
-                    elif member.type == "ObjectGroup":
-
-                        self._resolve_reference(
-                            value=member.name,
-                            context=context,
-                            depth=depth + 1,
-                            max_depth=max_depth,
-                            visited=visited,
-                            result=result
-                        )
+                    self._resolve_reference(
+                        value=member.name,
+                        context=context,
+                        depth=depth + 1,
+                        max_depth=max_depth,
+                        visited=visited,
+                        result=result
+                    )
 
 
     def _find_candidates(

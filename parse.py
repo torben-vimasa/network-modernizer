@@ -215,7 +215,120 @@ def parse_context_file(context_file: Path) -> dict:
         "access_groups": access_groups,
         "any_any_rules": any_any_rules
     }
+def deduplicate_network_objects(
+        objects
+    ):
 
+        by_name = {}
+
+        for obj in objects:
+
+            name = obj.name
+
+            existing = by_name.get(
+                name
+            )
+
+            if existing is None:
+
+                by_name[
+                    name
+                ] = obj
+
+                continue
+
+            existing_value = str(
+                existing.value or ""
+            ).strip()
+
+            candidate_value = str(
+                obj.value or ""
+            ).strip()
+
+            existing_type = str(
+                existing.object_type or "unknown"
+            ).lower()
+
+            candidate_type = str(
+                obj.object_type or "unknown"
+            ).lower()
+
+            existing_concrete = (
+                existing_type != "unknown"
+                and bool(existing_value)
+            )
+
+            candidate_concrete = (
+                candidate_type != "unknown"
+                and bool(candidate_value)
+            )
+
+            #
+            # Concrete definition always wins over
+            # an unresolved/empty placeholder.
+            #
+            if (
+                candidate_concrete
+                and not existing_concrete
+            ):
+
+                by_name[
+                    name
+                ] = obj
+
+                continue
+
+            #
+            # Existing concrete definition wins over
+            # a later unresolved/empty placeholder.
+            #
+            if (
+                existing_concrete
+                and not candidate_concrete
+            ):
+
+                continue
+
+            #
+            # If both definitions are concrete and identical,
+            # simply keep the first one.
+            #
+            if (
+                existing_concrete
+                and candidate_concrete
+                and existing_type == candidate_type
+                and existing_value == candidate_value
+            ):
+
+                continue
+
+            #
+            # Conflicting concrete definitions must not
+            # silently overwrite each other.
+            #
+            if (
+                existing_concrete
+                and candidate_concrete
+            ):
+
+                print(
+                    "WARNING: conflicting NetworkObject "
+                    f"definition for {name}: "
+                    f"{existing_type}={existing_value} "
+                    f"vs "
+                    f"{candidate_type}={candidate_value}"
+                )
+
+                continue
+
+            #
+            # Both are unresolved placeholders.
+            # Keep the first one.
+            #
+
+        return list(
+            by_name.values()
+        )
 
 def main() -> None:
     OUTPUT_DIR.mkdir(exist_ok=True)
@@ -379,6 +492,39 @@ def main() -> None:
             f"{len(result['interfaces'])} interfaces, "
             f"{len(result['access_groups'])} access-groups"
         )
+
+    original_network_object_count = len(
+        all_network_objects
+    )
+
+    all_network_objects = (
+        deduplicate_network_objects(
+            all_network_objects
+        )
+    )
+
+    deduplicated_network_object_count = len(
+        all_network_objects
+    )
+
+    removed_network_object_duplicates = (
+        original_network_object_count
+        - deduplicated_network_object_count
+    )
+
+    print()
+    print(
+        "Network objects before deduplication: "
+        f"{original_network_object_count}"
+    )
+    print(
+        "Network objects after deduplication : "
+        f"{deduplicated_network_object_count}"
+    )
+    print(
+        "Duplicate object definitions removed: "
+        f"{removed_network_object_duplicates}"
+    )
 
     network_objects_json = [
         {
