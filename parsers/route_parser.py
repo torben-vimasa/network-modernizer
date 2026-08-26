@@ -415,13 +415,14 @@ class RouteParser:
             #
             # Connected/local routes.
             #
-            # Typical IOS XR examples:
+            # IOS XR examples:
             #
-            # C 172.27.2.0/24 is directly
-            #   connected, Bundle-Ether...
+            # C 172.27.157.0/24 is directly connected, 1y09w, BVI157
+            # L 172.27.157.1/32 is directly connected, 1y09w, BVI157
             #
-            # L 172.27.2.102/32 is directly
-            #   connected, Bundle-Ether...
+            # Some outputs may omit route age:
+            #
+            # C 172.27.157.0/24 is directly connected, BVI157
             #
             connected_match = re.match(
                 r"^"
@@ -429,23 +430,40 @@ class RouteParser:
                 r"\s+"
                 r"(\d+\.\d+\.\d+\.\d+/\d+)"
                 r"\s+is directly connected"
-                r"(?:,\s*(\S+))?",
+                r"(?:,\s*(.*))?"
+                r"$",
                 line
             )
 
             if connected_match:
 
-                code = (
-                    connected_match.group(1)
-                )
+                code = connected_match.group(1)
+                prefix = connected_match.group(2)
 
-                prefix = (
-                    connected_match.group(2)
-                )
+                tail = connected_match.group(3)
 
-                interface = (
-                    connected_match.group(3)
-                )
+                interface = None
+
+                if tail:
+
+                    fields = [
+                        field.strip()
+                        for field in tail.split(",")
+                        if field.strip()
+                    ]
+
+                    if fields:
+
+                        #
+                        # IOS XR places the actual interface
+                        # as the final field.
+                        #
+                        # Examples:
+                        #
+                        #   1y09w, BVI157
+                        #   BVI157
+                        #
+                        interface = fields[-1]
 
                 protocol = (
                     "connected"
@@ -461,8 +479,11 @@ class RouteParser:
                         next_hop=None,
                         protocol=protocol,
                         exit_interface=interface,
-                        metric=0
+                        metric=0,
+                        admin_distance=0
                     )
                 )
+
+                continue
 
         return routes

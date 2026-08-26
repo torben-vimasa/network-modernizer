@@ -452,6 +452,9 @@ class GraphBuilder:
                     "RouterInterface",
                     f"{router.name}:{interface.name}",
                     {
+                        "router": router.name,
+                        "device": router.name,
+                        "interface": interface.name,
                         "vrf": interface.vrf,
                         "ip": interface.ip,
                         "prefix": interface.prefix,
@@ -492,7 +495,7 @@ class GraphBuilder:
                     graph.add_relationship(
                         interface_node,
                         subnet_node,
-                        "IN_SUBNET"
+                        "CONNECTED_TO"
                     )
 
     def _add_applications(self, graph):
@@ -782,9 +785,13 @@ class GraphBuilder:
         if not file.exists():
             return
 
-        interfaces = self._load_json("router_interfaces.json")
+        interfaces = self._load_json(
+            "router_interfaces.json"
+        )
 
-        hsrp_states = self._load_json("hsrp_status.json")
+        hsrp_states = self._load_json(
+            "hsrp_status.json"
+        )
 
         hsrp_by_key = {
             (
@@ -814,14 +821,26 @@ class GraphBuilder:
                 "RouterInterface",
                 f'{i["device"]}:{i["interface"]}',
                 {
+                    "router": i["device"],
+                    "device": i["device"],
+                    "interface": i["interface"],
                     "ip": i["ip"],
                     "mask": i.get("mask"),
-                    "hsrp_virtual_ip": i["hsrp_virtual_ip"],
-                    "hsrp_state": hsrp.get("state") if hsrp else i.get("hsrp_state"),
-                    "hsrp_priority": i.get("hsrp_priority"),
+                    "hsrp_virtual_ip": i.get(
+                        "hsrp_virtual_ip"
+                    ),
+                    "hsrp_state": (
+                        hsrp.get("state")
+                        if hsrp
+                        else i.get("hsrp_state")
+                    ),
+                    "hsrp_priority": i.get(
+                        "hsrp_priority"
+                    ),
                     "vrf": i.get("vrf")
                 }
             )
+
             graph.add_relationship(
                 router,
                 interface,
@@ -829,22 +848,26 @@ class GraphBuilder:
             )
 
             if i["ip"] and i.get("mask"):
+
                 prefix = self._to_prefix_from_cidr_or_host(
                     i["ip"],
                     i.get("mask")
                 )
 
                 if prefix:
+
                     subnet = graph.add_node(
                         "Subnet",
                         prefix,
-                        {"prefix": prefix}
+                        {
+                            "prefix": prefix
+                        }
                     )
 
                     graph.add_relationship(
                         interface,
                         subnet,
-                        "IN_SUBNET"
+                        "CONNECTED_TO"
                     )
 
     def _connect_bgp_to_firewall_interfaces(self, graph):

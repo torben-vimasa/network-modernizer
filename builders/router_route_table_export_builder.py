@@ -110,15 +110,7 @@ class RouterRouteTableExportBuilder:
                             router=router.name,
                             vrf=interface.vrf,
                             prefix=interface.prefix,
-
-                            #
-                            # Current TraceWorkflow recognizes a
-                            # directly connected destination when
-                            # route next-hop matches a local
-                            # RouterInterface IP.
-                            #
-                            next_hop=interface.ip,
-
+                            next_hop=None,
                             protocol="connected",
                             exit_interface=interface.name,
                             metric=0

@@ -51,6 +51,9 @@ from engines.dependency_hint_engine import (
     DependencyHintEngine
 )
 from engines.firewall_route_engine import FirewallRouteEngine
+from engines.dependency_state_engine import (
+    DependencyStateEngine
+)
 
 class DigitalTwin:
 
@@ -154,6 +157,11 @@ class DigitalTwin:
         self.dependency_hint_engine = (
             DependencyHintEngine(
                 self
+            )
+        )
+        self.dependency_state_engine = (
+            DependencyStateEngine(
+                self.graph
             )
         )
         self.application_view = ApplicationViewEngine(
@@ -749,4 +757,29 @@ class DigitalTwin:
         return self.dependency_hint_engine.enrich(
             dependencies=dependencies,
             source_network=network
+        )
+        
+    def dependency_states(
+        self,
+        network,
+        direction="both",
+        service=None,
+        action="permit"
+    ):
+
+        dependencies = self.dependencies(
+            network=network,
+            direction=direction,
+            service=service,
+            action=action
+        )
+
+        hints = self.dependency_hint_engine.enrich(
+            dependencies=dependencies,
+            source_network=network
+        )
+
+        return self.dependency_state_engine.enrich(
+            dependencies=dependencies,
+            hints=hints
         )
