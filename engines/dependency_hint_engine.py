@@ -361,6 +361,7 @@ class DependencyHintEngine:
         router_name,
         vrf,
         visited_routers=None,
+        visited_contexts=None,
         depth=0,
         max_depth=8
     ):
@@ -369,6 +370,9 @@ class DependencyHintEngine:
 
         if visited_routers is None:
             visited_routers = set()
+
+        if visited_contexts is None:
+            visited_contexts = set()
 
         if depth > max_depth:
             return evidence
@@ -523,9 +527,9 @@ class DependencyHintEngine:
                 self._trace_firewall_context(
                     destination_ip=destination_ip,
                     firewall_context=firewall_context,
-                    visited_contexts=set(),
-                    depth=0,
-                    max_depth=8
+                    visited_contexts=visited_contexts,
+                    depth=depth + 1,
+                    max_depth=max_depth
                 )
             )
 
@@ -567,6 +571,7 @@ class DependencyHintEngine:
                         router_name=next_router,
                         vrf=used_vrf,
                         visited_routers=visited_routers,
+                        visited_contexts=visited_contexts,
                         depth=depth + 1,
                         max_depth=max_depth
                     )
@@ -1605,6 +1610,7 @@ class DependencyHintEngine:
                             router_name=next_router,
                             vrf=next_vrf,
                             visited_routers=set(),
+                            visited_contexts=visited_contexts,
                             depth=depth + 1,
                             max_depth=max_depth
                         )
