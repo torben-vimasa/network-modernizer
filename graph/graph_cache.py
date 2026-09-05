@@ -366,6 +366,10 @@ class GraphCache:
                 "graph_builder.py"
             ),
             Path(
+                "parsers/"
+                "acl_rule_parser.py"
+            ),
+            Path(
                 "graph/"
                 "graph.py"
             ),

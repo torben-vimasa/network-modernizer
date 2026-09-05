@@ -19,24 +19,75 @@ class GraphBuilder:
     def build_from_vrf_inventory(self):
         graph = KnowledgeGraph()
 
-        vrf_inventory = self._load_json("vrf_inventory.json")
-        vrf_topology = self._load_json("vrf_asa_topology.json")
+        vrf_inventory = self._load_json(
+            "vrf_inventory.json"
+        )
 
-        self._add_vrf_nodes(graph, vrf_inventory)
-        self._add_topology_links(graph, vrf_topology)
-        self._add_objects_and_groups(graph)
-        self._add_acl_rules(graph)
-        self._add_router_inventory(graph)
+        vrf_topology = self._load_json(
+            "vrf_asa_topology.json"
+        )
 
-        self._add_firewall_interfaces(graph)
-        self._add_access_groups(graph)
-        self._add_router_interfaces(graph)
-        self._add_firewall_bgp(graph)
-        
-        self._connect_bgp_neighbors(graph)
-        self._connect_bgp_to_firewall_interfaces(graph)
-        self._connect_interfaces_by_subnet(graph)
-        self._add_applications(graph)
+        self._add_vrf_nodes(
+            graph,
+            vrf_inventory
+        )
+
+        self._add_topology_links(
+            graph,
+            vrf_topology
+        )
+
+        self._add_objects_and_groups(
+            graph
+        )
+
+        self._add_acl_rules(
+            graph
+        )
+
+        self._add_router_inventory(
+            graph
+        )
+
+        self._add_firewall_interfaces(
+            graph
+        )
+
+        self._add_access_groups(
+            graph
+        )
+
+        self._add_router_interfaces(
+            graph
+        )
+
+        #
+        # Add normalized router topology observations
+        # after router/interface inventory has been built.
+        #
+        self._add_router_neighbors(
+            graph
+        )
+
+        self._add_firewall_bgp(
+            graph
+        )
+
+        self._connect_bgp_neighbors(
+            graph
+        )
+
+        self._connect_bgp_to_firewall_interfaces(
+            graph
+        )
+
+        self._connect_interfaces_by_subnet(
+            graph
+        )
+
+        self._add_applications(
+            graph
+        )
 
         return graph
 
@@ -329,7 +380,8 @@ class GraphBuilder:
                     rule_node,
                     "USES_SOURCE",
                     getattr(rule, "source_type", None),
-                    getattr(rule, "source_value", None)
+                    getattr(rule, "source_value", None),
+                    rule.properties.get("context")
                 )
 
                 self._connect_acl_rule_endpoint(
@@ -337,7 +389,8 @@ class GraphBuilder:
                     rule_node,
                     "USES_DESTINATION",
                     getattr(rule, "destination_type", None),
-                    getattr(rule, "destination_value", None)
+                    getattr(rule, "destination_value", None),
+                    rule.properties.get("context")
                 )
 
     def _connect_acl_rule_endpoint(
@@ -346,7 +399,8 @@ class GraphBuilder:
         rule_node,
         relationship_type,
         endpoint_type,
-        endpoint_value
+        endpoint_value,
+        context=None
     ):
         if not endpoint_type or not endpoint_value:
             return
@@ -394,18 +448,41 @@ class GraphBuilder:
             return
 
         if endpoint_type == "object":
-            target_node = self._find_best_node(graph, "NetworkObject", endpoint_value)
+            target_node = self._find_best_node(
+                graph,
+                "NetworkObject",
+                endpoint_value,
+                context=context
+            )
             if target_node:
                 graph.add_relationship(rule_node, target_node, relationship_type)
             return
 
         if endpoint_type == "object-group":
-            target_node = self._find_best_node(graph, "ObjectGroup", endpoint_value)
+            target_node = self._find_best_node(
+                graph,
+                "ObjectGroup",
+                endpoint_value,
+                context=context
+            )
             if target_node:
                 graph.add_relationship(rule_node, target_node, relationship_type)
             return
 
-    def _find_best_node(self, graph, node_type, short_name):
+    def _find_best_node(
+        self,
+        graph,
+        node_type,
+        short_name,
+        context=None
+    ):
+        if context:
+            contextual_name = f"{context}:{short_name}"
+            contextual = graph.find(node_type, contextual_name)
+
+            if contextual:
+                return contextual.id
+
         exact = graph.find(node_type, short_name)
 
         if exact:
@@ -421,7 +498,10 @@ class GraphBuilder:
         if not matches:
             return None
 
-        return sorted(matches, key=lambda node: node.name)[0].id
+        if len(matches) == 1:
+            return matches[0].id
+
+        return None
 
     def _add_router_inventory(self, graph):
         router_dir = Path("data/router_raw")
@@ -497,6 +577,172 @@ class GraphBuilder:
                         subnet_node,
                         "CONNECTED_TO"
                     )
+
+    def _add_router_neighbors(self, graph):
+        """
+        Add normalized router neighbor observations to the graph.
+
+        Neighbor observations are protocol-neutral at graph level.
+        Current producer is CDP, but the graph representation can also
+        carry LLDP or other discovery protocols later.
+
+        A neighbor observation is topology evidence. It does not imply
+        that the remote device has complete managed inventory.
+        """
+
+        neighbors_file = (
+            self.output_dir / "router_neighbors.json"
+        )
+
+        if not neighbors_file.exists():
+            return
+
+        neighbors = self._load_json(
+            "router_neighbors.json"
+        )
+
+        for neighbor in neighbors:
+
+            local_device = neighbor.get(
+                "local_device"
+            )
+
+            local_interface = neighbor.get(
+                "local_interface"
+            )
+
+            remote_device = neighbor.get(
+                "remote_device"
+            )
+
+            remote_interface = neighbor.get(
+                "remote_interface"
+            )
+
+            remote_ip = neighbor.get(
+                "remote_ip"
+            )
+
+            protocol = (
+                neighbor.get("protocol")
+                or "unknown"
+            )
+
+            if not local_device:
+                continue
+
+            if not local_interface:
+                continue
+
+            if not remote_device:
+                continue
+
+            if not remote_interface:
+                continue
+
+            # ----------------------------------------------------------
+            # Local device
+            # ----------------------------------------------------------
+
+            local_router = graph.add_node(
+                "Router",
+                local_device
+            )
+
+            local_interface_node = graph.add_node(
+                "RouterInterface",
+                f"{local_device}:{local_interface}",
+                {
+                    "router": local_device,
+                    "device": local_device,
+                    "interface": local_interface
+                }
+            )
+
+            graph.add_relationship(
+                local_router,
+                local_interface_node,
+                "HAS_INTERFACE"
+            )
+
+            # ----------------------------------------------------------
+            # Remote device
+            #
+            # This is a discovered device. CDP/LLDP proves that the
+            # device exists and is directly adjacent, but does not prove
+            # that we possess its complete configuration/inventory.
+            # ----------------------------------------------------------
+
+            remote_router = graph.add_node(
+                "Router",
+                remote_device,
+                {
+                    "discovered": True,
+                    "discovery_protocol": protocol,
+                    "platform": neighbor.get(
+                        "platform"
+                    ),
+                    "software": neighbor.get(
+                        "software"
+                    )
+                }
+            )
+
+            remote_interface_node = graph.add_node(
+                "RouterInterface",
+                f"{remote_device}:{remote_interface}",
+                {
+                    "router": remote_device,
+                    "device": remote_device,
+                    "interface": remote_interface,
+                    "ip": remote_ip,
+                    "discovered": True,
+                    "discovery_protocol": protocol,
+                    "source_file": neighbor.get(
+                        "source_file"
+                    ),
+                    "confidence": neighbor.get(
+                        "confidence",
+                        "medium"
+                    )
+                }
+            )
+
+            graph.add_relationship(
+                remote_router,
+                remote_interface_node,
+                "HAS_INTERFACE"
+            )
+
+            # ----------------------------------------------------------
+            # Physical/logical adjacency
+            # ----------------------------------------------------------
+
+            graph.add_relationship(
+                local_interface_node,
+                remote_interface_node,
+                "NEIGHBOR"
+            )
+
+            # ----------------------------------------------------------
+            # Remote IP
+            # ----------------------------------------------------------
+
+            if remote_ip:
+
+                ip_node = graph.add_node(
+                    "IPAddress",
+                    remote_ip,
+                    {
+                        "address": remote_ip
+                    }
+                )
+
+                graph.add_relationship(
+                    remote_interface_node,
+                    ip_node,
+                    "HAS_IP"
+                )
 
     def _add_applications(self, graph):
         applications_file = self.knowledge_dir / "applications.json"
@@ -867,7 +1113,7 @@ class GraphBuilder:
                     graph.add_relationship(
                         interface,
                         subnet,
-                        "CONNECTED_TO"
+                        "IN_SUBNET"
                     )
 
     def _connect_bgp_to_firewall_interfaces(self, graph):

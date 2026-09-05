@@ -462,62 +462,64 @@ class EndpointResolver:
         next_hop = route.get("next_hop")
 
         #
-        # Resolve exact route owner / egress
-        # interface using the pre-built interface
-        # node index instead of scanning the graph.
+        # Resolve exact route owner / egress interface only when
+        # the route record explicitly identifies an egress interface.
         #
-        for node in self._interface_nodes:
+        # Route ownership alone is not sufficient evidence to select
+        # one or more interfaces on the route-owning device.
+        #
+        if egress:
 
-            node_device = (
-                node.properties.get("device")
-                or node.properties.get("router")
-            )
+            for node in self._interface_nodes:
 
-            node_context = node.properties.get(
-                "context"
-            )
+                node_device = (
+                    node.properties.get("device")
+                    or node.properties.get("router")
+                )
 
-            node_vrf = node.properties.get(
-                "vrf"
-            )
+                node_context = node.properties.get(
+                    "context"
+                )
 
-            node_interface = (
-                node.properties.get("nameif")
-                or node.properties.get("interface")
-                or node.properties.get("name")
-            )
+                node_vrf = node.properties.get(
+                    "vrf"
+                )
 
-            owner_match = False
+                node_interface = (
+                    node.properties.get("nameif")
+                    or node.properties.get("interface")
+                    or node.properties.get("name")
+                )
 
-            if (
-                router_name
-                and node_device == router_name
-            ):
-                owner_match = True
+                owner_match = False
 
-            if (
-                router_name
-                and node_context == router_name
-            ):
-                owner_match = True
+                if (
+                    router_name
+                    and node_device == router_name
+                ):
+                    owner_match = True
 
-            if (
-                vrf
-                and node_context == vrf
-            ):
-                owner_match = True
+                if (
+                    router_name
+                    and node_context == router_name
+                ):
+                    owner_match = True
 
-            if not owner_match:
-                continue
+                if (
+                    vrf
+                    and node_context == vrf
+                ):
+                    owner_match = True
 
-            if (
-                vrf
-                and node.type == "RouterInterface"
-                and node_vrf != vrf
-            ):
-                continue
+                if not owner_match:
+                    continue
 
-            if egress:
+                if (
+                    vrf
+                    and node.type == "RouterInterface"
+                    and node_vrf != vrf
+                ):
+                    continue
 
                 if (
                     node_interface != egress
@@ -528,15 +530,12 @@ class EndpointResolver:
                 ):
                     continue
 
-            if (
-                node.type == "ASAInterface"
-                and not egress
-            ):
-                continue
-
-            results.append(
-                self._describe_interface(node)
-            )
+                results.append(
+                    self._describe_interface(
+                        node,
+                        role="route_egress"
+                    )
+                )
 
         #
         # Resolve next-hop into connected
@@ -600,7 +599,7 @@ class EndpointResolver:
         return unique
 
 
-    def _describe_interface(self, interface):
+    def _describe_interface(self, interface, role="direct"):
 
         devices = []
         contexts = []
@@ -678,7 +677,7 @@ class EndpointResolver:
             "devices": sorted(set(devices)),
             "contexts": sorted(set(contexts)),
             "vrfs": sorted(set(vrfs)),
-            "role": "direct",
+            "role": role,
             "properties": interface.properties
         }
 

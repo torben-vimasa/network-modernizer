@@ -64,6 +64,9 @@ class RouterInterfaceExportBuilder:
 
             raw_files = []
 
+            #
+            # Existing supported command-output files.
+            #
             raw_files.extend(
                 self.router_raw_dir.rglob(
                     "*section interface*.txt"
@@ -75,6 +78,27 @@ class RouterInterfaceExportBuilder:
                     "*show running-config.txt"
                 )
             )
+
+            #
+            # Full router configurations.
+            #
+            # Generic convention:
+            #
+            #   data/router_raw/OBvPe1/OBvPe1.txt
+            #   data/router_raw/OBvPe2/OBvPe2.txt
+            #
+            # The filename must match the parent directory name.
+            #
+            for file in self.router_raw_dir.rglob("*.txt"):
+
+                if (
+                    file.stem.lower()
+                    == file.parent.name.lower()
+                ):
+
+                    raw_files.append(
+                        file
+                    )
 
             raw_files = sorted(
                 set(raw_files)
@@ -108,6 +132,7 @@ class RouterInterfaceExportBuilder:
                                 "/",
                                 1
                             )[1]
+
                         except IndexError:
                             mask = None
 
@@ -118,9 +143,12 @@ class RouterInterfaceExportBuilder:
                             "vrf": interface.vrf,
                             "ip": interface.ip,
                             "mask": mask,
-                            "hsrp_virtual_ip": None,
-                            "hsrp_state": None,
-                            "hsrp_priority": None
+                            "hsrp_virtual_ip":
+                                interface.hsrp_virtual_ip,
+                            "hsrp_state":
+                                interface.hsrp_state,
+                            "hsrp_priority":
+                                interface.hsrp_priority
                         }
                     )
 

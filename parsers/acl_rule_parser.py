@@ -1,4 +1,4 @@
-import ipaddress
+﻿import ipaddress
 
 from models.acl import ACL
 from models.acl_rule import ACLRule
@@ -105,17 +105,44 @@ class ACLRuleParser:
                     endpoint_index
                 )
 
+                #
+                # ASA extended ACL grammar may contain a source
+                # transport-port expression between source and
+                # destination:
+                #
+                #   permit udp any eq 3544 any range 1025 65535
+                #
+                # The source-port expression is not the destination
+                # endpoint and must be consumed before parsing it.
+                #
+                if protocol in ("tcp", "udp"):
+                    next_index = (
+                        self._skip_source_transport_service(
+                            parts,
+                            next_index
+                        )
+                    )
+
                 (
                     destination_type,
                     destination_value,
-                    _
+                    destination_end_index
                 ) = self._parse_endpoint(
                     parts,
                     next_index
                 )
 
-                service_info = self._extract_service(
-                    parts
+                #
+                # Destination service starts only after the
+                # destination endpoint.  Do not scan the complete
+                # rule because the first eq/range may belong to the
+                # source transport port.
+                #
+                service_info = (
+                    self._extract_service_from_index(
+                        parts,
+                        destination_end_index
+                    )
                 )
 
                 if service:
@@ -223,6 +250,45 @@ class ACLRuleParser:
 
         return token, None, index + 1
 
+    def _skip_source_transport_service(
+        self,
+        parts,
+        index
+    ):
+        """
+        Consume an optional ASA TCP/UDP source-port expression.
+
+        Examples:
+            eq 3544
+            range 1025 65535
+            lt 1024
+            gt 1024
+            neq 22
+
+        object-group is intentionally not consumed here because in
+        this grammar position it may also be the destination network
+        object-group and therefore requires additional disambiguation.
+        """
+
+        if len(parts) <= index:
+            return index
+
+        token = parts[index]
+
+        if (
+            token in ("eq", "lt", "gt", "neq")
+            and len(parts) > index + 1
+        ):
+            return index + 2
+
+        if (
+            token == "range"
+            and len(parts) > index + 2
+        ):
+            return index + 3
+
+        return index
+
     def _parse_endpoint(
         self,
         parts,
@@ -273,6 +339,81 @@ class ACLRuleParser:
                 parts[index + 1],
                 index + 2
             )
+
+        #
+        # Expanded ASA FQDN syntax:
+        #
+        # fqdn example.com
+        # fqdn example.com (resolved)
+        # fqdn example.com (unresolved)
+        #
+        # The optional resolution-state token belongs
+        # to the endpoint and must be consumed so that
+        # service parsing starts at the correct token.
+        #
+        if (
+            token == "fqdn"
+            and len(parts) > index + 1
+        ):
+            fqdn = parts[index + 1]
+            next_index = index + 2
+
+            if (
+                len(parts) > next_index
+                and parts[next_index].lower()
+                in ["(resolved)", "(unresolved)"]
+            ):
+                next_index += 1
+
+            return (
+                "fqdn",
+                fqdn,
+                next_index
+            )
+
+        #
+        # Expanded ASA address-range syntax:
+        #
+        # range 172.31.6.0 172.31.7.255
+        #
+        # If the complete range maps exactly to one CIDR, normalize
+        # it directly to a network.  Otherwise retain it as an
+        # explicit address range.
+        #
+        if (
+            token == "range"
+            and len(parts) > index + 2
+        ):
+            start = parts[index + 1]
+            end = parts[index + 2]
+
+            try:
+                start_ip = ipaddress.ip_address(start)
+                end_ip = ipaddress.ip_address(end)
+
+                networks = list(
+                    ipaddress.summarize_address_range(
+                        start_ip,
+                        end_ip
+                    )
+                )
+
+            except ValueError:
+                pass
+
+            else:
+                if len(networks) == 1:
+                    return (
+                        "network",
+                        str(networks[0]),
+                        index + 3
+                    )
+
+                return (
+                    "range",
+                    f"{start}-{end}",
+                    index + 3
+                )
 
         #
         # Expanded ASA network syntax:

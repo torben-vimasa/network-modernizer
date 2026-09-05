@@ -12,6 +12,7 @@ class RouterInventoryParser:
 
         current_interface = None
         current_vrf = "default"
+        in_hsrp = False
 
         for raw in lines:
 
@@ -36,6 +37,7 @@ class RouterInventoryParser:
                 )
 
                 current_vrf = "default"
+                in_hsrp = False
                 continue
 
             if not current_interface:
@@ -61,10 +63,31 @@ class RouterInventoryParser:
             #
             # VRF
             #
+            # NX-OS:
+            #   vrf member MGMT
+            #
+            # IOS / IOS-XE:
+            #   ip vrf forwarding MGMT
+            #   vrf forwarding MGMT
+            #
+            # IOS-XR / generic:
+            #   vrf MGMT
+            #
             if stripped.startswith("vrf member "):
 
                 current_vrf = stripped.replace(
                     "vrf member ",
+                    "",
+                    1
+                )
+
+                current_interface.vrf = current_vrf
+                continue
+
+            if stripped.startswith("ip vrf forwarding "):
+
+                current_vrf = stripped.replace(
+                    "ip vrf forwarding ",
                     "",
                     1
                 )
@@ -127,6 +150,81 @@ class RouterInventoryParser:
 
                 continue
 
+            #
+            # HSRP configuration.
+            #
+            # NX-OS:
+            #
+            #   hsrp 2
+            #     priority 210
+            #     ip 172.27.2.1
+            #
+            # IOS-XR:
+            #
+            #   hsrp 2
+            #     priority 240
+            #     address 172.27.2.1
+            #
+            if stripped.startswith("hsrp "):
+
+                tokens = stripped.split()
+
+                if (
+                    len(tokens) >= 2
+                    and tokens[1].isdigit()
+                ):
+                    in_hsrp = True
+                else:
+                    in_hsrp = False
+
+                continue
+
+            if in_hsrp:
+
+                if stripped.startswith("priority "):
+
+                    tokens = stripped.split()
+
+                    if len(tokens) >= 2:
+
+                        try:
+                            current_interface.hsrp_priority = int(
+                                tokens[1]
+                            )
+
+                        except ValueError:
+                            pass
+
+                    continue
+
+                if stripped.startswith("ip "):
+
+                    tokens = stripped.split()
+
+                    if (
+                        len(tokens) >= 2
+                        and self._is_ipv4(tokens[1])
+                    ):
+                        current_interface.hsrp_virtual_ip = (
+                            tokens[1]
+                        )
+
+                    continue
+
+                if stripped.startswith("address "):
+
+                    tokens = stripped.split()
+
+                    if (
+                        len(tokens) >= 2
+                        and self._is_ipv4(tokens[1])
+                    ):
+                        current_interface.hsrp_virtual_ip = (
+                            tokens[1]
+                        )
+
+                    continue
+
         #
         # Last interface
         #
@@ -183,3 +281,13 @@ class RouterInventoryParser:
         interface.prefix = str(
             parsed.network
         )
+
+
+    def _is_ipv4(self, value):
+
+        try:
+            ipaddress.IPv4Address(value)
+            return True
+
+        except ValueError:
+            return False

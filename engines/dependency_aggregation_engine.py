@@ -126,6 +126,68 @@ class DependencyAggregationEngine:
             reverse=True
         )
 
+
+        # Classify dependency evidence strength.
+        # Strongest normalized match tier wins.
+        for dependency in dependencies.values():
+            tiers = set(dependency.match_tiers)
+
+            if "explicit" in tiers or "group" in tiers:
+                dependency.evidence_class = "specific"
+
+            elif "covering" in tiers:
+                dependency.evidence_class = "covering"
+
+            elif tiers == {"any"}:
+                dependency.evidence_class = "generic-policy"
+
+            else:
+                dependency.evidence_class = "unknown"
+
+
+        # Derive observation state only from the evidence
+        # tiers relevant to the winning evidence class.
+        for dependency in dependencies.values():
+
+            if dependency.evidence_class == "specific":
+                relevant_tiers = ("explicit", "group")
+
+            elif dependency.evidence_class == "covering":
+                relevant_tiers = ("covering",)
+
+            elif dependency.evidence_class == "generic-policy":
+                relevant_tiers = ("any",)
+
+            else:
+                relevant_tiers = ()
+
+            counters = [
+                dependency.tier_counters[tier]
+                for tier in relevant_tiers
+                if tier in dependency.tier_counters
+            ]
+
+            if any(
+                item.get("observed_rule_count", 0) > 0
+                for item in counters
+            ):
+                dependency.observation_state = "observed"
+
+            elif any(
+                item.get("unknown_counter_count", 0) > 0
+                for item in counters
+            ):
+                dependency.observation_state = "counter-unknown"
+
+            elif counters and sum(
+                item.get("rule_count", 0)
+                for item in counters
+            ) > 0:
+                dependency.observation_state = "unobserved"
+
+            else:
+                dependency.observation_state = "unknown"
+
         return results
 
     def _build_alias_index(
@@ -293,6 +355,23 @@ class DependencyAggregationEngine:
                 f"network:"
                 f"{endpoint.resolved_networks[0]}"
             )
+
+        #
+        # Explicit address range.
+        #
+        # A parsed ASA range already has a stable endpoint identity
+        # such as:
+        #
+        #   range:172.21.150.7-172.21.150.26
+        #
+        # Preserve that identity instead of degrading it to a
+        # generic name-based dependency.
+        #
+        if (
+            endpoint.endpoint_type == "range"
+            and str(endpoint.key).startswith("range:")
+        ):
+            return endpoint.key
 
         #
         # If this representation did not resolve,
@@ -515,6 +594,27 @@ class DependencyAggregationEngine:
             dependency.endpoint_keys
         )
 
+        if endpoint.endpoint_type:
+
+            self._append_unique(
+                dependency.endpoint_types,
+                endpoint.endpoint_type
+            )
+
+        if endpoint.direction:
+
+            self._append_unique(
+                dependency.directions,
+                endpoint.direction
+            )
+
+        for match_tier in endpoint.match_tiers:
+
+            self._append_unique(
+                dependency.match_tiers,
+                match_tier
+            )
+
         for alias in endpoint.aliases:
 
             self._append_unique(
@@ -550,6 +650,13 @@ class DependencyAggregationEngine:
                 network
             )
 
+        for unresolved in endpoint.unresolved:
+
+            self._append_unique(
+                dependency.unresolved,
+                unresolved
+            )
+
         for group in endpoint.parent_groups:
 
             self._append_unique(
@@ -577,6 +684,42 @@ class DependencyAggregationEngine:
         dependency.total_hits += (
             endpoint.total_hits
         )
+
+        dependency.unknown_counter_count += (
+            endpoint.unknown_counter_count
+        )
+
+        # Preserve counter evidence per normalized match tier.
+        for rule in endpoint.rules:
+
+            tier = rule.get("match_tier")
+
+            if not tier:
+                continue
+
+            counters = dependency.tier_counters.setdefault(
+                tier,
+                {
+                    "rule_count": 0,
+                    "observed_rule_count": 0,
+                    "unknown_counter_count": 0,
+                    "total_hits": 0,
+                }
+            )
+
+            counters["rule_count"] += 1
+
+            hitcnt = rule.get("hitcnt")
+
+            if hitcnt is None:
+                counters["unknown_counter_count"] += 1
+
+            elif isinstance(hitcnt, int):
+
+                if hitcnt > 0:
+                    counters["observed_rule_count"] += 1
+
+                counters["total_hits"] += hitcnt
 
     def _merge_classification(
         self,
@@ -702,6 +845,21 @@ class DependencyAggregationEngine:
         endpoint,
         resolved_host_keys
     ):
+
+        #
+        # An explicit address-range endpoint must retain its
+        # own semantic identity.
+        #
+        # Example:
+        #
+        #   172.21.150.7-172.21.150.26
+        #
+        # contains valid IPv4 strings, but must not collapse
+        # to host:172.21.150.7 merely because that host also
+        # exists elsewhere in the analysed endpoint set.
+        #
+        if endpoint.endpoint_type == "range":
+            return None
 
         candidates = []
 

@@ -419,9 +419,6 @@ class SecurityEngine:
         # Object-group members may be references to another
         # context-scoped NetworkObject.
         #
-        # Example:
-        # OBV-CAT3-FW1-1:HOST-172.27.210.20--JTTN
-        #
         if object_type == "raw_member" and object_value:
             referenced_node = self.graph.find(
                 "NetworkObject",
@@ -437,9 +434,6 @@ class SecurityEngine:
                     value
                 )
 
-            #
-            # raw_member may also reference a nested ObjectGroup.
-            #
             referenced_group = self.graph.find(
                 "ObjectGroup",
                 object_value
@@ -472,14 +466,60 @@ class SecurityEngine:
         if node.name.endswith(f":host {value}"):
             return True
 
-        if object_type in ["network", "subnet"]:
+        #
+        # Generic IPv4/IPv6 address and CIDR matching.
+        #
+        # Security evaluation asks whether the policy object
+        # covers the complete requested value.
+        #
+        # Examples:
+        #
+        #   policy 10.0.0.0/8, query 10.3.0.0/16
+        #       -> True
+        #
+        #   policy 10.3.32.0/19, query 10.3.0.0/16
+        #       -> False
+        #
+        #   policy 10.3.32.0/19, query 10.3.32.17
+        #       -> True
+        #
+        if object_type in ["network", "subnet"] and object_value:
             try:
-                return ipaddress.ip_address(
-                    value
-                ) in ipaddress.ip_network(
+                policy_network = ipaddress.ip_network(
                     object_value,
                     strict=False
                 )
+
+                query_text = str(value).strip()
+
+                if "/" in query_text:
+                    query_network = ipaddress.ip_network(
+                        query_text,
+                        strict=False
+                    )
+
+                    if (
+                        policy_network.version
+                        != query_network.version
+                    ):
+                        return False
+
+                    return query_network.subnet_of(
+                        policy_network
+                    )
+
+                query_address = ipaddress.ip_address(
+                    query_text
+                )
+
+                if (
+                    policy_network.version
+                    != query_address.version
+                ):
+                    return False
+
+                return query_address in policy_network
+
             except (TypeError, ValueError):
                 return False
 

@@ -54,6 +54,9 @@ from engines.firewall_route_engine import FirewallRouteEngine
 from engines.dependency_state_engine import (
     DependencyStateEngine
 )
+from reporters.dependency_report_builder import (
+    DependencyReportBuilder
+)
 
 class DigitalTwin:
 
@@ -164,6 +167,13 @@ class DigitalTwin:
                 self.graph
             )
         )
+
+        self.dependency_report_builder = (
+            DependencyReportBuilder(
+                self
+            )
+        )
+
         self.application_view = ApplicationViewEngine(
                     self.graph,
                     self.endpoint,
@@ -782,4 +792,19 @@ class DigitalTwin:
         return self.dependency_state_engine.enrich(
             dependencies=dependencies,
             hints=hints
+        )
+
+    def dependency_report(
+        self,
+        network,
+        direction="both",
+        service=None,
+        action="permit"
+    ):
+
+        return self.dependency_report_builder.build(
+            network=network,
+            direction=direction,
+            service=service,
+            action=action
         )

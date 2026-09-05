@@ -374,6 +374,20 @@ class TraceWorkflow:
 
             state.packet.next_hop = route["next_hop"]
 
+            route_protocol = str(
+                route.get("protocol")
+                or ""
+            ).lower()
+
+            if route_protocol in [
+                "connected",
+                "direct",
+                "local"
+            ]:
+                forwarding_target = state.destination
+            else:
+                forwarding_target = route["next_hop"]
+
             local_interface = next(
                 (
                     node
@@ -383,7 +397,7 @@ class TraceWorkflow:
                     if node.name.startswith(f"{state.router}:")
                     and str(
                         node.properties.get("ip") or ""
-                    ).split("/")[0] == route["next_hop"]
+                    ).split("/")[0] == forwarding_target
                 ),
                 None
             )
@@ -397,7 +411,7 @@ class TraceWorkflow:
                 )
 
                 explanation.add(
-                    f"Route next-hop {route['next_hop']} is local to "
+                    f"Forwarding target {forwarding_target} is local to "
                     f"{local_interface.name}"
                 )
                 explanation.add(reason)
@@ -412,7 +426,7 @@ class TraceWorkflow:
                 self._resolve_router_next_hop(
                     current_router=state.router,
                     current_vrf=state.vrf,
-                    next_hop=route["next_hop"],
+                    next_hop=forwarding_target,
                     explanation=explanation
                 )
             )

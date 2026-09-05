@@ -1,4 +1,4 @@
-import ipaddress
+﻿import ipaddress
 
 
 class ObjectResolver:
@@ -345,12 +345,156 @@ class ObjectResolver:
 
         properties = node.properties or {}
 
+        object_type = str(
+            properties.get("type") or ""
+        ).strip().lower()
+
         value = (
             properties.get("value")
             or properties.get("ip")
             or node.name
         )
 
+        #
+        # Some ASA object-group service members are currently
+        # represented in the Knowledge Graph as raw NetworkObject
+        # members because the graph model has no dedicated service
+        # member node type.
+        #
+        # They must remain in the graph because SecurityEngine uses
+        # the HAS_MEMBER relationships for service matching, but
+        # ObjectResolver is an address resolver and must not expose
+        # service syntax as network endpoint evidence.
+        #
+        if object_type == "raw_member":
+
+            raw_text = str(value).strip()
+            text = raw_text.lower()
+
+            service_prefixes = (
+                "eq ",
+                "range ",
+                "tcp ",
+                "udp ",
+                "tcp-udp ",
+                "icmp ",
+            )
+
+            if text.startswith(service_prefixes):
+                return
+
+            #
+            # ASA object-group network members may be represented
+            # as raw members using explicit host syntax:
+            #
+            #   host 10.110.9.21
+            #
+            # Normalize that syntax before normal address parsing.
+            #
+            if text.startswith("host "):
+
+                host_value = raw_text[5:].strip()
+
+                parsed = self._parse_address(
+                    host_value
+                )
+
+                if parsed:
+
+                    kind = parsed.get("type")
+                    normalized = parsed.get("value")
+
+                    if kind == "host":
+                        result["hosts"].append(
+                            normalized
+                        )
+
+                    elif kind == "network":
+                        result["networks"].append(
+                            normalized
+                        )
+
+                    return
+
+        #
+        # Explicit address range.
+        #
+        # Convert the exact range into the smallest lossless
+        # set of CIDR blocks. This keeps firewall-specific
+        # range syntax out of the normalized address model.
+        #
+        if object_type == "range":
+
+            parts = str(value).split()
+
+            if len(parts) != 2:
+                result["unresolved"].append(
+                    str(value)
+                )
+                return
+
+            try:
+                start_ip = ipaddress.ip_address(
+                    parts[0]
+                )
+
+                end_ip = ipaddress.ip_address(
+                    parts[1]
+                )
+
+            except ValueError:
+                result["unresolved"].append(
+                    str(value)
+                )
+                return
+
+            #
+            # A range cannot cross IPv4/IPv6 families.
+            #
+            if start_ip.version != end_ip.version:
+                result["unresolved"].append(
+                    str(value)
+                )
+                return
+
+            #
+            # Reject reversed ranges.
+            #
+            if int(start_ip) > int(end_ip):
+                result["unresolved"].append(
+                    str(value)
+                )
+                return
+
+            networks = ipaddress.summarize_address_range(
+                start_ip,
+                end_ip
+            )
+
+            for network in networks:
+
+                #
+                # Preserve the existing normalized distinction
+                # between individual hosts and networks.
+                #
+                if (
+                    network.prefixlen
+                    == network.max_prefixlen
+                ):
+                    result["hosts"].append(
+                        str(network.network_address)
+                    )
+
+                else:
+                    result["networks"].append(
+                        str(network)
+                    )
+
+            return
+
+        #
+        # Existing host/network handling.
+        #
         parsed = self._parse_address(
             value
         )
@@ -372,7 +516,6 @@ class ObjectResolver:
             result["networks"].append(
                 parsed["value"]
             )
-
 
     def _parse_address(
         self,

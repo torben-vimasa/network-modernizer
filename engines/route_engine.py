@@ -1,10 +1,9 @@
-import ipaddress
+﻿import ipaddress
 import json
 from pathlib import Path
 
 from models.route_explanation import RouteExplanation
 from models.confidence import Confidence
-
 
 
 class RouteEngine:
@@ -14,23 +13,25 @@ class RouteEngine:
         self.routes = []
 
         #
-        # Static routes
+        # Authoritative normalized routing source.
         #
-        self.routes.extend(
-            self._load_routes(
-                Path("output/routes.json")
-            )
-        )
-
-        #
-        # Runtime routing table (optional)
+        # Runtime routing data is preferred when available.
+        # Legacy routes.json is used only as fallback and must
+        # never be merged with runtime observations.
         #
         runtime = Path("output/routes_runtime.json")
+        legacy = Path("output/routes.json")
 
         if runtime.exists():
 
             self.routes.extend(
                 self._load_routes(runtime)
+            )
+
+        elif legacy.exists():
+
+            self.routes.extend(
+                self._load_routes(legacy)
             )
 
         self._normalize_routes()
@@ -65,7 +66,6 @@ class RouteEngine:
                 route["metric"] = 0
 
 
-
     def _load_routes(self, file):
 
         if not file.exists():
@@ -74,11 +74,14 @@ class RouteEngine:
         with open(file, encoding="utf-8") as f:
             return json.load(f)
 
+
     def lookup(self, router, vrf, destination):
+
         destination_ip = ipaddress.ip_address(destination)
         matches = []
 
         for route in self.routes:
+
             if route["router"] != router:
                 continue
 
@@ -86,22 +89,39 @@ class RouteEngine:
                 continue
 
             try:
-                network = ipaddress.ip_network(route["prefix"], strict=False)
+                network = ipaddress.ip_network(
+                    route["prefix"],
+                    strict=False
+                )
             except ValueError:
                 continue
 
             if destination_ip in network:
-                matches.append((network.prefixlen, route))
+                matches.append(
+                    (
+                        network.prefixlen,
+                        route
+                    )
+                )
 
         if not matches:
             return None
 
-        matches.sort(key=lambda item: item[0], reverse=True)
+        matches.sort(
+            key=lambda item: item[0],
+            reverse=True
+        )
+
         return matches[0][1]
+
 
     def explain(self, router, vrf, destination):
 
-        route = self.lookup(router, vrf, destination)
+        route = self.lookup(
+            router,
+            vrf,
+            destination
+        )
 
         if not route:
             return None
@@ -115,6 +135,6 @@ class RouteEngine:
             confidence=Confidence(
                 level="high",
                 score=1.0,
-                reason="Static route parsed directly from router configuration"
+                reason="Route selected from normalized routing data"
             )
         )
